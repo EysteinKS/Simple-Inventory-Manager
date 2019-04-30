@@ -1,0 +1,11 @@
+.Sales {
+  border: black 3px solid
+}
+
+.Sales-header {
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+  justify-items: center;
+  border-bottom: black 2px solid;
+  padding: 10px;
+}

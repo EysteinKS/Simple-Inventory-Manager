@@ -31,3 +31,16 @@
     transform: rotate(360deg);
   }
 }
+
+.app-grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-column-gap: 10px;
+  padding: 5vh;
+  height: 90vh;
+  max-height: 90vh;
+}
+
+button {
+  width: 100%;
+}

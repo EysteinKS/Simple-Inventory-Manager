@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import "./Inventory.css"
 
 import Status from "./Status"
 import Products from "./Products"
@@ -29,16 +30,16 @@ export default () => {
   }
 
   return (
-    <div>
+    <div className="Inventory">
       <Header view={view} setView={setView}/>
-      {current}
+      <div className="Inventory-current">{current}</div>
     </div>
   )
 }
 
 const Header = ({ view, setView }) => {
   return(
-    <header>
+    <header className="Inventory-header">
         <h3>Lager</h3>
         <HeaderButton name="Status" value="status" view={view} setView={setView}/>
         <HeaderButton name="Produkter" value="products" view={view} setView={setView}/>

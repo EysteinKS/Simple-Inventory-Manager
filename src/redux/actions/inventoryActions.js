@@ -22,11 +22,10 @@ export const loadInventoryFailure = (error) => ({
 export const loadInventory = () => {
   return dispatch => {
     dispatch(loadInventoryBegin())
-    getInventory()
-      .then(res => {
-        dispatch(loadInventorySuccess(res))
-    })
-      .catch(err => loadInventoryFailure(err))
+    getInventory.then(res => {
+      console.log("Loaded inventory successfully: ", res)
+      dispatch(loadInventorySuccess(res))
+    }).catch(err => loadInventoryFailure(err))
   }
 }
 

@@ -1,0 +1,12 @@
+.status-header {
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+  justify-items: center;
+  border-bottom: black 1px solid;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+  justify-items: center;
+}
