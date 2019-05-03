@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import "./Orders.css";
+import { getProductName } from "../../constants/util"
 
 export default () => {
   const list = useSelector(state => state.orders.orders);
@@ -72,15 +73,6 @@ const Order = ({ order }) => {
     </div>
   );
 };
-
-const getProductName = (products, id) => {
-  console.log(products)
-  let p = products.find(product => (
-    product.productID === id
-  ))
-  console.log(`Found product ${p.name} with ID ${id}`)
-  return p.name
-}
 
 const Product = ({ product }) => {
   const products = useSelector(state => state.inventory.inventory)

@@ -1,4 +1,4 @@
-import { getInventory } from "../../constants/mock"
+import { getInventory } from "../../constants/api"
 
 //LOADING
 

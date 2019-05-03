@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from "react-redux"
 import "./Status.css"
+import { getOrderedAmount, getProductName } from "../../constants/util"
 
 export default () => {
   const list = useSelector(state => state.inventory.inventory)
@@ -27,8 +28,8 @@ const StatusHeader = () => {
 
 const defaultList = [
   {
-  id: 1,
-  name: "default product",
+  id: 0,
+  name: "",
   inventory: 0,
   ordered: 0,
   reserved: 0
@@ -44,7 +45,14 @@ const List = ({ statusList = defaultList }) => {
 }
 
 const Product = ({ prod }) => {
-  const { name, amount, ordered, reserved } = prod
+  const { productID, amount, reserved } = prod
+
+  let orders = useSelector(state => state.orders.orders)
+  let products = useSelector(state => state.products.products)
+  //let reserved = useSelector(state => state.sales.reserved)
+  let name = getProductName(products, productID)
+  let ordered = getOrderedAmount(orders, productID)
+
   const total = amount + (ordered || 0) - (reserved || 0)
   return(
     <div className="product-grid">

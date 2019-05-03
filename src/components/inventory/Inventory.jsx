@@ -41,10 +41,11 @@ const Header = ({ view, setView }) => {
   return(
     <header className="Inventory-header">
         <h3>Lager</h3>
-        <HeaderButton name="Status" value="status" view={view} setView={setView}/>
-        <HeaderButton name="Produkter" value="products" view={view} setView={setView}/>
-        <HeaderButton name="Bestillinger" value="orders" view={view} setView={setView}/>
-        <HeaderButton name="Logg" value="history" view={view} setView={setView}/>
+        {[["Status", "status"], ["Produkter", "products"], ["Bestillinger", "orders"], ["Logg", "history"]].map((btn, i) => {
+          let name = btn[0]
+          let value = btn[1]
+          return <HeaderButton name={name} value={value} view={view} setView={setView} key={i}/>
+        })}
       </header>
   )
 }

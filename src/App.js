@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 
 import Inventory from "./components/inventory/Inventory"
 import Sales from "./components/sales/Sales"
+import { loadProducts } from "./redux/actions/productsActions"
 import { loadInventory } from "./redux/actions/inventoryActions"
 import { loadOrders } from "./redux/actions/ordersActions"
 
@@ -11,19 +12,26 @@ import './App.css';
 class App extends Component {
 
   componentDidMount(){
-    if(!this.props.inventory.isLoading && !this.props.inventory.loaded){
+    let inventory = this.props.inventory
+    if(!inventory.isLoading && !inventory.loaded){
       this.props.dispatch(loadInventory())
     }
-    if(!this.props.orders.isLoading && !this.props.orders.loaded){
+    let orders = this.props.orders
+    if(!orders.isLoading && !orders.loaded){
       this.props.dispatch(loadOrders())
+    }
+    let products = this.props.products
+    if(!products.isLoading && !products.loaded){
+      this.props.dispatch(loadProducts())
     }
   }
   
   render(){
     const inventory = this.props.inventory
     const orders = this.props.orders
+    const products = this.props.products
 
-    if(inventory.isLoading || orders.isLoading){
+    if(inventory.isLoading || orders.isLoading || products.isLoading){
       return(
         <div>
           Loading...
@@ -31,7 +39,7 @@ class App extends Component {
       )
     }
 
-    if(inventory.error || orders.error){
+    if(inventory.error || orders.error || products.error){
       return(
         <div>
           <p>Error: {inventory.error.message || orders.error.message}</p>
@@ -39,7 +47,7 @@ class App extends Component {
       )
     }
 
-    if(inventory.loaded && orders.loaded){
+    if(inventory.loaded && orders.loaded && products.loaded){
       return(
         <div className="app-grid">
           <Inventory className="grid-left"/>
@@ -57,7 +65,8 @@ class App extends Component {
 
 const mapStateToProps = state => ({
   inventory: state.inventory,
-  orders: state.orders
+  orders: state.orders,
+  products: state.products
 })
 
 export default connect(mapStateToProps)(App);

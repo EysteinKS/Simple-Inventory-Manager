@@ -1,4 +1,4 @@
-import { getOrders } from "../../constants/mock"
+import { getOrders } from "../../constants/api"
 
 //LOADING
 
