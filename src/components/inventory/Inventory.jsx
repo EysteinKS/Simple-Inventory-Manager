@@ -9,7 +9,7 @@ import History from "./History"
 
 export default () => {
   const views = [ "status", "products", "orders", "history" ]
-  const [ view, setView ] = useState(views[0])
+  const [ view, setView ] = useState(views[1])
 
   let current = null
   switch(view){

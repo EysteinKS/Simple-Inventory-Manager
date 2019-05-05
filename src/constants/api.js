@@ -38,7 +38,7 @@ export const getOrders = new Promise((res, rej) => {
 
 export const getCustomers = new Promise((res, rej) => {
   if(!customers){
-    rej(new Error("Couldn't find product categories"))
+    rej(new Error("Couldn't find customers"))
   }
   setTimeout(() => {
     res(customers)
@@ -47,7 +47,7 @@ export const getCustomers = new Promise((res, rej) => {
 
 export const getSales = new Promise((res, rej) => {
   if(!sales){
-    rej(new Error("Couldn't find product categories"))
+    rej(new Error("Couldn't find sales"))
   }
   setTimeout(() => {
     res(sales)

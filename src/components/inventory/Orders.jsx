@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { sortProducts } from "../../redux/actions/productsActions"
 import "./Orders.css";
-import { getProductName } from "../../constants/util"
+import ProductName from "../ProductName"
 
 export default () => {
   const list = useSelector(state => state.orders.orders);
@@ -75,12 +76,9 @@ const Order = ({ order }) => {
 };
 
 const Product = ({ product }) => {
-  const products = useSelector(state => state.inventory.inventory)
-  let name = getProductName( products, product.productID)
-
   return(
     <div>
-      <p>{product.amount} x {name}</p>
+      <span>{product.amount}x <ProductName id={product.productID}/></span>
     </div>
   )
 }

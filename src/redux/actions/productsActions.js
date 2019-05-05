@@ -73,3 +73,9 @@ export const disableProduct = (id) => ({
   type: DISABLE_PRODUCT,
   payload: id
 })
+
+export const SORT_PRODUCTS = "SORT_PRODUCTS"
+export const sortProducts = (sorting, direction) => ({
+  type: SORT_PRODUCTS,
+  payload: { sorting, direction }
+})

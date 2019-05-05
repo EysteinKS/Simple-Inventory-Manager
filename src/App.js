@@ -51,7 +51,6 @@ class App extends Component {
       return(
         <div className="app-grid">
           <Inventory className="grid-left"/>
-          <Sales className="grid-right"/>
         </div>
       )
     }

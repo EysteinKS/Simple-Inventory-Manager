@@ -84,6 +84,30 @@ export default (state = initialState, {type, payload}) => {
       return {
         ...state
       }
+    case action.SORT_PRODUCTS:
+      const sortByName = (a, b) => {
+        const nameA = a.name.toUpperCase()
+        const nameB = b.name.toUpperCase()
+
+        let compare = 0;
+        if(nameA > nameB){
+          compare = 1
+        } else if (nameA < nameB) {
+          compare = -1
+        }
+        return (
+          (payload.direction === "desc") ? (compare * -1) : compare
+        )
+      }
+      let sorted
+      if(payload.sorting === "name"){
+        sorted = [...state.products].sort(sortByName)
+      }
+
+      return {
+        ...state,
+        products: sorted 
+      }
     default:
       return state
   }
