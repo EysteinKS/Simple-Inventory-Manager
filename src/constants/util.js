@@ -19,17 +19,14 @@ export const getProductName = (products = [], id) => {
 }
 
 export const getCategoryName = (categories = [], id) => {
-  let c = categories.find(category => (
-    category.categoryID === id
-  ))
-  return c.name
+  return categories[id - 1].name
 }
 //GETTING VALUES END
 
 
 //SORTING
-export const sortByName = (products = [], direction) => {
-  return [...products].sort((a, b) => {
+export const sortByName = (direction) => {
+  return (a, b) => {
     const nameA = a.name.toUpperCase()
     const nameB = b.name.toUpperCase()
     let compare = 0
@@ -39,71 +36,30 @@ export const sortByName = (products = [], direction) => {
       compare = -1
     }
     return ((direction === "desc") ? (compare * -1) : compare)
-  })
+  }
 }
 
-export const sortByCategory = (products = [], categories = [], direction) => {
-
-}
-
-export const hideInactive = (products = []) => {
-
-}
-
-export class SortableList {
-  constructor(list, type){
-    this.list = list
-    this.sortedList = list
-    this.type = type
-    this.sortingKey = "id"
-    this.sortingDirection = null
-  }
-
-  get list(){
-    return sortedList
-  }
-
-  reset() {
-    this.sortedList = this.list
-    return this
-  }
-
-  filterByActive() {
-
-  }
-
-  sortByKey(key, values) {
-    if(key !== this.sortingKey){
-      this.sortingDirection = "asc"
-    } else if (key === this.sortingKey){
-      this.sortingDirection === "asc"
-        ? this.sortingDirection = "desc"
-        : this.sortingDirection = "asc"
+export const sortByCategory = (categories = [], direction) => {
+  const sortedCategories = [...categories].sort(sortByName("asc"))
+  console.log(sortedCategories)
+  return (a, b) => {
+    const categoryA = sortedCategories[a.categoryID - 1].name.toUpperCase()
+    const categoryB = sortedCategories[b.categoryID - 1].name.toUpperCase()
+    let compare = 0
+    if(categoryA > categoryB){
+      compare = 1
+    } else if (categoryA < categoryB){
+      compare = -1
     }
-    this.sortingKey = key
-    
-    this.sortedList.sort(function(a, b) {
-      let a = a[key]
-      let b = b[key]
-      if(typeof a[key] === "string"){
-        a = a.toUpperCase()
-        b = b.toUpperCase()
-      }
-      let compare = 0
-      if(a > b){
-        compare = 1
-      } else if (a < b){
-        compare = -1
-      }
-      return((this.sortingDirection === "asc") ? compare : (compare * -1))
-    }) 
-
-    return this
+    return ((direction === "desc") ? (compare * -1) : compare)
   }
-
 }
-//SORTING END
 
-const list = new SortableList([], "")
-list.sortByKey("name")
-console.log(list.list)
+export const filterByActive = (isFiltered) => {
+  return (item) => {
+    console.log(item)
+    if(item.active || !isFiltered){
+      return item
+    }
+  }
+}

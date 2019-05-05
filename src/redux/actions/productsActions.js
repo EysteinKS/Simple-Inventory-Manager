@@ -62,20 +62,23 @@ export const editProduct = (id, settings) => ({
 })
 
 
-export const ENABLE_PRODUCT = 'ENABLE_PRODUCT'
-export const enableProduct = (id) => ({
-  type: ENABLE_PRODUCT,
+export const TOGGLE_PRODUCT = 'TOGGLE_PRODUCT'
+export const toggleProduct = id => ({
+  type: TOGGLE_PRODUCT,
   payload: id
 })
 
-export const DISABLE_PRODUCT = "DISABLE_PRODUCT"
-export const disableProduct = (id) => ({
-  type: DISABLE_PRODUCT,
-  payload: id
-})
+//PRODUCT VISIBILITY
+
 
 export const SORT_PRODUCTS = "SORT_PRODUCTS"
-export const sortProducts = (sorting, direction) => ({
+export const sortProducts = (func) => ({
   type: SORT_PRODUCTS,
-  payload: { sorting, direction }
+  payload: func
+})
+
+export const FILTER_PRODUCTS = 'FILTER_PRODUCTS'
+export const filterProducts = (func) => ({
+  type: FILTER_PRODUCTS,
+  payload: func
 })

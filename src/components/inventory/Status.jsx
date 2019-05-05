@@ -20,6 +20,7 @@ const StatusHeader = () => {
   return(
     <div className="status-header">
       <p className="header-name">Navn</p>
+      <p className="header-category">Kategori</p>
       <p className="header-inventory">På lager</p>
       <p className="header-ordered">Bestilt</p>
       <p className="header-reserved">Reservert</p>
@@ -57,6 +58,7 @@ const Product = ({ prod }) => {
   return(
     <div className="product-grid">
       <p className="product-name"><ProductName id={productID}/></p>
+      <p className="product-category">Kategori</p>
       <p className="product-inventory">{amount || 0}</p>
       <p className="product-ordered">{ordered || 0}</p>
       <p className="product-reserved">{reserved || 0}</p>

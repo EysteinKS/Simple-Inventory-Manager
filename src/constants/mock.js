@@ -1,7 +1,7 @@
 export const products = [
-  { productID: 1, name: "iPad Wi-Fi", categoryID: 1 },
-  { productID: 2, name: "iPad Mini", categoryID: 1 },
-  { productID: 3, name: "Epson TM-T20II", categoryID: 2 }
+  { productID: 1, name: "iPad Wi-Fi", categoryID: 1, active: true },
+  { productID: 2, name: "iPad Mini", categoryID: 1, active: true },
+  { productID: 3, name: "Epson TM-T20II", categoryID: 2, active: false }
 ]
 
 export const productCategories = [

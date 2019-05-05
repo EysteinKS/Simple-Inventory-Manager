@@ -2,6 +2,7 @@ import * as action from "../actions/productsActions"
 
 const initialState = {
   products: [],
+  sortedProducts: [],
   isLoading: false,
   loaded: false,
   isSaving: false,
@@ -22,7 +23,8 @@ export default (state = initialState, {type, payload}) => {
         ...state,
         isLoading: false,
         loaded: true,
-        products: payload
+        products: payload,
+        sortedProducts: payload
       }
     case action.LOAD_PRODUCTS_FAILURE:
       return {
@@ -69,46 +71,28 @@ export default (state = initialState, {type, payload}) => {
         ...state,
         products: edited
       }
-    case action.ENABLE_PRODUCT:
-      let enabled = state.products.map(product => {
-        if(product.productID === payload){
-          product.active = true
-        }
-        return product
-      })
+    case action.TOGGLE_PRODUCT:
+      let enabled = [...state.products]
+      let isActive = enabled[payload-1].active
+      enabled[payload-1].active = !isActive
       return {
         ...state,
         products: enabled
       }
-    case action.DISABLE_PRODUCT:
-      return {
-        ...state
-      }
     case action.SORT_PRODUCTS:
-      const sortByName = (a, b) => {
-        const nameA = a.name.toUpperCase()
-        const nameB = b.name.toUpperCase()
-
-        let compare = 0;
-        if(nameA > nameB){
-          compare = 1
-        } else if (nameA < nameB) {
-          compare = -1
-        }
-        return (
-          (payload.direction === "desc") ? (compare * -1) : compare
-        )
-      }
-      let sorted
-      if(payload.sorting === "name"){
-        sorted = [...state.products].sort(sortByName)
-      }
-
+      let sorted = [...state.sortedProducts].sort(payload)
       return {
         ...state,
-        products: sorted 
+        sortedProducts: sorted 
+      }
+    case action.FILTER_PRODUCTS:
+      let filtered = [...state.products].filter(payload)
+      console.log(filtered)
+      return {
+        ...state,
+        sortedProducts: filtered
       }
     default:
-      return state
+      return state 
   }
 }

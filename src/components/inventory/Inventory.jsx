@@ -5,6 +5,7 @@ import Status from "./Status"
 import Products from "./Products"
 import Orders from "./Orders"
 import History from "./History"
+import Sales from "../sales/Sales"
 
 
 export default () => {
@@ -13,9 +14,7 @@ export default () => {
 
   let current = null
   switch(view){
-    case "status":
-      current = <Status/>
-      break
+
     case "products":
       current = <Products/>
       break
@@ -24,6 +23,9 @@ export default () => {
       break
     case "history":
       current = <History/>
+      break
+    case "sales":
+      current = <Sales/>
       break
     default:
       break
@@ -41,7 +43,7 @@ const Header = ({ view, setView }) => {
   return(
     <header className="Inventory-header">
         <h3>Lager</h3>
-        {[["Status", "status"], ["Produkter", "products"], ["Bestillinger", "orders"], ["Logg", "history"]].map((btn, i) => {
+        {[["Produkter", "products"], ["Bestillinger", "orders"], ["Salg", "sales"], ["Logg", "history"]].map((btn, i) => {
           let name = btn[0]
           let value = btn[1]
           return <HeaderButton name={name} value={value} view={view} setView={setView} key={i}/>

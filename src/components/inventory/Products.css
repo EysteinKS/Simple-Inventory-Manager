@@ -1,12 +1,22 @@
 .products-header {
   display: grid;
-  grid-template-columns: repeat(5, 20%);
+  grid-template-columns: repeat(6, 14.58%) 12.5%;
   justify-items: center;
   border-bottom: black 1px solid;
 }
 
+.products-header > button {
+  border: none;
+  padding: 16px;
+  background: none
+}
+
 .product {
   display: grid;
-  grid-template-columns: repeat(5, 20%);
+  grid-template-columns: repeat(6, 14.58%) 6.25% 6.25%;
   justify-items: center;
+}
+
+.product > p {
+  margin: 16px;
 }
