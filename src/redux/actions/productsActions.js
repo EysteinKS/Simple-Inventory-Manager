@@ -50,15 +50,33 @@ export const saveInventoryFailure = (error) => ({
 //PRODUCT HANDLING
 
 export const CREATE_PRODUCT = 'CREATE_PRODUCT'
-export const createProduct = (product) => ({
+export const createProduct = (initializedProduct) => ({
   type: CREATE_PRODUCT,
-  payload: product
+  payload: initializedProduct
+})
+
+export const SAVE_CREATED_PRODUCT = 'SAVE_CREATED_PRODUCT'
+export const saveCreatedProduct = (created) => ({
+  type: SAVE_CREATED_PRODUCT,
+  payload: created
 })
 
 export const EDIT_PRODUCT = 'EDIT_PRODUCT'
-export const editProduct = (id, settings) => ({
+export const editProduct = (id) => ({
   type: EDIT_PRODUCT,
-  payload: { id, settings }
+  payload: id
+})
+
+
+export const SAVE_EDITED_PRODUCT = 'SAVE_EDITED_PRODUCT'
+export const saveEditedProduct = (edited) => ({
+  type: SAVE_EDITED_PRODUCT,
+  payload: edited
+})
+
+export const CLEAR_CURRENT_PRODUCT = 'CLEAR_CURRENT_PRODUCT'
+export const clearCurrentProduct = () => ({
+  type: CLEAR_CURRENT_PRODUCT,
 })
 
 

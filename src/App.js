@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
 
-import Inventory from "./components/inventory/Inventory"
-import Sales from "./components/sales/Sales"
+import Main from "./components/Main"
 import { loadProducts } from "./redux/actions/productsActions"
-import { loadInventory } from "./redux/actions/inventoryActions"
 import { loadOrders } from "./redux/actions/ordersActions"
 
 import './App.css';
@@ -12,10 +10,6 @@ import './App.css';
 class App extends Component {
 
   componentDidMount(){
-    let inventory = this.props.inventory
-    if(!inventory.isLoading && !inventory.loaded){
-      this.props.dispatch(loadInventory())
-    }
     let orders = this.props.orders
     if(!orders.isLoading && !orders.loaded){
       this.props.dispatch(loadOrders())
@@ -27,11 +21,10 @@ class App extends Component {
   }
   
   render(){
-    const inventory = this.props.inventory
     const orders = this.props.orders
     const products = this.props.products
 
-    if(inventory.isLoading || orders.isLoading || products.isLoading){
+    if(orders.isLoading || products.isLoading){
       return(
         <div>
           Loading...
@@ -39,18 +32,18 @@ class App extends Component {
       )
     }
 
-    if(inventory.error || orders.error || products.error){
+    if(orders.error || products.error){
       return(
         <div>
-          <p>Error: {inventory.error.message || orders.error.message}</p>
+          <p>Error: {orders.error.message || products.error.message}</p>
         </div>
       )
     }
 
-    if(inventory.loaded && orders.loaded && products.loaded){
+    if(orders.loaded && products.loaded){
       return(
         <div className="app-grid">
-          <Inventory className="grid-left"/>
+          <Main className="grid-left"/>
         </div>
       )
     }

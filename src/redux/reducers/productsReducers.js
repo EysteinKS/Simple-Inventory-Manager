@@ -3,6 +3,7 @@ import * as action from "../actions/productsActions"
 const initialState = {
   products: [],
   sortedProducts: [],
+  currentProduct: {},
   isLoading: false,
   loaded: false,
   isSaving: false,
@@ -54,22 +55,38 @@ export default (state = initialState, {type, payload}) => {
         error: payload
       }
     case action.CREATE_PRODUCT:
-      let newArray = state.products.concat(payload)
       return {
         ...state,
-        products: newArray
+        currentProduct: payload
+      }
+    case action.SAVE_CREATED_PRODUCT:
+      let withNewProduct = state.products.concat(payload)
+      return {
+        ...state,
+        products: withNewProduct,
+        sortedProducts: withNewProduct,
+        currentProduct: {}
       }
     case action.EDIT_PRODUCT:
-      let edited = state.products.map(product => {
-        if(product.productID === payload.id){
-          return payload.settings
-        } else {
-          return product
-        }
-      })
       return {
         ...state,
-        products: edited
+        currentProduct: state.products[payload - 1]
+      }
+    case action.SAVE_EDITED_PRODUCT:
+      let edited = [...state.products]
+      edited[payload.productID - 1] = payload
+      console.log(state.products)
+      console.log(edited)
+      return {
+        ...state,
+        products: edited,
+        sortedProducts: edited,
+        currentProduct: {}
+      }
+    case action.CLEAR_CURRENT_PRODUCT:
+      return {
+        ...state,
+        currentProduct: {}
       }
     case action.TOGGLE_PRODUCT:
       let enabled = [...state.products]

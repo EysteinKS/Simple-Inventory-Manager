@@ -9,6 +9,7 @@ export default () => {
 
   return (
     <div>
+      <h3 style={{display: "flex", justifyContent: "center"}}>Bestillinger</h3>
       <OrdersHeader />
       <List list={list} />
     </div>

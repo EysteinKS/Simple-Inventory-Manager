@@ -63,3 +63,16 @@ export const filterByActive = (isFiltered) => {
     }
   }
 }
+
+//CREATING
+
+export const newProduct = (id) => {
+  console.log("Creating product with id: ", id)
+  return {
+    productID: id,
+    name: "Default",
+    categoryID: "Default",
+    active: true,
+    amount: 0
+  }
+}
