@@ -25,7 +25,7 @@ export const getCategoryName = (categories = [], id) => {
 
 
 //SORTING
-export const sortByName = (direction) => {
+const sortByName = (direction) => {
   return (a, b) => {
     const nameA = a.name.toUpperCase()
     const nameB = b.name.toUpperCase()
@@ -39,7 +39,7 @@ export const sortByName = (direction) => {
   }
 }
 
-export const sortByCategory = (categories = [], direction) => {
+const sortByCategory = (categories = [], direction) => {
   const sortedCategories = [...categories].sort(sortByName("asc"))
   console.log(sortedCategories)
   return (a, b) => {
@@ -55,6 +55,13 @@ export const sortByCategory = (categories = [], direction) => {
   }
 }
 
+export const sort = {
+  byName: sortByName,
+  byCategory: sortByCategory
+}
+//SORTING END
+
+//FILTERING
 export const filterByActive = (isFiltered) => {
   return (item) => {
     console.log(item)
@@ -63,6 +70,7 @@ export const filterByActive = (isFiltered) => {
     }
   }
 }
+//FILTERING END
 
 //CREATING
 
@@ -70,8 +78,8 @@ export const newProduct = (id) => {
   console.log("Creating product with id: ", id)
   return {
     productID: id,
-    name: "Default",
-    categoryID: "Default",
+    name: "",
+    categoryID: "1",
     active: true,
     amount: 0
   }

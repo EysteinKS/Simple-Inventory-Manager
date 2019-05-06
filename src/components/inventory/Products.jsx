@@ -8,7 +8,7 @@ import {
   editProduct,
   saveEditedProduct,
   clearCurrentProduct } from "../../redux/actions/productsActions"
-import { sortByName, filterByActive, sortByCategory, getOrderedAmount, newProduct } from "../../constants/util"
+import { filterByActive, sort, getOrderedAmount, newProduct } from "../../constants/util"
 import { productCategories } from "../../constants/mock"
 import "./Products.css"
 
@@ -53,8 +53,8 @@ const ProductsHeader = () => {
   }, [isFiltered, dispatch])
   return(
     <div className="products-header">
-      <HeaderButton name="Navn" sort={dir => sortByName(dir)}/>
-      <HeaderButton name="Kategori" sort={dir => sortByCategory(productCategories, dir)}/>
+      <HeaderButton name="Navn" sorting={dir => sort.byName(dir)}/>
+      <HeaderButton name="Kategori" sorting={dir => sort.byCategory(productCategories, dir)}/>
       <p>På lager</p>
       <p>Bestilt</p>
       <p>Reservert</p>
@@ -64,14 +64,14 @@ const ProductsHeader = () => {
   )
 }
 
-const HeaderButton = ({ name, sort }) => {
+const HeaderButton = ({ name, sorting }) => {
   const dispatch = useDispatch()
   const [ currentDirection, setDirection ] = useState("asc")
   return(
     <button onClick={() => {
       setDirection(currentDirection === "asc" ? "desc" : "asc" )
       console.log(currentDirection)
-      dispatch(sortProducts(sort(currentDirection)))
+      dispatch(sortProducts(sorting(currentDirection)))
     }}>
       {name} {currentDirection === "desc" ? "↓" : "↑"}
     </button>
@@ -126,6 +126,21 @@ const EditProduct = ({ isOpen, close }) => {
     categoryID: category,
     active: active,
     amount: Number(amount)
+  }
+
+  const save = () => {
+    console.log("Current ID: ", current.productID)
+    console.log("Products length: ", products.length)
+    if(current.productID > products.length){
+      dispatch(saveCreatedProduct(returnedProduct))
+      close()
+      setInit(false)
+    } else {
+      console.log("Saving product: ", returnedProduct)
+      dispatch(saveEditedProduct(returnedProduct))
+      close()
+      setInit(false)
+    }
   }
 
   return(
@@ -183,20 +198,7 @@ const EditProduct = ({ isOpen, close }) => {
           onChange={() => setActive(!active)}
         />
       </form>
-      <button onClick={() => {
-        console.log("Current ID: ", current.productID)
-        console.log("Products length: ", products.length)
-        if(current.productID > products.length){
-          dispatch(saveCreatedProduct(returnedProduct))
-          close()
-          setInit(false)
-        } else {
-          console.log("Saving product: ", returnedProduct)
-          dispatch(saveEditedProduct(returnedProduct))
-          close()
-          setInit(false)
-        }
-      }}>Lagre</button>
+      <button onClick={save}>Lagre</button>
       <button onClick={() => {
         close()
         setInit(false)
