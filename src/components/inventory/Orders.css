@@ -13,7 +13,7 @@
 }
 
 .order-list {
-  height: 69vh;
+  max-height: 63vh;
   overflow-y: scroll;
 }
 

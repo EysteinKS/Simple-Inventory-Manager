@@ -1,27 +1,51 @@
-import React, { useState, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { sortProducts } from "../../redux/actions/productsActions"
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+//import { sortProducts } from "../../redux/actions/productsActions"
 import "./Orders.css";
-import ProductName from "../ProductName"
+import ProductName from "../ProductName";
+
+import SectionHeader, { Row, Title, Key, KeyButton } from "../SectionHeader";
 
 export default () => {
   const list = useSelector(state => state.orders.orders);
 
+  const LeftButton = () => (
+    <button
+      onClick={() => {
+        //dispatch(createProduct(newProduct(products.products.length + 1)));
+        //setProductOpen(true);
+      }}
+    >
+      Legg til
+    </button>
+  );
+  const RightButton = () => {
+    return (
+      <button
+        onClick={() => {
+          //setCategoriesOpen(true);
+        }}
+      >
+        Leverandører
+      </button>
+    );
+  };
+
   return (
     <div>
-      <h3 style={{display: "flex", justifyContent: "center"}}>Bestillinger</h3>
-      <OrdersHeader />
+      <SectionHeader>
+        <Row grid="20% 60% 20%">
+          <LeftButton />
+          <Title>Bestillinger</Title>
+          <RightButton />
+        </Row>
+        <Row grid="10% 30% 30% 30%">
+          <Key name="#"/>
+          <Key name="Navn"/>
+          <Key name="Leverandør"/>
+        </Row>
+      </SectionHeader>
       <List list={list} />
-    </div>
-  );
-};
-
-const OrdersHeader = () => {
-  return (
-    <div className="orders-header">
-      <p>#</p>
-      <p>Navn</p>
-      <p>Leverandør</p>
     </div>
   );
 };
@@ -41,14 +65,21 @@ const List = ({ list }) => {
 };
 
 const Order = ({ order }) => {
-  const { orderid, supplier, title, dateOrdered, dateReceived, ordered } = order;
-  const [ expanded, setExpanded ] = useState(false)
+  const {
+    orderid,
+    supplier,
+    title,
+    dateOrdered,
+    dateReceived,
+    ordered
+  } = order;
+  const [expanded, setExpanded] = useState(false);
 
   let detailStyle;
-  if(expanded){
-    detailStyle = "order-details"
+  if (expanded) {
+    detailStyle = "order-details";
   } else {
-    detailStyle = "order-details collapsed"
+    detailStyle = "order-details collapsed";
   }
 
   return (
@@ -68,7 +99,7 @@ const Order = ({ order }) => {
         </div>
         <div className="order-content">
           {ordered.map((prod, i) => (
-            <Product product={prod} key={i}/>
+            <Product product={prod} key={i} />
           ))}
         </div>
       </div>
@@ -77,9 +108,11 @@ const Order = ({ order }) => {
 };
 
 const Product = ({ product }) => {
-  return(
+  return (
     <div>
-      <span>{product.amount}x <ProductName id={product.productID}/></span>
+      <span>
+        {product.amount}x <ProductName id={product.productID} />
+      </span>
     </div>
-  )
-}
+  );
+};

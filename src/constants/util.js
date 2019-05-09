@@ -64,7 +64,6 @@ export const sort = {
 //FILTERING
 export const filterByActive = (isFiltered) => {
   return (item) => {
-    console.log(item)
     if(item.active || !isFiltered){
       return item
     }

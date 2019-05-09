@@ -1,5 +1,6 @@
 .Inventory {
   border: black 3px solid;
+  border-radius: 10px;
 }
 
 .btn-active {
@@ -12,8 +13,33 @@
 
 .Inventory-header {
   display: grid;
-  grid-template-columns: 20% repeat(6, 13.33%);
+  grid-template-columns: 20% repeat(4, 20%);
+  column-gap: 2px;
   justify-items: center;
   border-bottom: black 2px solid;
   padding: 10px;
 }
+
+.Inventory-header > h3 {
+  width: 100%;
+}
+
+.Inventory-header > button {
+  position: relative;
+  right: 8px;
+  border-style: outset;
+  border-color: rgba(255, 255, 255, 0.4);
+  background-color: #fbfbfb;
+  border-radius: 15px;
+}
+
+/*.Inventory-header > button::after {
+  content: "";
+  background-color: #000;
+  position: absolute;
+  width: 5px;
+  height: 100px;
+  top: 10px;
+  left: 50%;
+  display: block;
+}*/

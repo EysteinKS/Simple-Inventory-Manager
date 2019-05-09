@@ -18,14 +18,8 @@ export default () => {
     case "orders":
       current = <Orders />;
       break;
-    case "suppliers":
-      current = <div/>
-      break
     case "history":
       current = <History />;
-      break;
-    case "sales":
-      current = <Sales />;
       break;
     case "customers":
       current = <div/>
@@ -46,9 +40,7 @@ const Header = ({ view, setView }) => {
   const pages = [
     ["Produkter", "products"],
     ["Bestillinger", "orders"],
-    ["Leverandører", "suppliers"],
     ["Salg", "sales"],
-    ["Kunder", "customers"],
     ["Logg", "history"]
   ];
   return (

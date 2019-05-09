@@ -1,4 +1,5 @@
 import { getProducts } from "../../constants/api"
+import { firestore } from "../../firebase/firebase"
 
 //LOADING
 
@@ -29,6 +30,20 @@ export const loadProducts = () => {
   }
 }
 
+export const loadProductsNew = () => {
+  return dispatch => {
+    dispatch(loadProductsBegin())
+    firestore.doc("Barcontrol/Products").get()
+      .then(res => {
+        let data = res.data()
+        let products = data.products
+        console.log("Loaded products successfully: ", products)
+        dispatch(loadProductsSuccess(products))
+      })
+      .catch(err => loadProductsFailure(err))
+  }
+}
+
 //SAVING
 
 export const SAVE_PRODUCTS_BEGIN = 'SAVE_PRODUCTS_BEGIN'
@@ -42,10 +57,23 @@ export const saveProductsSuccess = () => ({
 })
 
 export const SAVE_PRODUCTS_FAILURE = 'SAVE_PRODUCTS_FAILURE'
-export const saveInventoryFailure = (error) => ({
+export const saveProductsFailure = (error) => ({
   type: SAVE_PRODUCTS_FAILURE,
   payload: error
 })
+
+export const saveProducts = (products) => {
+  return dispatch => {
+    dispatch(saveProductsBegin())
+    firestore.doc("Barcontrol/Products").set({
+      products: products
+    }, {merge: true})
+      .then(() => {
+        dispatch(saveProductsSuccess())
+      })
+      .catch(err => dispatch(saveProductsFailure(err)))
+  }
+}
 
 //PRODUCT HANDLING
 

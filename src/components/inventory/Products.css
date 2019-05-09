@@ -11,12 +11,33 @@
   background: none
 }
 
+.product-list {
+  height: 63vh;
+  max-height: 63vh;
+  overflow-y: scroll
+}
+
 .product {
   display: grid;
-  grid-template-columns: repeat(6, 14.58%) 6.25% 6.25%;
+  grid-template-columns: repeat(6, 14.58%) 12.5%;
   justify-items: center;
+}
+
+.product:nth-child(2n){
+  background-color: rgba(200, 200, 200, 0.1)
+}
+
+.product-name {
+  justify-self: left ;
+}
+.product-category {
+  justify-self: left ;
 }
 
 .product > p {
   margin: 16px;
+}
+
+.inactive {
+  background-color: #fad7d7 !important
 }

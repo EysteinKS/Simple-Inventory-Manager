@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from "react-redux"
 
 import Main from "./components/Main"
-import { loadProducts } from "./redux/actions/productsActions"
+import { data } from "./config"
+import { loadProducts, loadProductsNew } from "./redux/actions/productsActions"
 import { loadOrders } from "./redux/actions/ordersActions"
 
 import './App.css';
@@ -15,8 +16,10 @@ class App extends Component {
       this.props.dispatch(loadOrders())
     }
     let products = this.props.products
-    if(!products.isLoading && !products.loaded){
-      this.props.dispatch(loadProducts())
+    if(!products.isLoading && !products.isLoaded){
+      (data === "Local")
+      ? this.props.dispatch(loadProducts())
+      : this.props.dispatch(loadProductsNew())
     }
   }
   
@@ -40,7 +43,7 @@ class App extends Component {
       )
     }
 
-    if(orders.loaded && products.loaded){
+    if(orders.loaded && products.isLoaded){
       return(
         <div className="app-grid">
           <Main className="grid-left"/>

@@ -6,7 +6,8 @@ export const products = [
 
 export const productCategories = [
   { categoryID: 1, name: "iPader", color: "" },
-  { categoryID: 2, name: "Printere", color: "" }
+  { categoryID: 2, name: "Printere", color: "" },
+  { categoryID: 3, name: "Annet", color: "" }
 ]
 
 export const inventory = [
@@ -23,30 +24,6 @@ export const orders = [
   { orderid: 2, supplier: "EET", title: "Printere", dateOrdered: "01-01-1970", dateReceived: null, ordered: [
     { productID: 3, amount: 4 },
   ]},
-  { orderid: 3, supplier: "EET", title: "Printere", dateOrdered: "01-01-1970", dateReceived: null, ordered: [
-    { productID: 3, amount: 4 },
-  ]},
-  { orderid: 4, supplier: "EET", title: "Printere", dateOrdered: "01-01-1970", dateReceived: null, ordered: [
-    { productID: 3, amount: 4 },
-  ]},
-  { orderid: 5, supplier: "EET", title: "Printere", dateOrdered: "01-01-1970", dateReceived: null, ordered: [
-    { productID: 3, amount: 4 },
-  ]},
-  { orderid: 6, supplier: "EET", title: "Printere", dateOrdered: "01-01-1970", dateReceived: null, ordered: [
-    { productID: 3, amount: 4 },
-  ]},
-  { orderid: 7, supplier: "EET", title: "Printere", dateOrdered: "01-01-1970", dateReceived: null, ordered: [
-    { productID: 3, amount: 4 },
-  ]},
-  { orderid: 8, supplier: "EET", title: "Printere", dateOrdered: "01-01-1970", dateReceived: null, ordered: [
-    { productID: 3, amount: 4 },
-  ]},
-  { orderid: 9, supplier: "EET", title: "Printere", dateOrdered: "01-01-1970", dateReceived: null, ordered: [
-    { productID: 3, amount: 4 },
-  ]},
-  { orderid: 10, supplier: "EET", title: "Printere", dateOrdered: "01-01-1970", dateReceived: null, ordered: [
-    { productID: 3, amount: 4 },
-  ]}
 ]
 
 export const customers = [
