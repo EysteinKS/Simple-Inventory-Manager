@@ -8,6 +8,7 @@ import {
   clearCurrentProduct,
   saveProducts
 } from "../../redux/actions/productsActions";
+import { saveCategories } from "../../redux/actions/categoriesActions"
 import {
   filterByActive,
   sort,
@@ -26,6 +27,7 @@ import Icons from "../Icons"
 export default () => {
   const dispatch = useDispatch();
   const products = useSelector(state => state.products);
+  const categories = useSelector(state => state.categories)
   let productList = products.sortedProducts;
   const [isProductOpen, setProductOpen] = useState(false);
   const [isCategoriesOpen, setCategoriesOpen] = useState(false);
@@ -79,10 +81,13 @@ export default () => {
           <div/>
           <Title>Produkter</Title>
           <CloudStatus 
-            save={() => dispatch(saveProducts(products.products))}
-            isSaving={products.isSaving}
-            isSaved={products.isSaved}
-            error={products.savingError}
+            save={() => {
+              dispatch(saveProducts(products.products))
+              dispatch(saveCategories(categories.categories))
+            }}
+            isSaving={products.isSaving && categories.isSaving}
+            isSaved={products.isSaved && categories.isSaved}
+            error={products.savingError || categories.savingError}
           />
           <RightButton />
         </Row>

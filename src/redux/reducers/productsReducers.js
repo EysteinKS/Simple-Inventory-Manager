@@ -1,5 +1,6 @@
 import * as action from "../actions/productsActions"
 
+
 const initialState = {
   products: [],
   sortedProducts: [],
@@ -19,6 +20,8 @@ export default (state = initialState, {type, payload}) => {
       return {
         ...state,
         isLoading: true,
+        isLoaded: false,
+        loadingError: false,
         error: null
       }
     case action.LOAD_PRODUCTS_SUCCESS:
