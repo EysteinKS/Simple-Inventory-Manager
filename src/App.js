@@ -5,6 +5,7 @@ import Main from "./components/Main"
 import { data } from "./config"
 import { loadProducts, loadProductsNew } from "./redux/actions/productsActions"
 import { loadOrders } from "./redux/actions/ordersActions"
+import { loadCategories } from "./redux/actions/categoriesActions"
 
 import './App.css';
 
@@ -21,11 +22,16 @@ class App extends Component {
       ? this.props.dispatch(loadProducts())
       : this.props.dispatch(loadProductsNew())
     }
+    let categories = this.props.categories
+    if(!categories.isLoading && !categories.isLoaded){
+      this.props.dispatch(loadCategories())
+    }
   }
   
   render(){
     const orders = this.props.orders
     const products = this.props.products
+    const categories = this.props.categories
 
     if(orders.isLoading || products.isLoading){
       return(
@@ -43,7 +49,7 @@ class App extends Component {
       )
     }
 
-    if(orders.loaded && products.isLoaded){
+    if(orders.loaded && products.isLoaded && categories.isLoaded){
       return(
         <div className="app-grid">
           <Main className="grid-left"/>
@@ -59,9 +65,9 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  inventory: state.inventory,
   orders: state.orders,
-  products: state.products
+  products: state.products,
+  categories: state.categories
 })
 
 export default connect(mapStateToProps)(App);
