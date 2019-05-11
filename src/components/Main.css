@@ -1,6 +1,7 @@
 .Inventory {
   border: lightgray 1px solid;
   border-radius: 10px;
+  height: 90vh;
 }
 
 .btn-active {

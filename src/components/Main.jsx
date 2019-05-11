@@ -20,11 +20,11 @@ export default () => {
     case "orders":
       current = <Orders />;
       break;
+    case "sales":
+      current = <Sales />
+      break;
     case "history":
       current = <History />;
-      break;
-    case "customers":
-      current = <div/>
       break;
     default:
       break;

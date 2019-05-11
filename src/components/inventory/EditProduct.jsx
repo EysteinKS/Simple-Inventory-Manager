@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useCallback, Fragment} from "react"
+import React, {useState, useEffect, useCallback} from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { saveCreatedProduct, saveEditedProduct } from "../../redux/actions/productsActions"
-import { createCategory, saveCreatedCategory } from "../../redux/actions/categoriesActions"
-import ReactTooltip from "react-tooltip"
+import { saveCreatedCategory } from "../../redux/actions/categoriesActions"
 import ReactModal from "react-modal"
+import Collapse from "@material-ui/core/Collapse"
 import Icons from "../Icons"
 ReactModal.setAppElement("#root");
 
@@ -109,7 +109,9 @@ export default ({ isOpen, close }) => {
           {categories.map((category, key)=> <option key={key} value={category.categoryID}>{category.name}</option>)}
           <option value="new">...</option>
         </select>
-        {newCategory
+        <Collapse in={newCategory} style={{
+          gridColumn: "2/3"
+        }}>{newCategory
           ? <AddCategory 
               visible={(category === "new")}
               categories={categories}  
@@ -119,6 +121,7 @@ export default ({ isOpen, close }) => {
               }} 
             />
           : null}
+          </Collapse>
         <label htmlFor="amount">På lager</label>
         <input
           type="tel"

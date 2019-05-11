@@ -3,7 +3,7 @@ import * as action from "../actions/ordersActions"
 const initialState = {
   orders: [],
   isLoading: false,
-  loaded: false,
+  isLoaded: false,
   isSaving: false,
   saved: false,
   error: null
@@ -21,7 +21,7 @@ export default (state = initialState, {type, payload}) => {
       return {
         ...state,
         isLoading: false,
-        loaded: true,
+        isLoaded: true,
         orders: payload
       }
     case action.LOAD_ORDERS_FAILURE:
@@ -29,7 +29,7 @@ export default (state = initialState, {type, payload}) => {
         ...state,
         orders: [],
         isLoading: false,
-        loaded: false,
+        isLoaded: false,
         error: payload
       }
     case action.SAVE_ORDERS_BEGIN:

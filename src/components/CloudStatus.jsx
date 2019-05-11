@@ -1,7 +1,6 @@
 import React, {Fragment} from "react"
 import Icons from "./Icons"
 import ReactTooltip from "react-tooltip"
-import {useGate} from "../constants/hooks"
 
 export default ({ className, style, save, isSaving, isSaved, error }) => {
   

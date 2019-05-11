@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import "./Orders.css";
 import ProductName from "../ProductName";
 
-import SectionHeader, { Row, Title, Key, KeyButton } from "../SectionHeader";
+import SectionHeader, { Row, Title, Key } from "../SectionHeader";
 
 export default () => {
   const list = useSelector(state => state.orders.orders);

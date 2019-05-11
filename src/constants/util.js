@@ -41,7 +41,7 @@ const sortByName = (direction) => {
 
 const sortByCategory = (categories = [], direction) => {
   const sortedCategories = [...categories].sort(sortByName("asc"))
-  console.log(sortedCategories)
+  //console.log(sortedCategories)
   return (a, b) => {
     const categoryA = sortedCategories[a.categoryID - 1].name.toUpperCase()
     const categoryB = sortedCategories[b.categoryID - 1].name.toUpperCase()
@@ -74,7 +74,7 @@ export const filterByActive = (isFiltered) => {
 //CREATING
 
 export const newProduct = (id) => {
-  console.log("Creating product with id: ", id)
+  //console.log("Creating product with id: ", id)
   return {
     productID: id,
     name: "",

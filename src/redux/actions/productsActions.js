@@ -1,4 +1,3 @@
-import { getProducts } from "../../constants/api"
 import { firestore } from "../../firebase/firebase"
 
 //LOADING
@@ -20,7 +19,7 @@ export const loadProductsFailure = (error) => ({
   payload: error
 })
 
-export const loadProducts = () => {
+/*export const loadProducts = () => {
   return dispatch => {
     dispatch(loadProductsBegin())
     getProducts.then(res => {
@@ -28,9 +27,9 @@ export const loadProducts = () => {
       dispatch(loadProductsSuccess(res))
     }).catch(err => loadProductsFailure(err))
   }
-}
+}*/
 
-export const loadProductsNew = () => {
+export const loadProducts = () => {
   return dispatch => {
     dispatch(loadProductsBegin())
     firestore.doc("Barcontrol/Products").get()

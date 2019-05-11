@@ -12,14 +12,25 @@
 }
 
 .product-list {
-  height: 63vh;
-  max-height: 63vh;
+  height: 57vh;
   overflow-y: scroll
 }
 
+/*.product-list:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  bottom: 5vh;
+  left: 7vh;
+  pointer-events: none;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 90%);
+  width: 88vw;
+  height: 4em;
+}*/
+
 .product {
   display: grid;
-  grid-template-columns: 15% 15% repeat(4, 14.5%) 12%;
+  grid-template-columns: 15% 15% repeat(4, 14.5%) 6% 6%;
   justify-items: center;
 }
 

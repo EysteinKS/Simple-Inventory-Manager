@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import {useSelector, useDispatch} from "react-redux"
+import {useSelector} from "react-redux"
 
 import ReactModal from "react-modal"
 ReactModal.setAppElement("#root")
@@ -36,7 +36,7 @@ export default ({ isOpen, close }) => {
 }
 
 const CategoryList = ({ categories }) => {
-  return categories.map(category => <Category category={category}/>)
+  return categories.map((category, i)=> <Category category={category} key={i}/>)
 }
 
 const Category = ({ category }) => {

@@ -1,73 +1,70 @@
-import React, { Component } from 'react';
-import { connect } from "react-redux"
 
-import Main from "./components/Main"
-import { data } from "./config"
-import { loadProducts, loadProductsNew } from "./redux/actions/productsActions"
+import React, {useState, useEffect} from "react"
+import {useDispatch, useSelector} from "react-redux"
+import {useGate, generateSelectors} from "./constants/hooks"
+import { loadProducts } from "./redux/actions/productsActions"
 import { loadOrders } from "./redux/actions/ordersActions"
 import { loadCategories } from "./redux/actions/categoriesActions"
 
-import './App.css';
+import CircularProgress from "@material-ui/core/CircularProgress"
+import Main from "./components/Main"
+import "./App.css"
 
-class App extends Component {
+const App = () => {
+  const gateObjects = ["products", "categories", "orders"]
+  let isLoadingSelector = generateSelectors(gateObjects, "isLoading", useSelector)
+  let isLoadedSelector = generateSelectors(gateObjects, "isLoaded", useSelector)
+  let loadingErrorSelector = generateSelectors(gateObjects, "loadingError", useSelector)
 
-  componentDidMount(){
-    let orders = this.props.orders
-    if(!orders.isLoading && !orders.loaded){
-      this.props.dispatch(loadOrders())
+  const isLoadingGate = useGate(
+    {gate: "OR", list: isLoadingSelector},
+    {gate: "OR", list: ["isLoading"]}
+  )
+  const isLoadedGate = useGate(
+    {gate: "AND", list: isLoadedSelector},
+    {gate: "AND", list: ["isLoaded"]}
+  )
+  const loadingErrorGate = useGate(
+    {gate: "OR", list: loadingErrorSelector},
+    {gate: "OR", list: ["loadingError"]}
+  )
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if(!isLoadingGate && !isLoadedGate){
+      dispatch(loadOrders())
+      dispatch(loadProducts())
+      dispatch(loadCategories())
     }
-    let products = this.props.products
-    if(!products.isLoading && !products.isLoaded){
-      (data === "Local")
-      ? this.props.dispatch(loadProducts())
-      : this.props.dispatch(loadProductsNew())
-    }
-    let categories = this.props.categories
-    if(!categories.isLoading && !categories.isLoaded){
-      this.props.dispatch(loadCategories())
-    }
-  }
-  
-  render(){
-    const orders = this.props.orders
-    const products = this.props.products
-    const categories = this.props.categories
+  }, [dispatch, isLoadingGate, isLoadedGate, loadingErrorGate])
 
-    if(orders.isLoading || products.isLoading){
-      return(
-        <div>
-          Loading...
-        </div>
-      )
+  const [content, setContent] = useState(null)
+  useEffect(() => {
+    //console.log("isLoadingGate: ", isLoadingGate)
+    //console.log("isLoadedGate: ", isLoadedGate)
+    if(isLoadingGate){
+      setContent(<CircularProgress style={{alignSelf: "center", justifySelf: "center"}}/>)
+    } else if (loadingErrorGate){
+      setContent(<p>Error!</p>)
+    } else if (isLoadedGate){
+      setContent(<Main/>)
     }
+  }, [isLoadingGate, loadingErrorGate, isLoadedGate])
 
-    if(orders.error || products.error){
-      return(
-        <div>
-          <p>Error: {orders.error.message || products.error.message}</p>
-        </div>
-      )
-    }
-
-    if(orders.loaded && products.isLoaded && categories.isLoaded){
-      return(
-        <div className="app-grid">
-          <Main className="grid-left"/>
-        </div>
-      )
-    }
-
-    return(
-      null
-    )
-  }
-
+  return(
+    <div style={{
+      display: "grid",
+      paddingTop: "5vh",
+      paddingBottom: "5vh",
+      paddingLeft: "5vw",
+      paddingRight: "5vw",
+      height: "90vh",
+      maxHeight: "90vh",
+      width: "90vw"
+    }}>
+      {content}
+    </div>
+  )
 }
 
-const mapStateToProps = state => ({
-  orders: state.orders,
-  products: state.products,
-  categories: state.categories
-})
-
-export default connect(mapStateToProps)(App);
+export default App

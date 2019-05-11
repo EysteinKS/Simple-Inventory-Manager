@@ -6,7 +6,8 @@ import {
   createProduct,
   editProduct,
   clearCurrentProduct,
-  saveProducts
+  saveProducts,
+  toggleProduct
 } from "../../redux/actions/productsActions";
 import { saveCategories } from "../../redux/actions/categoriesActions"
 import {
@@ -15,7 +16,6 @@ import {
   getOrderedAmount,
   newProduct
 } from "../../constants/util";
-import { productCategories } from "../../constants/mock";
 import "./Products.css";
 
 import EditProduct from "./EditProduct";
@@ -94,12 +94,12 @@ export default () => {
   const errorGate = useGate(
     {gate: "OR", list: gateObjError}, 
     {gate: "OR", list: ["savingError"]})
-  console.log(gateObjSaving)
+  //console.log(gateObjSaving)
 
   return (
     <Fragment>
       <SectionHeader>
-        <Row grid="15% 15% 40% 15% 15%">
+        <Row grid="15% 15% 43.5% 14.5% 12%">
           <NewProductButton />
           <CategoriesButton />
           <Title>Produkter</Title>
@@ -120,7 +120,7 @@ export default () => {
             <Icons.FormatQuote/>
           </HeaderButton>
           <HeaderButton
-            sorting={dir => sort.byCategory(productCategories, dir)}
+            sorting={dir => sort.byCategory(categories.categories, dir)}
           >
             <Icons.FolderOpen/>
           </HeaderButton>
@@ -168,6 +168,7 @@ const HeaderButton = ({ children, sorting }) => {
 };
 
 const Product = ({ product, reserved, edit }) => {
+  const dispatch = useDispatch()
   const categories = useSelector(state => state.categories.categories);
   const category = categories[product.categoryID - 1].name;
   //const category = getCategoryName(categories, product.categoryID)
@@ -185,7 +186,8 @@ const Product = ({ product, reserved, edit }) => {
       <p>{ordered || 0}</p>
       <p>{reserved || 0}</p>
       <p>{total}</p>
-      <button onClick={() => edit(product.productID)}>Rediger</button>
+      <button onClick={() => dispatch(toggleProduct(product.productID))}>{product.active ? <Icons.Visibility/>: <Icons.VisibilityOff/>}</button>
+      <button onClick={() => edit(product.productID)}><Icons.Edit/></button>
     </div>
   );
 };
