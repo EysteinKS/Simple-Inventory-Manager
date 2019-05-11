@@ -16,6 +16,20 @@
   overflow-y: scroll
 }
 
+.product-list::-webkit-scrollbar {
+  position: relative;
+  right: 10px;
+  width: 2px;
+}
+
+.product-list::-webkit-scrollbar-thumb {
+  background-color: darkgray
+}
+
+.product-list::-webkit-scrollbar-track {
+  background-color: transparent
+}
+
 /*.product-list:after {
   content: "";
   position: absolute;
