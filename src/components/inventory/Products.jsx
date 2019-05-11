@@ -25,6 +25,9 @@ import CloudStatus from "../CloudStatus"
 import Icons from "../Icons"
 import {useGate, generateSelectors} from "../../constants/hooks"
 
+import SimpleBar from "simplebar-react"
+import "simplebar/dist/simplebar.min.css"
+
 export default () => {
   const dispatch = useDispatch();
   const products = useSelector(state => state.products);
@@ -131,8 +134,11 @@ export default () => {
           <KeyButton onClick={filter}>{!isFiltered ? <Icons.VisibilityOff/> : <Icons.Visibility/>}</KeyButton>
         </Row>
       </SectionHeader>
-
-      <div className="product-list">{content}</div>
+      <SimpleBar>
+      <div className="product-list">
+        {content}
+      </div>
+      </SimpleBar>
       <EditProduct
         isOpen={isProductOpen}
         close={() => {

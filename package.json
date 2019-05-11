@@ -16,7 +16,8 @@
     "react-scripts": "3.0.0",
     "react-tooltip": "^3.10.0",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "simplebar-react": "^1.0.0-alpha.9"
   },
   "scripts": {
     "start": "react-scripts start",
