@@ -1,6 +1,7 @@
 import React, {Fragment} from "react"
 import Icons from "./Icons"
 import ReactTooltip from "react-tooltip"
+import {useGate} from "../constants/hooks"
 
 export default ({ className, style, save, isSaving, isSaved, error }) => {
   
@@ -25,14 +26,14 @@ export default ({ className, style, save, isSaving, isSaved, error }) => {
     tooltip = "En feil oppsto! Prøv igjen?"
     styling["cursor"] = "pointer"
     styling["backgroundColor"] = "#ff9999"
+  } else if(isSaving){
+    icon = <Icons.CloudUpload/>
+    tooltip = "Lagrer..."
+    styling["backgroundColor"] = "#ffe599"
   } else if (!isSaving && !isSaved){
     icon = <Icons.CloudOff/>
     tooltip = "Lagre endringer?"
     styling["cursor"] = "pointer"
-    styling["backgroundColor"] = "#ffe599"
-  } else if(isSaving){
-    icon = <Icons.CloudUpload/>
-    tooltip = "Lagrer..."
     styling["backgroundColor"] = "#ffe599"
   } else {
     icon = <Icons.CloudDone/>

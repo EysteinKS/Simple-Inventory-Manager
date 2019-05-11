@@ -19,7 +19,7 @@
 
 .product {
   display: grid;
-  grid-template-columns: repeat(6, 14.58%) 12.5%;
+  grid-template-columns: 15% 15% repeat(4, 14.5%) 12%;
   justify-items: center;
 }
 

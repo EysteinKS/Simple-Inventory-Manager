@@ -23,6 +23,7 @@ import EditCategories from "./Categories";
 import SectionHeader, { Row, Title, Key, KeyButton } from "../SectionHeader";
 import CloudStatus from "../CloudStatus"
 import Icons from "../Icons"
+import {useGate, generateSelectors} from "../../constants/hooks"
 
 export default () => {
   const dispatch = useDispatch();
@@ -54,8 +55,14 @@ export default () => {
     ));
   }
 
-  const LeftButton = () => (
+  const buttonStyle = {
+    height: "75%",
+    width: "75%",
+    borderRadius: "15px",
+  }
+  const NewProductButton = () => (
     <button
+    style={buttonStyle}
       onClick={() => {
         dispatch(createProduct(newProduct(products.products.length + 1)));
         setProductOpen(true);
@@ -64,8 +71,9 @@ export default () => {
       Legg til
     </button>
   );
-  const RightButton = () => (
+  const CategoriesButton = () => (
     <button
+      style={{...buttonStyle}}
       onClick={() => {
         setCategoriesOpen(true);
       }}
@@ -73,26 +81,41 @@ export default () => {
       Kategorier
     </button>
   );
+  const gateObjects = ["categories", "products"]
+  let gateObjSaving = generateSelectors(gateObjects, "isSaving", useSelector)
+  let gateObjSaved = generateSelectors(gateObjects, "isSaved", useSelector)
+  let gateObjError = generateSelectors(gateObjects, "savingError", useSelector)
+  const savingGate = useGate(
+    {gate: "OR", list: gateObjSaving}, 
+    {gate: "OR", list: ["isSaving"]})
+  const savedGate = useGate(
+    {gate: "AND", list: gateObjSaved}, 
+    {gate: "AND", list: ["isSaved"]})
+  const errorGate = useGate(
+    {gate: "OR", list: gateObjError}, 
+    {gate: "OR", list: ["savingError"]})
+  console.log(gateObjSaving)
+
   return (
     <Fragment>
       <SectionHeader>
-        <Row grid="20% 20% 20% 20% 20%">
-          <LeftButton />
-          <div/>
+        <Row grid="15% 15% 40% 15% 15%">
+          <NewProductButton />
+          <CategoriesButton />
           <Title>Produkter</Title>
+          <br/>
           <CloudStatus 
             save={() => {
               dispatch(saveProducts(products.products))
               dispatch(saveCategories(categories.categories))
             }}
-            isSaving={products.isSaving && categories.isSaving}
-            isSaved={products.isSaved && categories.isSaved}
-            error={products.savingError || categories.savingError}
+            isSaving={savingGate}
+            isSaved={savedGate}
+            error={errorGate}
           />
-          <RightButton />
         </Row>
         
-        <Row grid="repeat(6, 14.58%) 12.5%" cName="products-header">
+        <Row grid="15% 15% repeat(4, 14.5%) 12%" cName="products-header">
           <HeaderButton sorting={dir => sort.byName(dir)}>
             <Icons.FormatQuote/>
           </HeaderButton>
@@ -138,7 +161,8 @@ const HeaderButton = ({ children, sorting }) => {
         dispatch(sortProducts(sorting(currentDirection)));
       }}
     >
-      {children} {currentDirection === "asc" ? "↓" : "↑"}
+      {children}
+      <p>{currentDirection === "asc" ? "↓" : "↑"}</p>
     </button>
   );
 };
@@ -154,7 +178,7 @@ const Product = ({ product, reserved, edit }) => {
   const total = amount + (ordered || 0) - (reserved || 0);
 
   return (
-    <div className={`product ${!product.active ? "inactive" : null}`}>
+    <div className={`product ${!product.active ? "inactive" : ""}`}>
       <p className="product-name">{product.name}</p>
       <p className="product-category">{category}</p>
       <p>{amount || 0}</p>
@@ -165,3 +189,4 @@ const Product = ({ product, reserved, edit }) => {
     </div>
   );
 };
+  

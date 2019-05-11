@@ -6,6 +6,8 @@ import Orders from "./inventory/Orders";
 import History from "./inventory/History";
 import Sales from "./sales/Sales";
 
+import Icons from "./Icons"
+
 export default () => {
   const views = ["status", "products", "orders", "history"];
   const [view, setView] = useState(views[1]);
@@ -38,10 +40,26 @@ export default () => {
 
 const Header = ({ view, setView }) => {
   const pages = [
-    ["Produkter", "products"],
-    ["Bestillinger", "orders"],
-    ["Salg", "sales"],
-    ["Logg", "history"]
+    [<>
+      <Icons.Storage/>
+      <br/>
+      <b><i>Produkter</i></b>
+    </>, "products"],
+    [<>
+      <Icons.Archive/>
+      <br/>
+      <b><i>Bestillinger</i></b>
+    </>, "orders"],
+    [<>
+      <Icons.Unarchive/>
+      <br/>
+      <b><i>Salg</i></b>
+    </>, "sales"],
+    [<>
+      <Icons.Functions/>
+      <br/>
+      <b><i>Logg</i></b>
+    </>, "history"]
   ];
   return (
     <header className="Inventory-header">
@@ -51,26 +69,25 @@ const Header = ({ view, setView }) => {
         let value = btn[1];
         return (
           <HeaderButton
-            name={name}
             value={value}
             view={view}
             setView={setView}
             key={i}
-          />
+          >{name}</HeaderButton>
         );
       })}
     </header>
   );
 };
 
-const HeaderButton = ({ name, value, view, setView }) => {
+const HeaderButton = ({ children, value, view, setView }) => {
   let style = "btn-inactive";
   if (view === value) {
     style = "btn-active";
   }
   return (
     <button className={style} onClick={() => setView(value)}>
-      {name}
+      {children}
     </button>
   );
 };

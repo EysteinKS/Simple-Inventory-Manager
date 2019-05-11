@@ -1,5 +1,5 @@
 .Inventory {
-  border: black 3px solid;
+  border: lightgray 1px solid;
   border-radius: 10px;
 }
 
@@ -16,7 +16,7 @@
   grid-template-columns: 20% repeat(4, 20%);
   column-gap: 2px;
   justify-items: center;
-  border-bottom: black 2px solid;
+  border-bottom: gray 2px solid;
   padding: 10px;
 }
 

@@ -6,7 +6,7 @@ export default ({
   return (
     <header style={{
       display: "block",
-      borderBottom: "black 1px solid"
+      borderBottom: "gray 1px solid"
     }}>
       {children}
     </header>
