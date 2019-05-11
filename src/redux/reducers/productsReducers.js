@@ -73,7 +73,7 @@ export default (
         draft.sortedProducts.sort(payload);
         break;
       case action.FILTER_PRODUCTS:
-        draft.sortedProducts = state.sortedProducts.filter(payload);
+        draft.sortedProducts = draft.products.filter(payload);
         break;
       default:
         break;

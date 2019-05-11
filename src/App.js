@@ -56,8 +56,8 @@ const App = () => {
       display: "grid",
       paddingTop: "5vh",
       paddingBottom: "5vh",
-      paddingLeft: "5vw",
-      paddingRight: "5vw",
+      paddingLeft: "2vw",
+      paddingRight: "2vw",
       height: "90vh",
       maxHeight: "90vh",
       width: "90vw"

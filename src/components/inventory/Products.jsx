@@ -115,7 +115,7 @@ export default () => {
           />
         </Row>
         
-        <Row grid="15% 15% repeat(4, 14.5%) 12%" cName="products-header">
+        <Row grid="24% 24% repeat(4, 10%) 12%" cName="products-header">
           <HeaderButton sorting={dir => sort.byName(dir)}>
             <Icons.FormatQuote/>
           </HeaderButton>
