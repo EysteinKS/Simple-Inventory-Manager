@@ -1,4 +1,5 @@
 import { getOrders } from "../../constants/api"
+import { firestore } from "../../firebase/firebase";
 
 //LOADING
 
@@ -8,7 +9,7 @@ export const loadOrdersBegin = () => ({
 })
 
 export const LOAD_ORDERS_SUCCESS = 'LOAD_ORDERS_SUCCESS'
-export const loadOrdersSuccess = (orders = []) => ({
+export const loadOrdersSuccess = (orders) => ({
   type: LOAD_ORDERS_SUCCESS,
   payload: orders
 })
@@ -26,6 +27,19 @@ export const loadOrders = () => {
       console.log("Loaded orders successfully: ", res)
       dispatch(loadOrdersSuccess(res))
     }).catch(err => loadOrdersFailure(err))
+  }
+}
+
+export const loadOrdersNew = () => {
+  return dispatch => {
+    dispatch(loadOrdersBegin())
+    firestore.doc("Barcontrol/Orders")
+      .then(res => {
+        let orders = res.data().orders
+        console.log("Loaded orders successfully")
+        dispatch(loadOrdersSuccess(orders))
+      })
+      .catch(err => dispatch(loadOrdersFailure(err)))
   }
 }
 
@@ -47,24 +61,48 @@ export const saveOrdersFailure = (error) => ({
   payload: { error }
 })
 
+export const saveOrders = (orders) => {
+  return dispatch => {
+    dispatch(saveOrdersBegin())
+    firestore.doc("Barcontrol/Orders").set({
+      orders: orders
+    }, {merge: true})
+      .then(() => {
+        dispatch(saveOrdersSuccess())
+      })
+      .catch(err => dispatch(saveOrdersFailure(err)))
+  }
+}
+
 //ORDER HANDLING
 
-export const ADD_ORDER = 'ADD_ORDER'
-export const addOrder = (order) => ({
-  type: ADD_ORDER,
-  payload: order
+export const CREATE_ORDER = 'CREATE_ORDER'
+export const createOrder = (initializedOrder) => ({
+  type: CREATE_ORDER,
+  payload: initializedOrder
 })
 
-export const DELETE_ORDER = "DELETE_ORDER"
-export const deleteOrder = (id) => ({
-  type: DELETE_ORDER,
+export const SAVE_CREATED_ORDER = 'SAVE_CREATED_ORDER'
+export const saveCreatedOrder = (created) => ({
+  type: SAVE_CREATED_ORDER,
+  payload: created
+})
+
+export const EDIT_ORDER = 'EDIT_ORDER'
+export const editORder = (id) => ({
+  type: EDIT_ORDER,
   payload: id
 })
 
-export const CHANGE_ORDER = 'CHANGE_ORDER'
-export const changeOrder = (id, order) => ({
-  type: CHANGE_ORDER,
-  payload: { id, order }
+export const SAVE_EDITED_ORDER = 'SAVE_EDITED_ORDER'
+export const saveEditedOrder = (edited) => ({
+  type: SAVE_EDITED_ORDER,
+  payload: edited
+})
+
+export const CLEAR_CURRENT_ORDER = 'CLEAR_CURRENT_ORDER'
+export const clearCurrentOrder = () => ({
+  type: CLEAR_CURRENT_ORDER
 })
 
 export const RECEIVED_ORDER = 'RECEIVED_ORDER'

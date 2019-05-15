@@ -1,4 +1,4 @@
-import React, { useState, useCallback, Fragment } from "react";
+import React, { useState, useCallback, Fragment, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   sortProducts,
@@ -23,7 +23,7 @@ import EditCategories from "./Categories";
 import SectionHeader, { Row, Title, Key, KeyButton } from "../SectionHeader";
 import CloudStatus from "../CloudStatus"
 import Icons from "../Icons"
-import {useGate, generateSelectors} from "../../constants/hooks"
+import {useGate} from "../../constants/hooks"
 
 export default () => {
   const dispatch = useDispatch();
@@ -73,7 +73,7 @@ export default () => {
   );
   const CategoriesButton = () => (
     <button
-      style={{...buttonStyle}}
+      style={buttonStyle}
       onClick={() => {
         setCategoriesOpen(true);
       }}
@@ -81,20 +81,13 @@ export default () => {
       Kategorier
     </button>
   );
-  const gateObjects = ["categories", "products"]
-  let gateObjSaving = generateSelectors(gateObjects, "isSaving", useSelector)
-  let gateObjSaved = generateSelectors(gateObjects, "isSaved", useSelector)
-  let gateObjError = generateSelectors(gateObjects, "savingError", useSelector)
-  const savingGate = useGate(
-    {gate: "OR", list: gateObjSaving}, 
-    {gate: "OR", list: ["isSaving"]})
-  const savedGate = useGate(
-    {gate: "AND", list: gateObjSaved}, 
-    {gate: "AND", list: ["isSaved"]})
-  const errorGate = useGate(
-    {gate: "OR", list: gateObjError}, 
-    {gate: "OR", list: ["savingError"]})
-  //console.log(gateObjSaving)
+
+  const allIsSaving = useMemo(() => [products.isSaving, categories.isSaving], [products.isSaving, categories.isSaving])
+  const savingGate = useGate(allIsSaving, "OR", "productsIsSaving")
+  const allIsSaved = useMemo(() => [products.isSaved, categories.isSaved], [products.isSaved, categories.isSaved])
+  const savedGate = useGate(allIsSaved, "AND", "productsIsSaved")
+  const allError = useMemo(() => [products.savingError, categories.savingError], [products.savingError, categories.savingError])
+  const errorGate = useGate(allError, "OR", "productsLoadingError")
 
   return (
     <Fragment>

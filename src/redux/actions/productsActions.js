@@ -19,16 +19,6 @@ export const loadProductsFailure = (error) => ({
   payload: error
 })
 
-/*export const loadProducts = () => {
-  return dispatch => {
-    dispatch(loadProductsBegin())
-    getProducts.then(res => {
-      console.log("Loaded products successfully")
-      dispatch(loadProductsSuccess(res))
-    }).catch(err => loadProductsFailure(err))
-  }
-}*/
-
 export const loadProducts = () => {
   return dispatch => {
     dispatch(loadProductsBegin())

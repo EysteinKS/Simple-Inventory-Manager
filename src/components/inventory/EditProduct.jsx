@@ -188,7 +188,7 @@ const AddCategory = ({ visible, close, categories }) => {
         onChange={e => setName(e.target.value)} 
         placeholder="Navn"
         style={{
-          width: "100%"
+          width: "100"
         }}
       />
       <button 

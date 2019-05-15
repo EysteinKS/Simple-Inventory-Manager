@@ -4,8 +4,10 @@ const initialState = {
   orders: [],
   isLoading: false,
   isLoaded: false,
+  loadingError: false,
   isSaving: false,
-  saved: false,
+  isSaved: false,
+  savingError: false,
   error: null
 }
 
@@ -42,13 +44,13 @@ export default (state = initialState, {type, payload}) => {
       return {
         ...state,
         isSaving: false,
-        saved: true
+        isSaved: true
       }
     case action.SAVE_ORDERS_FAILURE:
       return {
         ...state,
         isSaving: false,
-        saved: false,
+        isSaved: false,
         error: payload
       }
     default:

@@ -1,70 +1,95 @@
+import React, { useState, useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useGate } from "./constants/hooks";
+import { loadProducts } from "./redux/actions/productsActions";
+import { loadOrders } from "./redux/actions/ordersActions";
+import { loadCategories } from "./redux/actions/categoriesActions";
 
-import React, {useState, useEffect} from "react"
-import {useDispatch, useSelector} from "react-redux"
-import {useGate, generateSelectors} from "./constants/hooks"
-import { loadProducts } from "./redux/actions/productsActions"
-import { loadOrders } from "./redux/actions/ordersActions"
-import { loadCategories } from "./redux/actions/categoriesActions"
-
-import CircularProgress from "@material-ui/core/CircularProgress"
-import Main from "./components/Main"
-import "./App.css"
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Main from "./components/Main";
+import "./App.css";
 
 const App = () => {
-  const gateObjects = ["products", "categories", "orders"]
-  let isLoadingSelector = generateSelectors(gateObjects, "isLoading", useSelector)
-  let isLoadedSelector = generateSelectors(gateObjects, "isLoaded", useSelector)
-  let loadingErrorSelector = generateSelectors(gateObjects, "loadingError", useSelector)
+  const selectorArray = [
+    useSelector(state => state.products),
+    useSelector(state => state.categories),
+    useSelector(state => state.orders)
+  ]
 
-  const isLoadingGate = useGate(
-    {gate: "OR", list: isLoadingSelector},
-    {gate: "OR", list: ["isLoading"]}
-  )
-  const isLoadedGate = useGate(
-    {gate: "AND", list: isLoadedSelector},
-    {gate: "AND", list: ["isLoaded"]}
-  )
-  const loadingErrorGate = useGate(
-    {gate: "OR", list: loadingErrorSelector},
-    {gate: "OR", list: ["loadingError"]}
-  )
+  const isLoadingArr = selectorArray.map(sel => sel.isLoading)
+  const memoizedIsLoadingArr = useMemo(() => { return isLoadingArr }, [isLoadingArr])
 
-  const dispatch = useDispatch()
+  const isLoadedArr = selectorArray.map(sel => sel.isLoaded)
+  const memoizedIsLoadedArr = useMemo(() => { return isLoadedArr }, [isLoadedArr])
+
+  const loadingErrorArr = selectorArray.map(sel => sel.loadingError)
+  const memoizedLoadingErrorArr = useMemo(() => { return loadingErrorArr }, [loadingErrorArr])
+
+
+  const prodSelector = useSelector(state => state.products)
+  const catSelector = useSelector(state => state.categories)
+  const ordSelector = useSelector(state => state.orders)
+  
+  const isLoadingArr2 = useMemo(() => [
+    prodSelector.isLoading,
+    catSelector.isLoading,
+    ordSelector.isLoading
+  ], [
+    prodSelector.isLoading,
+    catSelector.isLoading,
+    ordSelector.isLoading
+  ])
+
+  const isLoadedArr2 = useMemo(() => [
+    prodSelector.isLoaded,
+    catSelector.isLoaded,
+    ordSelector.isLoaded
+  ], [
+    prodSelector.isLoaded,
+    catSelector.isLoaded,
+    ordSelector.isLoaded
+  ])
+
+  const loadingErrorArr2 = useMemo(() => [
+    prodSelector.loadingError,
+    catSelector.loadingError,
+    ordSelector.loadingError
+  ], [
+    prodSelector.loadingError,
+    catSelector.loadingError,
+    ordSelector.loadingError
+  ])
+
+
+  const isLoadingGate = useGate(isLoadingArr2, "OR", "isLoading");
+  const isLoadedGate = useGate(isLoadedArr2, "AND", "isLoaded");
+  const loadingErrorGate = useGate(loadingErrorArr2, "OR", "loadingError");
+
+  const dispatch = useDispatch();
   useEffect(() => {
-    if(!isLoadingGate && !isLoadedGate){
-      dispatch(loadOrders())
-      dispatch(loadProducts())
-      dispatch(loadCategories())
+    if (!isLoadingGate && !isLoadedGate) {
+      dispatch(loadOrders());
+      dispatch(loadProducts());
+      dispatch(loadCategories());
     }
-  }, [dispatch, isLoadingGate, isLoadedGate, loadingErrorGate])
+  }, [dispatch, isLoadingGate, isLoadedGate, loadingErrorGate]);
 
-  const [content, setContent] = useState(null)
-  useEffect(() => {
-    //console.log("isLoadingGate: ", isLoadingGate)
-    //console.log("isLoadedGate: ", isLoadedGate)
-    if(isLoadingGate){
-      setContent(<CircularProgress style={{alignSelf: "center", justifySelf: "center"}}/>)
-    } else if (loadingErrorGate){
-      setContent(<p>Error!</p>)
-    } else if (isLoadedGate){
-      setContent(<Main/>)
-    }
-  }, [isLoadingGate, loadingErrorGate, isLoadedGate])
-
-  return(
-    <div style={{
-      display: "grid",
-      paddingTop: "5vh",
-      paddingBottom: "5vh",
-      paddingLeft: "2vw",
-      paddingRight: "2vw",
-      height: "90vh",
-      maxHeight: "90vh",
-      width: "90vw"
-    }}>
-      {content}
+  return (
+    <div
+      style={{
+        display: "grid",
+        padding: "5vh 2vw",
+        height: "90vh",
+        maxHeight: "90vh",
+        width: "90vw"
+      }}
+    >
+      {isLoadingGate ? <CircularProgress style={{ alignSelf: "center", justifySelf: "center" }}/> 
+      : loadingErrorGate ? <p>Error!</p> 
+      : isLoadedGate ? <Main/> : null}
+      {/*content*/}
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
