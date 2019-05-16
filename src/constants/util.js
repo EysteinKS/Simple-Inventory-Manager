@@ -55,7 +55,24 @@ const sortByCategory = (categories = [], direction) => {
   }
 }
 
+const sortBy = (key = "", direction) => {
+  return (a, b) => {
+    console.log(`a[${key}] = `, a[key])
+    const A = () => (typeof a === "string") ? a[key].toUpperCase() : a[key]
+    const B = () => (typeof b === "string") ? b[key].toUpperCase() : b[key]
+
+    let compare = 0
+    if(A > B){
+      compare = 1
+    } else if (A < B){
+      compare = -1
+    }
+    return ((direction === "desc") ? (compare * -1) : compare)
+  }
+}
+
 export const sort = {
+  by: sortBy,
   byName: sortByName,
   byCategory: sortByCategory
 }
@@ -69,6 +86,16 @@ export const filterByActive = (isFiltered) => {
     }
   }
 }
+
+export const filterByOrdered = (isFiltered, products) => {
+  return (item) =>
+    (!products || !isFiltered)
+      ? item
+      : (typeof products === "string") 
+      ? "" 
+      : item.products.some(product => products.includes(product.productID))
+
+}
 //FILTERING END
 
 //CREATING
@@ -81,5 +108,18 @@ export const newProduct = (id) => {
     categoryID: "1",
     active: true,
     amount: 0
+  }
+}
+
+export const newOrder = (id) => {
+  let date = new Date()
+  return {
+    orderID: id,
+    name: "",
+    supplierID: "1",
+    active: true,
+    dateOrdered: date,
+    dateReceived: null,
+    products: []
   }
 }

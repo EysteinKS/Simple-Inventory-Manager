@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useState} from 'react'
+import { useDispatch } from "react-redux"
 
 export default ({
   children
@@ -39,16 +40,33 @@ export const Key = ({ children }) => {
   )
 }
 
-export const KeyButton = ({ children, onClick, border = true }) => {
-  let withBorder = {}
-  let withoutBorder = {border: "none", padding: "16px", background: "none"}
+export const KeyButton = ({children, onClick}) => {
+  const withoutBorder = {border: "none", padding: "16px", background: "none"}
+
+  return(
+    <button
+    onClick={onClick}
+    style={withoutBorder}>
+      {children}
+    </button>
+  )
+}
+
+export const SortingKey = ({ children, target, sorting }) => {
+  const withoutBorder = {border: "none", padding: "16px", background: "none"}
+  const dispatch = useDispatch()
+  const [currentDirection, setDirection] = useState("asc");
 
   return(
     <button 
-      onClick={onClick}
-      style={border ? withBorder : withoutBorder}
+      onClick={() => {
+        setDirection(currentDirection === "asc" ? "desc" : "asc")
+        dispatch(target(sorting(currentDirection)))
+      }}
+      style={withoutBorder}
     >
       {children}
+      <p>{currentDirection === "asc" ? "↓" : "↑"}</p>
     </button>
   )
 }

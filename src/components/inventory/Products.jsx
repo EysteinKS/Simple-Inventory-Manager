@@ -20,7 +20,7 @@ import "./Products.css";
 
 import EditProduct from "./EditProduct";
 import EditCategories from "./Categories";
-import SectionHeader, { Row, Title, Key, KeyButton } from "../SectionHeader";
+import SectionHeader, { Row, Title, Key, KeyButton, SortingKey } from "../SectionHeader";
 import CloudStatus from "../CloudStatus"
 import Icons from "../Icons"
 import {useGate} from "../../constants/hooks"
@@ -109,14 +109,18 @@ export default () => {
         </Row>
         
         <Row grid="24% 24% repeat(4, 10%) 12%" cName="products-header">
-          <HeaderButton sorting={dir => sort.byName(dir)}>
+          <SortingKey 
+            sorting={dir => sort.byName(dir)}
+            target={sortProducts}  
+          >
             <Icons.FormatQuote/>
-          </HeaderButton>
-          <HeaderButton
+          </SortingKey>
+          <SortingKey
             sorting={dir => sort.byCategory(categories.categories, dir)}
+            target={sortProducts}
           >
             <Icons.FolderOpen/>
-          </HeaderButton>
+          </SortingKey>
           <Key><Icons.Storage/></Key>
           <Key><Icons.Archive/></Key>
           <Key><Icons.Unarchive/></Key>
@@ -141,23 +145,6 @@ export default () => {
         }}
       />
     </Fragment>
-  );
-};
-
-const HeaderButton = ({ children, sorting }) => {
-  const dispatch = useDispatch();
-  const [currentDirection, setDirection] = useState("asc");
-  return (
-    <button
-      onClick={() => {
-        setDirection(currentDirection === "asc" ? "desc" : "asc");
-        //console.log(currentDirection);
-        dispatch(sortProducts(sorting(currentDirection)));
-      }}
-    >
-      {children}
-      <p>{currentDirection === "asc" ? "↓" : "↑"}</p>
-    </button>
   );
 };
 

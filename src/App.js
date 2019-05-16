@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGate } from "./constants/hooks";
 import { loadProducts } from "./redux/actions/productsActions";
@@ -10,7 +10,7 @@ import Main from "./components/Main";
 import "./App.css";
 
 const App = () => {
-  const selectorArray = [
+  /* const selectorArray = [
     useSelector(state => state.products),
     useSelector(state => state.categories),
     useSelector(state => state.orders)
@@ -24,7 +24,7 @@ const App = () => {
 
   const loadingErrorArr = selectorArray.map(sel => sel.loadingError)
   const memoizedLoadingErrorArr = useMemo(() => { return loadingErrorArr }, [loadingErrorArr])
-
+ */
 
   const prodSelector = useSelector(state => state.products)
   const catSelector = useSelector(state => state.categories)
@@ -87,7 +87,6 @@ const App = () => {
       {isLoadingGate ? <CircularProgress style={{ alignSelf: "center", justifySelf: "center" }}/> 
       : loadingErrorGate ? <p>Error!</p> 
       : isLoadedGate ? <Main/> : null}
-      {/*content*/}
     </div>
   );
 };

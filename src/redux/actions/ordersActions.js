@@ -110,3 +110,13 @@ export const receivedOrder = (id) => ({
   type: RECEIVED_ORDER,
   payload: id
 })
+
+export const FILTER_ORDERS = 'FILTER_ORDERS'
+
+export const SORT_ORDERS = 'SORT_ORDERS'
+export const sortOrders = (func) => ({
+  type: SORT_ORDERS,
+  payload: func
+})
+
+export const TOGGLE_ORDER = "TOGGLE_ORDER"

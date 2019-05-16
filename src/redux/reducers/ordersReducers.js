@@ -1,59 +1,67 @@
+/* eslint-disable default-case */
 import * as action from "../actions/ordersActions"
+import produce from "immer";
+import drafts from "./drafts";
 
-const initialState = {
+
+
+export default (state = drafts.initializeState({
   orders: [],
-  isLoading: false,
-  isLoaded: false,
-  loadingError: false,
-  isSaving: false,
-  isSaved: false,
-  savingError: false,
-  error: null
-}
-
-export default (state = initialState, {type, payload}) => {
-  switch(type){
+  sortedOrders: [],
+  currentOrder: {}
+}), {type, payload}) => 
+produce(state, draft => {
+  switch (type) {
     case action.LOAD_ORDERS_BEGIN:
-      return {
-        ...state,
-        isLoading: true,
-        error: null
-      }
+      return drafts.loadBegin(draft);
     case action.LOAD_ORDERS_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        isLoaded: true,
-        orders: payload
-      }
+      return drafts.loadSuccess(
+        draft,
+        ["orders", "sortedOrders"],
+        payload
+      );
     case action.LOAD_ORDERS_FAILURE:
-      return {
-        ...state,
-        orders: [],
-        isLoading: false,
-        isLoaded: false,
-        error: payload
-      }
+      return drafts.loadFailure(draft, payload);
     case action.SAVE_ORDERS_BEGIN:
-      return {
-        ...state,
-        isSaving: true,
-        error: null
-      }
+      return drafts.saveBegin(draft);
     case action.SAVE_ORDERS_SUCCESS:
-      return {
-        ...state,
-        isSaving: false,
-        isSaved: true
-      }
+      return drafts.saveSuccess(draft);
     case action.SAVE_ORDERS_FAILURE:
-      return {
-        ...state,
-        isSaving: false,
-        isSaved: false,
-        error: payload
-      }
+      return drafts.saveFailure(draft, payload);
+    case action.CREATE_ORDER:
+      draft.currentOrder = payload;
+      break;
+    case action.SAVE_CREATED_ORDER:
+      draft.orders.push(payload);
+      draft.sortedOrders.push(payload);
+      draft.currentOrder = {};
+      draft.isSaved = false;
+      break;
+    case action.EDIT_ORDER:
+      draft.currentOrder = state.orders[payload - 1];
+      break;
+    case action.SAVE_EDITED_ORDER:
+      draft.orders[payload.orderID - 1] = payload;
+      draft.sortedOrders = draft.orders;
+      draft.currentOrder = {};
+      draft.isSaved = false;
+      break;
+    case action.CLEAR_CURRENT_ORDER:
+      draft.currentOrder = {};
+      break;
+    case action.TOGGLE_ORDER:
+      draft.orders[payload - 1].active = !state.orders[payload - 1]
+        .active;
+      draft.sortedOrders = draft.orders;
+      draft.isSaved = false;
+      break;
+    case action.SORT_ORDERS:
+      draft.sortedOrders.sort(payload);
+      break;
+    case action.FILTER_ORDERS:
+      draft.sortedOrders = draft.orders.filter(payload);
+      break;
     default:
-      return state
+      break;
   }
-}
+});
