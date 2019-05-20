@@ -75,6 +75,11 @@ export default (
       case action.FILTER_PRODUCTS:
         draft.sortedProducts = draft.products.filter(payload);
         break;
+      case action.UPDATE_PRODUCT_AMOUNT:
+        draft.products[payload.id - 1].amount += payload.amount
+        draft.sortedProducts = draft.products
+        draft.isSaved = false;
+        break;
       default:
         break;
     }

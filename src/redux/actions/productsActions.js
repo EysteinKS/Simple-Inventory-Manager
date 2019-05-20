@@ -103,6 +103,13 @@ export const toggleProduct = id => ({
   payload: id
 })
 
+export const UPDATE_PRODUCT_AMOUNT = 'UPDATE_PRODUCT_AMOUNT'
+export const updateProductAmount = (id, amount) => ({
+  type: UPDATE_PRODUCT_AMOUNT,
+  payload: {id, amount}
+})
+
+
 //PRODUCT VISIBILITY
 
 

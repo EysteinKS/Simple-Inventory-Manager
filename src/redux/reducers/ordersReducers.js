@@ -3,8 +3,6 @@ import * as action from "../actions/ordersActions"
 import produce from "immer";
 import drafts from "./drafts";
 
-
-
 export default (state = drafts.initializeState({
   orders: [],
   sortedOrders: [],
@@ -60,6 +58,12 @@ produce(state, draft => {
       break;
     case action.FILTER_ORDERS:
       draft.sortedOrders = draft.orders.filter(payload);
+      break;
+    case action.DELETE_ORDER:
+      let deletedArray = state.orders.filter(order => order.orderID !== payload)
+      draft.orders = deletedArray
+      draft.sortedOrders = deletedArray
+      draft.isSaved = false;
       break;
     default:
       break;

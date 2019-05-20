@@ -17,11 +17,11 @@ export const inventory = [
 ]
 
 export const orders = [
-  { orderID: 1, supplier: "Komplett", title: "iPader", dateOrdered: new Date(), dateReceived: null, ordered: [
+  { orderID: 1, supplierID: 1, dateOrdered: new Date(), dateReceived: null, ordered: [
     { productID: 1, amount: 4 },
     { productID: 2, amount: 5 }
   ]},
-  { orderID: 2, supplier: "EET", title: "Printere", dateOrdered: new Date(), dateReceived: null, ordered: [
+  { orderID: 2, supplierID: 2, dateOrdered: new Date(), dateReceived: null, ordered: [
     { productID: 3, amount: 4 },
   ]},
 ]

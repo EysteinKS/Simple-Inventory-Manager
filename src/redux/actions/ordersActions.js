@@ -1,5 +1,5 @@
-import { getOrders } from "../../constants/api"
 import { firestore } from "../../firebase/firebase";
+import { updateProductAmount } from "./productsActions"
 
 //LOADING
 
@@ -23,19 +23,12 @@ export const loadOrdersFailure = (error) => ({
 export const loadOrders = () => {
   return dispatch => {
     dispatch(loadOrdersBegin())
-    getOrders.then(res => {
-      console.log("Loaded orders successfully: ", res)
-      dispatch(loadOrdersSuccess(res))
-    }).catch(err => loadOrdersFailure(err))
-  }
-}
-
-export const loadOrdersNew = () => {
-  return dispatch => {
-    dispatch(loadOrdersBegin())
-    firestore.doc("Barcontrol/Orders")
+    firestore.doc("Barcontrol/Orders").get()
       .then(res => {
-        let orders = res.data().orders
+        let orders = res.data().orders.map(order => {
+          order.dateOrdered = new Date(order.dateOrdered.seconds * 1000)
+          return order
+        })
         console.log("Loaded orders successfully")
         dispatch(loadOrdersSuccess(orders))
       })
@@ -111,6 +104,15 @@ export const receivedOrder = (id) => ({
   payload: id
 })
 
+export const didReceiveOrder = (id, ordered) => {
+  return dispatch => {
+    ordered.forEach(product => {
+      dispatch(updateProductAmount(product.productID, product.amount))
+    })
+    dispatch(deleteOrder(id))
+  }
+}
+
 export const FILTER_ORDERS = 'FILTER_ORDERS'
 
 export const SORT_ORDERS = 'SORT_ORDERS'
@@ -120,3 +122,9 @@ export const sortOrders = (func) => ({
 })
 
 export const TOGGLE_ORDER = "TOGGLE_ORDER"
+
+export const DELETE_ORDER = 'DELETE_ORDER'
+export const deleteOrder = (id) => ({
+  type: DELETE_ORDER,
+  payload: id
+})

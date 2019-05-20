@@ -4,6 +4,7 @@ import { useGate } from "./constants/hooks";
 import { loadProducts } from "./redux/actions/productsActions";
 import { loadOrders } from "./redux/actions/ordersActions";
 import { loadCategories } from "./redux/actions/categoriesActions";
+import { loadSuppliers } from "./redux/actions/suppliersActions"
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Main from "./components/Main";
@@ -29,35 +30,42 @@ const App = () => {
   const prodSelector = useSelector(state => state.products)
   const catSelector = useSelector(state => state.categories)
   const ordSelector = useSelector(state => state.orders)
+  const suppSelector = useSelector(state => state.suppliers)
   
   const isLoadingArr2 = useMemo(() => [
     prodSelector.isLoading,
     catSelector.isLoading,
-    ordSelector.isLoading
+    ordSelector.isLoading,
+    suppSelector.isLoading
   ], [
     prodSelector.isLoading,
     catSelector.isLoading,
-    ordSelector.isLoading
+    ordSelector.isLoading,
+    suppSelector.isLoading
   ])
 
   const isLoadedArr2 = useMemo(() => [
     prodSelector.isLoaded,
     catSelector.isLoaded,
-    ordSelector.isLoaded
+    ordSelector.isLoaded,
+    suppSelector.isLoaded
   ], [
     prodSelector.isLoaded,
     catSelector.isLoaded,
-    ordSelector.isLoaded
+    ordSelector.isLoaded,
+    suppSelector.isLoaded
   ])
 
   const loadingErrorArr2 = useMemo(() => [
     prodSelector.loadingError,
     catSelector.loadingError,
-    ordSelector.loadingError
+    ordSelector.loadingError,
+    suppSelector.loadingError
   ], [
     prodSelector.loadingError,
     catSelector.loadingError,
-    ordSelector.loadingError
+    ordSelector.loadingError,
+    suppSelector.loadingError
   ])
 
 
@@ -71,6 +79,7 @@ const App = () => {
       dispatch(loadOrders());
       dispatch(loadProducts());
       dispatch(loadCategories());
+      dispatch(loadSuppliers())
     }
   }, [dispatch, isLoadingGate, isLoadedGate, loadingErrorGate]);
 

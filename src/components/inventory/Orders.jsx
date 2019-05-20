@@ -1,4 +1,4 @@
-import React, { useState, useCallback, Fragment, useMemo } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { 
   createOrder,
@@ -10,28 +10,29 @@ import {
   loadOrders,
   sortOrders,
   //filterOrders,
-  receivedOrder
+  didReceiveOrder,
+  deleteOrder
 } from "../../redux/actions/ordersActions"
 import { saveSuppliers } from "../../redux/actions/suppliersActions"
 import {
   sort,
-  filterByOrdered,
   newOrder
 } from "../../constants/util"
 import "./Orders.css";
 
+import EditOrder from "./EditOrder"
 import ProductName from "../ProductName";
 import SectionHeader, { Row, Title, Key, SortingKey } from "../SectionHeader";
 import CloudStatus from "../CloudStatus"
 import Icons from "../Icons"
+import Buttons from "../Buttons"
 import {useGate} from "../../constants/hooks"
 
 export default () => {
-  const list = useSelector(state => state.orders.orders);
   const dispatch = useDispatch()
   const orders = useSelector(state => state.orders)
   const ordersList = orders.sortedOrders
-  const suppliers = useSelector(state => state.orders)
+  const suppliers = useSelector(state => state.suppliers)
   const [isOrderOpen, setOrderOpen] = useState(false)
   const [isSuppliersOpen, setSuppliersOpen] = useState(false)
 
@@ -76,12 +77,14 @@ export default () => {
   return (
     <div>
       <SectionHeader>
-        <Row grid="15% 15% 40% 15% 15%">
+        <Row grid="15% 15% 43.5% 14.5% 12%">
           <NewOrderButton />
           <SuppliersButton />
           <Title>Bestillinger</Title>
+          <br/>
           <CloudStatus 
             save={() => {
+              console.log(suppliers)
               dispatch(saveOrders(orders.orders))
               dispatch(saveSuppliers(suppliers.suppliers))
             }}
@@ -96,16 +99,26 @@ export default () => {
             target={sortOrders}
             >#</SortingKey>
           <SortingKey
-            sorting={dir => sort.byName(dir)}
+            sorting={dir => sort.by("supplier", dir)}
             target={sortOrders}
           ><Icons.Business/></SortingKey>
-          <SortingKey><Icons.LocalShipping/></SortingKey>
-          <SortingKey><Icons.ShoppingCart/></SortingKey>
+          <SortingKey
+            sorting={dir => sort.by("dateOrdered", dir)}
+            target={sortOrders}
+          ><Icons.LocalShipping/></SortingKey>
+          <Key><Icons.ShoppingCart/></Key>
         </Row>
       </SectionHeader>
       {(!Array.isArray(ordersList) || !ordersList.length)
         ? null
         : <List list={ordersList} />}
+        <EditOrder
+          isOpen={isOrderOpen}
+          close={() => {
+            setOrderOpen(false)
+            dispatch(clearCurrentOrder())
+          }}
+        />
     </div>
   );
 };
@@ -127,12 +140,14 @@ const List = ({ list }) => {
 const Order = ({ order }) => {
   const {
     orderID,
-    supplier,
+    supplierID,
     dateOrdered,
     dateReceived,
     ordered
   } = order;
   const [expanded, setExpanded] = useState(false);
+  const dispatch = useDispatch()
+  const suppliers = useSelector(state => state.suppliers.suppliers)
 
   let detailStyle;
   if (expanded) {
@@ -143,20 +158,24 @@ const Order = ({ order }) => {
 
   let orderDate = dateOrdered.toLocaleDateString("default", {year: "numeric", month: "short", day: "numeric"})
   let totalOrdered = ordered.reduce((acc, cur) => acc + cur.amount, 0)
-  console.log(ordered)
-  console.log({...totalOrdered})
 
   return (
     <div className="order">
       <div className="order-grid">
         <p>{orderID}</p>
-        <p>{supplier}</p>
+        <p>{suppliers[supplierID - 1].name}</p>
         <p>{orderDate}</p>
         <p>{totalOrdered}</p>
         <div/>
         <button onClick={() => setExpanded(!expanded)}>=</button>
-        <button>X</button>
-        <button>></button>
+        <Buttons.Confirm
+          message="Vil du slette denne bestillingen?"
+          onConfirm={() => dispatch(deleteOrder(orderID))}
+        ><Icons.Delete/></Buttons.Confirm>
+        <Buttons.Confirm
+          message="Bekreft mottak av bestilling"
+          onConfirm={() => dispatch(didReceiveOrder(orderID, ordered))}
+        >></Buttons.Confirm>
       </div>
       <div className={detailStyle}>
         <div className="order-time">

@@ -65,8 +65,7 @@ export const SortingKey = ({ children, target, sorting }) => {
       }}
       style={withoutBorder}
     >
-      {children}
-      <p>{currentDirection === "asc" ? "↓" : "↑"}</p>
+      {children}{currentDirection === "asc" ? "↓" : "↑"}
     </button>
   )
 }

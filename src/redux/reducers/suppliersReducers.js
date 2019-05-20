@@ -18,9 +18,9 @@ export default (state = drafts.initializeState({suppliers: []}), {type, payload}
         return drafts.saveSuccess(draft)
       case action.SAVE_SUPPLIERS_FAILURE:
         return drafts.saveFailure(draft, payload)
-      case action.SAVE_CREATED_CATEGORY:
+      case action.SAVE_CREATED_SUPPLIER:
         draft.suppliers.push({
-          categoryID: draft.suppliers.length + 1,
+          supplierID: draft.suppliers.length + 1,
           name: payload
         })
         break

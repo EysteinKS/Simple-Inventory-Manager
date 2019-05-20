@@ -12,7 +12,7 @@ export const loadSuppliersSuccess = (suppliers = []) => ({
 })
 
 export const LOAD_SUPPLIERS_FAILURE = 'LOAD_SUPPLIERS_FAILURE'
-export const loadsuppliersFailure = (error) => ({
+export const loadSuppliersFailure = (error) => ({
   type: LOAD_SUPPLIERS_FAILURE,
   payload: error
 })
@@ -26,7 +26,7 @@ export const loadSuppliers = () => {
         console.log("Loaded suppliers successfully")
         dispatch(loadSuppliersSuccess(suppliers))
       })
-      .catch(err => loadsuppliersFailure(err))
+      .catch(err => loadSuppliersFailure(err))
   }
 }
 
@@ -50,9 +50,10 @@ export const saveSuppliersFailure = (error) => ({
 
 export const saveSuppliers = (suppliers) => {
   return dispatch => {
+    console.log(suppliers)
     dispatch(saveSuppliersBegin())
     firestore.doc("Barcontrol/Suppliers").set({
-      suppliers
+      suppliers: suppliers
     }, {merge: true})
       .then(() => {
         dispatch(saveSuppliersSuccess())
