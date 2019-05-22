@@ -13,11 +13,14 @@ produce(state, draft => {
     case action.LOAD_ORDERS_BEGIN:
       return drafts.loadBegin(draft);
     case action.LOAD_ORDERS_SUCCESS:
-      return drafts.loadSuccess(
+      drafts.loadSuccess(
         draft,
         ["orders", "sortedOrders"],
-        payload
+        payload.orders
       );
+      draft.currentID = payload.currentID
+      draft.history = payload.history
+      break
     case action.LOAD_ORDERS_FAILURE:
       return drafts.loadFailure(draft, payload);
     case action.SAVE_ORDERS_BEGIN:
@@ -27,20 +30,29 @@ produce(state, draft => {
     case action.SAVE_ORDERS_FAILURE:
       return drafts.saveFailure(draft, payload);
     case action.CREATE_ORDER:
-      draft.currentOrder = payload;
+      draft.currentOrder = payload
+      draft.currentOrder.orderID = state.currentID + 1
       break;
     case action.SAVE_CREATED_ORDER:
       draft.orders.push(payload);
       draft.sortedOrders.push(payload);
       draft.currentOrder = {};
       draft.isSaved = false;
+      draft.currentID = payload.orderID
       break;
     case action.EDIT_ORDER:
-      draft.currentOrder = state.orders[payload - 1];
+      draft.currentOrder = state.orders.find(order => order.orderID === payload)
       break;
     case action.SAVE_EDITED_ORDER:
-      draft.orders[payload.orderID - 1] = payload;
-      draft.sortedOrders = draft.orders;
+      let newArray = state.orders.map(order => {
+        if(order.orderID === payload.orderID){
+          return payload
+        } else {
+          return order
+        }
+      })
+      draft.orders = newArray
+      draft.sortedOrders = newArray
       draft.currentOrder = {};
       draft.isSaved = false;
       break;
@@ -58,6 +70,20 @@ produce(state, draft => {
       break;
     case action.FILTER_ORDERS:
       draft.sortedOrders = draft.orders.filter(payload);
+      break;
+    case action.RECEIVED_ORDER:
+      let orderIndex
+      let received = state.orders.find((order, index) => {
+        if(order.orderID === payload){
+          orderIndex = index
+        }
+        return (order.orderID === payload)
+      })
+      received.dateReceived = new Date()
+      draft.history.push(received)
+      draft.orders.splice(orderIndex, 1)
+      draft.sortedOrders = draft.orders
+      draft.isSaved = false
       break;
     case action.DELETE_ORDER:
       let deletedArray = state.orders.filter(order => order.orderID !== payload)

@@ -118,6 +118,7 @@ export const newOrder = (id) => {
     supplierID: "1",
     dateOrdered: date,
     dateReceived: null,
-    ordered: [{productID: 1, amount: 0}, {productID: 2, amount: 0}]
+    ordered: [],
+    isNew: true
   }
 }

@@ -3,11 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { 
   createOrder,
   editOrder,
-  saveCreatedOrder,
-  savedEditedOrder,
   clearCurrentOrder,
   saveOrders,
-  loadOrders,
   sortOrders,
   //filterOrders,
   didReceiveOrder,
@@ -111,7 +108,10 @@ export default () => {
       </SectionHeader>
       {(!Array.isArray(ordersList) || !ordersList.length)
         ? null
-        : <List list={ordersList} />}
+        : <List list={ordersList} edit={id => {
+          dispatch(editOrder(id))
+          setOrderOpen(true)
+        }}/>}
         <EditOrder
           isOpen={isOrderOpen}
           close={() => {
@@ -123,12 +123,12 @@ export default () => {
   );
 };
 
-const List = ({ list }) => {
+const List = ({ list, edit }) => {
   if (list) {
     return (
       <div className="order-list">
         {list.map((order, index) => (
-          <Order order={order} key={index} />
+          <Order order={order} key={index} edit={edit}/>
         ))}
       </div>
     );
@@ -137,7 +137,7 @@ const List = ({ list }) => {
   }
 };
 
-const Order = ({ order }) => {
+const Order = ({ order, edit }) => {
   const {
     orderID,
     supplierID,
@@ -168,6 +168,7 @@ const Order = ({ order }) => {
         <p>{totalOrdered}</p>
         <div/>
         <button onClick={() => setExpanded(!expanded)}>=</button>
+        <button onClick={() => edit(orderID)}><Icons.Edit/></button>
         <Buttons.Confirm
           message="Vil du slette denne bestillingen?"
           onConfirm={() => dispatch(deleteOrder(orderID))}

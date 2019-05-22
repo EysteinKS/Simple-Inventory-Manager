@@ -47,7 +47,11 @@ export default ({ isOpen, close }) => {
       ordered: ordered
     };
     //console.log(returnedOrder)
-    dispatch(saveCreatedOrder(returnedOrder));
+    if(current.isNew){
+      dispatch(saveCreatedOrder(returnedOrder));
+    } else {
+      dispatch(saveEditedOrder(returnedOrder));
+    }
     close();
     setInit(false);
   };
@@ -259,7 +263,7 @@ const OrderedProduct = ({ product, edit, remove, index }) => {
     >
       <ProductName id={productID} />
       <input
-        type="number"
+        type="tel"
         value={amount}
         onChange={e => edit(Number(e.target.value), index)}
       />

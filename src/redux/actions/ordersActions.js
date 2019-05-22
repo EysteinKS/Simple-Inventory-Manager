@@ -1,5 +1,5 @@
 import { firestore } from "../../firebase/firebase";
-import { updateProductAmount } from "./productsActions"
+import { updateProductAmount, saveProducts } from "./productsActions"
 
 //LOADING
 
@@ -9,9 +9,9 @@ export const loadOrdersBegin = () => ({
 })
 
 export const LOAD_ORDERS_SUCCESS = 'LOAD_ORDERS_SUCCESS'
-export const loadOrdersSuccess = (orders) => ({
+export const loadOrdersSuccess = (orders, history, currentID) => ({
   type: LOAD_ORDERS_SUCCESS,
-  payload: orders
+  payload: {orders, history, currentID}
 })
 
 export const LOAD_ORDERS_FAILURE = 'LOAD_ORDERS_FAILURE'
@@ -25,12 +25,14 @@ export const loadOrders = () => {
     dispatch(loadOrdersBegin())
     firestore.doc("Barcontrol/Orders").get()
       .then(res => {
-        let orders = res.data().orders.map(order => {
+        let data = res.data()
+        let orders = data.orders.map(order => {
+          //Firestore returns date objects as {seconds, nanoseconds}
           order.dateOrdered = new Date(order.dateOrdered.seconds * 1000)
           return order
         })
         console.log("Loaded orders successfully")
-        dispatch(loadOrdersSuccess(orders))
+        dispatch(loadOrdersSuccess(orders, data.history, data.currentID))
       })
       .catch(err => dispatch(loadOrdersFailure(err)))
   }
@@ -54,11 +56,14 @@ export const saveOrdersFailure = (error) => ({
   payload: { error }
 })
 
-export const saveOrders = (orders) => {
-  return dispatch => {
+export const saveOrders = () => {
+  return (dispatch, getState) => {
+    const state = getState()
     dispatch(saveOrdersBegin())
     firestore.doc("Barcontrol/Orders").set({
-      orders: orders
+      orders: state.orders.orders,
+      history: state.orders.history,
+      currentID: state.orders.currentID
     }, {merge: true})
       .then(() => {
         dispatch(saveOrdersSuccess())
@@ -82,15 +87,15 @@ export const saveCreatedOrder = (created) => ({
 })
 
 export const EDIT_ORDER = 'EDIT_ORDER'
-export const editORder = (id) => ({
+export const editOrder = (id) => ({
   type: EDIT_ORDER,
   payload: id
 })
 
 export const SAVE_EDITED_ORDER = 'SAVE_EDITED_ORDER'
-export const saveEditedOrder = (edited) => ({
+export const saveEditedOrder = (order) => ({
   type: SAVE_EDITED_ORDER,
-  payload: edited
+  payload: order
 })
 
 export const CLEAR_CURRENT_ORDER = 'CLEAR_CURRENT_ORDER'
@@ -105,11 +110,13 @@ export const receivedOrder = (id) => ({
 })
 
 export const didReceiveOrder = (id, ordered) => {
-  return dispatch => {
+  return (dispatch, getState) => {
     ordered.forEach(product => {
       dispatch(updateProductAmount(product.productID, product.amount))
     })
-    dispatch(deleteOrder(id))
+    dispatch(receivedOrder(id))
+    const state = getState()
+    dispatch(saveProducts(state.products.products))
   }
 }
 

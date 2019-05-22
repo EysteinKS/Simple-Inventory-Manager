@@ -4,7 +4,7 @@ import ReactTooltip from "react-tooltip"
 
 export default ({ className, style, save, isSaving, isSaved, error }) => {
   
-  let icon
+  let icon = <Icons.CloudDone/>
   let tooltip
   let styling = {
     display: "flex",

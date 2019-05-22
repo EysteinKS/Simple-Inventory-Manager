@@ -1,6 +1,7 @@
 const initializeState = (optionals = {}) => {
   return {
     ...optionals,
+    currentID: 0,
     isLoading: false,
     isLoaded: false,
     loadingError: false,
@@ -8,6 +9,8 @@ const initializeState = (optionals = {}) => {
     isSaved: true,
     savingError: false,
     error: null,
+    isSorted: false,
+    sorting: []
   }
 }
 

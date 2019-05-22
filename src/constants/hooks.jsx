@@ -1,4 +1,6 @@
 import {useState, useEffect} from "react"
+import {useSelector} from "react-redux"
+import produce from "immer"
 
 const AND = (list, cb) => list.every(cb)
 const OR = (list, cb) => list.some(cb)
@@ -18,6 +20,35 @@ export const useGate = (arr, gateType, source = undefined, value = true) => {
   return bool
 }
 
+//Checks if target is sorted, goes through all stored sorting functions if sorted
+export const useSortableList = (arr = [], target) => {
+  const [list, setList] = useState(arr)
+  const isSorted = useSelector(state => state[target].isSorted)
+  const sortingFuncs = useSelector(state => state[target].sorting)
+
+  useEffect(() => {
+    if(isSorted){
+      let newList = produce(list, draft => {
+        if(Array.isArray(sortingFuncs)){
+          sortingFuncs.forEach(sort => {
+            if(typeof sort === "function"){
+              draft.sort(sort)
+            }
+          })
+        }
+      })
+      setList(newList)
+    }
+  }, [list, isSorted, sortingFuncs])
+
+  return [list, setList]
+}
+
+export const useFilterableList = (arr = [], filter, isFiltered) => {
+  const [list, setList] = useState(arr)
+
+  return [list, setList]
+}
 
 export const useEditableList = (arr = []) => {
   const [list, setList] = useState(arr)
