@@ -1,4 +1,5 @@
 import { firestore } from "../../firebase/firebase"
+import { updateProductAmount, saveProducts } from "./productsActions"
 
 //LOADING
 
@@ -8,9 +9,9 @@ export const loadSalesBegin = () => ({
 })
 
 export const LOAD_SALES_SUCCESS = 'LOAD_SALES_SUCCESS'
-export const loadSalesSuccess = (sales) => ({
+export const loadSalesSuccess = (sales, history, currentID) => ({
   type: LOAD_SALES_SUCCESS,
-  payload: sales
+  payload: {sales, history, currentID}
 })
 
 export const LOAD_SALES_FAILURE = 'LOAD_SALES_FAILURE'
@@ -22,11 +23,15 @@ export const loadSalesFailure = (error) => ({
 export const loadSales = () => {
   return dispatch => {
     dispatch(loadSalesBegin())
-    firestore.doc("Barcontrol/Sales")
+    firestore.doc("Barcontrol/Sales").get()
       .then(res => {
-        let sales = res.data().sales
+        let data = res.data()
+        let sales = data.sales.map(sale => {
+          sale.dateOrdered = new Date(sale.dateOrdered.seconds * 1000)
+          return sale
+        })
         console.log("Loaded sales successfully")
-        dispatch(loadSalesSuccess(sales))
+        dispatch(loadSalesSuccess(sales, data.history, data.currentID))
       })
       .catch(err => dispatch(loadSalesFailure(err)))
   }
@@ -50,11 +55,14 @@ export const saveSalesFailure = (error) => ({
   payload: error
 })
 
-export const saveSales = (sales) => {
-  return dispatch => {
+export const saveSales = () => {
+  return (dispatch, getState) => {
+    const state = getState()
     dispatch(saveSalesBegin())
     firestore.doc("Barcontrol/Sales").set({
-      sales: sales
+      sales: state.sales.sales,
+      history: state.sales.history,
+      currentID: state.sales.currentID
     }, {merge: true})
       .then(() => {
         dispatch(saveSalesSuccess())
@@ -84,9 +92,9 @@ export const editSale = (id) => ({
 })
 
 export const SAVE_EDITED_SALE = 'SAVE_EDITED_SALE'
-export const saveEditedSale = (edited) => ({
+export const saveEditedSale = (sale) => ({
   type: SAVE_EDITED_SALE,
-  payload: edited
+  payload: sale
 })
 
 export const CLEAR_CURRENT_SALE = 'CLEAR_CURRENT_SALE'
@@ -94,8 +102,25 @@ export const clearCurrentSale = () => ({
   type: CLEAR_CURRENT_SALE,
 })
 
-export const FINISH_SALE = 'FINISH_SALE'
-export const finishSale = (id) => ({
-  type: FINISH_SALE,
+export const SEND_SALE = 'SEND_SALE'
+export const sendSale = (id) => ({
+  type: SEND_SALE,
+  payload: id
+})
+
+export const didSendSale = (id, ordered) => {
+  return (dispatch, getState) => {
+    ordered.forEach(product => {
+      dispatch(updateProductAmount(product.productID, product.amount))
+    })
+    dispatch(sendSale(id))
+    const state = getState()
+    dispatch(saveProducts(state.products.products))
+  }
+}
+
+export const DELETE_SALE = 'DELETE_SALE'
+export const deleteSale = (id) => ({
+  type: DELETE_SALE,
   payload: id
 })

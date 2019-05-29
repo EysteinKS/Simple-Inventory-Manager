@@ -13,11 +13,14 @@ export default (state = drafts.initializeState({
       case action.LOAD_SALES_BEGIN:
         return drafts.loadBegin(draft)
       case action.LOAD_SALES_SUCCESS:
-        return drafts.loadSuccess(
+        drafts.loadSuccess(
           draft,
           ["sales", "sortedSales"],
-          payload
+          payload.sales
         )
+        draft.currentID = payload.currentID
+        draft.history = payload.history
+        break
       case action.LOAD_SALES_FAILURE:
         return drafts.loadFailure(draft, payload)
       case action.SAVE_SALES_BEGIN:
@@ -28,29 +31,53 @@ export default (state = drafts.initializeState({
         return drafts.saveFailure(draft, payload)
       case action.CREATE_SALE:
         draft.currentSale = payload
+        draft.currentSale.saleID = state.currentID + 1
         break
       case action.SAVE_CREATED_SALE:
         draft.sales.push(payload)
         draft.sortedSales.push(payload)
         draft.currentSale = {}
         draft.isSaved = false
+        draft.currentID = payload.saleID
         break
       case action.EDIT_SALE:
-        draft.currentSale = state.sales[payload -1]
+        draft.currentSale = state.sales.find(sale => sale.saleID === payload)
         break
       case action.SAVE_EDITED_SALE:
-        draft.sales[payload.saleID - 1] = payload
-        draft.sortedSales = draft.sales
-        draft.currentSale = {}
-        draft.isSaved = false
-        break
+        let newArray = state.sales.map(sale => {
+          if(sale.saleID === payload.saleID){
+            return payload
+          } else {
+            return sale
+          }
+        })
+        draft.sales = newArray
+        draft.sortedSales = newArray
+        draft.currentSale = {};
+        draft.isSaved = false;
+        break;
       case action.CLEAR_CURRENT_SALE:
         draft.currentSale = {}
         break
-      case action.FINISH_SALE:
-        draft.sales[payload - 1].finished = true
+      case action.SEND_SALE:
+        let saleIndex
+        let sent = state.sales.find((sale, index) => {
+          if(sale.saleID === payload){
+            saleIndex = index
+          }
+          return (sale.saleID === payload)
+        })
+        sent.dateSent = new Date()
+        draft.history.push(sent)
+        draft.sales.splice(saleIndex, 1)
         draft.sortedSales = draft.sales
         draft.isSaved = false
         break
+      case action.DELETE_SALE:
+        let deletedArray = state.sales.filter(sale => sale.saleID !== payload)
+        draft.sales = deletedArray
+        draft.sortedSales = deletedArray
+        draft.isSaved = false;
+        break;
     }
   })

@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector } from "react-redux"
 
-export default ({target, id}) => {
+export default function Names({target, id}) {
   //console.log("Target: ", target)
   const selector = useSelector(state => state[target][target])
   //console.log("Selector: ", selector)

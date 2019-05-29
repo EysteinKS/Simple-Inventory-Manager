@@ -4,7 +4,7 @@ import {useSelector} from "react-redux"
 import ReactModal from "react-modal"
 ReactModal.setAppElement("#root")
 
-export default ({ isOpen, close }) => {
+export default function EditCategories({ isOpen, close }) {
   const categories = useSelector(state => state.categories.categories)
   const [isEditing, setEditing] = useState(false)
 

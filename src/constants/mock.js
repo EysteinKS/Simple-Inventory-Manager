@@ -31,7 +31,7 @@ export const customers = [
 ]
 
 export const sales = [
-  { saleID: 1, customerID: 1, dateOrdered: "01-01-1970", sent: false, received: false, ordered: [
+  { saleID: 1, customerID: 1, dateOrdered: new Date(), dateSent: null, ordered: [
     { productID: 1, amount: 4 },
     { productID: 2, amount: 5 }
   ]}

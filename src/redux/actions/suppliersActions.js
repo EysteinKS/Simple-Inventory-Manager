@@ -6,9 +6,9 @@ export const loadSuppliersBegin = () => ({
 })
 
 export const LOAD_SUPPLIERS_SUCCESS = 'LOAD_SUPPLIERS_SUCCESS'
-export const loadSuppliersSuccess = (suppliers = []) => ({
+export const loadSuppliersSuccess = (suppliers, currentID) => ({
   type: LOAD_SUPPLIERS_SUCCESS,
-  payload: suppliers
+  payload: {suppliers, currentID}
 })
 
 export const LOAD_SUPPLIERS_FAILURE = 'LOAD_SUPPLIERS_FAILURE'
@@ -22,9 +22,11 @@ export const loadSuppliers = () => {
     dispatch(loadSuppliersBegin())
     firestore.doc("Barcontrol/Suppliers").get()
       .then(res => {
-        let suppliers = res.data().suppliers
+        let data = res.data()
+        let suppliers = data.suppliers
+        let currentID = data.currentID
         console.log("Loaded suppliers successfully")
-        dispatch(loadSuppliersSuccess(suppliers))
+        dispatch(loadSuppliersSuccess(suppliers, currentID))
       })
       .catch(err => loadSuppliersFailure(err))
   }
@@ -49,11 +51,12 @@ export const saveSuppliersFailure = (error) => ({
 })
 
 export const saveSuppliers = (suppliers) => {
-  return dispatch => {
-    console.log(suppliers)
+  return (dispatch, getState) => {
+    const state = getState()
     dispatch(saveSuppliersBegin())
     firestore.doc("Barcontrol/Suppliers").set({
-      suppliers: suppliers
+      suppliers: state.suppliers.suppliers,
+      currentID: state.suppliers.currentID
     }, {merge: true})
       .then(() => {
         dispatch(saveSuppliersSuccess())

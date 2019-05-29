@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import { useDispatch } from "react-redux"
 
-export default ({
+export default function SectionHeader({
   children
-}) => {
+}) {
   return (
     <header style={{
       display: "block",

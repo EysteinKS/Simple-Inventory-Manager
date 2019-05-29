@@ -39,6 +39,7 @@ import ArrowDown from "@material-ui/icons/KeyboardArrowDown"
 import ArrowLeft from "@material-ui/icons/KeyboardArrowLeft"
 import ArrowRight from "@material-ui/icons/KeyboardArrowRight"
 import LocalShipping from "@material-ui/icons/LocalShipping"
+import AccessTime from "@material-ui/icons/AccessTime"
 
 export default {
   Visibility,
@@ -73,5 +74,6 @@ export default {
   ArrowDown,
   ArrowLeft,
   ArrowRight,
-  LocalShipping
+  LocalShipping,
+  AccessTime
 }

@@ -5,6 +5,8 @@ import { loadProducts } from "./redux/actions/productsActions";
 import { loadOrders } from "./redux/actions/ordersActions";
 import { loadCategories } from "./redux/actions/categoriesActions";
 import { loadSuppliers } from "./redux/actions/suppliersActions"
+import { loadSales } from "./redux/actions/salesActions"
+import { loadCustomers } from "./redux/actions/customersActions"
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Main from "./components/Main";
@@ -31,41 +33,55 @@ const App = () => {
   const catSelector = useSelector(state => state.categories)
   const ordSelector = useSelector(state => state.orders)
   const suppSelector = useSelector(state => state.suppliers)
+  const saleSelector = useSelector(state => state.sales)
+  const custSelector = useSelector(state => state.customers) 
   
   const isLoadingArr2 = useMemo(() => [
     prodSelector.isLoading,
     catSelector.isLoading,
     ordSelector.isLoading,
-    suppSelector.isLoading
+    suppSelector.isLoading,
+    saleSelector.isLoading,
+    custSelector.isLoading
   ], [
     prodSelector.isLoading,
     catSelector.isLoading,
     ordSelector.isLoading,
-    suppSelector.isLoading
+    suppSelector.isLoading,
+    saleSelector.isLoading,
+    custSelector.isLoading
   ])
 
   const isLoadedArr2 = useMemo(() => [
     prodSelector.isLoaded,
     catSelector.isLoaded,
     ordSelector.isLoaded,
-    suppSelector.isLoaded
+    suppSelector.isLoaded,
+    saleSelector.isLoaded,
+    custSelector.isLoaded
   ], [
     prodSelector.isLoaded,
     catSelector.isLoaded,
     ordSelector.isLoaded,
-    suppSelector.isLoaded
+    suppSelector.isLoaded,
+    saleSelector.isLoaded,
+    custSelector.isLoaded
   ])
 
   const loadingErrorArr2 = useMemo(() => [
     prodSelector.loadingError,
     catSelector.loadingError,
     ordSelector.loadingError,
-    suppSelector.loadingError
+    suppSelector.loadingError,
+    saleSelector.loadingError,
+    custSelector.loadingError
   ], [
     prodSelector.loadingError,
     catSelector.loadingError,
     ordSelector.loadingError,
-    suppSelector.loadingError
+    suppSelector.loadingError,
+    saleSelector.loadingError,
+    custSelector.loadingError
   ])
 
 
@@ -79,7 +95,9 @@ const App = () => {
       dispatch(loadOrders());
       dispatch(loadProducts());
       dispatch(loadCategories());
-      dispatch(loadSuppliers())
+      dispatch(loadSuppliers());
+      dispatch(loadSales())
+      dispatch(loadCustomers())
     }
   }, [dispatch, isLoadingGate, isLoadedGate, loadingErrorGate]);
 

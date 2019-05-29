@@ -1,15 +1,3 @@
-export const getOrderedAmount = (orders = [], id) => {
-  return orders.reduce(( acc, cur ) => {
-    let list = cur.ordered
-    list.forEach(product => {
-      if (product.productID === id){
-        acc += product.amount
-      }
-    })
-    return acc
-  }, 0)
-}
-
 //GETTING VALUES
 export const getProductName = (products = [], id) => {
   let p = products.find(product => (
@@ -20,6 +8,18 @@ export const getProductName = (products = [], id) => {
 
 export const getCategoryName = (categories = [], id) => {
   return categories[id - 1].name
+}
+
+export const getAmount = (orders = [], id) => {
+  return orders.reduce(( acc, cur ) => {
+    let list = cur.ordered
+    list.forEach(product => {
+      if (product.productID === id){
+        acc += product.amount
+      }
+    })
+    return acc
+  }, 0)
 }
 //GETTING VALUES END
 
@@ -55,6 +55,21 @@ const sortByCategory = (categories = [], direction) => {
   }
 }
 
+const sortBySupplier = (suppliers = [], direction) => {
+  const sortedSuppliers = [...suppliers].sort(sortByName("asc"))
+  return (a, b) => {
+    const supplierA = sortedSuppliers[a.supplierID - 1].name.toUpperCase()
+    const supplierB = sortedSuppliers[b.supplierID - 1].name.toUpperCase()
+    let compare = 0
+    if(supplierA > supplierB){
+      compare = 1
+    } else if (supplierA < supplierB){
+      compare = -1
+    }
+    return ((direction === "desc") ? (compare * -1) : compare)
+  }
+}
+
 const sortBy = (key = "", direction) => {
   return (a, b) => {
     console.log(`a[${key}] = `, a[key])
@@ -74,7 +89,8 @@ const sortBy = (key = "", direction) => {
 export const sort = {
   by: sortBy,
   byName: sortByName,
-  byCategory: sortByCategory
+  byCategory: sortByCategory,
+  bySupplier: sortBySupplier
 }
 //SORTING END
 
@@ -105,7 +121,7 @@ export const newProduct = (id) => {
   return {
     productID: id,
     name: "",
-    categoryID: "1",
+    categoryID: 1,
     active: true,
     amount: 0
   }
@@ -115,10 +131,29 @@ export const newOrder = (id) => {
   let date = new Date()
   return {
     orderID: id,
-    supplierID: "1",
+    supplierID: 1,
     dateOrdered: date,
     dateReceived: null,
     ordered: [],
     isNew: true
   }
+}
+
+export const newSale = (id) => {
+  let date = new Date()
+  return {
+    saleID: id,
+    customerID: 1,
+    dateOrdered: date,
+    dateSent: null,
+    ordered: [],
+    isNew: true
+  }
+}
+
+//CREATING END
+
+//BOOLEANS
+export const isArrayEmpty = (arr) => {
+  return (!Array.isArray(arr) || !arr.length)
 }

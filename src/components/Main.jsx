@@ -8,7 +8,7 @@ import Sales from "./sales/Sales";
 
 import Icons from "./Icons"
 
-export default () => {
+export default function Main (){
   const views = ["status", "products", "orders", "history"];
   const [view, setView] = useState(views[1]);
 

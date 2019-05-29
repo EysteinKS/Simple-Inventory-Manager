@@ -49,11 +49,11 @@
   width: 100%;
 }
 
-@media(max-width: 1000px){
+/* @media(max-width: 1000px){
   .product{
     width: 88vw;
   }
-}
+} */
 
 .product:nth-child(2n){
   background-color: rgba(200, 200, 200, 0.1)

@@ -9,7 +9,9 @@ export default (state = drafts.initializeState({suppliers: []}), {type, payload}
       case action.LOAD_SUPPLIERS_BEGIN:
         return drafts.loadBegin(draft)
       case action.LOAD_SUPPLIERS_SUCCESS:
-        return drafts.loadSuccess(draft, "suppliers", payload)
+        drafts.loadSuccess(draft, "suppliers", payload.suppliers)
+        draft.currentID = payload.currentID
+        break;
       case action.LOAD_SUPPLIERS_FAILURE:
         return drafts.loadFailure(draft, payload)
       case action.SAVE_SUPPLIERS_BEGIN:

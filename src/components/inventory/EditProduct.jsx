@@ -11,7 +11,7 @@ ReactModal.setAppElement("#root");
 //MAKE SURE PRODUCT CAN ONLY BE DEACTIVATED IF
 //NO ORDERS OR SALES
 
-export default ({ isOpen, close }) => {
+export default function EditProduct({ isOpen, close }) {
   const current = useSelector(state => state.products.currentProduct);
   const products = useSelector(state => state.products.products);
   const categories = useSelector(state => state.categories.categories)

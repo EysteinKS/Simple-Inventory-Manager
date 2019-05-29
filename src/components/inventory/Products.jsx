@@ -13,7 +13,7 @@ import { saveCategories } from "../../redux/actions/categoriesActions"
 import {
   filterByActive,
   sort,
-  getOrderedAmount,
+  getAmount,
   newProduct
 } from "../../constants/util";
 import "./Products.css";
@@ -25,7 +25,7 @@ import CloudStatus from "../CloudStatus"
 import Icons from "../Icons"
 import {useGate} from "../../constants/hooks"
 
-export default () => {
+export default function Products(){
   const dispatch = useDispatch();
   const products = useSelector(state => state.products);
   const categories = useSelector(state => state.categories)
@@ -38,22 +38,6 @@ export default () => {
     setFiltered(!isFiltered);
     dispatch(filterProducts(filterByActive(isFiltered)));
   }, [isFiltered, dispatch]);
-
-  let content;
-  if (!Array.isArray(productList) || !productList.length) {
-    content = null;
-  } else {
-    content = productList.map((product, key) => (
-      <Product
-        key={key}
-        product={product}
-        edit={id => {
-          dispatch(editProduct(id));
-          setProductOpen(true);
-        }}
-      />
-    ));
-  }
 
   const buttonStyle = {
     height: "75%",
@@ -85,9 +69,14 @@ export default () => {
   const allIsSaving = useMemo(() => [products.isSaving, categories.isSaving], [products.isSaving, categories.isSaving])
   const savingGate = useGate(allIsSaving, "OR", "productsIsSaving")
   const allIsSaved = useMemo(() => [products.isSaved, categories.isSaved], [products.isSaved, categories.isSaved])
-  const savedGate = useGate(allIsSaved, "AND", "productsIsSaved")
+  const savedGate = useGate(allIsSaved, "AND", "productsIsSaved", true)
   const allError = useMemo(() => [products.savingError, categories.savingError], [products.savingError, categories.savingError])
   const errorGate = useGate(allError, "OR", "productsLoadingError")
+
+  React.useEffect(() => {
+    console.log("allIsSaved: ", allIsSaved)
+    console.log("savedGate: ", savedGate)
+  })
 
   return (
     <Fragment>
@@ -129,7 +118,16 @@ export default () => {
         </Row>
       </SectionHeader>
       <div className="product-list">
-        {content}
+        {(!Array.isArray(productList) || !productList.length)
+          ? null
+          : productList.map((product, key) => (
+            <Product
+              key={key}
+              product={product}
+              edit={id => {
+                dispatch(editProduct(id));
+                setProductOpen(true);
+              }}/>))}
       </div>
       <EditProduct
         isOpen={isProductOpen}
@@ -148,13 +146,15 @@ export default () => {
   );
 };
 
-const Product = ({ product, reserved, edit }) => {
+const Product = ({ product, edit }) => {
   const dispatch = useDispatch()
   const categories = useSelector(state => state.categories.categories);
   const category = categories[product.categoryID - 1].name;
   //const category = getCategoryName(categories, product.categoryID)
   let orders = useSelector(state => state.orders.orders);
-  let ordered = getOrderedAmount(orders, product.productID);
+  let sales = useSelector(state => state.sales.sales)
+  let ordered = getAmount(orders, product.productID);
+  let reserved = getAmount(sales, product.productID)
   let amount = product.amount;
 
   const total = amount + (ordered || 0) - (reserved || 0);

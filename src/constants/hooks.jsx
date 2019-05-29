@@ -9,8 +9,8 @@ const gate = (arr, gate, cb) => {
   return (gate === "AND" ? AND(arr, cb) : OR(arr, cb))
 }
 
-export const useGate = (arr, gateType, source = undefined, value = true) => {
-  const [bool, setBool] = useState(false)
+export const useGate = (arr, gateType, source = undefined, initialValue = false, value = true) => {
+  const [bool, setBool] = useState(initialValue)
 
   useEffect(() => {
     setBool(gate(arr, gateType, (val => val === value)))

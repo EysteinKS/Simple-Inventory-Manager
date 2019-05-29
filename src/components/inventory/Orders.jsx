@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { 
   createOrder,
@@ -13,7 +13,8 @@ import {
 import { saveSuppliers } from "../../redux/actions/suppliersActions"
 import {
   sort,
-  newOrder
+  newOrder,
+  isArrayEmpty
 } from "../../constants/util"
 import "./Orders.css";
 
@@ -25,20 +26,20 @@ import Icons from "../Icons"
 import Buttons from "../Buttons"
 import {useGate} from "../../constants/hooks"
 
-export default () => {
+export default function Orders(){
   const dispatch = useDispatch()
   const orders = useSelector(state => state.orders)
   const ordersList = orders.sortedOrders
   const suppliers = useSelector(state => state.suppliers)
   const [isOrderOpen, setOrderOpen] = useState(false)
-  const [isSuppliersOpen, setSuppliersOpen] = useState(false)
+  //const [isSuppliersOpen, setSuppliersOpen] = useState(false)
 
-  const [isFiltered, setFiltered] = useState(true);
+/*   const [isFiltered, setFiltered] = useState(true);
   const [filterInput, setFilterInput] = useState(false)
   const filter = useCallback(() => {
     setFiltered(!isFiltered);
     //dispatch(filterOrders(filterByOrdered(isFiltered, filterInput)));
-  }, [isFiltered, filterInput, dispatch]);
+  }, [isFiltered, filterInput, dispatch]); */
 
   const buttonStyle = {
     height: "75%",
@@ -57,7 +58,7 @@ export default () => {
   const SuppliersButton = () => {
     return (
       <button style={buttonStyle} onClick={() => {
-          setSuppliersOpen(true);
+          //setSuppliersOpen(true);
         }}>
         Leverandører
       </button>
@@ -67,7 +68,7 @@ export default () => {
   const allIsSaving = useMemo(() => [orders.isSaving, suppliers.isSaving], [orders.isSaving, suppliers.isSaving])
   const savingGate = useGate(allIsSaving, "OR", "ordersIsSaving")
   const allIsSaved = useMemo(() => [orders.isSaved, suppliers.isSaved], [orders.isSaved, suppliers.isSaved])
-  const savedGate = useGate(allIsSaved, "AND", "ordersIsSaved")
+  const savedGate = useGate(allIsSaved, "AND", "ordersIsSaved", true)
   const allError = useMemo(() => [orders.savingError, suppliers.savingError], [orders.savingError, suppliers.savingError])
   const errorGate = useGate(allError, "OR", "ordersLoadingError")
 
@@ -96,17 +97,17 @@ export default () => {
             target={sortOrders}
             >#</SortingKey>
           <SortingKey
-            sorting={dir => sort.by("supplier", dir)}
+            sorting={dir => sort.bySupplier(suppliers.suppliers, dir)}
             target={sortOrders}
           ><Icons.Business/></SortingKey>
           <SortingKey
             sorting={dir => sort.by("dateOrdered", dir)}
             target={sortOrders}
-          ><Icons.LocalShipping/></SortingKey>
+          ><Icons.AccessTime/></SortingKey>
           <Key><Icons.ShoppingCart/></Key>
         </Row>
       </SectionHeader>
-      {(!Array.isArray(ordersList) || !ordersList.length)
+      {(isArrayEmpty(ordersList))
         ? null
         : <List list={ordersList} edit={id => {
           dispatch(editOrder(id))
@@ -156,7 +157,9 @@ const Order = ({ order, edit }) => {
     detailStyle = "order-details collapsed";
   }
 
-  let orderDate = dateOrdered.toLocaleDateString("default", {year: "numeric", month: "short", day: "numeric"})
+  let orderDate = dateOrdered.toLocaleDateString(
+    "default", {year: "numeric", month: "short", day: "numeric"}
+  )
   let totalOrdered = ordered.reduce((acc, cur) => acc + cur.amount, 0)
 
   return (

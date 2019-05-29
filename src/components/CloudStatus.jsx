@@ -2,7 +2,7 @@ import React, {Fragment} from "react"
 import Icons from "./Icons"
 import ReactTooltip from "react-tooltip"
 
-export default ({ className, style, save, isSaving, isSaved, error }) => {
+export default function CloudStatus({ className, style, save, isSaving, isSaved, error }) {
   
   let icon = <Icons.CloudDone/>
   let tooltip
