@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import { useDispatch } from "react-redux"
 
 export default function SectionHeader({
   children
@@ -52,7 +51,7 @@ export const KeyButton = ({children, onClick}) => {
   )
 }
 
-export const SortingKey = ({ children, target, sorting }) => {
+/* export const SortingKey = ({ children, target, sorting }) => {
   const withoutBorder = {border: "none", padding: "16px", background: "none"}
   const dispatch = useDispatch()
   const [currentDirection, setDirection] = useState("asc");
@@ -67,5 +66,43 @@ export const SortingKey = ({ children, target, sorting }) => {
     >
       {children}{currentDirection === "asc" ? "↓" : "↑"}
     </button>
+  )
+} */
+
+export const SortingKey = ({ children, onClick}) => {
+  const withoutBorder = {border: "none", padding: "16px", background: "none"}
+  const [direction, setDirection] = useState(null)
+
+  const getNextDirection = (currentDir) => {
+    switch(currentDir){
+      case("asc"):
+        return "desc"
+      case("desc"):
+        return null
+      default:
+        return "asc"
+    }
+  }
+
+  const changeDirection = (nextDir) => {
+    setDirection(nextDir)
+  }
+
+  return(
+    <button
+      style={withoutBorder}
+      onClick={() => {
+        let nextDir = getNextDirection(direction)
+        changeDirection(nextDir)
+        onClick(nextDir)
+      }}>
+        {children} {
+          direction === "asc"
+            ? "↓"
+            : direction === "desc"
+              ? "↑"
+              : null
+        }
+      </button>
   )
 }

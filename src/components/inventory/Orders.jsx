@@ -1,76 +1,109 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { 
+import {
   createOrder,
   editOrder,
   clearCurrentOrder,
   saveOrders,
-  sortOrders,
-  //filterOrders,
   didReceiveOrder,
   deleteOrder
-} from "../../redux/actions/ordersActions"
-import { saveSuppliers } from "../../redux/actions/suppliersActions"
-import {
-  sort,
-  newOrder,
-  isArrayEmpty
-} from "../../constants/util"
+} from "../../redux/actions/ordersActions";
+import { saveSuppliers } from "../../redux/actions/suppliersActions";
+import { sort, newOrder, isArrayEmpty } from "../../constants/util";
 import "./Orders.css";
 
-import EditOrder from "./EditOrder"
+import EditOrder from "./EditOrder";
 import ProductName from "../ProductName";
-import SectionHeader, { Row, Title, Key, SortingKey } from "../SectionHeader";
-import CloudStatus from "../CloudStatus"
-import Icons from "../Icons"
-import Buttons from "../Buttons"
-import {useGate} from "../../constants/hooks"
+import SectionHeader, {
+  Row,
+  Title,
+  Key,
+  SortingKey
+} from "../SectionHeader";
+import CloudStatus from "../CloudStatus";
+import Icons from "../Icons";
+import Buttons from "../Buttons";
+import { useGate } from "../../constants/hooks";
 
-export default function Orders(){
-  const dispatch = useDispatch()
-  const orders = useSelector(state => state.orders)
-  const ordersList = orders.sortedOrders
-  const suppliers = useSelector(state => state.suppliers)
-  const [isOrderOpen, setOrderOpen] = useState(false)
-  //const [isSuppliersOpen, setSuppliersOpen] = useState(false)
+import useSortableList from "../../hooks/useSortableList";
+import produce from "immer";
 
-/*   const [isFiltered, setFiltered] = useState(true);
-  const [filterInput, setFilterInput] = useState(false)
-  const filter = useCallback(() => {
-    setFiltered(!isFiltered);
-    //dispatch(filterOrders(filterByOrdered(isFiltered, filterInput)));
-  }, [isFiltered, filterInput, dispatch]); */
+export default function Orders() {
+  const dispatch = useDispatch();
+  const orders = useSelector(state => state.orders);
+  const suppliers = useSelector(state => state.suppliers);
+  const [isOrderOpen, setOrderOpen] = useState(false);
+
+  //SORTING
+  const [sorting, setSorting] = useState([null, null, null]);
+  const [sortedList, setList, setSortingFuncs] = useSortableList(orders.orders);
+  useEffect(() => {
+    //console.log("Orders list updated, setting list");
+    setList(orders.orders);
+    setSortingFuncs(sorting);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orders.orders]);
+  const sortList = (dir, index, func) => {
+    if (dir !== null) {
+      let newSorting = produce(sorting, draft => {
+        draft[index] = func;
+      });
+      setSorting(newSorting);
+      setSortingFuncs(newSorting);
+    } else {
+      let newSorting = produce(sorting, draft => {
+        draft[index] = null;
+      });
+      setSorting(newSorting);
+      setSortingFuncs(newSorting);
+    }
+  };
 
   const buttonStyle = {
     height: "75%",
     width: "75%",
     borderRadius: "15px"
-  }
+  };
 
   const NewOrderButton = () => (
-    <button style={buttonStyle} onClick={() => {
+    <button
+      style={buttonStyle}
+      onClick={() => {
         dispatch(createOrder(newOrder(orders.orders.length + 1)));
         setOrderOpen(true);
-      }}>
+      }}
+    >
       Legg til
     </button>
   );
   const SuppliersButton = () => {
     return (
-      <button style={buttonStyle} onClick={() => {
+      <button
+        style={buttonStyle}
+        onClick={() => {
           //setSuppliersOpen(true);
-        }}>
+        }}
+      >
         Leverandører
       </button>
     );
   };
-  
-  const allIsSaving = useMemo(() => [orders.isSaving, suppliers.isSaving], [orders.isSaving, suppliers.isSaving])
-  const savingGate = useGate(allIsSaving, "OR", "ordersIsSaving")
-  const allIsSaved = useMemo(() => [orders.isSaved, suppliers.isSaved], [orders.isSaved, suppliers.isSaved])
-  const savedGate = useGate(allIsSaved, "AND", "ordersIsSaved", true)
-  const allError = useMemo(() => [orders.savingError, suppliers.savingError], [orders.savingError, suppliers.savingError])
-  const errorGate = useGate(allError, "OR", "ordersLoadingError")
+
+  const allIsSaving = useMemo(() => [orders.isSaving, suppliers.isSaving], [
+    orders.isSaving,
+    suppliers.isSaving
+  ]);
+  const savingGate = useGate(allIsSaving, "OR", "ordersIsSaving");
+  const allIsSaved = useMemo(() => [orders.isSaved, suppliers.isSaved], [
+    orders.isSaved,
+    suppliers.isSaved
+  ]);
+  const savedGate = useGate(allIsSaved, "AND", "ordersIsSaved", true);
+  const allError = useMemo(() => [orders.savingError, suppliers.savingError], [
+    orders.savingError,
+    suppliers.savingError
+  ]);
+  const errorGate = useGate(allError, "OR", "ordersLoadingError");
 
   return (
     <div>
@@ -79,12 +112,12 @@ export default function Orders(){
           <NewOrderButton />
           <SuppliersButton />
           <Title>Bestillinger</Title>
-          <br/>
-          <CloudStatus 
+          <br />
+          <CloudStatus
             save={() => {
-              console.log(suppliers)
-              dispatch(saveOrders(orders.orders))
-              dispatch(saveSuppliers(suppliers.suppliers))
+              //console.log(suppliers);
+              dispatch(saveOrders(orders.orders));
+              dispatch(saveSuppliers(suppliers.suppliers));
             }}
             isSaving={savingGate}
             isSaved={savedGate}
@@ -93,43 +126,53 @@ export default function Orders(){
         </Row>
         <Row grid="15% 15% 15% 15%">
           <SortingKey
-            sorting={dir => sort.by("orderID", dir)}
-            target={sortOrders}
-            >#</SortingKey>
+            onClick={dir => sortList(dir, 0, sort.by("orderID", dir))}
+          >
+            #
+          </SortingKey>
           <SortingKey
-            sorting={dir => sort.bySupplier(suppliers.suppliers, dir)}
-            target={sortOrders}
-          ><Icons.Business/></SortingKey>
+            onClick={dir =>
+              sortList(dir, 1, sort.bySupplier(suppliers.suppliers, dir))
+            }
+          >
+            <Icons.Business />
+          </SortingKey>
           <SortingKey
-            sorting={dir => sort.by("dateOrdered", dir)}
-            target={sortOrders}
-          ><Icons.AccessTime/></SortingKey>
-          <Key><Icons.ShoppingCart/></Key>
+            onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}
+          >
+            <Icons.AccessTime />
+          </SortingKey>
+          <Key>
+            <Icons.ShoppingCart />
+          </Key>
         </Row>
       </SectionHeader>
-      {(isArrayEmpty(ordersList))
-        ? null
-        : <List list={ordersList} edit={id => {
-          dispatch(editOrder(id))
-          setOrderOpen(true)
-        }}/>}
-        <EditOrder
-          isOpen={isOrderOpen}
-          close={() => {
-            setOrderOpen(false)
-            dispatch(clearCurrentOrder())
+      {isArrayEmpty(sortedList) ? null : (
+        <List
+          list={sortedList}
+          edit={id => {
+            dispatch(editOrder(id));
+            setOrderOpen(true);
           }}
         />
+      )}
+      <EditOrder
+        isOpen={isOrderOpen}
+        close={() => {
+          setOrderOpen(false);
+          dispatch(clearCurrentOrder());
+        }}
+      />
     </div>
   );
-};
+}
 
 const List = ({ list, edit }) => {
   if (list) {
     return (
       <div className="order-list">
         {list.map((order, index) => (
-          <Order order={order} key={index} edit={edit}/>
+          <Order order={order} key={index} edit={edit} />
         ))}
       </div>
     );
@@ -139,16 +182,10 @@ const List = ({ list, edit }) => {
 };
 
 const Order = ({ order, edit }) => {
-  const {
-    orderID,
-    supplierID,
-    dateOrdered,
-    dateReceived,
-    ordered
-  } = order;
+  const { orderID, supplierID, dateOrdered, dateReceived, ordered } = order;
   const [expanded, setExpanded] = useState(false);
-  const dispatch = useDispatch()
-  const suppliers = useSelector(state => state.suppliers.suppliers)
+  const dispatch = useDispatch();
+  const suppliers = useSelector(state => state.suppliers.suppliers);
 
   let detailStyle;
   if (expanded) {
@@ -157,10 +194,12 @@ const Order = ({ order, edit }) => {
     detailStyle = "order-details collapsed";
   }
 
-  let orderDate = dateOrdered.toLocaleDateString(
-    "default", {year: "numeric", month: "short", day: "numeric"}
-  )
-  let totalOrdered = ordered.reduce((acc, cur) => acc + cur.amount, 0)
+  let orderDate = dateOrdered.toLocaleDateString("default", {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  });
+  let totalOrdered = ordered.reduce((acc, cur) => acc + cur.amount, 0);
 
   return (
     <div className="order">
@@ -169,17 +208,23 @@ const Order = ({ order, edit }) => {
         <p>{suppliers[supplierID - 1].name}</p>
         <p>{orderDate}</p>
         <p>{totalOrdered}</p>
-        <div/>
+        <div />
         <button onClick={() => setExpanded(!expanded)}>=</button>
-        <button onClick={() => edit(orderID)}><Icons.Edit/></button>
+        <button onClick={() => edit(orderID)}>
+          <Icons.Edit />
+        </button>
         <Buttons.Confirm
           message="Vil du slette denne bestillingen?"
           onConfirm={() => dispatch(deleteOrder(orderID))}
-        ><Icons.Delete/></Buttons.Confirm>
+        >
+          <Icons.Delete />
+        </Buttons.Confirm>
         <Buttons.Confirm
           message="Bekreft mottak av bestilling"
           onConfirm={() => dispatch(didReceiveOrder(orderID, ordered))}
-        >></Buttons.Confirm>
+        >
+          >
+        </Buttons.Confirm>
       </div>
       <div className={detailStyle}>
         <div className="order-time">

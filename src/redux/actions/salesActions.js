@@ -111,7 +111,7 @@ export const sendSale = (id) => ({
 export const didSendSale = (id, ordered) => {
   return (dispatch, getState) => {
     ordered.forEach(product => {
-      dispatch(updateProductAmount(product.productID, product.amount))
+      dispatch(updateProductAmount(product.productID, -Math.abs(product.amount)))
     })
     dispatch(sendSale(id))
     const state = getState()

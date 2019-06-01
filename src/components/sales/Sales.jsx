@@ -25,7 +25,7 @@ export default function Sales(){
   const salesList = sales.sortedSales
   const customers = useSelector(state => state.customers)
   const [ isSaleOpen, setSaleOpen ] = useState(false)
-  console.log("isSaleOpen: ", isSaleOpen)
+  //console.log("isSaleOpen: ", isSaleOpen)
 
   const buttonStyle = {
     height: "75%",
@@ -123,9 +123,7 @@ const Sale = ({ sale, edit }) => {
   } = sale
   const [expanded, setExpanded] = useState(false)
   const dispatch = useDispatch()
-
-  console.log("Mapping sale: ", sale)
-
+  
   let expandedStyle;
   if(!expanded) {
     expandedStyle = { display: "none" }

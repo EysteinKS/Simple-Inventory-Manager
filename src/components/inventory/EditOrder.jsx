@@ -10,7 +10,7 @@ import Collapse from "@material-ui/core/Collapse";
 import Icons from "../Icons";
 import ProductName from "../ProductName";
 import SelectProduct from "./SelectProduct";
-import {useEditableList} from "../../constants/hooks"
+import { useEditableList } from "../../constants/hooks"
 
 ReactModal.setAppElement("#root");
 

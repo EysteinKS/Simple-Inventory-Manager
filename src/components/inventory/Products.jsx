@@ -1,8 +1,6 @@
-import React, { useState, useCallback, Fragment, useMemo } from "react";
+import React, { useState, useEffect, Fragment, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  sortProducts,
-  filterProducts,
   createProduct,
   editProduct,
   clearCurrentProduct,
@@ -25,19 +23,47 @@ import CloudStatus from "../CloudStatus"
 import Icons from "../Icons"
 import {useGate} from "../../constants/hooks"
 
+import useSortableList from "../../hooks/useSortableList"
+import produce from "immer"
+
 export default function Products(){
   const dispatch = useDispatch();
   const products = useSelector(state => state.products);
   const categories = useSelector(state => state.categories)
-  let productList = products.sortedProducts;
+
   const [isProductOpen, setProductOpen] = useState(false);
   const [isCategoriesOpen, setCategoriesOpen] = useState(false);
 
-  const [isFiltered, setFiltered] = useState(true);
+  //SORTING
+  const [sorting, setSorting] = useState([null, null])
+  const [sortedList, setList, setSortingFuncs] = useSortableList(products.products)
+  useEffect(() => {
+    //console.log("Orders list updated, setting list");
+    setList(products.products);
+    setSortingFuncs(sorting);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products.products]);
+  const sortList = (dir, index, func) => {
+    if (dir !== null) {
+      let newSorting = produce(sorting, draft => {
+        draft[index] = func;
+      });
+      setSorting(newSorting);
+      setSortingFuncs(newSorting);
+    } else {
+      let newSorting = produce(sorting, draft => {
+        draft[index] = null;
+      });
+      setSorting(newSorting);
+      setSortingFuncs(newSorting);
+    }
+  }
+
+/*   const [isFiltered, setFiltered] = useState(true);
   const filter = useCallback(() => {
     setFiltered(!isFiltered);
     dispatch(filterProducts(filterByActive(isFiltered)));
-  }, [isFiltered, dispatch]);
+  }, [isFiltered, dispatch]); */
 
   const buttonStyle = {
     height: "75%",
@@ -74,8 +100,8 @@ export default function Products(){
   const errorGate = useGate(allError, "OR", "productsLoadingError")
 
   React.useEffect(() => {
-    console.log("allIsSaved: ", allIsSaved)
-    console.log("savedGate: ", savedGate)
+    //console.log("allIsSaved: ", allIsSaved)
+    //console.log("savedGate: ", savedGate)
   })
 
   return (
@@ -99,14 +125,12 @@ export default function Products(){
         
         <Row grid="24% 24% repeat(4, 10%) 12%" cName="products-header">
           <SortingKey 
-            sorting={dir => sort.byName(dir)}
-            target={sortProducts}  
+            onClick={dir => sortList(dir, 0, sort.byName(dir))}
           >
             <Icons.FormatQuote/>
           </SortingKey>
           <SortingKey
-            sorting={dir => sort.byCategory(categories.categories, dir)}
-            target={sortProducts}
+            onClick={dir => sortList(dir, 1, sort.byCategory(categories.categories, dir))}
           >
             <Icons.FolderOpen/>
           </SortingKey>
@@ -114,13 +138,13 @@ export default function Products(){
           <Key><Icons.Archive/></Key>
           <Key><Icons.Unarchive/></Key>
           <Key><Icons.Functions/></Key>
-          <KeyButton onClick={filter}>{!isFiltered ? <Icons.VisibilityOff/> : <Icons.Visibility/>}</KeyButton>
+          <KeyButton onClick={() => console.log("TODO: useFilterableList")}>{/* !isFiltered ? <Icons.VisibilityOff/> : <Icons.Visibility/> */}</KeyButton>
         </Row>
       </SectionHeader>
       <div className="product-list">
-        {(!Array.isArray(productList) || !productList.length)
+        {(!Array.isArray(sortedList) || !sortedList.length)
           ? null
-          : productList.map((product, key) => (
+          : sortedList.map((product, key) => (
             <Product
               key={key}
               product={product}

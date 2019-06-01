@@ -66,13 +66,13 @@ const sortBySupplier = (suppliers = [], direction) => {
     } else if (supplierA < supplierB){
       compare = -1
     }
-    return ((direction === "desc") ? (compare * -1) : compare)
+    return ((direction === "asc") ? (compare * -1) : compare)
   }
 }
 
 const sortBy = (key = "", direction) => {
   return (a, b) => {
-    console.log(`a[${key}] = `, a[key])
+    //console.log(`a[${key}] = `, a[key])
     const A = () => (typeof a === "string") ? a[key].toUpperCase() : a[key]
     const B = () => (typeof b === "string") ? b[key].toUpperCase() : b[key]
 
@@ -82,7 +82,7 @@ const sortBy = (key = "", direction) => {
     } else if (A < B){
       compare = -1
     }
-    return ((direction === "desc") ? (compare * -1) : compare)
+    return ((direction === "asc") ? (compare * -1) : compare)
   }
 }
 
