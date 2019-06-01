@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGate } from "./constants/hooks";
+
+import useGate from "./hooks/useGate";
 import { loadProducts } from "./redux/actions/productsActions";
 import { loadOrders } from "./redux/actions/ordersActions";
 import { loadCategories } from "./redux/actions/categoriesActions";
@@ -8,26 +9,18 @@ import { loadSuppliers } from "./redux/actions/suppliersActions"
 import { loadSales } from "./redux/actions/salesActions"
 import { loadCustomers } from "./redux/actions/customersActions"
 
+import {BrowserRouter as Router, Route} from "react-router-dom"
+import * as routes from "./constants/routes"
+import Header from "./components/Header"
+import Products from "./pages/Products"
+import Orders from "./pages/Orders"
+import Sales from "./pages/Sales"
+import History from "./pages/History"
+
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Main from "./components/Main";
 import "./App.css";
 
 const App = () => {
-  /* const selectorArray = [
-    useSelector(state => state.products),
-    useSelector(state => state.categories),
-    useSelector(state => state.orders)
-  ]
-
-  const isLoadingArr = selectorArray.map(sel => sel.isLoading)
-  const memoizedIsLoadingArr = useMemo(() => { return isLoadingArr }, [isLoadingArr])
-
-  const isLoadedArr = selectorArray.map(sel => sel.isLoaded)
-  const memoizedIsLoadedArr = useMemo(() => { return isLoadedArr }, [isLoadedArr])
-
-  const loadingErrorArr = selectorArray.map(sel => sel.loadingError)
-  const memoizedLoadingErrorArr = useMemo(() => { return loadingErrorArr }, [loadingErrorArr])
- */
 
   const prodSelector = useSelector(state => state.products)
   const catSelector = useSelector(state => state.categories)
@@ -100,22 +93,47 @@ const App = () => {
       dispatch(loadCustomers())
     }
   }, [dispatch, isLoadingGate, isLoadedGate, loadingErrorGate]);
-
+ 
   return (
-    <div
-      style={{
-        display: "grid",
-        padding: "5vh 2vw",
-        height: "90vh",
-        maxHeight: "90vh",
-        width: "90vw"
-      }}
-    >
-      {isLoadingGate ? <CircularProgress style={{ alignSelf: "center", justifySelf: "center" }}/> 
-      : loadingErrorGate ? <p>Error!</p> 
-      : isLoadedGate ? <Main/> : null}
-    </div>
+    <Router>
+      <main
+        style={{
+          display: "grid",
+          padding: "5vh 2vw",
+          height: "90vh",
+          maxHeight: "90vh",
+          width: "90vw",
+        }}
+      >
+        <div style={{
+          border: "lightgray 1px solid",
+          borderRadius: "10px",
+          height: "90vh",
+          width: "96vw"
+        }}>
+        <Header/>
+        <section style={{ padding: "10px"}}>
+          {isLoadingGate ? <PageLoading/> 
+          : loadingErrorGate ? <p>Error!</p> 
+          : isLoadedGate ? <Page/> : null}
+        </section>
+        </div>
+      </main>
+    </Router>
   );
 };
+
+const Page = () => {
+  return(
+    <React.Fragment>
+      <Route exact path={routes.HOME} component={Products}/>
+      <Route path={routes.ORDERS} component={Orders}/>
+      <Route path={routes.SALES} component={Sales}/>
+      <Route path={routes.HISTORY} component={History}/>
+    </React.Fragment>
+  )
+}
+
+const PageLoading = () => <CircularProgress style={{ alignSelf: "center", justifySelf: "center" }}/>
 
 export default App;

@@ -7,17 +7,17 @@ import {
   clearCurrentSale,
   deleteSale,
   didSendSale
-} from "../../redux/actions/salesActions"
-import { saveCustomers } from "../../redux/actions/customersActions"
+} from "../redux/actions/salesActions"
+import { saveCustomers } from "../redux/actions/customersActions"
 
-import EditSale from "./EditSale"
-import SectionHeader, { Row, Title, Key, SortingKey } from "../SectionHeader"
-import CloudStatus from "../CloudStatus"
-import Icons from "../Icons"
-import Buttons from "../Buttons"
-import Names from "../Names"
-import {isArrayEmpty, newSale} from "../../constants/util"
-import {useGate} from "../../constants/hooks"
+import EditSale from "../components/EditSale"
+import SectionHeader, { Row, Title, Key, SortingKey } from "../components/SectionHeader"
+import CloudStatus from "../components/CloudStatus"
+import Icons from "../components/Icons"
+import Buttons from "../components/Buttons"
+import Names from "../components/Names"
+import {isArrayEmpty, newSale} from "../constants/util"
+import useGate from "../hooks/useGate"
 
 export default function Sales(){
   const dispatch = useDispatch()

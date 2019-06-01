@@ -1,10 +1,10 @@
 import React, {useState, useEffect, useCallback} from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { saveCreatedProduct, saveEditedProduct } from "../../redux/actions/productsActions"
-import { saveCreatedCategory } from "../../redux/actions/categoriesActions"
+import { saveCreatedProduct, saveEditedProduct } from "../redux/actions/productsActions"
+import { saveCreatedCategory } from "../redux/actions/categoriesActions"
 import ReactModal from "react-modal"
 import Collapse from "@material-ui/core/Collapse"
-import Icons from "../Icons"
+import Icons from "./Icons"
 ReactModal.setAppElement("#root");
 
 //TODO

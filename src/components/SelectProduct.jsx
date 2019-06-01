@@ -1,6 +1,6 @@
 import React from "react"
 import { useSelector } from "react-redux"
-import Names from "../Names"
+import Names from "./Names"
 
 export default ({style = {}, onSelect}) => {
   let styling = {

@@ -7,25 +7,25 @@ import {
   saveOrders,
   didReceiveOrder,
   deleteOrder
-} from "../../redux/actions/ordersActions";
-import { saveSuppliers } from "../../redux/actions/suppliersActions";
-import { sort, newOrder, isArrayEmpty } from "../../constants/util";
+} from "../redux/actions/ordersActions";
+import { saveSuppliers } from "../redux/actions/suppliersActions";
+import { sort, newOrder, isArrayEmpty } from "../constants/util";
 import "./Orders.css";
 
-import EditOrder from "./EditOrder";
-import ProductName from "../ProductName";
+import EditOrder from "../components/EditOrder";
+import ProductName from "../components/ProductName";
 import SectionHeader, {
   Row,
   Title,
   Key,
   SortingKey
-} from "../SectionHeader";
-import CloudStatus from "../CloudStatus";
-import Icons from "../Icons";
-import Buttons from "../Buttons";
-import { useGate } from "../../constants/hooks";
+} from "../components/SectionHeader";
+import CloudStatus from "../components/CloudStatus";
+import Icons from "../components/Icons";
+import Buttons from "../components/Buttons";
+import useGate from "../hooks/useGate";
 
-import useSortableList from "../../hooks/useSortableList";
+import useSortableList from "../hooks/useSortableList";
 import produce from "immer";
 
 export default function Orders() {

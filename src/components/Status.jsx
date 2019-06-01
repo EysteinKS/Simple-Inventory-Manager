@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSelector } from "react-redux"
 import "./Status.css"
-import { getOrderedAmount } from "../../constants/util"
-import ProductName from "../ProductName"
+import { getOrderedAmount } from "../constants/util"
+import ProductName from "./ProductName"
 
 export default () => {
   const list = useSelector(state => state.inventory.inventory)

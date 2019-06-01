@@ -6,24 +6,23 @@ import {
   clearCurrentProduct,
   saveProducts,
   toggleProduct
-} from "../../redux/actions/productsActions";
-import { saveCategories } from "../../redux/actions/categoriesActions"
+} from "../redux/actions/productsActions";
+import { saveCategories } from "../redux/actions/categoriesActions"
 import {
-  filterByActive,
   sort,
   getAmount,
   newProduct
-} from "../../constants/util";
+} from "../constants/util";
 import "./Products.css";
 
-import EditProduct from "./EditProduct";
-import EditCategories from "./Categories";
-import SectionHeader, { Row, Title, Key, KeyButton, SortingKey } from "../SectionHeader";
-import CloudStatus from "../CloudStatus"
-import Icons from "../Icons"
-import {useGate} from "../../constants/hooks"
+import EditProduct from "../components/EditProduct";
+import EditCategories from "../components/Categories";
+import SectionHeader, { Row, Title, Key, KeyButton, SortingKey } from "../components/SectionHeader";
+import CloudStatus from "../components/CloudStatus"
+import Icons from "../components/Icons"
+import useGate from "../hooks/useGate"
 
-import useSortableList from "../../hooks/useSortableList"
+import useSortableList from "../hooks/useSortableList"
 import produce from "immer"
 
 export default function Products(){

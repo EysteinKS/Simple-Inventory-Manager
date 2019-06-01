@@ -1,65 +1,67 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  saveCreatedSale,
-  saveEditedSale
-} from "../../redux/actions/salesActions";
-import { saveCreatedCustomer } from "../../redux/actions/customersActions";
+  saveCreatedOrder,
+  saveEditedOrder
+} from "../redux/actions/ordersActions";
+import { saveCreatedSupplier } from "../redux/actions/suppliersActions";
 import ReactModal from "react-modal";
 import Collapse from "@material-ui/core/Collapse";
-import Icons from "../Icons";
-import ProductName from "../ProductName";
-import SelectProduct from "../inventory/SelectProduct";
-import {useEditableList} from "../../constants/hooks"
+import Icons from "./Icons";
+import ProductName from "./ProductName";
+import SelectProduct from "./SelectProduct";
+import useEditableList from "../hooks/useEditableList"
 
 ReactModal.setAppElement("#root");
 
-export default function EditSale({ isOpen, close }) {
-  const current = useSelector(state => state.sales.currentSale);
-  const customers = useSelector(state => state.customers.customers);
+export default function EditOrder({ isOpen, close }) {
+  const current = useSelector(state => state.orders.currentOrder);
+  const suppliers = useSelector(state => state.suppliers.suppliers);
   const dispatch = useDispatch();
 
-  const [customer, setCustomer] = useState();
-  const [ordered, addProduct, editProduct, removeProduct, setOrdered] = useEditableList(current.ordered || [])
+  const [supplier, setSupplier] = useState();
+  const [ordered, addProduct, editProduct, removeProduct, setOrdered] = useEditableList(current.ordered)
 
   const [init, setInit] = useState(false);
   if (isOpen && !init) {
-    setCustomer(current.customerID);
+    setSupplier(current.supplierID);
     setOrdered(current.ordered);
     setInit(true);
   }
 
-  const [newCustomer, toggleNewCustomer] = useState(false);
+  const [newSupplier, toggleNewSupplier] = useState(false);
   useEffect(() => {
-    if (customer === "new") {
-      toggleNewCustomer(true);
+    if (supplier === "new") {
+      toggleNewSupplier(true);
     } else {
-      toggleNewCustomer(false);
+      toggleNewSupplier(false);
     }
-  }, [customer, toggleNewCustomer]);
+  }, [supplier, toggleNewSupplier]);
 
   const save = () => {
-    let returnedSale = {
-      saleID: current.saleID,
-      customerID: customer,
+    let returnedOrder = {
+      orderID: current.orderID,
+      supplierID: supplier,
       dateOrdered: new Date(),
-      dateSent: null,
+      dateReceived: null,
       ordered: ordered
     };
     //console.log(returnedOrder)
     if(current.isNew){
-      dispatch(saveCreatedSale(returnedSale));
+      dispatch(saveCreatedOrder(returnedOrder));
     } else {
-      dispatch(saveEditedSale(returnedSale));
+      dispatch(saveEditedOrder(returnedOrder));
     }
     close();
     setInit(false);
   };
 
+  if(!Array.isArray(current.ordered)) {return null}
+
   return (
     <ReactModal
       isOpen={isOpen}
-      contentLabel="Edit sale"
+      contentLabel="Edit order"
       shouldCloseOnOverlayClick={true}
       shouldCloseOnEsc={true}
       onRequestClose={() => {
@@ -80,7 +82,7 @@ export default function EditSale({ isOpen, close }) {
         }
       }}
     >
-      <p style={{ padding: "10px" }}>ID: {current.saleID}</p>
+      <p style={{ padding: "10px" }}>ID: {current.orderID}</p>
       <form
         style={{
           display: "grid",
@@ -89,28 +91,28 @@ export default function EditSale({ isOpen, close }) {
           maxHeight: "60vh"
         }}
       >
-        <label htmlFor="customer">Kunde</label>
-        <select value={customer} onChange={e => setCustomer(e.target.value)}>
-          {customers.map((customer, key) => (
-            <option key={key} value={customer.customerID}>
-              {customer.name}
+        <label htmlFor="supplier">Leverandør</label>
+        <select value={supplier} onChange={e => setSupplier(e.target.value)}>
+          {suppliers.map((supplier, key) => (
+            <option key={key} value={supplier.supplierID}>
+              {supplier.name}
             </option>
           ))}
           <option value="new">...</option>
         </select>
         <Collapse
-          in={newCustomer}
+          in={newSupplier}
           style={{
             gridColumn: "2/3"
           }}
         >
-          {newCustomer ? (
-            <AddCustomer
-              visible={(customer === "new")}
-              customers={customers}
+          {newSupplier ? (
+            <AddSupplier
+              visible={(supplier === "new")}
+              suppliers={suppliers}
               close={ID => {
-                setCustomer(ID);
-                toggleNewCustomer(false);
+                setSupplier(ID);
+                toggleNewSupplier(false);
               }}
             />
           ) : null}
@@ -138,14 +140,14 @@ export default function EditSale({ isOpen, close }) {
   );
 };
 
-const AddCustomer = ({ visible, close, customers }) => {
+const AddSupplier = ({ visible, close, suppliers }) => {
   const [name, setName] = useState("");
   const [ID, setID] = useState();
   const dispatch = useDispatch();
   const save = useCallback(
     event => {
       event.preventDefault();
-      dispatch(saveCreatedCustomer(name));
+      dispatch(saveCreatedSupplier(name));
       close(ID);
     },
     [dispatch, name, close, ID]
@@ -153,9 +155,9 @@ const AddCustomer = ({ visible, close, customers }) => {
 
   useEffect(() => {
     if(visible) {
-      setID(customers.length + 1);
+      setID(suppliers.length + 1);
     }
-  }, [visible, setID, customers]);
+  }, [visible, setID, suppliers]);
 
   return (
     <div
