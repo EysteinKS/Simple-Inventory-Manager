@@ -14,14 +14,6 @@ const initialState = {
   isSaved: true,
   savingError: null,
   currentLocation: null,
-  firebaseConfig: {
-    apiKey: null,
-    authDomain: null,
-    databaseURL: null,
-    projectId: null,
-    storageBucket: null,
-    messagingSenderId: null
-  },
   locations: [],
   settings: {
     language: "NO",

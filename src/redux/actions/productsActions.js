@@ -1,4 +1,4 @@
-import { firestore } from "../../firebase/firebase"
+import { secondaryFirestore as firestore } from "../../firebase/firebase"
 
 //LOADING
 

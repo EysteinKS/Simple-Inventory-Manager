@@ -16,12 +16,46 @@ import Products from "./pages/Products"
 import Orders from "./pages/Orders"
 import Sales from "./pages/Sales"
 import History from "./pages/History"
+import Login from "./components/Login"
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import CssBaseline from "@material-ui/core/CssBaseline"
 import "./App.css";
 
+import { useAuthState } from "react-firebase-hooks/auth"
+import { auth, firestore, initializeLocation } from "./firebase/firebase"
+
 const App = () => {
+  const [user, intialising, error] = useAuthState(auth)
+  const dispatch = useDispatch();
+
+  async function fetchData(){
+    //await auth.signInWithEmailAndPassword("eystein.kolsto@gmail.com", "Eyks1995")
+    let config = await firestore.doc("Clients/Barcontrol").get().then(res => {
+      return res.data().firebaseConfig
+    })
+    await initializeLocation(config)
+  }
+
+  //INITIALIZE IF USER IS LOGGED IN
+  useEffect(() => {
+    if(user){
+      fetchData().then(() => loadLocation())
+    }
+  }, [user])
+
+  useEffect(() => {
+    console.log(user)
+  }, [user])
+
+  const loadLocation = () => {
+    dispatch(loadOrders());
+    dispatch(loadProducts());
+    dispatch(loadCategories());
+    dispatch(loadSuppliers());
+    dispatch(loadSales())
+    dispatch(loadCustomers())
+  }
 
   const prodSelector = useSelector(state => state.products)
   const catSelector = useSelector(state => state.categories)
@@ -63,18 +97,6 @@ const App = () => {
   const isLoadingGate = useGate(isLoadingArr2, "OR", "isLoading");
   const isLoadedGate = useGate(isLoadedArr2, "AND", "isLoaded");
   const loadingErrorGate = useGate(loadingErrorArr2, "OR", "loadingError");
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (!isLoadingGate && !isLoadedGate) {
-      dispatch(loadOrders());
-      dispatch(loadProducts());
-      dispatch(loadCategories());
-      dispatch(loadSuppliers());
-      dispatch(loadSales())
-      dispatch(loadCustomers())
-    }
-  }, [dispatch, isLoadingGate, isLoadedGate, loadingErrorGate]);
  
   return (
     <>
@@ -89,14 +111,20 @@ const App = () => {
       <section style={{ height: "100%", overflowY: "scroll", marginTop: "5vh"}}>
         {isLoadingGate ? <PageLoading/> 
         : loadingErrorGate ? <p>Error!</p> 
-        : isLoadedGate ? <Page/> : null}
+        : isLoadedGate ? <AuthPage/> : null}
       </section>
     </main>
     </>
   );
 };
 
-const Page = () => {
+const NonAuthPage = () => {
+  return(
+    <Login/>
+  )
+}
+
+const AuthPage = () => {
   //https://github.com/reach/router/issues/242#issuecomment-467082358
   return(
     <div style={{margin: "5vh 10vw 10vh 10vw"}}>

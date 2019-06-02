@@ -9,6 +9,9 @@ import Typography from "@material-ui/core/Typography"
 
 import useLocation from "../hooks/useLocation"
 
+import { auth } from "../firebase/firebase"
+import { useAuthState } from "react-firebase-hooks/auth"
+
 export default function Header() {
   const fixedPosition = {
     position: "fixed",
@@ -21,6 +24,7 @@ export default function Header() {
     <header style={{
       display: "grid",
       gridTemplateColumns: "1fr 1fr 1fr",
+      
       columnGap: "2px",
       justifyItems: "center",
       borderBottom: "gray 2px solid",
@@ -35,6 +39,7 @@ export default function Header() {
 }
 
 const LocationSelector = () => {
+
   return(
     <Typography variant="h4" style={{placeSelf: "center"}}>BARCONTROL</Typography>
   )
