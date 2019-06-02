@@ -30,7 +30,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   async function fetchData(){
-    //await auth.signInWithEmailAndPassword("eystein.kolsto@gmail.com", "Eyks1995")
+    //login here 
     let config = await firestore.doc("Clients/Barcontrol").get().then(res => {
       return res.data().firebaseConfig
     })
