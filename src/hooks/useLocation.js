@@ -17,6 +17,7 @@ const useLocation = () => {
     return () => {
       removeListener();
     };
+    // eslint-disable-next-line
   }, []);
 
   return state;

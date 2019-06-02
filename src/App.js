@@ -110,6 +110,6 @@ const Page = () => {
   )
 }
 
-const PageLoading = () => <CircularProgress style={{ alignSelf: "center", justifySelf: "center" }}/>
+const PageLoading = () => <div style={{display: "flex", justifyContent: "center", height: "100%"}}><CircularProgress style={{ alignSelf: "center", justifySelf: "center" }}/></div>
 
 export default App;

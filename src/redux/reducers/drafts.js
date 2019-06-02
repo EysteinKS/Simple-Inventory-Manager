@@ -8,9 +8,7 @@ const initializeState = (optionals = {}) => {
     isSaving: false,
     isSaved: true,
     savingError: false,
-    error: null,
-    isSorted: false,
-    sorting: []
+    error: null
   }
 }
 

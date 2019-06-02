@@ -1,5 +1,5 @@
 import React from 'react'
-import { navigate, Location } from "@reach/router"
+import { navigate } from "@reach/router"
 import * as routes from "../constants/routes"
 import Icons from "./Icons"
 import DropDownMenu from "./DropDownMenu"
@@ -53,7 +53,6 @@ const HeaderLink = ({children, linkTo, onClick, name}) => {
       borderStyle: "outset",
       borderColor: "rgba(255, 255, 255, 0.4)",
       backgroundColor: "#fbfbfb",
-      height: "100%",
       display: "grid",
       gridTemplateColumns: "1fr 1fr 1fr",
       padding: "10px",

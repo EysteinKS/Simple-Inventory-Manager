@@ -46,6 +46,7 @@
   grid-template-columns: 24% 24% repeat(4, 10%) 6% 6%;
   justify-items: center;
   width: 100%;
+  background-color: #EEEDE3
 }
 
 /* @media(max-width: 1000px){
@@ -55,7 +56,7 @@
 } */
 
 .product:nth-child(2n){
-  background-color: rgba(200, 200, 200, 0.1)
+  background-color: #FFFFF3
 }
 
 .product-name {
