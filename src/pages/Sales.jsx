@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import {
   createSale,
@@ -16,16 +16,41 @@ import CloudStatus from "../components/CloudStatus"
 import Icons from "../components/Icons"
 import Buttons from "../components/Buttons"
 import Names from "../components/Names"
-import {isArrayEmpty, newSale} from "../constants/util"
+import {isArrayEmpty, newSale, sort} from "../constants/util"
 import useGate from "../hooks/useGate"
+
+import useSortableList from "../hooks/useSortableList";
+import produce from "immer";
 
 export default function Sales(){
   const dispatch = useDispatch()
   const sales = useSelector(state => state.sales)
-  const salesList = sales.sortedSales
   const customers = useSelector(state => state.customers)
   const [ isSaleOpen, setSaleOpen ] = useState(false)
-  //console.log("isSaleOpen: ", isSaleOpen)
+
+  //SORTING
+  const [sorting, setSorting] = useState([null, null, null])
+  const [sortedList, setList, setSortingFuncs] = useSortableList(sales.sales)
+  useEffect(() => {
+    setList(sales.sales)
+    setSortingFuncs(sorting)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sales.sales])
+  const sortList = (dir, index, func) => {
+    if (dir !== null) {
+      let newSorting = produce(sorting, draft => {
+        draft[index] = func;
+      });
+      setSorting(newSorting);
+      setSortingFuncs(newSorting);
+    } else {
+      let newSorting = produce(sorting, draft => {
+        draft[index] = null;
+      });
+      setSorting(newSorting);
+      setSortingFuncs(newSorting);
+    }
+  }
 
   const buttonStyle = {
     height: "75%",
@@ -75,15 +100,15 @@ export default function Sales(){
           />
         </Row>
         <Row grid="15% 15% 15% 15%">
-          <Key>#</Key>
-          <Key><Icons.Business/></Key>
-          <Key><Icons.AccessTime/></Key>
+          <SortingKey onClick={dir => sortList(dir, 0, sort.by("saleID", dir))}>#</SortingKey>
+          <SortingKey onClick={dir => sortList(dir, 1, sort.byCustomer(customers.customers, dir))}><Icons.Business/></SortingKey>
+          <SortingKey onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}><Icons.AccessTime/></SortingKey>
           <Key><Icons.ShoppingCart/></Key>
         </Row>
       </SectionHeader>
-      {(isArrayEmpty(salesList))
+      {(isArrayEmpty(sortedList))
         ? null
-        : <List list={salesList} edit={id => {
+        : <List list={sortedList} edit={id => {
           dispatch(editSale(id))
           setSaleOpen(true)
         }}/>}

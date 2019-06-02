@@ -1,58 +1,124 @@
 import React from 'react'
-import { NavLink } from "react-router-dom"
+import { navigate, Location } from "@reach/router"
 import * as routes from "../constants/routes"
 import Icons from "./Icons"
+import DropDownMenu from "./DropDownMenu"
+import MenuList from "@material-ui/core/MenuList"
+import MenuItem from "@material-ui/core/MenuItem"
+import Typography from "@material-ui/core/Typography"
+
+import useLocation from "../hooks/useLocation"
 
 export default function Header() {
+  const fixedPosition = {
+    position: "fixed",
+    width: "100%",
+    top: "0",
+    zIndex: "10",
+  }
+
   return (
     <header style={{
       display: "grid",
-      gridTemplateColumns: "20% repeat(4, 20%)",
+      gridTemplateColumns: "1fr 1fr 1fr",
       columnGap: "2px",
       justifyItems: "center",
       borderBottom: "gray 2px solid",
-      padding: "10px"
+      backgroundColor: "#6FCF79",
+      ...fixedPosition
     }}>
-      <h3 style={{width: "100%"}}>Lager</h3>
-      <HeaderButton linkTo={routes.HOME}>
-        <Icons.Storage/><br/>
-        <b><i>Produkter</i></b>
-      </HeaderButton>
-
-      <HeaderButton linkTo={routes.ORDERS}>
-        <Icons.Archive/><br/>
-        <b><i>Bestillinger</i></b>
-      </HeaderButton>
-
-      <HeaderButton linkTo={routes.SALES}>
-        <Icons.Unarchive/><br/>
-        <b><i>Salg</i></b>
-      </HeaderButton>
-
-      <HeaderButton linkTo={routes.HISTORY}>
-        <Icons.Functions/><br/>
-        <b><i>Logg</i></b>
-      </HeaderButton>
+      <SectionSelector/>
+      <LocationSelector/>
+      <UserSelector/>
     </header>
   )
 }
 
-const HeaderButton = ({children, linkTo}) => {
+const LocationSelector = () => {
   return(
-    <NavLink to={linkTo} activeStyle={{
-      color: "blue"
-    }}>
-      <button style={{
-        position: "relative",
-        right: "8px",
-        borderStyle: "outset",
-        borderColor: "rgba(255, 255, 255, 0.4)",
-        backgroundColor: "#fbfbfb",
-        borderRadius: "15px",
-        width: "18vw"
-      }}>
-        {children}
+    <Typography variant="h4" style={{placeSelf: "center"}}>BARCONTROL</Typography>
+  )
+}
+
+const UserSelector = () => {
+  return(
+    <Typography style={{placeSelf: "center"}}>Fornavn Etternavn</Typography>
+  )
+}
+
+const HeaderLink = ({children, linkTo, onClick, name}) => {
+  return(
+    <MenuItem style={{
+      position: "relative",
+      borderStyle: "outset",
+      borderColor: "rgba(255, 255, 255, 0.4)",
+      backgroundColor: "#fbfbfb",
+      height: "100%",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      padding: "10px",
+      height: "5vh"
+    }}
+      onClick={e => {
+        navigate(linkTo)
+        onClick(e)}}
+    >
+      {children}
+      <Typography style={{placeSelf: "center"}}>{name}</Typography>
+    </MenuItem>
+  )
+}
+
+const SectionSelector = () => {
+  const [open, setOpen] = React.useState(false)
+  const anchorRef = React.useRef(null)
+  const currentLocation = useLocation()
+
+  const handleToggle = () => {
+    setOpen(prevOpen => !prevOpen)
+  }
+
+  const handleClose = event => {
+    if(anchorRef.current && anchorRef.current.contains(event.target)){
+      return
+    }
+    setOpen(false)
+  }
+
+  const CurrentSection = ({onClick, thisRef }) => {
+    let currentSection = sections.find(section => section.linkTo === currentLocation.location.pathname)
+
+    return(
+      <button ref={thisRef} onClick={onClick} style={{width: "33vw", padding: "10px", height: "5vh"}}>
+        <div style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr"}}>
+        {currentSection.icon}
+        <Typography style={{placeSelf: "center"}}>{currentSection.name}</Typography>
+        </div>
       </button>
-    </NavLink>
+    )
+  }
+
+  const sections = [
+    {name: "Produkter", linkTo: routes.HOME, icon: <Icons.Storage/>},
+    {name: "Bestillinger", linkTo: routes.ORDERS, icon: <Icons.Archive/>},
+    {name: "Salg", linkTo: routes.SALES, icon: <Icons.Unarchive/>},
+    {name: "Logg", linkTo: routes.HISTORY, icon: <Icons.Functions/>}
+  ]
+
+  const filteredSections = sections.filter(section => section.linkTo !== currentLocation.location.pathname)
+
+  return(
+    <div>
+      <CurrentSection onClick={handleToggle} thisRef={anchorRef}/>
+      <DropDownMenu anchorEl={anchorRef.current} open={open} style={{width: "33vw", zIndex: "11"}} onClickAway={handleClose}>
+        <MenuList style={{paddingTop: "0px"}}>
+          {filteredSections.map((section, i)=> {
+            return <HeaderLink linkTo={section.linkTo} onClick={handleClose} name={section.name} key={i}>
+              {section.icon}
+            </HeaderLink>
+          })}
+        </MenuList>
+      </DropDownMenu>
+    </div>
   )
 }

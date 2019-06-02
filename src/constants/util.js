@@ -40,11 +40,9 @@ const sortByName = (direction) => {
 }
 
 const sortByCategory = (categories = [], direction) => {
-  const sortedCategories = [...categories].sort(sortByName("asc"))
-  //console.log(sortedCategories)
   return (a, b) => {
-    const categoryA = sortedCategories[a.categoryID - 1].name.toUpperCase()
-    const categoryB = sortedCategories[b.categoryID - 1].name.toUpperCase()
+    const categoryA = categories.find(cat => cat.categoryID === a.categoryID).name.toUpperCase()
+    const categoryB = categories.find(cat => cat.categoryID === b.categoryID).name.toUpperCase()
     let compare = 0
     if(categoryA > categoryB){
       compare = 1
@@ -56,14 +54,27 @@ const sortByCategory = (categories = [], direction) => {
 }
 
 const sortBySupplier = (suppliers = [], direction) => {
-  const sortedSuppliers = [...suppliers].sort(sortByName("asc"))
   return (a, b) => {
-    const supplierA = sortedSuppliers[a.supplierID - 1].name.toUpperCase()
-    const supplierB = sortedSuppliers[b.supplierID - 1].name.toUpperCase()
+    const supplierA = suppliers.find(supp => supp.supplierID === a.supplierID).name.toUpperCase()
+    const supplierB = suppliers.find(supp => supp.supplierID === b.supplierID).name.toUpperCase()
     let compare = 0
     if(supplierA > supplierB){
       compare = 1
     } else if (supplierA < supplierB){
+      compare = -1
+    }
+    return ((direction === "asc") ? (compare * -1) : compare)
+  }
+}
+
+const sortByCustomer = (customers = [], direction) => {
+  return (a, b) => {
+    const customerA = customers.find(cust => cust.customerID === a.customerID).name.toUpperCase()
+    const customerB = customers.find(cust => cust.customerID === b.customerID).name.toUpperCase()
+    let compare = 0
+    if(customerA > customerB){
+      compare = 1
+    } else if (customerA < customerB){
       compare = -1
     }
     return ((direction === "asc") ? (compare * -1) : compare)
@@ -90,7 +101,8 @@ export const sort = {
   by: sortBy,
   byName: sortByName,
   byCategory: sortByCategory,
-  bySupplier: sortBySupplier
+  bySupplier: sortBySupplier,
+  byCustomer: sortByCustomer
 }
 //SORTING END
 
@@ -123,7 +135,8 @@ export const newProduct = (id) => {
     name: "",
     categoryID: 1,
     active: true,
-    amount: 0
+    amount: 0,
+    comments: ""
   }
 }
 

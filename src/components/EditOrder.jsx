@@ -41,7 +41,7 @@ export default function EditOrder({ isOpen, close }) {
   const save = () => {
     let returnedOrder = {
       orderID: current.orderID,
-      supplierID: supplier,
+      supplierID: Number(supplier),
       dateOrdered: new Date(),
       dateReceived: null,
       ordered: ordered
@@ -244,6 +244,7 @@ const Ordered = ({ ordered, add, edit, remove }) => {
             overflowY: "scroll"
           }}
           onSelect={productID => add(productID)}
+          selected={ordered}
         />
       </Collapse>
     </div>

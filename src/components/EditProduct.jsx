@@ -21,6 +21,12 @@ export default function EditProduct({ isOpen, close }) {
   const [category, setCategory] = useState(current.categoryID);
   const [amount, setAmount] = useState(current.amount);
   const [active, setActive] = useState(current.active);
+  const [comments, setComments] = useState(current.comments)
+
+  useEffect(() => {
+    setComments(current.comments)
+    // eslint-disable-next-line
+  }, [isOpen])
 
   const [init, setInit] = useState(false);
   if (isOpen && !init) {
@@ -46,9 +52,10 @@ export default function EditProduct({ isOpen, close }) {
   let returnedProduct = {
     productID: current.productID,
     name: name,
-    categoryID: category,
+    categoryID: Number(category),
     active: active,
-    amount: Number(amount)
+    amount: Number(amount),
+    comments: comments
   };
 
   const save = () => {
@@ -132,6 +139,8 @@ export default function EditProduct({ isOpen, close }) {
             ? setAmount(event.target.value.replace(/\s/g,''))
             : null
           }/>
+        <label htmlFor="comments">Kommentar</label>
+        <textarea name="comments" value={comments} onChange={e => setComments(e.target.value)}/>
         <label htmlFor="active">Aktiv</label>
         <input
           type="checkbox"

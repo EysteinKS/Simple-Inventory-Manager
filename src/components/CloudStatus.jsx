@@ -15,6 +15,7 @@ export default function CloudStatus({ className, style, save, isSaving, isSaved,
     backgroundColor: "lightgrey", 
     cursor: "default",
     borderRadius: "5px",
+    border: "2px black solid"
   }
   //error color : #ff9999
   //unsaved / saving : #ffe599

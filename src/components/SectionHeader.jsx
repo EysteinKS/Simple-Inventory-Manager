@@ -6,7 +6,9 @@ export default function SectionHeader({
   return (
     <header style={{
       display: "block",
-      borderBottom: "gray 1px solid"
+      borderBottom: "gray 1px solid",
+      borderRadius: "15px 15px 0px 0px",
+      backgroundColor: "#6FCF79"    
     }}>
       {children}
     </header>
