@@ -23,8 +23,15 @@ export const loadUser = (uid) => {
     firestore.doc(`Users/${uid}`).get()
       .then(res => {
         let data = res.data()
+        console.log(data)
         dispatch(loadUserSuccess(data))
       })
       .catch(err => dispatch(loadUserFailure(err.message)))
   }
 }
+
+export const SET_LOCATION_NAME = 'SET_LOCATION_NAME'
+export const setLocationName = (name) => ({
+  type: SET_LOCATION_NAME,
+  payload: name
+})

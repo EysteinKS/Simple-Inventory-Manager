@@ -93,7 +93,7 @@ export default function EditOrder({ isOpen, close }) {
       >
         <label htmlFor="supplier">Leverandør</label>
         <select value={supplier} onChange={e => setSupplier(e.target.value)}>
-          {suppliers.map((supplier, key) => (
+          {suppliers && suppliers.map((supplier, key) => (
             <option key={key} value={supplier.supplierID}>
               {supplier.name}
             </option>

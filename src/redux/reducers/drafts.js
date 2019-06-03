@@ -70,6 +70,12 @@ const saveFailure = (draft, error) => {
   return ret
 }
 
+const resetReducer = (draft) => {
+  let ret = {...draft}
+  ret.isLoaded = false
+  return ret
+}
+
 export default {
   initializeState,
   loadBegin,
@@ -77,5 +83,6 @@ export default {
   loadFailure,
   saveBegin,
   saveSuccess,
-  saveFailure
+  saveFailure,
+  resetReducer
 }

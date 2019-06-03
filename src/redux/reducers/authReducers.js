@@ -2,8 +2,6 @@ import * as action from "../actions/authActions"
 import produce from "immer"
 
 const initialState = {
-  isLoggedIn: true,
-  uid: null,
   firstName: "",
   lastName: "",
   role: "user",
@@ -14,6 +12,7 @@ const initialState = {
   isSaved: true,
   savingError: null,
   currentLocation: null,
+  locationName: "",
   locations: [],
   settings: {
     language: "NO",
@@ -21,9 +20,34 @@ const initialState = {
   }
 }
 
-export default (state = initialState, {type, payload}) => {
-  switch(type){
-    default:
-      return state
-  }
-}
+export default (state = initialState, {type, payload}) => 
+  produce(state, draft => {
+    switch(type){
+      case action.LOAD_USER_BEGIN:
+        draft.isLoading = true
+        draft.isLoaded = false
+        draft.loadingError = null
+        break
+      case action.LOAD_USER_SUCCESS:
+        draft.isLoading = false
+        draft.isLoaded = true
+        draft.firstName = payload.firstName
+        draft.lastName = payload.lastName
+        draft.role = payload.role
+        draft.currentLocation = payload.currentLocation
+        draft.locations = payload.locations
+        draft.settings.language = payload.settings.language
+        draft.settings.isInactiveVisible = payload.settings.isInactiveVisible
+        break
+      case action.LOAD_USER_FAILURE:
+        draft.isLoading = false
+        draft.isLoaded = true
+        draft.loadingError = payload
+        break
+      case action.SET_LOCATION_NAME:
+        draft.locationName = payload
+        break
+      default:
+        return state
+    }
+  })

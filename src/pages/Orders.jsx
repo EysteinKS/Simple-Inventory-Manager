@@ -69,7 +69,7 @@ export default function Orders() {
     <button
       style={buttonStyle}
       onClick={() => {
-        dispatch(createOrder(newOrder(orders.orders.length + 1)));
+        dispatch(createOrder(newOrder(orders.currentID + 1)));
         setOrderOpen(true);
       }}
     >

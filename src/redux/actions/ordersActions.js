@@ -21,20 +21,24 @@ export const loadOrdersFailure = (error) => ({
 })
 
 export const loadOrders = () => {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState()
     dispatch(loadOrdersBegin())
-    firestore.doc("Barcontrol/Orders").get()
+    firestore.doc(`${state.auth.currentLocation}/Orders`).get()
       .then(res => {
         let data = res.data()
-        let orders = data.orders.map(order => {
-          //Firestore returns date objects as {seconds, nanoseconds}
-          order.dateOrdered = new Date(order.dateOrdered.seconds * 1000)
-          return order
-        })
+        let orders
+        if(data.orders && Array.isArray(data.orders)){
+          orders = data.orders.map(order => {
+            //Firestore returns date objects as {seconds, nanoseconds}
+            order.dateOrdered = new Date(order.dateOrdered.seconds * 1000)
+            return order
+          })
+        }
         console.log("Loaded orders successfully")
         dispatch(loadOrdersSuccess(orders, data.history, data.currentID))
       })
-      .catch(err => dispatch(loadOrdersFailure(err)))
+      .catch(err => dispatch(loadOrdersFailure(err.message)))
   }
 }
 
@@ -60,7 +64,7 @@ export const saveOrders = () => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(saveOrdersBegin())
-    firestore.doc("Barcontrol/Orders").set({
+    firestore.doc(`${state.auth.currentLocation}/Orders`).set({
       orders: state.orders.orders,
       history: state.orders.history,
       currentID: state.orders.currentID
@@ -134,4 +138,9 @@ export const DELETE_ORDER = 'DELETE_ORDER'
 export const deleteOrder = (id) => ({
   type: DELETE_ORDER,
   payload: id
+})
+
+export const RESET_ORDERS = 'RESET_ORDERS'
+export const resetOrders = () => ({
+  type: RESET_ORDERS
 })

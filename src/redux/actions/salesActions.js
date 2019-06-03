@@ -21,19 +21,23 @@ export const loadSalesFailure = (error) => ({
 })
 
 export const loadSales = () => {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState()    
     dispatch(loadSalesBegin())
-    firestore.doc("Barcontrol/Sales").get()
+    firestore.doc(`${state.auth.currentLocation}/Sales`).get()
       .then(res => {
         let data = res.data()
-        let sales = data.sales.map(sale => {
-          sale.dateOrdered = new Date(sale.dateOrdered.seconds * 1000)
-          return sale
-        })
+        let sales
+        if(data.sales && Array.isArray(data.sales)){
+          sales = data.sales.map(sale => {
+            sale.dateOrdered = new Date(sale.dateOrdered.seconds * 1000)
+            return sale
+          })
+        }
         console.log("Loaded sales successfully")
         dispatch(loadSalesSuccess(sales, data.history, data.currentID))
       })
-      .catch(err => dispatch(loadSalesFailure(err)))
+      .catch(err => dispatch(loadSalesFailure(err.message)))
   }
 }
 
@@ -59,7 +63,7 @@ export const saveSales = () => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(saveSalesBegin())
-    firestore.doc("Barcontrol/Sales").set({
+    firestore.doc(`${state.auth.currentLocation}/Sales`).set({
       sales: state.sales.sales,
       history: state.sales.history,
       currentID: state.sales.currentID
@@ -123,4 +127,9 @@ export const DELETE_SALE = 'DELETE_SALE'
 export const deleteSale = (id) => ({
   type: DELETE_SALE,
   payload: id
+})
+
+export const RESET_SALES = 'RESET_SALES'
+export const resetSales = () => ({
+  type: RESET_SALES
 })

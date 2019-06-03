@@ -39,12 +39,21 @@ export default function EditProduct({ isOpen, close }) {
   }
 
   const [newCategory, toggleNewCategory] = useState(false)
+
+  useEffect(() => {
+    console.log(categories)
+    if(!categories.length){
+      console.log("Setting toggleNewCategory(true)")
+      toggleNewCategory(true)
+    }
+  }, [isOpen])
   
   useEffect(() => {
     if(category === "new"){
       //console.log("Creating new category!")
       toggleNewCategory(true)
-    } else {
+    } else if (categories.length){
+      console.log("Setting toggleNewCategory(false)")
       toggleNewCategory(false)
     }
   }, [category, toggleNewCategory])

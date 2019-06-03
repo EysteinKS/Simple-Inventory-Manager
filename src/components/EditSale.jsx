@@ -91,7 +91,7 @@ export default function EditSale({ isOpen, close }) {
       >
         <label htmlFor="customer">Kunde</label>
         <select value={customer} onChange={e => setCustomer(e.target.value)}>
-          {customers.map((customer, key) => (
+          {customers && customers.map((customer, key) => (
             <option key={key} value={customer.customerID}>
               {customer.name}
             </option>

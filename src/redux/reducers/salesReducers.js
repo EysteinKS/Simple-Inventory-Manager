@@ -3,11 +3,13 @@ import * as action from "../actions/salesActions"
 import produce from "immer"
 import drafts from "./drafts"
 
-export default (state = drafts.initializeState({
+const initialState = drafts.initializeState({
   sales: [],
   sortedSales: [],
   currentSale: {}
-}), {type, payload}) => 
+})
+
+export default (state = initialState, {type, payload}) => 
   produce(state, draft => {
     switch(type){
       case action.LOAD_SALES_BEGIN:
@@ -79,5 +81,7 @@ export default (state = drafts.initializeState({
         draft.sortedSales = deletedArray
         draft.isSaved = false;
         break;
+      case action.RESET_SALES:
+        return drafts.resetReducer(draft, initialState)
     }
   })

@@ -10,14 +10,22 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseAuthConfig);
 }
 
+
 export const initializeLocation = (config) => {
-  console.log(firebase.apps)
   secondary = firebase.initializeApp(config, "secondary")
   secondaryFirestore = secondary.firestore()
   secondaryAuth = secondary.auth()
-  console.log(firebase.apps)
 }
 
+export const doSignOut = () => {
+  firebase.auth().signOut()
+  //https://firebase.google.com/docs/reference/js/firebase.app.App.html
+  secondary.delete().then(() => {
+    secondary = null
+    secondaryFirestore = null
+    secondaryAuth = null
+  })
+}
 
 const firestore = firebase.firestore();
 const auth = firebase.auth();

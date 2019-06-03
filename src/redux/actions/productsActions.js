@@ -20,9 +20,10 @@ export const loadProductsFailure = (error) => ({
 })
 
 export const loadProducts = () => {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState()    
     dispatch(loadProductsBegin())
-    firestore.doc("Barcontrol/Products").get()
+    firestore.doc(`${state.auth.currentLocation}/Products`).get()
       .then(res => {
         let data = res.data()
         let products = data.products
@@ -52,9 +53,10 @@ export const saveProductsFailure = (error) => ({
 })
 
 export const saveProducts = (products) => {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState()  
     dispatch(saveProductsBegin())
-    firestore.doc("Barcontrol/Products").set({
+    firestore.doc(`${state.auth.currentLocation}/Products`).set({
       products: products
     }, {merge: true})
       .then(() => {
@@ -123,4 +125,9 @@ export const FILTER_PRODUCTS = 'FILTER_PRODUCTS'
 export const filterProducts = (func) => ({
   type: FILTER_PRODUCTS,
   payload: func
+})
+
+export const RESET_PRODUCTS = 'RESET_PRODUCTS'
+export const resetProducts = () => ({
+  type: RESET_PRODUCTS
 })

@@ -3,18 +3,9 @@ import * as action from "../actions/categoriesActions";
 import produce from "immer";
 import drafts from "./drafts"
 
-/* const initialState = {
-  categories: [],
-  isLoading: false,
-  isLoaded: false,
-  loadingError: false,
-  isSaving: false,
-  isSaved: true,
-  savingError: false,
-  error: null
-}; */
+const initialState = drafts.initializeState({categories: []})
 
-export default (state = drafts.initializeState({categories: []}), { type, payload }) =>
+export default (state = initialState, { type, payload }) =>
   produce(state, draft => {
     switch (type) {
       case action.LOAD_CATEGORIES_BEGIN:
@@ -35,5 +26,7 @@ export default (state = drafts.initializeState({categories: []}), { type, payloa
           name: payload
         })
         break
+      case action.RESET_CATEGORIES:
+        return drafts.resetReducer(draft, initialState)
     }
 });

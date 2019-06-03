@@ -18,9 +18,10 @@ export const loadSuppliersFailure = (error) => ({
 })
 
 export const loadSuppliers = () => {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState()    
     dispatch(loadSuppliersBegin())
-    firestore.doc("Barcontrol/Suppliers").get()
+    firestore.doc(`${state.auth.currentLocation}/Suppliers`).get()
       .then(res => {
         let data = res.data()
         let suppliers = data.suppliers
@@ -54,7 +55,7 @@ export const saveSuppliers = (suppliers) => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(saveSuppliersBegin())
-    firestore.doc("Barcontrol/Suppliers").set({
+    firestore.doc(`${state.auth.currentLocation}/Suppliers`).set({
       suppliers: state.suppliers.suppliers,
       currentID: state.suppliers.currentID
     }, {merge: true})
@@ -69,4 +70,9 @@ export const SAVE_CREATED_SUPPLIER = 'SAVE_CREATED_SUPPLIER'
 export const saveCreatedSupplier = (name) => ({
   type: SAVE_CREATED_SUPPLIER,
   payload: name
+})
+
+export const RESET_SUPPLIERS = 'RESET_SUPPLIERS'
+export const resetSuppliers = () => ({
+  type: RESET_SUPPLIERS
 })

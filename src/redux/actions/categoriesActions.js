@@ -18,9 +18,10 @@ export const loadCategoriesFailure = (error) => ({
 })
 
 export const loadCategories = () => {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState()
     dispatch(loadCategoriesBegin())
-    firestore.doc("Barcontrol/Categories").get()
+    firestore.doc(`${state.auth.currentLocation}/Categories`).get()
       .then(res => {
         let categories = res.data().categories
         console.log("Loaded categories successfully")
@@ -49,9 +50,10 @@ export const saveCategoriesFailure = (error) => ({
 })
 
 export const saveCategories = (categories) => {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState()
     dispatch(saveCategoriesBegin())
-    firestore.doc("Barcontrol/Categories").set({
+    firestore.doc(`${state.auth.currentLocation}/Categories`).set({
       categories
     }, {merge: true})
       .then(() => {
@@ -65,4 +67,9 @@ export const SAVE_CREATED_CATEGORY = 'SAVE_CREATED_CATEGORY'
 export const saveCreatedCategory = (name) => ({
   type: SAVE_CREATED_CATEGORY,
   payload: name
+})
+
+export const RESET_CATEGORIES = 'RESET_CATEGORIES'
+export const resetCategories = () => ({
+  type: RESET_CATEGORIES
 })

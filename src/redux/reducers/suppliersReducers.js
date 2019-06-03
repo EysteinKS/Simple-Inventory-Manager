@@ -3,7 +3,9 @@ import * as action from "../actions/suppliersActions"
 import produce from "immer"
 import drafts from "./drafts"
 
-export default (state = drafts.initializeState({suppliers: []}), {type, payload}) =>
+const initialState = drafts.initializeState({suppliers: []})
+
+export default (state = initialState, {type, payload}) =>
   produce(state, draft => {
     switch (type) {
       case action.LOAD_SUPPLIERS_BEGIN:
@@ -26,5 +28,7 @@ export default (state = drafts.initializeState({suppliers: []}), {type, payload}
           name: payload
         })
         break
+      case action.RESET_SUPPLIERS:
+        return drafts.resetReducer(draft, initialState)
     }
 });

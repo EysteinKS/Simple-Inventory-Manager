@@ -3,7 +3,9 @@ import * as action from "../actions/customersActions"
 import produce from "immer"
 import drafts from "./drafts"
 
-export default (state = drafts.initializeState({customers: []}), {type, payload}) => 
+const initialState = drafts.initializeState({customers: []})
+
+export default (state = initialState, {type, payload}) => 
   produce(state, draft => {
     switch(type){
       case action.LOAD_CUSTOMERS_BEGIN:
@@ -26,5 +28,7 @@ export default (state = drafts.initializeState({customers: []}), {type, payload}
           name: payload
         })
         break
+      case action.RESET_CUSTOMERS:
+        return drafts.resetReducer(draft, initialState)
     }  
 })

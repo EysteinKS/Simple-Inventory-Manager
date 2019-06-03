@@ -9,8 +9,16 @@ import Typography from "@material-ui/core/Typography"
 
 import useLocation from "../hooks/useLocation"
 
-import { auth } from "../firebase/firebase"
+import { auth, doSignOut } from "../firebase/firebase"
 import { useAuthState } from "react-firebase-hooks/auth"
+import { useDispatch, useSelector } from "react-redux"
+
+import { resetCategories } from "../redux/actions/categoriesActions"
+import { resetCustomers } from "../redux/actions/customersActions"
+import { resetOrders } from "../redux/actions/ordersActions"
+import { resetProducts } from "../redux/actions/productsActions"
+import { resetSales } from "../redux/actions/salesActions"
+import { resetSuppliers } from "../redux/actions/suppliersActions"
 
 export default function Header() {
   const fixedPosition = {
@@ -24,7 +32,7 @@ export default function Header() {
     <header style={{
       display: "grid",
       gridTemplateColumns: "1fr 1fr 1fr",
-      
+
       columnGap: "2px",
       justifyItems: "center",
       borderBottom: "gray 2px solid",
@@ -39,15 +47,47 @@ export default function Header() {
 }
 
 const LocationSelector = () => {
+  const locationName = useSelector(state => state.auth.locationName)
 
   return(
-    <Typography variant="h4" style={{placeSelf: "center"}}>BARCONTROL</Typography>
+    <Typography variant="h4" style={{placeSelf: "center"}}>{locationName || "LAGER"}</Typography>
   )
 }
 
 const UserSelector = () => {
+  const [user, initialising, error] = useAuthState(auth)
+  const authUser = useSelector(state => state.auth)
+  const dispatch = useDispatch()
+
+  const resetRedux = () => {
+    dispatch(resetCategories())
+    dispatch(resetCustomers())
+    dispatch(resetOrders())
+    dispatch(resetProducts())
+    dispatch(resetSales())
+    dispatch(resetSuppliers())
+  }
+  
+  const LoggedIn = () => 
+    <>
+      <Typography style={{placeSelf: "center"}}>{authUser.firstName} {authUser.lastName}</Typography>
+      <button onClick={() => {
+        doSignOut()
+        resetRedux()
+      }}>Logg ut</button>
+    </>
+  
+
+  const NotLoggedIn = () => 
+    <>
+      <Typography>Logg inn</Typography>
+    </>
+  
+
   return(
-    <Typography style={{placeSelf: "center"}}>Fornavn Etternavn</Typography>
+    <div>
+      {user ? <LoggedIn/> : <NotLoggedIn/>}
+    </div>
   )
 }
 

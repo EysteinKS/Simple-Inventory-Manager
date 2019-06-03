@@ -3,25 +3,14 @@ import * as action from "../actions/productsActions";
 import produce from "immer";
 import drafts from "./drafts";
 
-/* const initialState = {
+const initialState = drafts.initializeState({
   products: [],
   sortedProducts: [],
-  currentProduct: {},
-  isLoading: false,
-  isLoaded: false,
-  loadingError: false,
-  isSaving: false,
-  isSaved: true,
-  savingError: false,
-  error: null
-} */
+  currentProduct: {}
+})
 
 export default (
-  state = drafts.initializeState({
-    products: [],
-    sortedProducts: [],
-    currentProduct: {}
-  }),
+  state = initialState,
   { type, payload }
 ) =>
   produce(state, draft => {
@@ -80,6 +69,8 @@ export default (
         draft.sortedProducts = draft.products
         draft.isSaved = false;
         break;
+      case action.RESET_PRODUCTS:
+        return drafts.resetReducer(draft, initialState)
       default:
         break;
     }

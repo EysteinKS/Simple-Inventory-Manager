@@ -18,9 +18,10 @@ export const loadCustomersFailure = (error) => ({
 })
 
 export const loadCustomers = () => {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState()
     dispatch(loadCustomersBegin())
-    firestore.doc("Barcontrol/Customers").get()
+    firestore.doc(`${state.auth.currentLocation}/Customers`).get()
       .then(res => {
         let data = res.data()
         let customers = data.customers
@@ -54,7 +55,7 @@ export const saveCustomers = (customers) => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(saveCustomersBegin())
-    firestore.doc("Barcontrol/Customers").set({
+    firestore.doc(`${state.auth.currentLocation}/Customers`).set({
       customers: state.customers.customers,
       currentID: state.customers.currentID
     }, {merge: true})
@@ -69,4 +70,9 @@ export const SAVE_CREATED_CUSTOMER = 'SAVE_CREATED_CUSTOMER'
 export const saveCreatedCustomer = (name) => ({
   type: SAVE_CREATED_CUSTOMER,
   payload: name
+})
+
+export const RESET_CUSTOMERS = 'RESET_CUSTOMERS'
+export const resetCustomers = () => ({
+  type: RESET_CUSTOMERS
 })

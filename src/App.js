@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import useGate from "./hooks/useGate";
+import { loadUser, setLocationName } from "./redux/actions/authActions"
 import { loadProducts } from "./redux/actions/productsActions";
 import { loadOrders } from "./redux/actions/ordersActions";
 import { loadCategories } from "./redux/actions/categoriesActions";
@@ -25,28 +26,44 @@ import "./App.css";
 import { useAuthState } from "react-firebase-hooks/auth"
 import { auth, firestore, initializeLocation } from "./firebase/firebase"
 
-const App = () => {
-  const [user, intialising, error] = useAuthState(auth)
-  const dispatch = useDispatch();
+//TODO
+//FIGURE OUT HOW TO RESET REDUX WITHOUT CRASHING THE APP
+//REFACTOR THE LOADING BEHAVIOR
 
-  async function fetchData(){
-    //await auth.signInWithEmailAndPassword("eystein.kolsto@gmail.com", "Eyks1995")
-    let config = await firestore.doc("Clients/Barcontrol").get().then(res => {
-      return res.data().firebaseConfig
-    })
-    await initializeLocation(config)
+const App = () => {
+  const [user, initialising, error] = useAuthState(auth)
+  const dispatch = useDispatch();
+  const authUser = useSelector(state => state.auth)
+
+  const fetchUserData = () => {
+    dispatch(loadUser(user.uid))
   }
 
+  async function fetchLocationData(location){
+    let data = await firestore.doc(`Clients/${location}`).get().then(res => {
+      return res.data()
+    })
+    await dispatch(setLocationName(data.name))
+    await initializeLocation(data.firebaseConfig)
+  }
+
+  let isLoadingUser = false
   //INITIALIZE IF USER IS LOGGED IN
   useEffect(() => {
-    if(user){
-      fetchData().then(() => loadLocation())
+    if(user && !isLoadingUser){
+      console.log("user: ", user)
+      console.log("fetching user data")
+      isLoadingUser = true
+      fetchUserData()
     }
-  }, [user])
-
+  }, [user, isLoadingUser])
+  
+  //LOAD LOCATION WHEN USER IS LOADED
   useEffect(() => {
-    console.log(user)
-  }, [user])
+    if(authUser.isLoaded){
+      fetchLocationData(authUser.currentLocation).then(() => loadLocation())
+    }
+  }, [authUser.isLoaded, authUser.currentLocation])
 
   const loadLocation = () => {
     dispatch(loadOrders());
@@ -57,6 +74,7 @@ const App = () => {
     dispatch(loadCustomers())
   }
 
+  const authSelector = useSelector(state => state.auth)
   const prodSelector = useSelector(state => state.products)
   const catSelector = useSelector(state => state.categories)
   const ordSelector = useSelector(state => state.orders)
@@ -65,30 +83,36 @@ const App = () => {
   const custSelector = useSelector(state => state.customers) 
   
   const isLoadingArr2 = useMemo(() => [
+    authSelector.isLoading,
     prodSelector.isLoading, catSelector.isLoading, 
     ordSelector.isLoading, suppSelector.isLoading,
     saleSelector.isLoading, custSelector.isLoading
   ], [
+    authSelector.isLoading,
     prodSelector.isLoading, catSelector.isLoading,
     ordSelector.isLoading, suppSelector.isLoading,
     saleSelector.isLoading, custSelector.isLoading
   ])
 
   const isLoadedArr2 = useMemo(() => [
+    authSelector.isLoaded,
     prodSelector.isLoaded, catSelector.isLoaded,
     ordSelector.isLoaded, suppSelector.isLoaded,
     saleSelector.isLoaded, custSelector.isLoaded
   ], [
+    authSelector.isLoaded,
     prodSelector.isLoaded,catSelector.isLoaded,
     ordSelector.isLoaded, suppSelector.isLoaded,
     saleSelector.isLoaded, custSelector.isLoaded
   ])
 
   const loadingErrorArr2 = useMemo(() => [
+    authSelector.loadingError,
     prodSelector.loadingError, catSelector.loadingError,
     ordSelector.loadingError, suppSelector.loadingError,
     saleSelector.loadingError, custSelector.loadingError
   ], [
+    authSelector.loadingError,
     prodSelector.loadingError, catSelector.loadingError,
     ordSelector.loadingError, suppSelector.loadingError,
     saleSelector.loadingError, custSelector.loadingError
@@ -109,9 +133,11 @@ const App = () => {
     >
       <Header/>
       <section style={{ height: "100%", overflowY: "scroll", marginTop: "5vh"}}>
-        {isLoadingGate ? <PageLoading/> 
-        : loadingErrorGate ? <p>Error!</p> 
-        : isLoadedGate ? <AuthPage/> : null}
+        {!user 
+          ? <NonAuthPage/> 
+          :isLoadingGate ? <PageLoading/> 
+            : loadingErrorGate ? <p>Error!</p> 
+            : isLoadedGate ? <AuthPage/> : null}
       </section>
     </main>
     </>
@@ -120,7 +146,9 @@ const App = () => {
 
 const NonAuthPage = () => {
   return(
-    <Login/>
+    <div style={{margin: "5vh 10vw 10vh 10vw"}}>
+      <Login/>
+    </div>
   )
 }
 
