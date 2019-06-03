@@ -30,10 +30,17 @@ export default function EditOrder({ isOpen, close }) {
   }
 
   const [newSupplier, toggleNewSupplier] = useState(false);
+
+  useEffect(() => {
+    if(!suppliers.length){
+      toggleNewSupplier(true)
+    }
+  }, [isOpen])
+
   useEffect(() => {
     if (supplier === "new") {
       toggleNewSupplier(true);
-    } else {
+    } else if (suppliers.length){
       toggleNewSupplier(false);
     }
   }, [supplier, toggleNewSupplier]);

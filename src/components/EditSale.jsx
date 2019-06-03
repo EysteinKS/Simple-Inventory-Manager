@@ -31,9 +31,14 @@ export default function EditSale({ isOpen, close }) {
 
   const [newCustomer, toggleNewCustomer] = useState(false);
   useEffect(() => {
+    if(!customers.length){
+      toggleNewCustomer(true)
+    }
+  }, [isOpen])
+  useEffect(() => {
     if (customer === "new") {
       toggleNewCustomer(true);
-    } else {
+    } else if (customers.length) {
       toggleNewCustomer(false);
     }
   }, [customer, toggleNewCustomer]);
