@@ -16,7 +16,7 @@ import {
 import "./Products.css";
 
 import EditProduct from "../components/EditProduct";
-import EditCategories from "../components/Categories";
+import EditCategories from "./Categories";
 import SectionHeader, { Row, Title, Key, KeyButton, SortingKey } from "../components/SectionHeader";
 import CloudStatus from "../components/CloudStatus"
 import Icons from "../components/Icons"

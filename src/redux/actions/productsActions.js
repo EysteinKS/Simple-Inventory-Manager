@@ -52,12 +52,12 @@ export const saveProductsFailure = (error) => ({
   payload: error
 })
 
-export const saveProducts = (products) => {
+export const saveProducts = () => {
   return (dispatch, getState) => {
-    const state = getState()  
+    const state = getState()
     dispatch(saveProductsBegin())
     firestore.doc(`${state.auth.currentLocation}/Products`).set({
-      products: products
+      products: state.products.products
     }, {merge: true})
       .then(() => {
         dispatch(saveProductsSuccess())

@@ -30,6 +30,8 @@ export default ({style = {}, onSelect, selected}) => {
     return searched
   }
 
+
+
   useEffect(() => {
     setList(filterBySelected(activeProducts))
     // eslint-disable-next-line

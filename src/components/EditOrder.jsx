@@ -20,7 +20,8 @@ export default function EditOrder({ isOpen, close }) {
   const dispatch = useDispatch();
 
   const [supplier, setSupplier] = useState();
-  const [ordered, addProduct, editProduct, removeProduct, setOrdered] = useEditableList(current.ordered)
+  const [ordered, addProduct, editProduct, 
+    removeProduct, setOrdered] = useEditableList(current.ordered)
 
   const [init, setInit] = useState(false);
   if (isOpen && !init) {

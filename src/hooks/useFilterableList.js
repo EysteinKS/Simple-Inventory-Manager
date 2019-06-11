@@ -1,8 +1,38 @@
-export const useFilterableList = (arr = [], filter, isFiltered) => {
-  const [list, setList] = useState(arr)
+import {useState, useEffect} from "react" 
 
-  return [list, setList]
+const useFilterableList = (arr = [], id) => {
+  const [list, setList] = useState(arr)
+  const [selected, setSelected] = useState([])
+  const [search, setSearch] = useState("")
+  const [filterArray, setFilterArray] = useState([])
+
+  useEffect(() => {
+
+  }, [filterArray])
+
+  const filterBySelected = (listToFilter) => {
+    //https://stackoverflow.com/questions/34901593/how-to-filter-an-array-from-all-elements-of-another-array/51598249#51598249
+    if(Array.isArray(selected)){
+      let selectedIDs = selected.map(sel => sel.productID)
+      return listToFilter.filter(product => !selectedIDs.includes(product.productID))
+    } else {
+      return listToFilter
+    }
+  }
+
+  const filterBySearched = (listToFilter) => {
+    return listToFilter.filter(item => item.toLowerCase().name.includes(search.toLowerCase()))
+  }
+
+  const filter = {
+    filterBySelected,
+    filterBySearched
+  }
+
+  return [list, setList, setFilterArray, filter]
 }
+
+export default useFilterableList
 
 /*
 TODO:

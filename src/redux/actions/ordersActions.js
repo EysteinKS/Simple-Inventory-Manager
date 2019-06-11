@@ -121,6 +121,7 @@ export const didReceiveOrder = (id, ordered) => {
     dispatch(receivedOrder(id))
     const state = getState()
     dispatch(saveProducts(state.products.products))
+    dispatch(saveOrders())
   }
 }
 

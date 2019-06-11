@@ -187,6 +187,8 @@ const Order = ({ order, edit }) => {
   const dispatch = useDispatch();
   const suppliers = useSelector(state => state.suppliers.suppliers);
 
+  console.log("Order: ", order)
+
   let detailStyle;
   if (expanded) {
     detailStyle = "order-details";
@@ -199,6 +201,16 @@ const Order = ({ order, edit }) => {
     month: "short",
     day: "numeric"
   });
+  
+  let receivedDate = null
+  if(dateReceived){
+    receivedDate = dateReceived.toLocaleDateString("default", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    })
+  }
+
   let totalOrdered = ordered.reduce((acc, cur) => acc + cur.amount, 0);
 
   return (
@@ -229,7 +241,7 @@ const Order = ({ order, edit }) => {
       <div className={detailStyle}>
         <div className="order-time">
           <p>Bestilt: {orderDate}</p>
-          <p>Mottatt: {dateReceived || "Nei"}</p>
+          <p>Mottatt: {receivedDate || "Nei"}</p>
         </div>
         <div className="order-content">
           {ordered.map((prod, i) => (
