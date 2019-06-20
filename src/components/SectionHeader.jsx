@@ -1,14 +1,26 @@
-import React, {useState} from 'react'
+import React, {useState, useMemo} from 'react'
+import { useSelector } from "react-redux"
 
 export default function SectionHeader({
   children
 }) {
+  const defaultColor = "#a9a9a9"
+  const primaryColor = useSelector(state => state.auth.primaryColor)
+  const bckColor = useMemo(() => {
+    if(primaryColor){
+      return primaryColor
+    } else {
+      return defaultColor
+    }
+  }, [primaryColor])
+
   return (
     <header style={{
       display: "block",
       borderBottom: "gray 1px solid",
       borderRadius: "15px 15px 0px 0px",
-      backgroundColor: "#6FCF79"    
+      backgroundColor: bckColor,
+      paddingTop: "1vh"
     }}>
       {children}
     </header>
@@ -16,7 +28,7 @@ export default function SectionHeader({
 }
 
 export const Title = ({children}) => {
-  return <h3>{children}</h3>
+  return <h1>{children}</h1>
 }
 
 export const Row = ({ grid, children, cName }) => {
@@ -30,6 +42,18 @@ export const Row = ({ grid, children, cName }) => {
     className={cName}>
       {children}
     </div>
+  )
+}
+
+export const RowSplitter = () => {
+  return(
+    <hr style={{
+      width: "95%",
+      marginLeft: "auto",
+      marginRight: "auto",
+      borderTop: "none",
+      borderBottom: "1px black solid"
+    }}/>
   )
 }
 

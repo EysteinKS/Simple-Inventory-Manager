@@ -11,7 +11,7 @@ import {
 import { saveCustomers } from "../redux/actions/customersActions"
 
 import EditSale from "../components/EditSale"
-import SectionHeader, { Row, Title, Key, SortingKey } from "../components/SectionHeader"
+import SectionHeader, { Row, RowSplitter, Title, Key, SortingKey } from "../components/SectionHeader"
 import CloudStatus from "../components/CloudStatus"
 import Icons from "../components/Icons"
 import Buttons from "../components/Buttons"
@@ -82,7 +82,7 @@ export default function Sales(){
   const errorGate = useGate(allError, "OR", "salesLoadingError")
 
   return(
-    <div>
+    <>
       <SectionHeader>
         <Row grid="15% 15% 43.5% 14.5% 12%">
           <NewSaleButton/>
@@ -99,6 +99,7 @@ export default function Sales(){
             error={errorGate}
           />
         </Row>
+        <RowSplitter/>
         <Row grid="15% 15% 15% 15%">
           <SortingKey onClick={dir => sortList(dir, 0, sort.by("saleID", dir))}>#</SortingKey>
           <SortingKey onClick={dir => sortList(dir, 1, sort.byCustomer(customers.customers, dir))}><Icons.Business/></SortingKey>
@@ -119,7 +120,7 @@ export default function Sales(){
             dispatch(clearCurrentSale())
           }}
         />
-    </div>
+    </>
   )
 
 }

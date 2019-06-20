@@ -41,6 +41,9 @@ import ArrowRight from "@material-ui/icons/KeyboardArrowRight"
 import LocalShipping from "@material-ui/icons/LocalShipping"
 import AccessTime from "@material-ui/icons/AccessTime"
 
+//AUTH
+import AccountCircle from "@material-ui/icons/AccountCircle"
+
 export default {
   Visibility,
   VisibilityOff,
@@ -75,5 +78,6 @@ export default {
   ArrowLeft,
   ArrowRight,
   LocalShipping,
-  AccessTime
+  AccessTime,
+  AccountCircle
 }

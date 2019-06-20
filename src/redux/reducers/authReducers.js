@@ -13,6 +13,8 @@ const initialState = {
   savingError: null,
   currentLocation: null,
   locationName: "",
+  logoUrl: null,
+  primaryColor: null,
   locations: [],
   settings: {
     language: "NO",
@@ -46,6 +48,12 @@ export default (state = initialState, {type, payload}) =>
         break
       case action.SET_LOCATION_NAME:
         draft.locationName = payload
+        break
+      case action.SET_LOCATION_LOGO:
+        draft.logoUrl = payload
+        break
+      case action.SET_LOCATION_COLOR:
+        draft.primaryColor = payload
         break
       default:
         return state

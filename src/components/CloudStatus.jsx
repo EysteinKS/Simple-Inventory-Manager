@@ -38,7 +38,7 @@ export default function CloudStatus({ className, style, save, isSaving, isSaved,
   } else {
     icon = <Icons.CloudDone/>
     tooltip = "Alle endringer lagret"
-    styling["backgroundColor"] = "#7bd367"
+    styling["backgroundColor"] = "#21b110"
   }
   
 

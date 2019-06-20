@@ -17,7 +17,7 @@ import "./Products.css";
 
 import EditProduct from "../components/EditProduct";
 import EditCategories from "./Categories";
-import SectionHeader, { Row, Title, Key, KeyButton, SortingKey } from "../components/SectionHeader";
+import SectionHeader, { Row, RowSplitter, Title, Key, KeyButton, SortingKey } from "../components/SectionHeader";
 import CloudStatus from "../components/CloudStatus"
 import Icons from "../components/Icons"
 import useGate from "../hooks/useGate"
@@ -121,7 +121,7 @@ export default function Products(){
             error={errorGate}
           />
         </Row>
-        
+        <RowSplitter/>
         <Row grid="24% 24% repeat(4, 10%) 12%" cName="products-header">
           <SortingKey 
             onClick={dir => sortList(dir, 0, sort.byName(dir))}

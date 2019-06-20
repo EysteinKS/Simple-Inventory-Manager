@@ -35,3 +35,15 @@ export const setLocationName = (name) => ({
   type: SET_LOCATION_NAME,
   payload: name
 })
+
+export const SET_LOCATION_LOGO = 'SET_LOCATION_LOGO'
+export const setLocationLogo = (url) => ({
+  type: SET_LOCATION_LOGO,
+  payload: url
+})
+
+export const SET_LOCATION_COLOR = 'SET_LOCATION_COLOR'
+export const setLocationColor = (hex) => ({
+  type: SET_LOCATION_COLOR,
+  payload: hex
+})

@@ -16,6 +16,7 @@ import EditOrder from "../components/EditOrder";
 import ProductName from "../components/ProductName";
 import SectionHeader, {
   Row,
+  RowSplitter,
   Title,
   Key,
   SortingKey
@@ -124,6 +125,7 @@ export default function Orders() {
             error={errorGate}
           />
         </Row>
+        <RowSplitter/>
         <Row grid="15% 15% 15% 15%">
           <SortingKey
             onClick={dir => sortList(dir, 0, sort.by("orderID", dir))}

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import useGate from "./hooks/useGate";
-import { loadUser, setLocationName } from "./redux/actions/authActions"
+import { loadUser, setLocationName, setLocationColor, setLocationLogo } from "./redux/actions/authActions"
 import { loadProducts } from "./redux/actions/productsActions";
 import { loadOrders } from "./redux/actions/ordersActions";
 import { loadCategories } from "./redux/actions/categoriesActions";
@@ -44,6 +44,8 @@ const App = () => {
       return res.data()
     })
     await dispatch(setLocationName(data.name))
+    await data.logoUrl && dispatch(setLocationLogo(data.logoUrl))
+    await data.primaryColor && dispatch(setLocationColor(data.primaryColor))
     await initializeLocation(data.firebaseConfig)
   }
 
@@ -131,7 +133,7 @@ const App = () => {
         overflow: "hidden"
       }}
     >
-      <Header/>
+      <Header locationIsLoaded={isLoadedGate}/>
       <section style={{ height: "100%", overflowY: "scroll", marginTop: "5vh"}}>
         {!user 
           ? <NonAuthPage/> 
@@ -146,7 +148,7 @@ const App = () => {
 
 const NonAuthPage = () => {
   return(
-    <div style={{margin: "5vh 10vw 10vh 10vw"}}>
+    <div style={{margin: "5vh 10vw 10vh 10vw", display: "grid"}}>
       <Login/>
     </div>
   )
