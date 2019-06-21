@@ -144,7 +144,6 @@ const Sale = ({ sale, edit }) => {
     saleID,
     customerID,
     dateOrdered,
-    dateSent,
     ordered
   } = sale
   const [expanded, setExpanded] = useState(false)

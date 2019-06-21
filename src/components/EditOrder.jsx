@@ -12,7 +12,7 @@ import ProductName from "./ProductName";
 import SelectProduct from "./SelectProduct";
 import useEditableList from "../hooks/useEditableList"
 
-ReactModal.setAppElement("#root");
+ReactModal.setAppElement("#root")
 
 export default function EditOrder({ isOpen, close }) {
   const current = useSelector(state => state.orders.currentOrder);
@@ -36,6 +36,7 @@ export default function EditOrder({ isOpen, close }) {
     if(!suppliers.length){
       toggleNewSupplier(true)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function EditOrder({ isOpen, close }) {
     } else if (suppliers.length){
       toggleNewSupplier(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supplier, toggleNewSupplier]);
 
   const save = () => {

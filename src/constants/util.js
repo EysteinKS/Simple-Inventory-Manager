@@ -127,7 +127,6 @@ export const filterByOrdered = (isFiltered, products) => {
 //FILTERING END
 
 //CREATING
-
 export const newProduct = (id) => {
   //console.log("Creating product with id: ", id)
   return {

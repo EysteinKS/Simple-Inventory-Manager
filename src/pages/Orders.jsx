@@ -189,7 +189,7 @@ const Order = ({ order, edit }) => {
   const dispatch = useDispatch();
   const suppliers = useSelector(state => state.suppliers.suppliers);
 
-  console.log("Order: ", order)
+  //console.log("Order: ", order)
 
   let detailStyle;
   if (expanded) {

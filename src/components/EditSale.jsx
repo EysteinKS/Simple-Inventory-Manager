@@ -34,6 +34,7 @@ export default function EditSale({ isOpen, close }) {
     if(!customers.length){
       toggleNewCustomer(true)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
   useEffect(() => {
     if (customer === "new") {
@@ -41,6 +42,7 @@ export default function EditSale({ isOpen, close }) {
     } else if (customers.length) {
       toggleNewCustomer(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customer, toggleNewCustomer]);
 
   const save = () => {

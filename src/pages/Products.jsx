@@ -26,10 +26,12 @@ import useSortableList from "../hooks/useSortableList"
 import produce from "immer"
 
 export default function Products(){
+  //REDUX
   const dispatch = useDispatch();
   const products = useSelector(state => state.products);
   const categories = useSelector(state => state.categories)
 
+  //MODALS
   const [isProductOpen, setProductOpen] = useState(false);
   const [isCategoriesOpen, setCategoriesOpen] = useState(false);
 
@@ -57,12 +59,6 @@ export default function Products(){
       setSortingFuncs(newSorting);
     }
   }
-
-/*   const [isFiltered, setFiltered] = useState(true);
-  const filter = useCallback(() => {
-    setFiltered(!isFiltered);
-    dispatch(filterProducts(filterByActive(isFiltered)));
-  }, [isFiltered, dispatch]); */
 
   const buttonStyle = {
     height: "75%",
@@ -97,11 +93,6 @@ export default function Products(){
   const savedGate = useGate(allIsSaved, "AND", "productsIsSaved", true)
   const allError = useMemo(() => [products.savingError, categories.savingError], [products.savingError, categories.savingError])
   const errorGate = useGate(allError, "OR", "productsLoadingError")
-
-  React.useEffect(() => {
-    //console.log("allIsSaved: ", allIsSaved)
-    //console.log("savedGate: ", savedGate)
-  })
 
   return (
     <Fragment>

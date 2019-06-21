@@ -19,12 +19,16 @@ const initialState = {
   settings: {
     language: "NO",
     isInactiveVisible: true
-  }
+  },
+  loggedOut: false
 }
 
 export default (state = initialState, {type, payload}) => 
   produce(state, draft => {
     switch(type){
+      case action.USER_SIGNING_IN:
+        draft.loggedOut = false
+        break
       case action.LOAD_USER_BEGIN:
         draft.isLoading = true
         draft.isLoaded = false
@@ -55,6 +59,8 @@ export default (state = initialState, {type, payload}) =>
       case action.SET_LOCATION_COLOR:
         draft.primaryColor = payload
         break
+      case action.RESET_AUTH:
+        return { ...initialState, loggedOut: true }
       default:
         return state
     }

@@ -1,5 +1,11 @@
 import { firestore } from "../../firebase/firebase"
 
+export const USER_SIGNING_IN = 'USER_SIGNING_IN'
+export const userSigningIn = () => ({
+  type: USER_SIGNING_IN,
+})
+
+
 export const LOAD_USER_BEGIN = 'LOAD_USER_BEGIN'
 export const loadUserBegin = () => ({
   type: LOAD_USER_BEGIN
@@ -23,7 +29,7 @@ export const loadUser = (uid) => {
     firestore.doc(`Users/${uid}`).get()
       .then(res => {
         let data = res.data()
-        console.log(data)
+        //console.log(data)
         dispatch(loadUserSuccess(data))
       })
       .catch(err => dispatch(loadUserFailure(err.message)))
@@ -46,4 +52,9 @@ export const SET_LOCATION_COLOR = 'SET_LOCATION_COLOR'
 export const setLocationColor = (hex) => ({
   type: SET_LOCATION_COLOR,
   payload: hex
+})
+
+export const RESET_AUTH = 'RESET_AUTH'
+export const resetAuth = () => ({
+  type: RESET_AUTH
 })

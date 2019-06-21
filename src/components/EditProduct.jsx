@@ -40,13 +40,14 @@ export default function EditProduct({ isOpen, close }) {
 
   const [newCategory, toggleNewCategory] = useState(false)
 
-  useEffect(() => {
+/*   useEffect(() => {
     console.log(categories)
     if(!categories.length){
       console.log("Setting toggleNewCategory(true)")
       toggleNewCategory(true)
     }
-  }, [isOpen])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]) */
   
   useEffect(() => {
     if(category === "new"){
@@ -56,6 +57,7 @@ export default function EditProduct({ isOpen, close }) {
       console.log("Setting toggleNewCategory(false)")
       toggleNewCategory(false)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, toggleNewCategory])
 
   let returnedProduct = {

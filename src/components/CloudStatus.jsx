@@ -1,4 +1,4 @@
-import React, {Fragment} from "react"
+import React from "react"
 import Icons from "./Icons"
 import ReactTooltip from "react-tooltip"
 
@@ -43,17 +43,17 @@ export default function CloudStatus({ className, style, save, isSaving, isSaved,
   
 
   return (
-    <Fragment>
-    <div 
-      data-tip data-for="cloudTooltip"
-      onClick={((!isSaving && !isSaved) || error) ? save : null}
-      style={styling}
-    >
-      {icon}
-    </div>
-    <ReactTooltip id="cloudTooltip" place="bottom" type="dark" effect="solid">
-      <span>{tooltip}</span>
-    </ReactTooltip>
-    </Fragment>
+    <>
+      <div 
+        data-tip data-for="cloudTooltip"
+        onClick={((!isSaving && !isSaved) || error) ? save : null}
+        style={styling}
+      >
+        {icon}
+      </div>
+      <ReactTooltip id="cloudTooltip" place="bottom" type="dark" effect="solid">
+        <span>{tooltip}</span>
+      </ReactTooltip>
+    </>
   )
 }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo} from 'react'
+import React, {useMemo} from 'react'
 import { navigate } from "@reach/router"
 import * as routes from "../constants/routes"
 import Icons from "./Icons"
@@ -19,6 +19,7 @@ import { resetOrders } from "../redux/actions/ordersActions"
 import { resetProducts } from "../redux/actions/productsActions"
 import { resetSales } from "../redux/actions/salesActions"
 import { resetSuppliers } from "../redux/actions/suppliersActions"
+import { resetAuth } from "../redux/actions/authActions"
 
 export default function Header({ locationIsLoaded }) {
   const defaultColor = "#a9a9a9"
@@ -55,11 +56,13 @@ export default function Header({ locationIsLoaded }) {
 }
 
 const AuthHeader = () => {
-  return[
-    <SectionSelector/>,
-    <LocationSelector/>,
-    <UserSelector/>
-  ]
+  return(
+    <>
+      <SectionSelector/>
+      <LocationSelector/>
+      <UserSelector/>
+    </>
+  )
 }
 
 const LocationSelector = () => {
@@ -77,7 +80,7 @@ const LocationSelector = () => {
 }
 
 const UserSelector = () => {
-  const [user, initialising, error] = useAuthState(auth)
+  const [user] = useAuthState(auth)
   const authUser = useSelector(state => state.auth)
   const dispatch = useDispatch()
 
@@ -88,16 +91,20 @@ const UserSelector = () => {
     dispatch(resetProducts())
     dispatch(resetSales())
     dispatch(resetSuppliers())
+    dispatch(resetAuth())
   }
   
   const LoggedIn = () => 
     <>
       <Icons.AccountCircle fontSize="large"/>
-      <Typography variant="h6" style={{ justifySelf: "left" }}>
-        {authUser.firstName} {authUser.lastName}
-      </Typography>
+      <div style={{ justifySelf: "left", display: "flex" }}>
+        <><Typography>{authUser.firstName}&nbsp;</Typography></>
+        <><Typography>{authUser.lastName}</Typography></>
+      </div>
       <button onClick={() => {
+        console.log("Signing out")
         doSignOut()
+        console.log("Resetting redux")
         resetRedux()
       }} style={{padding: "1vh"}}>Logg ut</button>
     </>
@@ -138,7 +145,7 @@ const HeaderLink = ({children, linkTo, onClick, name}) => {
         onClick(e)}}
     >
       {children}
-      <Typography style={{placeSelf: "center"}}>{name}</Typography>
+      <Typography style={{ placeSelf: "center" }}>{name}</Typography>
     </MenuItem>
   )
 }
@@ -163,7 +170,7 @@ const SectionSelector = () => {
     let currentSection = sections.find(section => section.linkTo === currentLocation.location.pathname)
 
     return(
-      <button ref={thisRef} onClick={onClick} style={{width: "33vw", padding: "10px", height: "5vh"}}>
+      <button ref={thisRef} onClick={onClick} style={{width: "33vw", height: "80%"}}>
         <div style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr"}}>
         {currentSection.icon}
         <Typography style={{placeSelf: "center"}}>{currentSection.name}</Typography>
@@ -182,8 +189,8 @@ const SectionSelector = () => {
   const filteredSections = sections.filter(section => section.linkTo !== currentLocation.location.pathname)
 
   return(
-    <div>
-      <CurrentSection onClick={handleToggle} thisRef={anchorRef}/>
+    <div style={{ display: "flex", placeItems: "center" }}>
+      <div><CurrentSection onClick={handleToggle} thisRef={anchorRef}/></div>
       <DropDownMenu anchorEl={anchorRef.current} open={open} style={{width: "33vw", zIndex: "11"}} onClickAway={handleClose}>
         <MenuList style={{paddingTop: "0px"}}>
           {filteredSections.map((section, i)=> {

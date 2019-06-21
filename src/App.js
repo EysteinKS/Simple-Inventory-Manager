@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import useGate from "./hooks/useGate";
+import useLoadedGate from "./hooks/useLoadedGate";
 import { loadUser, setLocationName, setLocationColor, setLocationLogo } from "./redux/actions/authActions"
 import { loadProducts } from "./redux/actions/productsActions";
 import { loadOrders } from "./redux/actions/ordersActions";
@@ -31,41 +31,48 @@ import { auth, firestore, initializeLocation } from "./firebase/firebase"
 //REFACTOR THE LOADING BEHAVIOR
 
 const App = () => {
-  const [user, initialising, error] = useAuthState(auth)
+  const [user, initializingUser] = useAuthState(auth)
   const dispatch = useDispatch();
-  const authUser = useSelector(state => state.auth)
-
-  const fetchUserData = () => {
-    dispatch(loadUser(user.uid))
-  }
+  const authIsLoaded = useSelector(state => state.auth.isLoaded)
+  const authCurrentLocation = useSelector(state => state.auth.currentLocation)
 
   async function fetchLocationData(location){
     let data = await firestore.doc(`Clients/${location}`).get().then(res => {
       return res.data()
     })
-    await dispatch(setLocationName(data.name))
+    await data.name && dispatch(setLocationName(data.name))
     await data.logoUrl && dispatch(setLocationLogo(data.logoUrl))
     await data.primaryColor && dispatch(setLocationColor(data.primaryColor))
     await initializeLocation(data.firebaseConfig)
   }
 
-  let isLoadingUser = false
+  const fetchUserData = () => {
+    dispatch(loadUser(user.uid))
+  }
+
+  const userLoggedOut = useSelector(state => state.auth.loggedOut)
+  const [isLoadingUser, setLoadingUser] = useState(false)
   //INITIALIZE IF USER IS LOGGED IN
   useEffect(() => {
-    if(user && !isLoadingUser){
-      console.log("user: ", user)
-      console.log("fetching user data")
-      isLoadingUser = true
+    //console.log(`user: ${Boolean(user)}, authIsLoaded: ${authIsLoaded}`)
+    //if(user){console.log("user: ", user)}
+    if(user && !isLoadingUser && !authIsLoaded && !userLoggedOut){
+      //console.log("user: ", user)
+      console.log("Fetching user data")
+      setLoadingUser(true)
       fetchUserData()
     }
-  }, [user, isLoadingUser])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, authIsLoaded, userLoggedOut])
   
   //LOAD LOCATION WHEN USER IS LOADED
   useEffect(() => {
-    if(authUser.isLoaded){
-      fetchLocationData(authUser.currentLocation).then(() => loadLocation())
+    if(authIsLoaded){
+      setLoadingUser(false)
+      fetchLocationData(authCurrentLocation).then(() => loadLocation())
     }
-  }, [authUser.isLoaded, authUser.currentLocation])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authIsLoaded, authCurrentLocation])
 
   const loadLocation = () => {
     dispatch(loadOrders());
@@ -76,75 +83,42 @@ const App = () => {
     dispatch(loadCustomers())
   }
 
-  const authSelector = useSelector(state => state.auth)
-  const prodSelector = useSelector(state => state.products)
-  const catSelector = useSelector(state => state.categories)
-  const ordSelector = useSelector(state => state.orders)
-  const suppSelector = useSelector(state => state.suppliers)
-  const saleSelector = useSelector(state => state.sales)
-  const custSelector = useSelector(state => state.customers) 
-  
-  const isLoadingArr2 = useMemo(() => [
-    authSelector.isLoading,
-    prodSelector.isLoading, catSelector.isLoading, 
-    ordSelector.isLoading, suppSelector.isLoading,
-    saleSelector.isLoading, custSelector.isLoading
-  ], [
-    authSelector.isLoading,
-    prodSelector.isLoading, catSelector.isLoading,
-    ordSelector.isLoading, suppSelector.isLoading,
-    saleSelector.isLoading, custSelector.isLoading
-  ])
+  const [isLoadingGate, isLoadedGate, loadingErrorGate] = useLoadedGate()
 
-  const isLoadedArr2 = useMemo(() => [
-    authSelector.isLoaded,
-    prodSelector.isLoaded, catSelector.isLoaded,
-    ordSelector.isLoaded, suppSelector.isLoaded,
-    saleSelector.isLoaded, custSelector.isLoaded
-  ], [
-    authSelector.isLoaded,
-    prodSelector.isLoaded,catSelector.isLoaded,
-    ordSelector.isLoaded, suppSelector.isLoaded,
-    saleSelector.isLoaded, custSelector.isLoaded
-  ])
+  //console.log("App is rendering...")
 
-  const loadingErrorArr2 = useMemo(() => [
-    authSelector.loadingError,
-    prodSelector.loadingError, catSelector.loadingError,
-    ordSelector.loadingError, suppSelector.loadingError,
-    saleSelector.loadingError, custSelector.loadingError
-  ], [
-    authSelector.loadingError,
-    prodSelector.loadingError, catSelector.loadingError,
-    ordSelector.loadingError, suppSelector.loadingError,
-    saleSelector.loadingError, custSelector.loadingError
-  ])
-
-  const isLoadingGate = useGate(isLoadingArr2, "OR", "isLoading");
-  const isLoadedGate = useGate(isLoadedArr2, "AND", "isLoaded");
-  const loadingErrorGate = useGate(loadingErrorArr2, "OR", "loadingError");
- 
-  return (
-    <>
-    <CssBaseline/>
-    <main
-      style={{
-        height: "100vh",
-        overflow: "hidden"
-      }}
-    >
-      <Header locationIsLoaded={isLoadedGate}/>
-      <section style={{ height: "100%", overflowY: "scroll", marginTop: "5vh"}}>
-        {!user 
-          ? <NonAuthPage/> 
-          :isLoadingGate ? <PageLoading/> 
-            : loadingErrorGate ? <p>Error!</p> 
-            : isLoadedGate ? <AuthPage/> : null}
-      </section>
-    </main>
-    </>
-  );
+  if(isLoadingGate || initializingUser || isLoadingUser){
+    return <AppWrapper isLoaded={isLoadedGate}><PageLoading/></AppWrapper>
+  } else if (!user){
+    return <AppWrapper isLoaded={isLoadedGate}><NonAuthPage/></AppWrapper>
+  } else if (loadingErrorGate){
+    return <AppWrapper isLoaded={isLoadedGate}><p>Error!</p></AppWrapper>
+  } else if (isLoadedGate) {
+    return <AppWrapper isLoaded={isLoadedGate}><AuthPage/></AppWrapper>
+  } else {
+    //console.log("App returning default")
+    return <AppWrapper isLoaded={isLoadedGate}><PageLoading/></AppWrapper>
+  }
 };
+
+const AppWrapper = ({ children, loadingState, isLoaded }) => {
+  return(
+    <>
+      <CssBaseline/>
+      <main
+        style={{
+          height: "100vh",
+          overflow: "hidden"
+        }}
+      >
+        <Header locationIsLoaded={isLoaded}/>
+        <section style={{ height: "100%", overflowY: "scroll", marginTop: "5vh"}}>
+          {children}
+        </section>
+      </main>
+    </>
+  )
+}
 
 const NonAuthPage = () => {
   return(
