@@ -17,6 +17,7 @@ import ProductName from "../components/ProductName";
 import SectionHeader, {
   Row,
   RowSplitter,
+  ColumnSplitter,
   Title,
   Key,
   SortingKey
@@ -126,12 +127,13 @@ export default function Orders() {
           />
         </Row>
         <RowSplitter/>
-        <Row grid="15% 15% 15% 15%">
+        <Row grid="14% 1% 14% 1% 14% 1% 15%">
           <SortingKey
             onClick={dir => sortList(dir, 0, sort.by("orderID", dir))}
           >
             #
           </SortingKey>
+          <ColumnSplitter/>
           <SortingKey
             onClick={dir =>
               sortList(dir, 1, sort.bySupplier(suppliers.suppliers, dir))
@@ -139,11 +141,13 @@ export default function Orders() {
           >
             <Icons.Business />
           </SortingKey>
+          <ColumnSplitter/>
           <SortingKey
             onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}
           >
             <Icons.AccessTime />
           </SortingKey>
+          <ColumnSplitter/>
           <Key>
             <Icons.ShoppingCart />
           </Key>
@@ -174,7 +178,7 @@ const List = ({ list, edit }) => {
     return (
       <div className="order-list">
         {list.map((order, index) => (
-          <Order order={order} key={index} edit={edit} />
+          <Order order={order} key={"order_" + order.orderID} edit={edit} />
         ))}
       </div>
     );

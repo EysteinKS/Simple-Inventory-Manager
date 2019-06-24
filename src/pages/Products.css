@@ -43,7 +43,7 @@
 
 .product {
   display: grid;
-  grid-template-columns: 24% 24% repeat(4, 10%) 6% 6%;
+  grid-template-columns: 10% 19% 19% repeat(5, 8%) 6% 6%;
   justify-items: center;
   width: 100%;
   background-color: #EEEDE3
@@ -71,5 +71,6 @@
 }
 
 .inactive {
-  background-color: #fad7d7 !important
+  background-color: #fde5e5 !important;
+  color: rgb(190, 190, 190)
 }

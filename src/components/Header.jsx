@@ -58,9 +58,9 @@ export default function Header({ locationIsLoaded }) {
 const AuthHeader = () => {
   return(
     <>
-      <SectionSelector/>
       <LocationSelector/>
       <UserSelector/>
+      <SectionSelector/>
     </>
   )
 }
@@ -194,7 +194,7 @@ const SectionSelector = () => {
       <DropDownMenu anchorEl={anchorRef.current} open={open} style={{width: "33vw", zIndex: "11"}} onClickAway={handleClose}>
         <MenuList style={{paddingTop: "0px"}}>
           {filteredSections.map((section, i)=> {
-            return <HeaderLink linkTo={section.linkTo} onClick={handleClose} name={section.name} key={i}>
+            return <HeaderLink linkTo={section.linkTo} onClick={handleClose} name={section.name} key={"section_" + i}>
               {section.icon}
             </HeaderLink>
           })}

@@ -17,13 +17,20 @@ import "./Products.css";
 
 import EditProduct from "../components/EditProduct";
 import EditCategories from "./Categories";
-import SectionHeader, { Row, RowSplitter, Title, Key, KeyButton, SortingKey } from "../components/SectionHeader";
+import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, KeyButton, SortingKey } from "../components/SectionHeader";
 import CloudStatus from "../components/CloudStatus"
 import Icons from "../components/Icons"
+import Warning from "../components/Warning"
 import useGate from "../hooks/useGate"
 
 import useSortableList from "../hooks/useSortableList"
 import produce from "immer"
+
+//TODO
+//Show icon if product contains a comment
+//Show ID
+//Hover orders and sales to see all active with dates
+//Warning when product sum is in minus
 
 export default function Products(){
   //REDUX
@@ -113,21 +120,26 @@ export default function Products(){
           />
         </Row>
         <RowSplitter/>
-        <Row grid="24% 24% repeat(4, 10%) 12%" cName="products-header">
+        <Row grid="9% 1% 18% 1% 18% 1% repeat(5, 8%) 12%" cName="products-header">
+          <Key>#</Key>
+          <ColumnSplitter/>
           <SortingKey 
             onClick={dir => sortList(dir, 0, sort.byName(dir))}
           >
             <Icons.FormatQuote/>
           </SortingKey>
+          <ColumnSplitter/>
           <SortingKey
             onClick={dir => sortList(dir, 1, sort.byCategory(categories.categories, dir))}
           >
             <Icons.FolderOpen/>
           </SortingKey>
+          <ColumnSplitter/>
           <Key><Icons.Storage/></Key>
           <Key><Icons.Archive/></Key>
           <Key><Icons.Unarchive/></Key>
           <Key><Icons.Functions/></Key>
+          <div/>
           <KeyButton onClick={() => console.log("TODO: useFilterableList")}>{/* !isFiltered ? <Icons.VisibilityOff/> : <Icons.Visibility/> */}</KeyButton>
         </Row>
       </SectionHeader>
@@ -136,7 +148,7 @@ export default function Products(){
           ? null
           : sortedList.map((product, key) => (
             <Product
-              key={key}
+              key={"product_" + product.productID}
               product={product}
               edit={id => {
                 dispatch(editProduct(id));
@@ -174,13 +186,15 @@ const Product = ({ product, edit }) => {
   const total = amount + (ordered || 0) - (reserved || 0);
 
   return (
-    <div className={`product ${!product.active ? "inactive" : ""}`}>
+    <div className={`product ${!product.active ? "inactive" : ""} ${(product.active && total < 0)}`}>
+      <p>{product.productID}</p>
       <p className="product-name">{product.name}</p>
       <p className="product-category">{category}</p>
       <p>{amount || 0}</p>
       <p>{ordered || 0}</p>
       <p>{reserved || 0}</p>
       <p>{total}</p>
+      {(total < 0) ? <Warning style={{ placeSelf: "center" }}/> : <div/>}
       <button onClick={() => dispatch(toggleProduct(product.productID))}>{product.active ? <Icons.Visibility/>: <Icons.VisibilityOff/>}</button>
       <button onClick={() => edit(product.productID)}><Icons.Edit/></button>
     </div>

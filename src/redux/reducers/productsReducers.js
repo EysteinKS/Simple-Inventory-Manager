@@ -6,6 +6,7 @@ import drafts from "./drafts";
 const initialState = drafts.initializeState({
   products: [],
   sortedProducts: [],
+  isSaved: true,
   currentProduct: {}
 })
 

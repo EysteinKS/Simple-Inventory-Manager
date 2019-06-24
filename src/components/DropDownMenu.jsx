@@ -6,7 +6,7 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener"
 const StyledPopover = withStyles({
   paper: {
     top: "5vh !important",
-    left: "2px !important",
+    left: "67vw !important",
     width: "33vw !important",
     border: "2px outset rgba(255, 255, 255, 0.4)" 
   }

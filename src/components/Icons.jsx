@@ -16,7 +16,7 @@ import LocalAtm from "@material-ui/icons/LocalAtm"
 import CloudDone from "@material-ui/icons/CloudDone"
 import CloudOff from "@material-ui/icons/CloudOff"
 import CloudUpload from "@material-ui/icons/CloudUpload"
-import Warning from "@material-ui/icons/Warning"
+import WarningIcon from "@material-ui/icons/Warning"
 
 import Edit from "@material-ui/icons/Edit"
 import Delete from "@material-ui/icons/Delete"
@@ -60,7 +60,7 @@ export default {
   CloudDone,
   CloudOff,
   CloudUpload,
-  Warning,
+  WarningIcon,
   Edit,
   Delete,
   Menu,

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react"
 import { useSelector } from "react-redux"
 import Names from "./Names"
 
-export default ({style = {}, onSelect, selected}) => {
+export default function SelectProduct({style = {}, onSelect, selected}) {
   const products = useSelector(state => state.products.products)
   const activeProducts = products.filter(product => product.active)
   const [list, setList] = useState(activeProducts)
@@ -30,8 +30,6 @@ export default ({style = {}, onSelect, selected}) => {
     return searched
   }
 
-
-
   useEffect(() => {
     setList(filterBySelected(activeProducts))
     // eslint-disable-next-line
@@ -47,7 +45,7 @@ export default ({style = {}, onSelect, selected}) => {
       style={styling}
     >
       <input type="text" value={search} onChange={e => setSearch(e.target.value)}/>
-      {list.map((prod, index) => <Product product={prod} key={index} onSelect={onSelect}/>)}
+      {list.map((prod, index) => <Product product={prod} key={"product_" + index} onSelect={onSelect}/>)}
     </section>
   )
 }

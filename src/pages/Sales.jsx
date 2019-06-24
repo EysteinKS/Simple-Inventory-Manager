@@ -11,7 +11,7 @@ import {
 import { saveCustomers } from "../redux/actions/customersActions"
 
 import EditSale from "../components/EditSale"
-import SectionHeader, { Row, RowSplitter, Title, Key, SortingKey } from "../components/SectionHeader"
+import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, SortingKey } from "../components/SectionHeader"
 import CloudStatus from "../components/CloudStatus"
 import Icons from "../components/Icons"
 import Buttons from "../components/Buttons"
@@ -100,10 +100,13 @@ export default function Sales(){
           />
         </Row>
         <RowSplitter/>
-        <Row grid="15% 15% 15% 15%">
+        <Row grid="14% 1% 14% 1% 14% 1% 15%">
           <SortingKey onClick={dir => sortList(dir, 0, sort.by("saleID", dir))}>#</SortingKey>
+          <ColumnSplitter/>
           <SortingKey onClick={dir => sortList(dir, 1, sort.byCustomer(customers.customers, dir))}><Icons.Business/></SortingKey>
+          <ColumnSplitter/>
           <SortingKey onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}><Icons.AccessTime/></SortingKey>
+          <ColumnSplitter/>
           <Key><Icons.ShoppingCart/></Key>
         </Row>
       </SectionHeader>
@@ -130,7 +133,7 @@ const List = ({ list, edit }) => {
     return(
       <div>
         {list.map((sale, index) => (
-          <Sale sale={sale} key={index} edit={edit}/>
+          <Sale sale={sale} key={"sale_" + sale.saleID} edit={edit}/>
         ))}
       </div>
     )

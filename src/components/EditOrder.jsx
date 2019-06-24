@@ -104,7 +104,7 @@ export default function EditOrder({ isOpen, close }) {
         <label htmlFor="supplier">Leverandør</label>
         <select value={supplier} onChange={e => setSupplier(e.target.value)}>
           {suppliers && suppliers.map((supplier, key) => (
-            <option key={key} value={supplier.supplierID}>
+            <option key={"supplier_menu_" + supplier.supplierID} value={supplier.supplierID}>
               {supplier.name}
             </option>
           ))}
@@ -241,7 +241,7 @@ const Ordered = ({ ordered, add, edit, remove }) => {
         {ordered.map((product, i) => (
           <OrderedProduct 
             product={product} 
-            key={i} 
+            key={"ordered_product_" + product.productID} 
             index={i} 
             edit={(value, index) => edit({productID: product.productID, amount: value}, index)}
             remove={index => remove(index)}/>

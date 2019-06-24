@@ -57,6 +57,20 @@ export const RowSplitter = () => {
   )
 }
 
+export const ColumnSplitter = () => {
+  return(
+    <hr 
+      width="1"
+      size="500"
+      style={{
+        height: "5vh",
+        borderLeft: "1px black solid",
+        borderRight: "none"
+      }}
+    />
+  )
+}
+
 export const Key = ({ children }) => {
   return(
     <p>

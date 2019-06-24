@@ -124,7 +124,7 @@ export default function EditProduct({ isOpen, close }) {
         <select 
           value={category} 
           onChange={(e) => setCategory(e.target.value)}>
-          {categories.map((category, key)=> <option key={key} value={category.categoryID}>{category.name}</option>)}
+          {categories.map((category)=> <option key={"category_menu_" + category.categoryID} value={category.categoryID}>{category.name}</option>)}
           <option value="new">...</option>
         </select>
         <Collapse in={newCategory} style={{
