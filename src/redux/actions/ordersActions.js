@@ -1,5 +1,7 @@
-import { secondaryFirestore as firestore } from "../../firebase/firebase";
 import { updateProductAmount, saveProducts } from "./productsActions"
+import { getSectionFromFirestore, setSectionToFirestore, convertTimestampsToDates } from "../middleware/thunks"
+
+const thisSection = "orders"
 
 //LOADING
 
@@ -9,9 +11,9 @@ export const loadOrdersBegin = () => ({
 })
 
 export const LOAD_ORDERS_SUCCESS = 'LOAD_ORDERS_SUCCESS'
-export const loadOrdersSuccess = (orders, history, currentID) => ({
+export const loadOrdersSuccess = ({ orders, history, currentID }) => ({
   type: LOAD_ORDERS_SUCCESS,
-  payload: {orders, history, currentID}
+  payload: { orders, history, currentID }
 })
 
 export const LOAD_ORDERS_FAILURE = 'LOAD_ORDERS_FAILURE'
@@ -20,7 +22,20 @@ export const loadOrdersFailure = (error) => ({
   payload: error
 })
 
-export const loadOrders = () => {
+export const loadOrders = () =>
+  getSectionFromFirestore(thisSection,
+    loadOrdersBegin,
+    loadOrdersSuccess,
+    loadOrdersFailure,
+    (data) => {
+      let orders = convertTimestampsToDates(data.orders, ["dateOrdered"])
+      return {
+        orders: orders, 
+        history: data.history, 
+        currentID: data.currentID}
+    })
+
+/* export const oldLoadOrders = () => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(loadOrdersBegin())
@@ -30,8 +45,7 @@ export const loadOrders = () => {
         let orders
         if(data.orders && Array.isArray(data.orders)){
           orders = data.orders.map(order => {
-            //Firestore returns date objects as {seconds, nanoseconds}
-            order.dateOrdered = new Date(order.dateOrdered.seconds * 1000)
+            order.dateOrdered = convertTimestampToDate(order.dateOrdered)
             return order
           })
         }
@@ -40,7 +54,7 @@ export const loadOrders = () => {
       })
       .catch(err => dispatch(loadOrdersFailure(err.message)))
   }
-}
+} */
 
 //SAVING
 
@@ -60,10 +74,24 @@ export const saveOrdersFailure = (error) => ({
   payload: { error }
 })
 
-export const saveOrders = () => {
+export const saveOrders = () =>
+  setSectionToFirestore(thisSection,
+    saveOrdersBegin,
+    saveOrdersSuccess,
+    saveOrdersFailure,
+    (state) => {
+      return {
+        orders: state.orders.orders,
+        history: state.orders.history,
+        currentID: state.orders.currentID
+      }
+    })
+
+/* export const oldSaveOrders = () => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(saveOrdersBegin())
+    console.log(state.orders)
     firestore.doc(`${state.auth.currentLocation}/Orders`).set({
       orders: state.orders.orders,
       history: state.orders.history,
@@ -71,10 +99,11 @@ export const saveOrders = () => {
     }, {merge: true})
       .then(() => {
         dispatch(saveOrdersSuccess())
+        dispatch(saveLastChanged("orders"))
       })
       .catch(err => dispatch(saveOrdersFailure(err)))
   }
-}
+} */
 
 //ORDER HANDLING
 
@@ -114,13 +143,12 @@ export const receivedOrder = (id) => ({
 })
 
 export const didReceiveOrder = (id, ordered) => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     ordered.forEach(product => {
       dispatch(updateProductAmount(product.productID, product.amount))
     })
     dispatch(receivedOrder(id))
-    const state = getState()
-    dispatch(saveProducts(state.products.products))
+    dispatch(saveProducts())
     dispatch(saveOrders())
   }
 }

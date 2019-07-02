@@ -8,11 +8,13 @@ import MenuItem from "@material-ui/core/MenuItem"
 import Typography from "@material-ui/core/Typography"
 
 import useLocation from "../hooks/useLocation"
+import Notifications from "./Notifications"
 
 import { auth, doSignOut } from "../firebase/firebase"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { useDispatch, useSelector } from "react-redux"
 
+import { clearLocalStorage } from "../redux/middleware/localStorage"
 import { resetCategories } from "../redux/actions/categoriesActions"
 import { resetCustomers } from "../redux/actions/customersActions"
 import { resetOrders } from "../redux/actions/ordersActions"
@@ -85,36 +87,14 @@ const UserSelector = () => {
   const dispatch = useDispatch()
 
   const resetRedux = () => {
+    dispatch(resetAuth())
     dispatch(resetCategories())
     dispatch(resetCustomers())
     dispatch(resetOrders())
     dispatch(resetProducts())
     dispatch(resetSales())
     dispatch(resetSuppliers())
-    dispatch(resetAuth())
   }
-  
-  const LoggedIn = () => 
-    <>
-      <Icons.AccountCircle fontSize="large"/>
-      <div style={{ justifySelf: "left", display: "flex" }}>
-        <><Typography>{authUser.firstName}&nbsp;</Typography></>
-        <><Typography>{authUser.lastName}</Typography></>
-      </div>
-      <button onClick={() => {
-        console.log("Signing out")
-        doSignOut()
-        console.log("Resetting redux")
-        resetRedux()
-      }} style={{padding: "1vh"}}>Logg ut</button>
-    </>
-  
-
-  const NotLoggedIn = () => 
-    <>
-      <Typography style={{gridColumn: "1/5"}}>Logg inn</Typography>
-    </>
-  
 
   return(
     <div style={{ 
@@ -123,10 +103,32 @@ const UserSelector = () => {
       gridTemplateColumns: "1fr 4fr 2fr",
       placeItems: "center"
      }}>
-      {user ? <LoggedIn/> : <NotLoggedIn/>}
+      {user ? <LoggedIn authUser={authUser} resetRedux={resetRedux}/> : <NotLoggedIn/>}
     </div>
   )
 }
+
+const LoggedIn = ({ authUser, resetRedux }) => 
+<>
+  <Icons.AccountCircle fontSize="large"/>
+  <div style={{ justifySelf: "left", display: "flex" }}>
+    <><Typography>{authUser.firstName}&nbsp;</Typography></>
+    <><Typography>{authUser.lastName}</Typography></>
+  </div>
+  {/*<Notifications/>*/}
+  <button onClick={() => {
+    console.log("Signing out")
+    doSignOut()
+    clearLocalStorage()
+    console.log("Resetting redux")
+    resetRedux()
+  }} style={{padding: "1vh"}}>Logg ut</button>
+</>
+
+const NotLoggedIn = () => 
+<>
+  <Typography style={{gridColumn: "1/5"}}>Logg inn</Typography>
+</>
 
 const HeaderLink = ({children, linkTo, onClick, name}) => {
   return(

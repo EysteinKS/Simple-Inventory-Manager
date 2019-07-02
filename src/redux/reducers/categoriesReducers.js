@@ -27,6 +27,6 @@ export default (state = initialState, { type, payload }) =>
         })
         break
       case action.RESET_CATEGORIES:
-        return drafts.resetReducer(draft, initialState)
+        return drafts.resetReducer(initialState)
     }
 });

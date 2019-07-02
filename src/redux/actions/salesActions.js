@@ -1,5 +1,7 @@
-import { secondaryFirestore as firestore } from "../../firebase/firebase"
 import { updateProductAmount, saveProducts } from "./productsActions"
+import { getSectionFromFirestore, setSectionToFirestore, convertTimestampsToDates } from "../middleware/thunks"
+
+const thisSection = "sales"
 
 //LOADING
 
@@ -9,9 +11,9 @@ export const loadSalesBegin = () => ({
 })
 
 export const LOAD_SALES_SUCCESS = 'LOAD_SALES_SUCCESS'
-export const loadSalesSuccess = (sales, history, currentID) => ({
+export const loadSalesSuccess = ({ sales, history, currentID }) => ({
   type: LOAD_SALES_SUCCESS,
-  payload: {sales, history, currentID}
+  payload: { sales, history, currentID }
 })
 
 export const LOAD_SALES_FAILURE = 'LOAD_SALES_FAILURE'
@@ -20,7 +22,21 @@ export const loadSalesFailure = (error) => ({
   payload: error
 })
 
-export const loadSales = () => {
+export const loadSales = () =>
+  getSectionFromFirestore(thisSection,
+    loadSalesBegin,
+    loadSalesSuccess,
+    loadSalesFailure,
+    (data) => {
+      let sales = convertTimestampsToDates(data.sales, ["dateOrdered"])
+      return {
+        sales: sales,
+        history: data.history,
+        currentID: data.currentID
+      }
+    })
+
+/* export const oldLoadSales = () => {
   return (dispatch, getState) => {
     const state = getState()    
     dispatch(loadSalesBegin())
@@ -39,7 +55,7 @@ export const loadSales = () => {
       })
       .catch(err => dispatch(loadSalesFailure(err.message)))
   }
-}
+} */
 
 //SAVING
 
@@ -59,7 +75,21 @@ export const saveSalesFailure = (error) => ({
   payload: error
 })
 
-export const saveSales = () => {
+export const saveSales = () =>
+  setSectionToFirestore(thisSection,
+    saveSalesBegin,
+    saveSalesSuccess,
+    saveSalesFailure,
+    (state) => {
+      let s = state.sales
+      return {
+        sales: s.sales,
+        history: s.history,
+        currentID: s.currentID
+      }
+    })
+
+/* export const oldSaveSales = () => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(saveSalesBegin())
@@ -70,10 +100,11 @@ export const saveSales = () => {
     }, {merge: true})
       .then(() => {
         dispatch(saveSalesSuccess())
+        dispatch(saveLastChanged("sales"))
       })
       .catch(err => dispatch(saveSalesFailure(err)))
   }
-}
+} */
 
 //SALE HANDLING
 

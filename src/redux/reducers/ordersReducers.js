@@ -15,14 +15,11 @@ produce(state, draft => {
     case action.LOAD_ORDERS_BEGIN:
       return drafts.loadBegin(draft);
     case action.LOAD_ORDERS_SUCCESS:
-      drafts.loadSuccess(
+      return drafts.loadSuccess(
         draft,
         ["orders", "sortedOrders"],
-        payload.orders
+        payload
       );
-      draft.currentID = payload.currentID
-      draft.history = payload.history
-      break
     case action.LOAD_ORDERS_FAILURE:
       return drafts.loadFailure(draft, payload);
     case action.SAVE_ORDERS_BEGIN:
@@ -94,7 +91,7 @@ produce(state, draft => {
       draft.isSaved = false;
       break;
     case action.RESET_ORDERS:
-      return drafts.resetReducer(draft, initialState)
+      return drafts.resetReducer(initialState)
     default:
       break;
   }

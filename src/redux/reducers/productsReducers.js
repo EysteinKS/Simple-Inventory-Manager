@@ -71,7 +71,7 @@ export default (
         draft.isSaved = false;
         break;
       case action.RESET_PRODUCTS:
-        return drafts.resetReducer(draft, initialState)
+        return drafts.resetReducer(initialState)
       default:
         break;
     }

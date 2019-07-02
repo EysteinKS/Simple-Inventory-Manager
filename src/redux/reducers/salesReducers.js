@@ -15,14 +15,11 @@ export default (state = initialState, {type, payload}) =>
       case action.LOAD_SALES_BEGIN:
         return drafts.loadBegin(draft)
       case action.LOAD_SALES_SUCCESS:
-        drafts.loadSuccess(
+        return drafts.loadSuccess(
           draft,
           ["sales", "sortedSales"],
-          payload.sales
+          payload
         )
-        draft.currentID = payload.currentID
-        draft.history = payload.history
-        break
       case action.LOAD_SALES_FAILURE:
         return drafts.loadFailure(draft, payload)
       case action.SAVE_SALES_BEGIN:
@@ -82,6 +79,6 @@ export default (state = initialState, {type, payload}) =>
         draft.isSaved = false;
         break;
       case action.RESET_SALES:
-        return drafts.resetReducer(draft, initialState)
+        return drafts.resetReducer(initialState)
     }
   })

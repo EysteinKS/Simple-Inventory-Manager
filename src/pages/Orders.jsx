@@ -118,8 +118,8 @@ export default function Orders() {
           <CloudStatus
             save={() => {
               //console.log(suppliers);
-              dispatch(saveOrders(orders.orders));
-              dispatch(saveSuppliers(suppliers.suppliers));
+              dispatch(saveOrders());
+              dispatch(saveSuppliers());
             }}
             isSaving={savingGate}
             isSaved={savedGate}
@@ -162,13 +162,13 @@ export default function Orders() {
           }}
         />
       )}
-      <EditOrder
+      {isOrderOpen && <EditOrder
         isOpen={isOrderOpen}
         close={() => {
           setOrderOpen(false);
           dispatch(clearCurrentOrder());
         }}
-      />
+      />}
     </div>
   );
 }
@@ -202,11 +202,21 @@ const Order = ({ order, edit }) => {
     detailStyle = "order-details collapsed";
   }
 
-  let orderDate = dateOrdered.toLocaleDateString("default", {
-    year: "numeric",
-    month: "short",
-    day: "numeric"
-  });
+  let orderDate
+  if(typeof dateOrdered === "string"){
+    let stringToDate = new Date(dateOrdered)
+    orderDate = stringToDate.toLocaleDateString("default", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    })
+  } else {
+    orderDate = dateOrdered.toLocaleDateString("default", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    });
+  }
   
   let receivedDate = null
   if(dateReceived){

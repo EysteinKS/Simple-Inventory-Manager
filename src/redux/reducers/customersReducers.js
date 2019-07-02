@@ -11,9 +11,7 @@ export default (state = initialState, {type, payload}) =>
       case action.LOAD_CUSTOMERS_BEGIN:
         return drafts.loadBegin(draft)
       case action.LOAD_CUSTOMERS_SUCCESS:
-        drafts.loadSuccess(draft, "customers", payload.customers)
-        draft.currentID = payload.currentID
-        break;
+        return drafts.loadSuccess(draft, "customers", payload)
       case action.LOAD_CUSTOMERS_FAILURE:
         return drafts.loadFailure(draft, payload)
       case action.SAVE_CUSTOMERS_BEGIN:
@@ -29,6 +27,6 @@ export default (state = initialState, {type, payload}) =>
         })
         break
       case action.RESET_CUSTOMERS:
-        return drafts.resetReducer(draft, initialState)
+        return drafts.resetReducer(initialState)
     }  
 })

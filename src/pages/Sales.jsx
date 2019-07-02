@@ -91,8 +91,8 @@ export default function Sales(){
           <br/>
           <CloudStatus 
             save={() => {
-              dispatch(saveSales(sales.sales))
-              dispatch(saveCustomers(customers.customers))
+              dispatch(saveSales())
+              dispatch(saveCustomers())
             }}
             isSaving={savingGate}
             isSaved={savedGate}
@@ -116,13 +116,13 @@ export default function Sales(){
           dispatch(editSale(id))
           setSaleOpen(true)
         }}/>}
-        <EditSale
+        {isSaleOpen && <EditSale
           isOpen={isSaleOpen}
           close={() => {
             setSaleOpen(false)
             dispatch(clearCurrentSale())
           }}
-        />
+        />}
     </>
   )
 
@@ -159,9 +159,22 @@ const Sale = ({ sale, edit }) => {
     expandedStyle = { backgroundColor: "#e6e6e6", padding: "10px", display: "grid", placeItems: "center" }
   }
 
-  let orderDate = dateOrdered.toLocaleDateString(
-    "default", {year: "numeric", month: "short", day: "numeric"}
-  )
+  let orderDate
+  if(typeof dateOrdered === "string"){
+    let stringToDate = new Date(dateOrdered)
+    orderDate = stringToDate.toLocaleDateString("default", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    })
+  } else {
+    orderDate = dateOrdered.toLocaleDateString("default", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    });
+  }
+  
   let totalProducts = ordered.reduce((acc, cur) => acc + cur.amount, 0)
 
   return(

@@ -1,4 +1,6 @@
-import { secondaryFirestore as firestore } from "../../firebase/firebase"
+import { getSectionFromFirestore, setSectionToFirestore } from "../middleware/thunks"
+
+const thisSection = "categories"
 
 export const LOAD_CATEGORIES_BEGIN = 'LOAD_CATEGORIES_BEGIN'
 export const loadCategoriesBegin = () => ({
@@ -6,10 +8,11 @@ export const loadCategoriesBegin = () => ({
 })
 
 export const LOAD_CATEGORIES_SUCCESS = 'LOAD_CATEGORIES_SUCCESS'
-export const loadCategoriesSuccess = (categories = []) => ({
+export const loadCategoriesSuccess = ({ categories, currentID }) => {
+  return {
   type: LOAD_CATEGORIES_SUCCESS,
-  payload: categories
-})
+  payload: { categories, currentID }
+}}
 
 export const LOAD_CATEGORIES_FAILURE = 'LOAD_CATEGORIES_FAILURE'
 export const loadCategoriesFailure = (error) => ({
@@ -17,19 +20,17 @@ export const loadCategoriesFailure = (error) => ({
   payload: error
 })
 
-export const loadCategories = () => {
-  return (dispatch, getState) => {
-    const state = getState()
-    dispatch(loadCategoriesBegin())
-    firestore.doc(`${state.auth.currentLocation}/Categories`).get()
-      .then(res => {
-        let categories = res.data().categories
-        console.log("Loaded categories successfully")
-        dispatch(loadCategoriesSuccess(categories))
-      })
-      .catch(err => loadCategoriesFailure(err))
-  }
-}
+export const loadCategories = () => 
+  getSectionFromFirestore(thisSection, 
+    loadCategoriesBegin,
+    loadCategoriesSuccess,
+    loadCategoriesFailure,
+    (data) => { 
+      return { 
+        categories: data.categories,
+        currentID: data.currentID
+      } 
+    })
 
 //SAVING
 
@@ -49,7 +50,19 @@ export const saveCategoriesFailure = (error) => ({
   payload: error
 })
 
-export const saveCategories = (categories) => {
+export const saveCategories = () => 
+  setSectionToFirestore(thisSection,
+    saveCategoriesBegin,
+    saveCategoriesSuccess,
+    saveCategoriesFailure,
+    (state) => {
+      return {
+        categories: state.categories.categories,
+        currentID: state.categories.currentID
+      }
+    })
+
+/* export const saveCategories = (categories) => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(saveCategoriesBegin())
@@ -58,10 +71,11 @@ export const saveCategories = (categories) => {
     }, {merge: true})
       .then(() => {
         dispatch(saveCategoriesSuccess())
+        dispatch(saveLastChanged("categories"))
       })
       .catch(err => dispatch(saveCategoriesFailure(err)))
   }
-}
+} */
 
 export const SAVE_CREATED_CATEGORY = 'SAVE_CREATED_CATEGORY'
 export const saveCreatedCategory = (name) => ({

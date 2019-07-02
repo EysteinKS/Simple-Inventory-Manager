@@ -1,9 +1,6 @@
 import React, {useState} from 'react'
 import {auth} from "../firebase/firebase"
 
-import { useDispatch } from "react-redux"
-import { userSigningIn } from "../redux/actions/authActions"
-
 import Typography from "@material-ui/core/Typography"
 import TextField from "@material-ui/core/TextField"
 import CircularProgress from "@material-ui/core/CircularProgress"
@@ -26,13 +23,9 @@ const LoginForm = ({ setLoggingIn, setError }) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const dispatch = useDispatch()
-
-
   const login = e => {
     e.preventDefault()
     setLoggingIn(true)
-    dispatch(userSigningIn())
     auth.signInWithEmailAndPassword(email, password)
       .then(() => setLoggingIn(false)).catch(err => {
         setLoggingIn(false)

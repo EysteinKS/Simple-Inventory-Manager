@@ -1,4 +1,6 @@
-import { secondaryFirestore as firestore } from "../../firebase/firebase"
+import { getSectionFromFirestore, setSectionToFirestore } from "../middleware/thunks"
+
+const thisSection = "products"
 
 //LOADING
 
@@ -8,9 +10,9 @@ export const loadProductsBegin = () => ({
 })
 
 export const LOAD_PRODUCTS_SUCCESS = 'LOAD_PRODUCTS_SUCCESS'
-export const loadProductsSuccess = (products = []) => ({
+export const loadProductsSuccess = ({ products, currentID }) => ({
   type: LOAD_PRODUCTS_SUCCESS,
-  payload: products
+  payload: { products, currentID }
 })
 
 export const LOAD_PRODUCTS_FAILURE = 'LOAD_PRODUCTS_FAILURE'
@@ -19,7 +21,19 @@ export const loadProductsFailure = (error) => ({
   payload: error
 })
 
-export const loadProducts = () => {
+export const loadProducts = () =>
+  getSectionFromFirestore(thisSection,
+    loadProductsBegin,
+    loadProductsSuccess,
+    loadProductsFailure,
+    (data) => {
+      return {
+        products: data.products,
+        currentID: data.currentID
+      }
+    })
+
+/* export const oldLoadProducts = () => {
   return (dispatch, getState) => {
     const state = getState()    
     dispatch(loadProductsBegin())
@@ -32,7 +46,7 @@ export const loadProducts = () => {
       })
       .catch(err => loadProductsFailure(err))
   }
-}
+} */
 
 //SAVING
 
@@ -52,7 +66,19 @@ export const saveProductsFailure = (error) => ({
   payload: error
 })
 
-export const saveProducts = () => {
+export const saveProducts = () => 
+  setSectionToFirestore(thisSection,
+    saveProductsBegin,
+    saveProductsSuccess,
+    saveProductsFailure,
+    (state) => {
+      return {
+        products: state.products.products,
+        currentID: state.products.currentID
+      }
+    })
+
+/* export const oldSaveProducts = () => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(saveProductsBegin())
@@ -61,10 +87,11 @@ export const saveProducts = () => {
     }, {merge: true})
       .then(() => {
         dispatch(saveProductsSuccess())
+        dispatch(saveLastChanged("products"))
       })
       .catch(err => dispatch(saveProductsFailure(err)))
   }
-}
+} */
 
 //PRODUCT HANDLING
 

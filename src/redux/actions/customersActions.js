@@ -1,4 +1,6 @@
-import { secondaryFirestore as firestore } from "../../firebase/firebase"
+import { getSectionFromFirestore, setSectionToFirestore } from "../middleware/thunks"
+
+const thisSection = "customers"
 
 export const LOAD_CUSTOMERS_BEGIN = 'LOAD_CUSTOMERS_BEGIN'
 export const loadCustomersBegin = () => ({
@@ -6,9 +8,9 @@ export const loadCustomersBegin = () => ({
 })
 
 export const LOAD_CUSTOMERS_SUCCESS = 'LOAD_CUSTOMERS_SUCCESS'
-export const loadCustomersSuccess = (customers, currentID) => ({
+export const loadCustomersSuccess = ({ customers, currentID }) => ({
   type: LOAD_CUSTOMERS_SUCCESS,
-  payload: {customers, currentID}
+  payload: { customers, currentID }
 })
 
 export const LOAD_CUSTOMERS_FAILURE = 'LOAD_CUSTOMERS_FAILURE'
@@ -17,7 +19,19 @@ export const loadCustomersFailure = (error) => ({
   payload: error
 })
 
-export const loadCustomers = () => {
+export const loadCustomers = () => 
+  getSectionFromFirestore(thisSection,
+    loadCustomersBegin,
+    loadCustomersSuccess,
+    loadCustomersFailure,
+    (data) => {
+      return {
+        customers: data.customers,
+        currentID: data.currentID
+      }
+    })
+
+/* export const oldLoadCustomers = () => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(loadCustomersBegin())
@@ -31,7 +45,7 @@ export const loadCustomers = () => {
       })
       .catch(err => loadCustomersFailure(err))
   }
-}
+} */
 
 //SAVING
 
@@ -51,7 +65,19 @@ export const saveCustomersFailure = (error) => ({
   payload: error
 })
 
-export const saveCustomers = (customers) => {
+export const saveCustomers = () => 
+  setSectionToFirestore(thisSection,
+    saveCustomersBegin,
+    saveCustomersSuccess,
+    saveCustomersFailure,
+    (state) => {
+      return {
+        customers: state.customers.customers,
+        currentID: state.customers.currentID
+      }
+    })
+
+/* export const oldSaveCustomers = (customers) => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(saveCustomersBegin())
@@ -61,10 +87,11 @@ export const saveCustomers = (customers) => {
     }, {merge: true})
       .then(() => {
         dispatch(saveCustomersSuccess())
+        dispatch(saveLastChanged("customers"))
       })
       .catch(err => dispatch(saveCustomersFailure(err)))
   }
-}
+} */
 
 export const SAVE_CREATED_CUSTOMER = 'SAVE_CREATED_CUSTOMER'
 export const saveCreatedCustomer = (name) => ({

@@ -64,9 +64,9 @@ export default function EditProduct({ isOpen, close }) {
     productID: current.productID,
     name: name,
     categoryID: Number(category),
-    active: active,
-    amount: Number(amount),
-    comments: comments
+    active: active || false,
+    amount: Number(amount) || 0,
+    comments: comments || ""
   };
 
   const save = () => {

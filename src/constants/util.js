@@ -169,3 +169,8 @@ export const newSale = (id) => {
 export const isArrayEmpty = (arr) => {
   return (!Array.isArray(arr) || !arr.length)
 }
+
+//LOADING
+export const convertTimestampToDate = (timestamp) => {
+  return new Date(timestamp.seconds * 1000)
+}

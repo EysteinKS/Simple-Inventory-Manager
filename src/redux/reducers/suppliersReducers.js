@@ -11,9 +11,7 @@ export default (state = initialState, {type, payload}) =>
       case action.LOAD_SUPPLIERS_BEGIN:
         return drafts.loadBegin(draft)
       case action.LOAD_SUPPLIERS_SUCCESS:
-        drafts.loadSuccess(draft, "suppliers", payload.suppliers)
-        draft.currentID = payload.currentID
-        break;
+        return drafts.loadSuccess(draft, "suppliers", payload)
       case action.LOAD_SUPPLIERS_FAILURE:
         return drafts.loadFailure(draft, payload)
       case action.SAVE_SUPPLIERS_BEGIN:
@@ -29,6 +27,6 @@ export default (state = initialState, {type, payload}) =>
         })
         break
       case action.RESET_SUPPLIERS:
-        return drafts.resetReducer(draft, initialState)
+        return drafts.resetReducer(initialState)
     }
 });

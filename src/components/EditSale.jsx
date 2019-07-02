@@ -24,6 +24,7 @@ export default function EditSale({ isOpen, close }) {
 
   const [init, setInit] = useState(false);
   if (isOpen && !init) {
+    console.log("EditSale is open and uninitialized")
     setCustomer(current.customerID);
     setOrdered(current.ordered);
     setInit(true);

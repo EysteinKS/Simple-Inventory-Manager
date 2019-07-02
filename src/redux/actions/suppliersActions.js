@@ -1,4 +1,6 @@
-import { secondaryFirestore as firestore } from "../../firebase/firebase"
+import { getSectionFromFirestore, setSectionToFirestore } from "../middleware/thunks"
+
+const thisSection = "suppliers"
 
 export const LOAD_SUPPLIERS_BEGIN = 'LOAD_SUPPLIERS_BEGIN'
 export const loadSuppliersBegin = () => ({
@@ -6,7 +8,7 @@ export const loadSuppliersBegin = () => ({
 })
 
 export const LOAD_SUPPLIERS_SUCCESS = 'LOAD_SUPPLIERS_SUCCESS'
-export const loadSuppliersSuccess = (suppliers, currentID) => ({
+export const loadSuppliersSuccess = ({ suppliers, currentID }) => ({
   type: LOAD_SUPPLIERS_SUCCESS,
   payload: {suppliers, currentID}
 })
@@ -17,7 +19,19 @@ export const loadSuppliersFailure = (error) => ({
   payload: error
 })
 
-export const loadSuppliers = () => {
+export const loadSuppliers = () =>
+  getSectionFromFirestore(thisSection,
+    loadSuppliersBegin,
+    loadSuppliersSuccess,
+    loadSuppliersFailure,
+    (data) => {
+      return {
+        suppliers: data.suppliers,
+        currentID: data.currentID
+      }
+    })
+
+/* export const oldLoadSuppliers = () => {
   return (dispatch, getState) => {
     const state = getState()    
     dispatch(loadSuppliersBegin())
@@ -31,7 +45,7 @@ export const loadSuppliers = () => {
       })
       .catch(err => loadSuppliersFailure(err))
   }
-}
+} */
 
 //SAVING
 
@@ -51,7 +65,20 @@ export const saveSuppliersFailure = (error) => ({
   payload: error
 })
 
-export const saveSuppliers = (suppliers) => {
+export const saveSuppliers = () => 
+  setSectionToFirestore(thisSection,
+    saveSuppliersBegin,
+    saveSuppliersSuccess,
+    saveSuppliersFailure,
+    (state) => {
+      let s = state.suppliers
+      return {
+        suppliers: s.suppliers,
+        currentID: s.currentID
+      }
+    })
+
+/* export const oldSaveSuppliers = (suppliers) => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(saveSuppliersBegin())
@@ -61,10 +88,11 @@ export const saveSuppliers = (suppliers) => {
     }, {merge: true})
       .then(() => {
         dispatch(saveSuppliersSuccess())
+        dispatch(saveLastChanged("suppliers"))
       })
       .catch(err => dispatch(saveSuppliersFailure(err)))
   }
-}
+} */
 
 export const SAVE_CREATED_SUPPLIER = 'SAVE_CREATED_SUPPLIER'
 export const saveCreatedSupplier = (name) => ({

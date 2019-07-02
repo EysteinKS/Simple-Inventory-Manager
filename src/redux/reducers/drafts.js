@@ -8,7 +8,8 @@ const initializeState = (optionals = {}) => {
     isSaving: false,
     isSaved: true,
     savingError: false,
-    error: null
+    error: null,
+    lastChanged: null
   }
 }
 
@@ -21,20 +22,22 @@ const loadBegin = (draft) => {
 }
 
 const loadSuccess = (draft, targets = [], payload) => {
+  //console.log("loadSuccess payload: ", payload)
   //console.log("Input of loadSuccess: ", {draft, targets, payload})
-  draft.isLoading = false
-  draft.isLoaded = true
+  let newDraft = {...draft, ...payload}
+  newDraft.isLoading = false
+  newDraft.isLoaded = true
   if(Array.isArray(targets)){
     //console.log("targets is array")
     targets.forEach(target => {
-      draft[target] = payload
+      newDraft[target] = payload[targets[0]]
     })
   } else if(typeof targets === "string"){
     //console.log("targets is string")
-    draft[targets] = payload
+    newDraft[targets] = payload[targets]
   }
-  //console.log("Returning draft: ", draft)
-  return draft
+  //console.log("Returning draft: ", newDraft)
+  return newDraft
 }
 
 const loadFailure = (draft, error) => {
@@ -70,8 +73,13 @@ const saveFailure = (draft, error) => {
   return ret
 }
 
-const resetReducer = (draft) => {
-  let ret = {...draft}
+const setLastChanged = (draft, date) => {
+  draft.lastChanged = date
+  return draft
+}
+
+const resetReducer = (initialState) => {
+  let ret = {...initialState}
   ret.isLoaded = false
   return ret
 }
@@ -84,5 +92,6 @@ export default {
   saveBegin,
   saveSuccess,
   saveFailure,
+  setLastChanged,
   resetReducer
 }

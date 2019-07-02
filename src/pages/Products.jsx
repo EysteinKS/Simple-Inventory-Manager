@@ -111,8 +111,8 @@ export default function Products(){
           <br/>
           <CloudStatus 
             save={() => {
-              dispatch(saveProducts(products.products))
-              dispatch(saveCategories(categories.categories))
+              dispatch(saveProducts())
+              dispatch(saveCategories())
             }}
             isSaving={savingGate}
             isSaved={savedGate}
@@ -155,19 +155,19 @@ export default function Products(){
                 setProductOpen(true);
               }}/>))}
       </div>
-      <EditProduct
+      {isProductOpen && <EditProduct
         isOpen={isProductOpen}
         close={() => {
           setProductOpen(false);
           dispatch(clearCurrentProduct());
         }}
-      />
-      <EditCategories
+      />}
+      {isCategoriesOpen && <EditCategories
         isOpen={isCategoriesOpen}
         close={() => {
           setCategoriesOpen(false);
         }}
-      />
+      />}
     </Fragment>
   );
 };
