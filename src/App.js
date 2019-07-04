@@ -1,16 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 
-import useLoadedGate from "./hooks/useLoadedGate";
-import {
-  loadUser,
-  setLocationName,
-  setLocationColor,
-  setLocationLogo,
-  setAllLastChanged,
-  userSignedOut
-} from "./redux/actions/authActions";
-
+//ROUTER
 import { Router } from "@reach/router";
 import * as routes from "./constants/routes";
 import Header from "./components/Header";
@@ -24,122 +14,28 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import "./App.css";
 
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, firestore, initializeLocation } from "./firebase/firebase";
-import { getInventory } from  "./redux/middleware/firestore"
-import { convertTimestampToDate } from "./constants/util"
-
-//TODO
-//FIGURE OUT HOW TO RESET REDUX WITHOUT CRASHING THE APP
-//REFACTOR THE LOADING BEHAVIOR
+import useInitialization from "./hooks/useInitialization"
 
 const App = () => {
-  const [user, initializingUser] = useAuthState(auth);
-  const dispatch = useDispatch();
-  const authIsLoaded = useSelector(state => state.auth.isLoaded);
-  const authCurrentLocation = useSelector(state => state.auth.currentLocation);
-  const userLoggingOut = useSelector(state => state.auth.loggingOut);
-
-  useEffect(() => {
-    if(!user && userLoggingOut){
-      dispatch(userSignedOut())
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, userLoggingOut])
-
-  async function fetchLocationData(location) {
-    await firestore.doc(`Clients/${location}`).get()
-      .then(async res => {
-        const data = res.data();
-        //console.log("Data from Firestore: ", data)
-        dispatch(setLocationName(data.name));
-        dispatch(setLocationLogo(data.logoUrl));
-        dispatch(setLocationColor(data.primaryColor));
-        const lastChangedToDate = (data) => {
-          let updated = {...data}
-          //console.log("lastChangedToDate: ", updated)
-          updated.global = convertTimestampToDate(updated.global)
-          for (let k in updated.sections){
-            updated.sections[k] = convertTimestampToDate(updated.sections[k])
-          }
-          //console.log("updated: ", updated)
-          return updated
-        }
-        let updatedLastChanged = lastChangedToDate(data.lastChanged)
-        //console.log("updatedLastChanged: ", updatedLastChanged)
-        dispatch(setAllLastChanged(updatedLastChanged))
-        initializeLocation(data.firebaseConfig);
-      });
-  }
-
-  const fetchUserData = () => {
-    dispatch(loadUser(user.uid));
-  };
-
-  const [isLoadingUser, setLoadingUser] = useState(false);
-  //INITIALIZE IF USER IS LOGGED IN
-  useEffect(() => {
-    //console.log(`user: ${Boolean(user)}, authIsLoaded: ${authIsLoaded}`)
-    //if(user){console.log("user: ", user)}
-    if (user && !isLoadingUser && !authIsLoaded && !userLoggingOut) {
-      //console.log("user: ", user)
-      console.log("Fetching user data");
-      console.time("Time until interactive")
-      setLoadingUser(true);
-      fetchUserData();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, authIsLoaded, userLoggingOut]);
-
-  //LOAD LOCATION WHEN USER IS LOADED
-  useEffect(() => {
-    if (authIsLoaded) {
-      setLoadingUser(false);
-      fetchLocationData(authCurrentLocation).then(() => dispatch(getInventory()));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authIsLoaded, authCurrentLocation]);
-
-  const [isLoadingGate, isLoadedGate, loadingErrorGate] = useLoadedGate();
-
-  //console.log("App is rendering...")
-  useEffect(() => {
-    isLoadedGate && console.timeEnd("Time until interactive")
-  }, [isLoadedGate])
-
-  if (isLoadingGate || initializingUser || isLoadingUser || (user && userLoggingOut)) {
-    return (
-      <AppWrapper isLoaded={isLoadedGate}>
-        <PageLoading />
-      </AppWrapper>
-    );
-  } else if (!user) {
-    return (
-      <AppWrapper isLoaded={isLoadedGate}>
-        <NonAuthPage />
-      </AppWrapper>
-    );
-  } else if (loadingErrorGate) {
-    return (
-      <AppWrapper isLoaded={isLoadedGate}>
-        <p>Error!</p>
-      </AppWrapper>
-    );
-  } else if (isLoadedGate && user) {
-    return (
-      <AppWrapper isLoaded={isLoadedGate}>
-        <AuthPage />
-      </AppWrapper>
-    );
-  } else {
-    //console.log("App returning default")
-    return (
-      <AppWrapper isLoaded={isLoadedGate}>
-        <PageLoading />
-      </AppWrapper>
-    );
-  }
-};
+  const {
+    loading,
+    isLoadedGate,
+    loadingErrorGate,
+    loadingMessage,
+    setLoadingMessage,
+    loggedIn, 
+  } = useInitialization()
+  
+  return(
+    <AppWrapper isLoaded={isLoadedGate}>
+      {(loading) ? <PageLoading message={loadingMessage}/>
+      : (loadingErrorGate) ? <p>Error!</p>
+      : (!loggedIn) ? <NonAuthPage setMessage={setLoadingMessage}/>
+      : (isLoadedGate && loggedIn) ? <AuthPage/>
+      : <PageLoading message={loadingMessage}/>}
+    </AppWrapper>
+  )
+}
 
 const AppWrapper = ({ children, isLoaded }) => {
   return (
@@ -153,7 +49,10 @@ const AppWrapper = ({ children, isLoaded }) => {
       >
         <Header locationIsLoaded={isLoaded} />
         <section
-          style={{ height: "100%", overflowY: "scroll", marginTop: "5vh" }}
+          style={{ 
+            height: "100%", 
+            overflowY: "scroll", 
+            marginTop: "5vh" }}
         >
           {children}
         </section>
@@ -162,10 +61,10 @@ const AppWrapper = ({ children, isLoaded }) => {
   );
 };
 
-const NonAuthPage = () => {
+const NonAuthPage = ({ setMessage }) => {
   return (
     <div style={{ margin: "5vh 10vw 10vh 10vw", display: "grid" }}>
-      <Login />
+      <Login setMessage={setMessage}/>
     </div>
   );
 };
@@ -184,9 +83,12 @@ const AuthPage = () => {
   );
 };
 
-const PageLoading = () => (
+const PageLoading = ({ message }) => (
   <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
-    <CircularProgress style={{ alignSelf: "center", justifySelf: "center" }} />
+    <div style={{display: "grid", gridTemplateColumns: "1fr", placeSelf: "center"}}>
+      <CircularProgress style={{ placeSelf: "center"}}/>
+      <p style={{ height: "2vh", placeSelf: "center" }}>{message}</p>
+    </div>
   </div>
 );
 

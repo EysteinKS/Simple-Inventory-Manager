@@ -10,7 +10,7 @@ export const sections = {
   suppliers: "Suppliers"
 }
 
-export const getInventory = () => {
+export const getInventory = (message) => {
   return (dispatch, getState) => {
     let state = getState()
     let fsLastChanged = state.auth.lastChanged
@@ -20,7 +20,7 @@ export const getInventory = () => {
     //console.log("localStorage data: ", ls)
     //If no localstorage data
     if(!ls) {
-      getAllFromFirestore(dispatch)
+      getAllFromFirestore(sectionKeys, dispatch, message)
       setLocalStorage(authKey, {lastChanged: fsLastChanged})
       return
     }
@@ -31,12 +31,13 @@ export const getInventory = () => {
     //console.log(firestoreToTimeString)
     //console.log("ls === fs: ", firestoreToTimeString === localStorageToTimeString)
     if(firestoreToTimeString === localStorageToTimeString){
-      return getAllFromLocalStorage(sectionKeys, dispatch, ls)
+      return getAllFromLocalStorage(sectionKeys, dispatch, ls, message)
     }
 
     //Check which values are changed
     let isChanged = []
     let isUnchanged = []
+    console.log("Checking for changes in firestore...")
     for(let k in fsLastChanged.sections){
       let fsDateToString = fsLastChanged.sections[k].toString()
       let lsDateToString = new Date(lsLastChanged.sections[k]).toString()
@@ -49,52 +50,50 @@ export const getInventory = () => {
     }
 
     if(isChanged.length && isChanged.length === Object.keys(fsActions).length){
-      getAllFromFirestore(dispatch)
+      getAllFromFirestore(sectionKeys, dispatch, message)
       setLocalStorage(authKey, {lastChanged: fsLastChanged})
       return
     }
 
     if(isUnchanged.length){
       isUnchanged.forEach(k => {
-        console.log(`Loading ${k} from localStorage...`)
-        localDataFromKey(k, dispatch, ls)
+        localDataFromKey(k, dispatch, ls, message)
       })
     }
     if(isChanged.length){
       isChanged.forEach(k => {
-        console.log(`Loading ${k} from firestore...`)
-        firestoreDataFromKey(k, dispatch)
+        firestoreDataFromKey(k, dispatch, message)
       })
     }
-    //console.log("fsLastChanged: ", fsLastChanged)
     setLocalStorage(authKey, {lastChanged: fsLastChanged})
   }
 }
 
-const firestoreDataFromKey = (key, dispatch) => {
+const firestoreDataFromKey = (key, dispatch, message) => {
+  message(`Loading data from firestore...`)
   let load = fsActions[key]
   dispatch(load())
 }
 
-const localDataFromKey = (key, dispatch, localStorage) => {
+const localDataFromKey = (key, dispatch, localStorage, message) => {
+  message(`Loading data from localStorage...`)
   let begin = lsBeginActions[key]
   dispatch(begin())
   let dataFromLocalStorage = localStorage[key]
   let success = lsSuccessActions[key]
-  //console.log("dataFromLocalStorage: ", dataFromLocalStorage)
   dispatch(success(dataFromLocalStorage))
 }
 
-const getAllFromLocalStorage = (keys, dispatch, localStorage) => {
+const getAllFromLocalStorage = (keys, dispatch, localStorage, message) => {
   console.log("Getting all data from localStorage")
   Object.keys(keys).forEach(k => {
-    localDataFromKey(k, dispatch, localStorage)
+    localDataFromKey(k, dispatch, localStorage, message)
   })
 }
 
-const getAllFromFirestore = (dispatch) => {
+const getAllFromFirestore = (keys, dispatch, message) => {
   console.log("Getting all data from firestore")
-  for(let func in fsActions) {
-    dispatch(fsActions[func]())
-  }
+  Object.keys(keys).forEach(k => {
+    firestoreDataFromKey(k, dispatch, message)
+  })
 }

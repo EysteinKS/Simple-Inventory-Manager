@@ -1,7 +1,7 @@
 import { secondaryFirestore } from "../../firebase/firebase"
 import { setLocalStorage } from "./localStorage"
 import { saveLastChanged } from "../actions/authActions"
-import { convertTimestampToDate } from "../../constants/util"
+import { parseDate } from "../../constants/util"
 
 const firestoreSections = {
   categories: "Categories",
@@ -66,10 +66,11 @@ export const convertTimestampsToDates = (data = [], keys = []) => {
   }
   return data.map(part => {
     keys.forEach(key => {
-      if(part[key] === "undefined"){
+      if(part[key] === undefined){
         throw new Error(`Key ${key} is undefined in ${part.name}`)
+      } else if (part[key] !== null){
+        part[key] = parseDate(part[key])
       }
-      part[key] = convertTimestampToDate(part[key])
     })
     return part
   })

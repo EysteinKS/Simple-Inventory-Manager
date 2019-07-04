@@ -6,6 +6,11 @@ export const userSignedOut = () => ({
   type: USER_SIGNED_OUT,
 })
 
+export const USER_LOGGING_IN = 'USER_LOGGING_IN'
+export const userLoggingIn = () => ({
+  type: USER_LOGGING_IN,
+})
+
 
 export const LOAD_USER_BEGIN = 'LOAD_USER_BEGIN'
 export const loadUserBegin = () => ({

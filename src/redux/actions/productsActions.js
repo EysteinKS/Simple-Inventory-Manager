@@ -33,21 +33,6 @@ export const loadProducts = () =>
       }
     })
 
-/* export const oldLoadProducts = () => {
-  return (dispatch, getState) => {
-    const state = getState()    
-    dispatch(loadProductsBegin())
-    firestore.doc(`${state.auth.currentLocation}/Products`).get()
-      .then(res => {
-        let data = res.data()
-        let products = data.products
-        console.log("Loaded products successfully")
-        dispatch(loadProductsSuccess(products))
-      })
-      .catch(err => loadProductsFailure(err))
-  }
-} */
-
 //SAVING
 
 export const SAVE_PRODUCTS_BEGIN = 'SAVE_PRODUCTS_BEGIN'

@@ -28,33 +28,13 @@ export const loadOrders = () =>
     loadOrdersSuccess,
     loadOrdersFailure,
     (data) => {
-      let orders = convertTimestampsToDates(data.orders, ["dateOrdered"])
+      let orders = convertTimestampsToDates(data.orders, ["dateOrdered", "dateReceived"])
+      let history = convertTimestampsToDates(data.history, ["dateOrdered", "dateReceived"])
       return {
         orders: orders, 
-        history: data.history, 
+        history: history, 
         currentID: data.currentID}
     })
-
-/* export const oldLoadOrders = () => {
-  return (dispatch, getState) => {
-    const state = getState()
-    dispatch(loadOrdersBegin())
-    firestore.doc(`${state.auth.currentLocation}/Orders`).get()
-      .then(res => {
-        let data = res.data()
-        let orders
-        if(data.orders && Array.isArray(data.orders)){
-          orders = data.orders.map(order => {
-            order.dateOrdered = convertTimestampToDate(order.dateOrdered)
-            return order
-          })
-        }
-        console.log("Loaded orders successfully")
-        dispatch(loadOrdersSuccess(orders, data.history, data.currentID))
-      })
-      .catch(err => dispatch(loadOrdersFailure(err.message)))
-  }
-} */
 
 //SAVING
 
@@ -80,30 +60,15 @@ export const saveOrders = () =>
     saveOrdersSuccess,
     saveOrdersFailure,
     (state) => {
+      let s = state.orders
+      let orders = convertTimestampsToDates(s.orders, ["dateOrdered", "dateReceived"])
+      let history = convertTimestampsToDates(s.history, ["dateOrdered", "dateReceived"])
       return {
-        orders: state.orders.orders,
-        history: state.orders.history,
-        currentID: state.orders.currentID
+        orders: orders,
+        history: history,
+        currentID: s.currentID
       }
     })
-
-/* export const oldSaveOrders = () => {
-  return (dispatch, getState) => {
-    const state = getState()
-    dispatch(saveOrdersBegin())
-    console.log(state.orders)
-    firestore.doc(`${state.auth.currentLocation}/Orders`).set({
-      orders: state.orders.orders,
-      history: state.orders.history,
-      currentID: state.orders.currentID
-    }, {merge: true})
-      .then(() => {
-        dispatch(saveOrdersSuccess())
-        dispatch(saveLastChanged("orders"))
-      })
-      .catch(err => dispatch(saveOrdersFailure(err)))
-  }
-} */
 
 //ORDER HANDLING
 

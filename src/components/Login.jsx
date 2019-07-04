@@ -1,34 +1,37 @@
-import React, {useState} from 'react'
-import {auth} from "../firebase/firebase"
+import React, { useState } from 'react'
+import { useDispatch } from "react-redux"
+import { userLoggingIn } from "../redux/actions/authActions"
+import { auth } from "../firebase/firebase"
 
 import Typography from "@material-ui/core/Typography"
 import TextField from "@material-ui/core/TextField"
-import CircularProgress from "@material-ui/core/CircularProgress"
 
-export default function Login() {
-  const [isLoggingIn, setLoggingIn] = useState(false)
+export default function Login({ setMessage }) {
   const [error, setError] = useState(null)
+  const dispatch = useDispatch()
+  const onLogin = (m) => {
+    setMessage(m)
+    dispatch(userLoggingIn())
+  }
 
-  if(isLoggingIn) return <div style={{display: "flex", justifyContent: "center", height: "100vh"}}><CircularProgress style={{ alignSelf: "center", justifySelf: "center" }}/></div>
   return (
     <>
       <Typography variant="h3" style={{ justifySelf: "center" }}>Innlogging</Typography>
-      <LoginForm setLoggingIn={bool => setLoggingIn(bool)} setError={bool => setError(bool)}/>
+      <LoginForm message={onLogin} setError={bool => setError(bool)}/>
       {error && <Typography>{error}</Typography>}
     </>
   )
 }
 
-const LoginForm = ({ setLoggingIn, setError }) => {
+const LoginForm = ({ message, setError }) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   const login = e => {
     e.preventDefault()
-    setLoggingIn(true)
+    message("Logging in...")
     auth.signInWithEmailAndPassword(email, password)
-      .then(() => setLoggingIn(false)).catch(err => {
-        setLoggingIn(false)
+      .catch(err => {
         setError(err.message)
       })
   }

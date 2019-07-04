@@ -11,7 +11,7 @@ export default function useLodadedGate() {
   const saleSelector = useSelector(state => state.sales, shallowEqual)
   const custSelector = useSelector(state => state.customers, shallowEqual) 
   
-  const isLoadingArr2 = useMemo(() => [
+  const isLoadingArr = useMemo(() => [
     authSelector.isLoading,
     prodSelector.isLoading, catSelector.isLoading, 
     ordSelector.isLoading, suppSelector.isLoading,
@@ -23,7 +23,7 @@ export default function useLodadedGate() {
     saleSelector.isLoading, custSelector.isLoading
   ])
 
-  const isLoadedArr2 = useMemo(() => [
+  const isLoadedArr = useMemo(() => [
     authSelector.isLoaded,
     prodSelector.isLoaded, catSelector.isLoaded,
     ordSelector.isLoaded, suppSelector.isLoaded,
@@ -35,7 +35,7 @@ export default function useLodadedGate() {
     saleSelector.isLoaded, custSelector.isLoaded
   ])
 
-  const loadingErrorArr2 = useMemo(() => [
+  const loadingErrorArr = useMemo(() => [
     authSelector.loadingError,
     prodSelector.loadingError, catSelector.loadingError,
     ordSelector.loadingError, suppSelector.loadingError,
@@ -47,9 +47,9 @@ export default function useLodadedGate() {
     saleSelector.loadingError, custSelector.loadingError
   ])
 
-  const isLoadingGate = useGate(isLoadingArr2, "OR", "isLoading");
-  const isLoadedGate = useGate(isLoadedArr2, "AND", "isLoaded");
-  const loadingErrorGate = useGate(loadingErrorArr2, "OR", "loadingError");
+  const isLoadingGate = useGate(isLoadingArr, "OR");
+  const isLoadedGate = useGate(isLoadedArr, "AND");
+  const loadingErrorGate = useGate(loadingErrorArr, "OR");
 
   useEffect(() => {
     //console.log(`isLoadingGate: ${isLoadingGate}, isLoadedGate: ${isLoadedGate}, loadingErrorGate: ${loadingErrorGate}`)

@@ -31,7 +31,7 @@ const initialState = {
       suppliers: new Date("2019-07-01T19:45:00")
     }
   },
-  loggedOut: false
+  loggingOut: false
 }
 
 export default (state = initialState, {type, payload}) => 
@@ -40,6 +40,7 @@ export default (state = initialState, {type, payload}) =>
       case action.USER_SIGNED_OUT:
         draft.loggingOut = false
         break
+      case action.USER_LOGGING_IN:
       case action.LOAD_USER_BEGIN:
         draft.isLoading = true
         draft.isLoaded = false

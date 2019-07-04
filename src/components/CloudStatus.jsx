@@ -22,7 +22,7 @@ export default function CloudStatus({ className, style, save, isSaving, isSaved,
   //saved : #bbff99
 
   if(error){
-    icon = <Icons.Warning/>
+    icon = <Icons.WarningIcon/>
     tooltip = "En feil oppsto! Prøv igjen?"
     styling["cursor"] = "pointer"
     styling["backgroundColor"] = "#ff9999"

@@ -170,7 +170,37 @@ export const isArrayEmpty = (arr) => {
   return (!Array.isArray(arr) || !arr.length)
 }
 
-//LOADING
-export const convertTimestampToDate = (timestamp) => {
-  return new Date(timestamp.seconds * 1000)
+//DATE HANDLING
+export const parseDate = (date) => {
+  const isObject = date => (typeof date === "object")
+  function isDateObject(date) {
+    return date && Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date);
+  }
+  if(isObject(date)){
+    if(isDateObject(date)) { 
+      return date 
+    } else if ("seconds" in date) {
+      return new Date(date.seconds * 1000)
+    } else {
+      throw new Error("Object in parseDate isn't a valid object!")
+    }
+  }
+
+  //dateStringRegex = YYYY-MM-DDThh:mm:ss
+  const dateStringRegex = /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d/
+  const isString = date => (typeof date === "string")
+  const isValidString = dateStringRegex.test(date)
+  if(isString(date)) {
+    if(isValidString){
+      const DATESTRING_LENGTH = 19
+      let dateString = date.substr(0, DATESTRING_LENGTH)
+      return new Date(dateString)
+    } else {
+      throw new Error("String in parseDate isn't a valid date string!")
+    }
+  }
+
+  if(date === null){
+    return date
+  }
 }

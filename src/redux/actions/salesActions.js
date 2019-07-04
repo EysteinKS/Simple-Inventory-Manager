@@ -28,36 +28,14 @@ export const loadSales = () =>
     loadSalesSuccess,
     loadSalesFailure,
     (data) => {
-      let sales = convertTimestampsToDates(data.sales, ["dateOrdered"])
+      let sales = convertTimestampsToDates(data.sales, ["dateOrdered", "dateSent"])
+      let history = convertTimestampsToDates(data.history, ["dateOrdered", "dateSent"])
       return {
         sales: sales,
-        history: data.history,
+        history: history,
         currentID: data.currentID
       }
     })
-
-/* export const oldLoadSales = () => {
-  return (dispatch, getState) => {
-    const state = getState()    
-    dispatch(loadSalesBegin())
-    firestore.doc(`${state.auth.currentLocation}/Sales`).get()
-      .then(res => {
-        let data = res.data()
-        let sales
-        if(data.sales && Array.isArray(data.sales)){
-          sales = data.sales.map(sale => {
-            sale.dateOrdered = new Date(sale.dateOrdered.seconds * 1000)
-            return sale
-          })
-        }
-        console.log("Loaded sales successfully")
-        dispatch(loadSalesSuccess(sales, data.history, data.currentID))
-      })
-      .catch(err => dispatch(loadSalesFailure(err.message)))
-  }
-} */
-
-//SAVING
 
 export const SAVE_SALES_BEGIN = 'SAVE_SALES_BEGIN'
 export const saveSalesBegin = () => ({
@@ -82,31 +60,14 @@ export const saveSales = () =>
     saveSalesFailure,
     (state) => {
       let s = state.sales
+      let sales = convertTimestampsToDates(s.sales, ["dateOrdered", "dateReceived"])
+      let history = convertTimestampsToDates(s.history, ["dateOrdered", "dateReceived"])
       return {
-        sales: s.sales,
-        history: s.history,
+        sales: sales,
+        history: history,
         currentID: s.currentID
       }
     })
-
-/* export const oldSaveSales = () => {
-  return (dispatch, getState) => {
-    const state = getState()
-    dispatch(saveSalesBegin())
-    firestore.doc(`${state.auth.currentLocation}/Sales`).set({
-      sales: state.sales.sales,
-      history: state.sales.history,
-      currentID: state.sales.currentID
-    }, {merge: true})
-      .then(() => {
-        dispatch(saveSalesSuccess())
-        dispatch(saveLastChanged("sales"))
-      })
-      .catch(err => dispatch(saveSalesFailure(err)))
-  }
-} */
-
-//SALE HANDLING
 
 export const CREATE_SALE = 'CREATE_SALE'
 export const createSale = (initializedSale) => ({
