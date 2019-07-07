@@ -28,9 +28,9 @@ import Icons from "../components/Icons";
 import Buttons from "../components/Buttons";
 import useGate from "../hooks/useGate";
 
-import useSortableList, { TSetList } from "../hooks/useSortableList";
+import useSortableList from "../hooks/useSortableList";
 import produce from "immer";
-import { RootState, IProduct, IOrder, IOrderedProduct } from "../redux/types";
+import { RootState, IOrder, IOrderedProduct } from "../redux/types";
 
 type TOrdered = { productID: number, amount: number }
 type TEdit = (id: number) => void

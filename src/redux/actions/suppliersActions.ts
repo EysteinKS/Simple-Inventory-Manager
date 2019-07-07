@@ -1,4 +1,5 @@
 import { getSectionFromFirestore, setSectionToFirestore } from "../middleware/thunks"
+import { ISupplier } from "../types";
 
 const thisSection = "suppliers"
 
@@ -8,13 +9,17 @@ export const loadSuppliersBegin = () => ({
 })
 
 export const LOAD_SUPPLIERS_SUCCESS = 'LOAD_SUPPLIERS_SUCCESS'
-export const loadSuppliersSuccess = ({ suppliers, currentID }) => ({
+type TLoadSuppliersSuccess = {
+  suppliers: ISupplier[],
+  currentID: number
+}
+export const loadSuppliersSuccess = ({ suppliers, currentID }: TLoadSuppliersSuccess) => ({
   type: LOAD_SUPPLIERS_SUCCESS,
   payload: {suppliers, currentID}
 })
 
 export const LOAD_SUPPLIERS_FAILURE = 'LOAD_SUPPLIERS_FAILURE'
-export const loadSuppliersFailure = (error) => ({
+export const loadSuppliersFailure = (error: string) => ({
   type: LOAD_SUPPLIERS_FAILURE,
   payload: error
 })
@@ -60,7 +65,7 @@ export const saveSuppliersSuccess = () => ({
 })
 
 export const SAVE_SUPPLIERS_FAILURE = 'SAVE_SUPPLIERS_FAILURE'
-export const saveSuppliersFailure = (error) => ({
+export const saveSuppliersFailure = (error: string) => ({
   type: SAVE_SUPPLIERS_FAILURE,
   payload: error
 })
@@ -95,7 +100,7 @@ export const saveSuppliers = () =>
 } */
 
 export const SAVE_CREATED_SUPPLIER = 'SAVE_CREATED_SUPPLIER'
-export const saveCreatedSupplier = (name) => ({
+export const saveCreatedSupplier = (name: string) => ({
   type: SAVE_CREATED_SUPPLIER,
   payload: name
 })

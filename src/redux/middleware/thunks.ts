@@ -10,7 +10,6 @@ import {
   RootState
 } from "../types"
 import { Action } from "redux";
-import { TSThisType } from "@babel/types";
 
 interface IStringKeys {[index:string]: string}
 
@@ -76,7 +75,9 @@ export const getSectionFromFirestore = (
  * @returns {Array}
  */
 
-export const convertTimestampsToDates = (data: Array<any>, keys: string[]): Array<any> => {
+type TDateKeys = "dateOrdered" | "dateReceived" | "dateSent"
+
+export const convertTimestampsToDates = (data: Array<any>, keys: TDateKeys[]): Array<any> => {
   if(!data || !Array.isArray(data)){
     throw new Error("Invalid data in convertTimestampsToDates")
   }

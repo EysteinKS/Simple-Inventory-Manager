@@ -2,7 +2,7 @@
 import * as action from "../actions/categoriesActions";
 import produce from "immer";
 import drafts from "./drafts"
-import { Reducer, AnyAction } from "redux";
+import { AnyAction } from "redux";
 import { CategoriesState } from "../types";
 
 const initialState = drafts.initializeState({categories: []}) as CategoriesState

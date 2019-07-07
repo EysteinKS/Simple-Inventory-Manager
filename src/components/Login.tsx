@@ -90,7 +90,7 @@ const LoginForm = ({ message, setError }: TLoginForm) => {
         name="password"
         value={password}
         onChange={(e: ChangeEvent<HTMLInputElement>)=> handlePassword(e)} 
-        data-minLength="8"
+        data-minlength="8"
         autoComplete="new-password"
         />
       <input style={submitStyle} type="submit" value="Logg inn"/>

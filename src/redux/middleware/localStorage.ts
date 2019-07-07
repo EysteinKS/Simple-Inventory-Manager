@@ -1,5 +1,4 @@
 import store from "store"
-import { RootState } from "../types"
 
 interface IStringKeys {
   [index: string]: string

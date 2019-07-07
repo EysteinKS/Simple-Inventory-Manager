@@ -3,7 +3,6 @@ import {
   authKey, 
   sectionKeys, 
   setLocalStorage,
-  ICombinedKeys,
   ISectionKeys
 } from "./localStorage"
 import { fsActions, lsBeginActions, lsSuccessActions } from "../actions"
@@ -12,15 +11,10 @@ import {
   RootState
 } from "../types"
 import {
-  IDispatch,
   TDispatch,
   IThunkAction,
 } from "./types"
 import {
-  ILoadActions
-} from "../actions/"
-import {
-  ThunkAction,
   ThunkDispatch
 } from "redux-thunk"
 import {
@@ -41,7 +35,6 @@ export const getInventory = (message: Function): IThunkAction => {
     let state = getState()
     let fsLastChanged = state.auth.lastChanged
     let ls = getAllStorage() as RootState
-    let lsLastChanged = ls.auth.lastChanged
 
     //console.log("localStorage data: ", ls)
     //If no localstorage data
@@ -50,6 +43,7 @@ export const getInventory = (message: Function): IThunkAction => {
       setLocalStorage(authKey, {lastChanged: fsLastChanged})
       return
     }
+    let lsLastChanged = ls.auth.lastChanged
 
     let localStorageToTimeString = new Date(lsLastChanged.global).toString()
     //console.log(localStorageToTimeString)

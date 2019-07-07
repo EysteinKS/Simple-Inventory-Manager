@@ -2,7 +2,7 @@ import * as action from "../actions/authActions"
 import { setLocalStorage, authKey } from "../middleware/localStorage"
 import produce from "immer"
 import { AuthState } from "../types";
-import { Reducer, AnyAction } from "redux"
+import { AnyAction } from "redux"
 
 const initialState: AuthState = {
   firstName: "",

@@ -2,7 +2,7 @@
 import * as action from "../actions/customersActions"
 import produce from "immer"
 import drafts from "./drafts"
-import { AnyAction, Reducer } from "redux";
+import { AnyAction } from "redux";
 import { CustomersState } from "../types";
 
 const initialState: CustomersState = drafts.initializeState({customers: []})

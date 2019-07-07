@@ -47,7 +47,7 @@ export default function Header({ locationIsLoaded }: THeader) {
   }
 
   return (
-    <header data-style={{
+    <header style={{
       display: "grid",
       gridTemplateColumns: "1fr 1fr 1fr",
       height: "5.1vh",
@@ -56,7 +56,7 @@ export default function Header({ locationIsLoaded }: THeader) {
       borderBottom: "gray 2px solid",
       backgroundColor: bckColor,
       ...fixedPosition
-    }}>
+    } as any}>
     {locationIsLoaded && <AuthHeader/>}
     </header>
   )

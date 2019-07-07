@@ -1,4 +1,5 @@
 import { getSectionFromFirestore, setSectionToFirestore } from "../middleware/thunks"
+import { IProduct } from "../types";
 
 const thisSection = "products"
 
@@ -10,13 +11,17 @@ export const loadProductsBegin = () => ({
 })
 
 export const LOAD_PRODUCTS_SUCCESS = 'LOAD_PRODUCTS_SUCCESS'
-export const loadProductsSuccess = ({ products, currentID }) => ({
+type TLoadProductsSuccess = {
+  products: IProduct[],
+  currentID: number
+}
+export const loadProductsSuccess = ({ products, currentID }: TLoadProductsSuccess) => ({
   type: LOAD_PRODUCTS_SUCCESS,
   payload: { products, currentID }
 })
 
 export const LOAD_PRODUCTS_FAILURE = 'LOAD_PRODUCTS_FAILURE'
-export const loadProductsFailure = (error) => ({
+export const loadProductsFailure = (error: string) => ({
   type: LOAD_PRODUCTS_FAILURE,
   payload: error
 })
@@ -46,7 +51,7 @@ export const saveProductsSuccess = () => ({
 })
 
 export const SAVE_PRODUCTS_FAILURE = 'SAVE_PRODUCTS_FAILURE'
-export const saveProductsFailure = (error) => ({
+export const saveProductsFailure = (error: string) => ({
   type: SAVE_PRODUCTS_FAILURE,
   payload: error
 })
@@ -81,26 +86,26 @@ export const saveProducts = () =>
 //PRODUCT HANDLING
 
 export const CREATE_PRODUCT = 'CREATE_PRODUCT'
-export const createProduct = (initializedProduct) => ({
+export const createProduct = (initializedProduct: IProduct) => ({
   type: CREATE_PRODUCT,
   payload: initializedProduct
 })
 
 export const SAVE_CREATED_PRODUCT = 'SAVE_CREATED_PRODUCT'
-export const saveCreatedProduct = (created) => ({
+export const saveCreatedProduct = (created: IProduct) => ({
   type: SAVE_CREATED_PRODUCT,
   payload: created
 })
 
 export const EDIT_PRODUCT = 'EDIT_PRODUCT'
-export const editProduct = (id) => ({
+export const editProduct = (id: number) => ({
   type: EDIT_PRODUCT,
   payload: id
 })
 
 
 export const SAVE_EDITED_PRODUCT = 'SAVE_EDITED_PRODUCT'
-export const saveEditedProduct = (edited) => ({
+export const saveEditedProduct = (edited: IProduct) => ({
   type: SAVE_EDITED_PRODUCT,
   payload: edited
 })
@@ -112,13 +117,13 @@ export const clearCurrentProduct = () => ({
 
 
 export const TOGGLE_PRODUCT = 'TOGGLE_PRODUCT'
-export const toggleProduct = id => ({
+export const toggleProduct = (id: number) => ({
   type: TOGGLE_PRODUCT,
   payload: id
 })
 
 export const UPDATE_PRODUCT_AMOUNT = 'UPDATE_PRODUCT_AMOUNT'
-export const updateProductAmount = (id, amount) => ({
+export const updateProductAmount = (id: number, amount: number) => ({
   type: UPDATE_PRODUCT_AMOUNT,
   payload: {id, amount}
 })
@@ -128,13 +133,13 @@ export const updateProductAmount = (id, amount) => ({
 
 
 export const SORT_PRODUCTS = "SORT_PRODUCTS"
-export const sortProducts = (func) => ({
+export const sortProducts = (func: Function) => ({
   type: SORT_PRODUCTS,
   payload: func
 })
 
 export const FILTER_PRODUCTS = 'FILTER_PRODUCTS'
-export const filterProducts = (func) => ({
+export const filterProducts = (func: Function) => ({
   type: FILTER_PRODUCTS,
   payload: func
 })

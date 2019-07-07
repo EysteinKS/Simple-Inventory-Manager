@@ -1,4 +1,4 @@
-import React, {useState, Dispatch, SetStateAction, FC} from "react"
+import React, {useState, Dispatch, SetStateAction} from "react"
 import {useSelector} from "react-redux"
 
 import ReactModal from "react-modal"

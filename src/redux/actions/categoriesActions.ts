@@ -1,11 +1,5 @@
 import { getSectionFromFirestore, setSectionToFirestore } from "../middleware/thunks"
-
-import {
-  IThunkAction
-} from "../middleware/types"
-import {
-  ICategory
-} from "../types"
+import { ICategory } from "../types"
 
 const thisSection = "categories"
 

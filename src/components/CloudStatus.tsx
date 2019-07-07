@@ -20,7 +20,7 @@ export default function CloudStatus({ className, style, save, isSaving, isSaved,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "3vh", 
+    height: "4vh", 
     width: "4vw", 
     backgroundColor: "lightgrey", 
     cursor: "default",
@@ -56,7 +56,7 @@ export default function CloudStatus({ className, style, save, isSaving, isSaved,
     <>
       <button 
         data-tip data-for="cloudTooltip"
-        onClick={((!isSaving && !isSaved) || error) && save}
+        onClick={((!isSaving && !isSaved) || error) ? save : undefined}
         style={styling}
       >
         {icon}
