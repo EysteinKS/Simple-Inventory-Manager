@@ -1,6 +1,6 @@
 import { updateProductAmount, saveProducts } from "./productsActions"
 import { getSectionFromFirestore, setSectionToFirestore, convertTimestampsToDates } from "../middleware/thunks"
-import { ISale, IOrderedProduct } from "../types";
+import { ISale, IOrderedProduct, SalesState } from "../types";
 import { IThunkAction } from "../middleware/types";
 
 const thisSection = "sales"
@@ -66,7 +66,7 @@ export const saveSales = () =>
     saveSalesSuccess,
     saveSalesFailure,
     (state) => {
-      let s = state.sales
+      let s = state.sales as SalesState
       let sales = convertTimestampsToDates(s.sales, ["dateOrdered", "dateSent"])
       let history = convertTimestampsToDates(s.history, ["dateOrdered", "dateSent"])
       return {

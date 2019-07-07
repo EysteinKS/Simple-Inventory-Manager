@@ -68,16 +68,27 @@ export const getSectionFromFirestore = (
       .catch(err => dispatch(onFailure(err.message)))
   }
 
+type TDateKeys = "dateOrdered" | "dateReceived" | "dateSent"
+type TSaleDates = {
+  dateOrdered: Date | string | null,
+  dateSent: Date | string | null,
+  [key: string]: any
+}
+type TOrderDates = {
+  dateOrdered: Date | string | null,
+  dateReceived: Date | string | null,
+  [key: string]: any
+}
+type TArrayWithDates = Array<TSaleDates | TOrderDates>
+
 /**
  * @function
  * @param {Array} data - Array of data which contains keys provided
  * @param {Array} keys - Array of keys that contain timestamps
- * @returns {Array}
+ * @returns Array with updated date properties
  */
 
-type TDateKeys = "dateOrdered" | "dateReceived" | "dateSent"
-
-export const convertTimestampsToDates = (data: Array<any>, keys: TDateKeys[]): Array<any> => {
+export const convertTimestampsToDates = (data: TArrayWithDates, keys: TDateKeys[]): Array<any> => {
   if(!data || !Array.isArray(data)){
     throw new Error("Invalid data in convertTimestampsToDates")
   }
