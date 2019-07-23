@@ -5,35 +5,39 @@ import { AuthState } from "../types";
 import { AnyAction } from "redux"
 
 const initialState: AuthState = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  role: "user",
+  user: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    role: "user",
+    locations: [],
+    currentLocation: "",
+    settings: {
+      language: "NO",
+      isInactiveVisible: true
+    }
+  },
+  location: {
+    name: "",
+    logoUrl: null,
+    primaryColor: null,
+    lastChanged: {
+      global: new Date("2019-07-01T19:45:00"),
+      sections: {
+        categories: new Date("2019-07-01T19:45:00"),
+        customers: new Date("2019-07-01T19:45:00"),
+        orders: new Date("2019-07-01T19:45:00"),
+        sales: new Date("2019-07-01T19:45:00"),
+        suppliers: new Date("2019-07-01T19:45:00")
+      }
+    }
+  },
   isLoading: false,
   isLoaded: false,
   loadingError: null,
   isSaving: false,
   isSaved: true,
   savingError: null,
-  currentLocation: null,
-  locationName: "",
-  logoUrl: null,
-  primaryColor: null,
-  locations: [],
-  settings: {
-    language: "NO",
-    isInactiveVisible: true
-  },
-  lastChanged: {
-    global: new Date("2019-07-01T19:45:00"),
-    sections: {
-      categories: new Date("2019-07-01T19:45:00"),
-      customers: new Date("2019-07-01T19:45:00"),
-      orders: new Date("2019-07-01T19:45:00"),
-      sales: new Date("2019-07-01T19:45:00"),
-      suppliers: new Date("2019-07-01T19:45:00")
-    }
-  },
   loggingOut: false,
   error: null
 }
@@ -51,30 +55,30 @@ export default (state: AuthState = initialState, { type, payload }: AnyAction) =
         draft.loadingError = null
         break
       case action.LOAD_USER_SUCCESS:
-        let newDraft = { ...draft, ...payload }
-        newDraft.isLoading = false
-        newDraft.isLoaded = true
-        return newDraft
+        draft.user = payload
+        draft.isLoading = false
+        draft.isLoaded = true
+        break
       case action.LOAD_USER_FAILURE:
         draft.isLoading = false
         draft.isLoaded = true
         draft.loadingError = payload
         break
       case action.SET_LOCATION_NAME:
-        draft.locationName = payload
+        draft.location.name = payload
         break
       case action.SET_LOCATION_LOGO:
-        draft.logoUrl = payload
+        draft.location.logoUrl = payload
         break
       case action.SET_LOCATION_COLOR:
-        draft.primaryColor = payload
+        draft.location.primaryColor = payload
         break
       case action.SET_ALL_LAST_CHANGED:
-        draft.lastChanged = payload
+        draft.location.lastChanged = payload
         break
       case action.SET_LAST_CHANGED: 
-        draft.lastChanged.global = payload.date
-        draft.lastChanged.sections[payload.section] = payload.date
+        draft.location.lastChanged.global = payload.date
+        draft.location.lastChanged.sections[payload.section] = payload.date
         break
       case action.RESET_AUTH:
         let resetDraft = { ...initialState, loggingOut: true }

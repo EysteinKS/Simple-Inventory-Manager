@@ -90,15 +90,7 @@ export default function Sales(){
           <CustomersButton/>
           <Title>Salg</Title>
           <br/>
-          <CloudStatus 
-            save={() => {
-              dispatch(saveSales())
-              dispatch(saveCustomers())
-            }}
-            isSaving={savingGate}
-            isSaved={savedGate}
-            error={errorGate}
-          />
+          <CloudStatus/>
         </Row>
         <RowSplitter/>
         <Row grid="14% 1% 14% 1% 14% 1% 15%">

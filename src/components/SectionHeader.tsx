@@ -6,7 +6,7 @@ export default function SectionHeader({
   children
 }: { children: ReactNode }) {
   const defaultColor = "#a9a9a9"
-  const primaryColor = useSelector((state: RootState) => state.auth.primaryColor)
+  const primaryColor = useSelector((state: RootState) => state.auth.location.primaryColor)
   const bckColor = useMemo(() => {
     if(primaryColor){
       return primaryColor

@@ -2,17 +2,10 @@
 import React, { MouseEventHandler } from "react"
 import Icons from "./Icons"
 import ReactTooltip from "react-tooltip"
+import useSavingGate from "../hooks/useSaving";
 
-interface ICloudStatus {
-  className?: string | null,
-  style?: any,
-  save: MouseEventHandler<HTMLButtonElement>,
-  isSaving: Boolean,
-  isSaved: Boolean,
-  error: Boolean
-}
-
-export default function CloudStatus({ className, style, save, isSaving, isSaved, error }: ICloudStatus) {
+export default function CloudStatus() {
+  const [isSaving, isSaved, error, save] = useSavingGate()
 
   let icon = <Icons.CloudDone/>
   let tooltip
@@ -56,7 +49,7 @@ export default function CloudStatus({ className, style, save, isSaving, isSaved,
     <>
       <button 
         data-tip data-for="cloudTooltip"
-        onClick={((!isSaving && !isSaved) || error) ? save : undefined}
+        onClick={() => (typeof save !== "boolean") && save()}
         style={styling}
       >
         {icon}

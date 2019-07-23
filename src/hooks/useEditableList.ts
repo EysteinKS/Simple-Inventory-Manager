@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react"
 
-export default function useEditableList(arr = []) {
+export default function useEditableList(arr: any[] = []) {
   const [list, setList] = useState(arr)
 
   useEffect(() => {

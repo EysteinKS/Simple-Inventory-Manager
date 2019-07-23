@@ -10,6 +10,7 @@ import {
   RootState
 } from "../types"
 import { Action } from "redux";
+import { saveReport } from "../actions/reportsActions";
 
 interface IStringKeys {[index:string]: string}
 
@@ -19,15 +20,16 @@ const firestoreSections: IStringKeys = {
   orders: "Orders",
   products: "Products",
   sales: "Sales",
-  suppliers: "Suppliers"
+  suppliers: "Suppliers",
+  reports: "Reports"
 }
 
 const getSectionString = (section: string) => {
   return firestoreSections[section]
 }
 
-const getCurrentLocation = (state: RootState) => {
-  const location = state.auth.currentLocation
+export const getCurrentLocation = (state: RootState) => {
+  const location = state.auth.user.currentLocation
   return location
 }
 
@@ -105,6 +107,7 @@ export const convertTimestampsToDates = (data: TArrayWithDates, keys: TDateKeys[
 }
 
 export const setSectionToFirestore = (
+  date: Date,
   section: string, 
   onBegin: TStringAction, 
   onSuccess: TStringAction, 
@@ -119,7 +122,7 @@ export const setSectionToFirestore = (
     secondaryFirestore.doc(`${location}/${sectionString}`).set(dataToSave, {merge:true})
       .then(() => {
         dispatch(onSuccess())
-        dispatch(saveLastChanged(section))
+        dispatch(saveLastChanged(section, date))
         setLocalStorage(section, {...dataToSave})
       })
       .catch(err => dispatch(onFailure(err.message)))

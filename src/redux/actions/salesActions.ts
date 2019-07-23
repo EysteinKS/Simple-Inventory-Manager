@@ -60,8 +60,10 @@ export const saveSalesFailure = (error: string) => ({
   payload: error
 })
 
-export const saveSales = () =>
-  setSectionToFirestore(thisSection,
+export const saveSales = (date: Date) =>
+  setSectionToFirestore(
+    date,
+    thisSection,
     saveSalesBegin,
     saveSalesSuccess,
     saveSalesFailure,
@@ -117,7 +119,6 @@ export const didSendSale = (id: number, ordered: IOrderedProduct[]): IThunkActio
       dispatch(updateProductAmount(product.productID, -Math.abs(product.amount)))
     })
     dispatch(sendSale(id))
-    dispatch(saveProducts())
   }
 }
 

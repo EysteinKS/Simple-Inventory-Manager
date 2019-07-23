@@ -51,8 +51,10 @@ export const saveCategoriesFailure = (error: string) => ({
   payload: error
 })
 
-export const saveCategories = () => 
-  setSectionToFirestore(thisSection,
+export const saveCategories = (date: Date) => 
+  setSectionToFirestore(
+    date,
+    thisSection,
     saveCategoriesBegin,
     saveCategoriesSuccess,
     saveCategoriesFailure,

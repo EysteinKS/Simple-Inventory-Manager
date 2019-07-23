@@ -3,7 +3,9 @@ import {
   authKey, 
   sectionKeys, 
   setLocalStorage,
-  ISectionKeys
+  ISectionKeys,
+  //eslint-disable-next-line
+  clearLocalStorage
 } from "./localStorage"
 import { fsActions, lsBeginActions, lsSuccessActions } from "../actions"
 
@@ -33,17 +35,17 @@ export const sections = {
 export const getInventory = (message: Function): IThunkAction => {
   return async (dispatch, getState) => {
     let state = getState()
-    let fsLastChanged = state.auth.lastChanged
+    let fsLastChanged = state.auth.location.lastChanged
     let ls = getAllStorage() as RootState
 
-    //console.log("localStorage data: ", ls)
+    console.log("localStorage data: ", ls)
     //If no localstorage data
     if(!ls) {
       getAllFromFirestore(sectionKeys, dispatch, message)
-      setLocalStorage(authKey, {lastChanged: fsLastChanged})
+      setLocalStorage(authKey, {location: { lastChanged: fsLastChanged}})
       return
     }
-    let lsLastChanged = ls.auth.lastChanged
+    let lsLastChanged = ls.auth.location.lastChanged
 
     let localStorageToTimeString = new Date(lsLastChanged.global).toString()
     //console.log(localStorageToTimeString)

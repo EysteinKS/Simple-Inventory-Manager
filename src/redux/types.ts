@@ -17,7 +17,7 @@ interface LoadingState {
   error: string | null
 }
 
-interface SectionState extends SavingState, LoadingState, IStringKey {
+interface SectionState extends SavingState, LoadingState {
   currentID: number
 }
 
@@ -34,33 +34,28 @@ export interface LastChanged {
 }
 
 export interface UserState {
-  currentLocation: string,
-  email: string,
   firstName: string,
   lastName: string,
-  locations: string[],
+  email: string,
   role: string,
+  locations: string[],
+  currentLocation: string,
   settings: {
     isInactiveVisible: boolean,
     language: string
   }
 }
 
-export interface AuthState extends SavingState, LoadingState, IStringKey {
-  firstName: string,
-  lastName: string,
-  email: string,
-  role: string,
-  currentLocation: string | null,
-  locationName: string,
+export interface LocationState {
+  name: string,
   logoUrl: string | null,
   primaryColor: string | null,
-  locations: string[],
-  settings: {
-    language: string,
-    isInactiveVisible: boolean
-  },
-  lastChanged: LastChanged,
+  lastChanged: LastChanged
+}
+
+export interface AuthState extends SavingState, LoadingState {
+  user: UserState,
+  location: LocationState
   loggingOut: boolean
 }
 
@@ -131,6 +126,7 @@ export interface ISale {
 export interface SalesState extends SectionState {
   sales: Array<ISale>,
   sortedSales: Array<ISale>,
+  currentSale: ISale | null,
   history: Array<ISale>
 }
 
@@ -143,7 +139,109 @@ export interface SuppliersState extends SectionState {
   suppliers: Array<ISupplier>
 }
 
-export type AnyState  = 
+export interface ILoggedChange {
+  timeChanged: string
+  changedBy: {
+    email: string
+    name: string
+  }
+}
+
+export interface ILoggedProduct {
+  productID: number
+  category: {
+    categoryID: number
+    name: string
+  }
+  name: string
+  amount: number
+  active: boolean
+}
+
+export interface ILoggedOrdered {
+  amount: number
+  productID: number
+  name: string
+}
+
+export interface ILoggedOrder {
+  orderID: number
+  supplier: {
+    supplierID: number
+    name: string
+  }
+  dateOrdered: string
+  dateReceived: string | null
+  ordered: ILoggedOrdered[]
+}
+
+export interface ILoggedSale {
+  saleID: number
+  customer: {
+    customerID: number
+    name: string
+  }
+  dateOrdered: string
+  dateSent: string | null
+  ordered: ILoggedOrdered[]
+}
+
+export interface IReport {
+  date: string
+  changeLog: Array<ILoggedChange>
+  products: {
+    new: number[] | never[]
+    all: ILoggedProduct[]
+  }
+  orders: {
+    new: number[] | never[]
+    active: ILoggedOrder[]
+    received: number[] | never[]
+  }
+  sales: {
+    new: number[] | never []
+    active: ILoggedSale[]
+    received: number[] | never[]
+  }
+}
+
+export interface IDate {
+  year: string,
+  month: string,
+  day: string
+}
+
+export interface IbyDate {
+  [key: string]: IbyYear
+}
+
+export interface IbyYear {
+  [key: string]: Array<string>
+}
+
+export interface IReportsDates {
+  isLoading: boolean
+  isLoaded: boolean
+  loadingError: string | null
+  byDate: IbyDate | null
+}
+
+export interface IReportsReport {
+  isLoading: boolean
+  isLoaded: boolean
+  loadingError: string | null
+  report: IReport | null
+}
+
+export interface ReportsState {
+  isSaving: boolean
+  isSaved: boolean
+  savingError: string | null
+  dates: IReportsDates
+  report: IReportsReport
+}
+
+export type AnyState = 
   AuthState | 
   CategoriesState |
   CustomersState |
@@ -160,5 +258,6 @@ export interface RootState {
   readonly orders: OrdersState,
   readonly sales: SalesState,
   readonly suppliers: SuppliersState,
+  readonly reports: ReportsState,
   [index: string]: any
 }

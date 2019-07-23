@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import * as firebase from 'firebase/app';
 import { FirebaseAppConfig } from "@firebase/app-types"
 import { FirebaseFirestore } from "@firebase/firestore-types"
 import 'firebase/auth';
@@ -31,6 +31,7 @@ const firestore = firebase.firestore();
 const auth = firebase.auth();
 
 export {
+  firebase,
   firestore,
   auth,
   secondaryFirestore,

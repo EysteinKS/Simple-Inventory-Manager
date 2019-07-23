@@ -11,7 +11,7 @@ import Icons from "./Icons";
 import ProductName from "./ProductName";
 import SelectProduct from "./SelectProduct";
 import useEditableList from "../hooks/useEditableList"
-import { RootState, ICustomer, IOrderedProduct } from "../redux/types";
+import { RootState, ICustomer, IOrderedProduct, ISale } from "../redux/types";
 
 ReactModal.setAppElement("#root");
 
@@ -21,7 +21,7 @@ type TEditSale = {
 }
 
 export default function EditSale({ isOpen, close }: TEditSale) {
-  const current = useSelector((state: RootState) => state.sales.currentSale);
+  const current = useSelector((state: RootState) => state.sales.currentSale) as ISale
   const customers = useSelector((state: RootState) => state.customers.customers);
   const dispatch = useDispatch();
 
@@ -137,7 +137,7 @@ export default function EditSale({ isOpen, close }: TEditSale) {
         </Collapse>
         <Ordered
           ordered={ordered}
-          add={productID => addProduct({productID: productID, amount: 0})}
+          add={productID => addProduct({productID: productID, amount: 1})}
           edit={(product, index) => editProduct(product, index)}
           remove={productID => removeProduct(productID)}
         />

@@ -12,19 +12,21 @@ const valuesToLowercase = (obj: any = {}) =>
   }, {})
 
 type TFilter = (item: string | any, search: string) => boolean
+type TUseSearchReturn = [any[], (search: string) => void]
 
 /**
  * Hook that filters a list based on a callback function
  * 
- * @param {Array} list
- * @param {Function} filters
+ * @param {array} list
+ * @param {TFilter} filters
+ * @returns {TUseSearchReturn} An array with the filtered array and a function to change search string
  * 
  * @example
  * let anyArray = []
  * let callback = (item, search) => (item.includes(search))
  * const [filtered, setSearch] = useSearch(anyArray, callback)
  */
-export default function useSearch(list: any[] = [], filters: TFilter){
+export default function useSearch(list: any[], filters: TFilter): TUseSearchReturn {
   const [filtered, setFiltered] = useState(list)
   const [search, setSearch] = useState("")
 

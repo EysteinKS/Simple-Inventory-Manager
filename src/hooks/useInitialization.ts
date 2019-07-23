@@ -21,7 +21,7 @@ export default function useInitialization() {
   const [user, initializingUser] = useAuthState(auth);
   const dispatch = useDispatch();
   const authIsLoaded = useSelector((state: RootState) => state.auth.isLoaded);
-  const authCurrentLocation = useSelector((state: RootState) => state.auth.currentLocation);
+  const authCurrentLocation = useSelector((state: RootState) => state.auth.user.currentLocation);
   const userLoggingOut = useSelector((state: RootState) => state.auth.loggingOut);
   const [isLoadingUser, setLoadingUser] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("Initializing...")
@@ -42,7 +42,7 @@ export default function useInitialization() {
         console.log("Time until interactive...")
         console.time("Time until interactive")
       }
-    } else if (!user && !initializingUser){
+    } else if (!user && !initializingUser) {
       if(timer){
         setTimer(false)
         console.timeEnd("Time until interactive")

@@ -63,8 +63,10 @@ export const saveOrdersFailure = (error: string) => ({
   payload: error
 })
 
-export const saveOrders = () =>
-  setSectionToFirestore(thisSection,
+export const saveOrders = (date: Date) =>
+  setSectionToFirestore(
+    date,
+    thisSection,
     saveOrdersBegin,
     saveOrdersSuccess,
     saveOrdersFailure,
@@ -124,8 +126,6 @@ export const didReceiveOrder = (
       dispatch(updateProductAmount(product.productID, product.amount))
     })
     dispatch(receivedOrder(id))
-    dispatch(saveProducts())
-    dispatch(saveOrders())
   }
 }
 

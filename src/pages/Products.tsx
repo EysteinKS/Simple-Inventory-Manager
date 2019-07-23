@@ -110,15 +110,7 @@ export default function Products(){
           <CategoriesButton />
           <Title>Produkter</Title>
           <br/>
-          <CloudStatus 
-            save={() => {
-              dispatch(saveProducts())
-              dispatch(saveCategories())
-            }}
-            isSaving={savingGate}
-            isSaved={savedGate}
-            error={errorGate}
-          />
+          <CloudStatus/>
         </Row>
         <RowSplitter/>
         <Row grid="9% 1% 18% 1% 18% 1% repeat(5, 8%) 12%" cName="products-header">

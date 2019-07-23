@@ -25,11 +25,11 @@ const loadBegin = (draft: AnyState) => {
 const loadSuccess = (
   draft: AnyState, 
   targets: string[] | string, 
-  payload: AnyState
+  payload: any
   ) => {
   //console.log("loadSuccess payload: ", payload)
   //console.log("Input of loadSuccess: ", {draft, targets, payload})
-  let newDraft = {...draft, ...payload}
+  let newDraft = {...draft, ...payload} as any
   newDraft.isLoading = false
   newDraft.isLoaded = true
   if(Array.isArray(targets)){
@@ -78,11 +78,6 @@ const saveFailure = (draft: AnyState, error: string) => {
   return ret
 }
 
-const setLastChanged = (draft: AnyState, date: Date) => {
-  draft.lastChanged = date
-  return draft
-}
-
 const resetReducer = (initialState: AnyState) => {
   let ret = {...initialState}
   ret.isLoaded = false
@@ -97,6 +92,5 @@ export default {
   saveBegin,
   saveSuccess,
   saveFailure,
-  setLastChanged,
   resetReducer
 }

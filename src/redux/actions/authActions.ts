@@ -75,26 +75,25 @@ export const setLastChanged = (section: string, date: string | Date) => ({
   payload: { section, date }
 })
 
-export const saveLastChanged = (section: string): IThunkAction => {
+export const saveLastChanged = (section: string, date: Date): IThunkAction => {
   return async (dispatch, getState) => {
     let state = getState()
-    let dateChanged = new Date()
-    firestore.doc(`Clients/${state.auth.currentLocation}`).update({
-      "lastChanged.global": dateChanged,
-      [`lastChanged.sections.${section}`]: dateChanged
+    firestore.doc(`Clients/${state.auth.user.currentLocation}`).update({
+      "lastChanged.global": date,
+      [`lastChanged.sections.${section}`]: date
     }).then(() => {
-      dispatch(setLastChanged(section, dateChanged))
+      dispatch(setLastChanged(section, date))
       let updatedAuthStorage = {
         ...state.auth, 
         lastChanged: {
-          global: dateChanged,
+          global: date,
            sections: {
-             ...state.auth.lastChanged.sections, 
-             [section]: dateChanged
+             ...state.auth.location.lastChanged.sections, 
+             [section]: date
             }
           }
         }
-      setLocalStorage(authKey, updatedAuthStorage)
+      setLocalStorage(authKey, { location: updatedAuthStorage })
     }).catch(err => {console.log("error saving lastChanged: ", err.message)})
   }  
 }

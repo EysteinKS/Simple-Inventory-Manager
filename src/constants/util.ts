@@ -240,3 +240,15 @@ export const parseDate = (date: Date | string | any) => {
     return date
   }
 }
+
+export const findInArray = (arr: any[], key: string | number, value: any) => {
+  return arr[arr.findIndex(i => i[key] === value)]
+}
+
+export const addZero = (str: string) => {
+  if(str.length === 1){
+    return "0" + str
+  } else {
+    return str
+  }
+}

@@ -96,22 +96,6 @@ export default function Orders() {
     );
   };
 
-  const allIsSaving = useMemo(() => [orders.isSaving, suppliers.isSaving], [
-    orders.isSaving,
-    suppliers.isSaving
-  ]);
-  const savingGate = useGate(allIsSaving, "OR");
-  const allIsSaved = useMemo(() => [orders.isSaved, suppliers.isSaved], [
-    orders.isSaved,
-    suppliers.isSaved
-  ]);
-  const savedGate = useGate(allIsSaved, "AND", true);
-  const allError = useMemo(() => [orders.savingError, suppliers.savingError], [
-    orders.savingError,
-    suppliers.savingError
-  ]);
-  const errorGate = useGate(allError, "OR");
-
   return (
     <div>
       <SectionHeader>
@@ -120,16 +104,7 @@ export default function Orders() {
           <SuppliersButton />
           <Title>Bestillinger</Title>
           <br />
-          <CloudStatus
-            save={() => {
-              //console.log(suppliers);
-              dispatch(saveOrders());
-              dispatch(saveSuppliers());
-            }}
-            isSaving={savingGate}
-            isSaved={savedGate}
-            error={errorGate}
-          />
+          <CloudStatus/>
         </Row>
         <RowSplitter/>
         <Row grid="14% 1% 14% 1% 14% 1% 15%">
@@ -230,7 +205,7 @@ const Order = ({ order, edit }: TOrder) => {
       year: "numeric",
       month: "short",
       day: "numeric"
-    });
+    })
   }
   
   let receivedDate = null

@@ -8,6 +8,7 @@ import MenuItem from "@material-ui/core/MenuItem"
 import Typography from "@material-ui/core/Typography"
 
 import useLocation from "../hooks/useLocation"
+//eslint-disable-next-line
 import Notifications from "./Notifications"
 
 import { auth, doSignOut } from "../firebase/firebase"
@@ -30,7 +31,7 @@ type THeader = {
 
 export default function Header({ locationIsLoaded }: THeader) {
   const defaultColor = "#a9a9a9"
-  const primaryColor = useSelector((state: RootState) => state.auth.primaryColor)
+  const primaryColor = useSelector((state: RootState) => state.auth.location.primaryColor)
   const bckColor = useMemo(() => {
     if(primaryColor && locationIsLoaded){
       return primaryColor
@@ -73,8 +74,8 @@ const AuthHeader = () => {
 }
 
 const LocationSelector = () => {
-  const locationName = useSelector((state: RootState) => state.auth.locationName)
-  const locationLogo = useSelector((state: RootState) => state.auth.logoUrl)
+  const locationName = useSelector((state: RootState) => state.auth.location.name)
+  const locationLogo = useSelector((state: RootState) => state.auth.location.logoUrl)
 
   if(locationLogo){
     return(
@@ -122,8 +123,8 @@ const LoggedIn = ({ authUser, resetRedux }: TLoggedIn) =>
 <>
   <Icons.AccountCircle fontSize="large"/>
   <div style={{ justifySelf: "left", display: "flex" }}>
-    <><Typography>{authUser.firstName}&nbsp;</Typography></>
-    <><Typography>{authUser.lastName}</Typography></>
+    <><Typography>{authUser.user.firstName}&nbsp;</Typography></>
+    <><Typography>{authUser.user.lastName}</Typography></>
   </div>
   {/*<Notifications/>*/}
   <button onClick={() => {
@@ -194,8 +195,8 @@ const SectionSelector = () => {
   const sections: ISection[] = [
     {name: "Produkter", linkTo: routes.HOME, icon: <Icons.Storage/>},
     {name: "Bestillinger", linkTo: routes.ORDERS, icon: <Icons.Archive/>},
-    {name: "Salg", linkTo: routes.SALES, icon: <Icons.Unarchive/>}
-    //{name: "Logg", linkTo: routes.HISTORY, icon: <Icons.Functions/>}
+    {name: "Salg", linkTo: routes.SALES, icon: <Icons.Unarchive/>},
+    {name: "Logg", linkTo: routes.HISTORY, icon: <Icons.AccessTime/>}
   ]
 
   const filteredSections = sections.filter(section => section.linkTo !== currentLocation.location.pathname)

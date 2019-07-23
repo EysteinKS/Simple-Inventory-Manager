@@ -1,0 +1,125 @@
+Date : 2019-07-11 17:23:49
+Directory : /Users/eystein/Documents/Programmering/lagerstatus/src
+Total : 86 files,  5182 codes, 330 comments, 687 blanks, all 6199 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| TypeScript React |         31 |      2,572 |         90 |        280 |      2,942 |
+| TypeScript       |         41 |      2,298 |        171 |        349 |      2,818 |
+| CSS              |          6 |        169 |         16 |         31 |        216 |
+| JavaScript       |          7 |        136 |         53 |         26 |        215 |
+| XML              |          1 |          7 |          0 |          1 |          8 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------+------------+------------+------------+------------+------------+
+| path                                 | files      | code       | comment    | blank      | total      |
++--------------------------------------+------------+------------+------------+------------+------------+
+| .                                    |         86 |      5,182 |        330 |        687 |      6,199 |
+| components                           |         21 |      1,723 |         66 |        188 |      1,977 |
+| redux                                |         24 |      1,648 |        129 |        240 |      2,017 |
+| pages                                |         11 |        845 |         36 |         94 |        975 |
+| redux/actions                        |          8 |        661 |        100 |        139 |        900 |
+| redux/reducers                       |          9 |        550 |         11 |         35 |        596 |
+| hooks                                |         10 |        311 |         28 |         62 |        401 |
+| constants                            |          4 |        293 |         12 |         36 |        341 |
+| redux/middleware                     |          4 |        286 |         18 |         39 |        343 |
+| firebase                             |          2 |         46 |          1 |         10 |         57 |
+| styles                               |          5 |         36 |         22 |         11 |         69 |
+| redux/selectors                      |          1 |          5 |          0 |          3 |          8 |
++--------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------+------------------+------------+------------+------------+------------+
+| filename                             | language         | code       | comment    | blank      | total      |
++--------------------------------------+------------------+------------+------------+------------+------------+
+| App.css                              | CSS              |         43 |          0 |          6 |         49 |
+| App.test.js                          | JavaScript       |          8 |          0 |          2 |         10 |
+| App.tsx                              | TypeScript React |         76 |          0 |         13 |         89 |
+| AuthPage.tsx                         | TypeScript React |         26 |          1 |          4 |         31 |
+| components/Buttons.tsx               | TypeScript React |         14 |          0 |          3 |         17 |
+| components/CloudStatus.tsx           | TypeScript React |         59 |          3 |          7 |         69 |
+| components/DropDownMenu.tsx          | TypeScript React |         33 |          0 |          6 |         39 |
+| components/EditOrder.tsx             | TypeScript React |        296 |          3 |         22 |        321 |
+| components/EditProduct.tsx           | TypeScript React |        203 |         18 |         16 |        237 |
+| components/EditSale.tsx              | TypeScript React |        296 |          3 |         19 |        318 |
+| components/Header.tsx                | TypeScript React |        211 |          1 |         28 |        240 |
+| components/Icons.tsx                 | TypeScript React |         76 |          3 |          8 |         87 |
+| components/ItemPage.tsx              | TypeScript React |        105 |          0 |         12 |        117 |
+| components/Login.tsx                 | TypeScript React |         87 |          1 |         11 |         99 |
+| components/Names.tsx                 | TypeScript React |         16 |          2 |          2 |         20 |
+| components/Notifications.tsx         | TypeScript React |         74 |          0 |         12 |         86 |
+| components/ProductName.tsx           | TypeScript React |         13 |          0 |          1 |         14 |
+| components/ProductSuppliers.tsx      | TypeScript React |          2 |         10 |          3 |         15 |
+| components/ProductTransactions.tsx   | TypeScript React |          7 |          1 |          4 |         12 |
+| components/SectionHeader.tsx         | TypeScript React |        125 |         17 |         16 |        158 |
+| components/SectionList.tsx           | TypeScript React |          8 |          0 |          1 |          9 |
+| components/SectionTable.tsx          | TypeScript React |          7 |          1 |          4 |         12 |
+| components/SelectProduct.tsx         | TypeScript React |         64 |          3 |          9 |         76 |
+| components/Status.css                | CSS              |         14 |          0 |          2 |         16 |
+| components/Warning.tsx               | TypeScript React |         13 |          0 |          2 |         15 |
+| constants/api.ts                     | TypeScript       |         49 |          0 |          6 |         55 |
+| constants/mock.ts                    | TypeScript       |         33 |          0 |          5 |         38 |
+| constants/routes.ts                  | TypeScript       |          6 |          0 |          0 |          6 |
+| constants/util.ts                    | TypeScript       |        205 |         12 |         25 |        242 |
+| firebase/firebase.ts                 | TypeScript       |         28 |          1 |          8 |         37 |
+| firebase/types.ts                    | TypeScript       |         18 |          0 |          2 |         20 |
+| hooks/useEditableList.ts             | TypeScript       |         22 |          0 |          7 |         29 |
+| hooks/useFilterableList.ts           | TypeScript       |         26 |          8 |          9 |         43 |
+| hooks/useForm.ts                     | TypeScript       |          9 |          0 |          4 |         13 |
+| hooks/useGate.ts                     | TypeScript       |         18 |          1 |          6 |         25 |
+| hooks/useInitialization.ts           | TypeScript       |        106 |          5 |         14 |        125 |
+| hooks/useLoadedGate.ts               | TypeScript       |         52 |          1 |          7 |         60 |
+| hooks/useLocation.ts                 | TypeScript       |         21 |          1 |          4 |         26 |
+| hooks/useSearch.ts                   | TypeScript       |         26 |         12 |          5 |         43 |
+| hooks/useSortableList.ts             | TypeScript       |         28 |          0 |          6 |         34 |
+| hooks/useUser.ts                     | TypeScript       |          3 |          0 |          0 |          3 |
+| index.css                            | CSS              |         14 |          0 |          2 |         16 |
+| index.tsx                            | TypeScript React |         14 |          3 |          4 |         21 |
+| logo.svg                             | XML              |          7 |          0 |          1 |          8 |
+| pages/Categories.tsx                 | TypeScript React |         58 |          0 |          9 |         67 |
+| pages/Customers.tsx                  | TypeScript React |          7 |          0 |          3 |         10 |
+| pages/History.tsx                    | TypeScript React |          8 |          0 |          2 |         10 |
+| pages/Orders.css                     | CSS              |         40 |          0 |          8 |         48 |
+| pages/Orders.tsx                     | TypeScript React |        272 |          6 |         22 |        300 |
+| pages/Products.css                   | CSS              |         48 |         16 |         12 |         76 |
+| pages/Products.tsx                   | TypeScript React |        184 |         11 |         14 |        209 |
+| pages/Profile.tsx                    | TypeScript React |          7 |          0 |          3 |         10 |
+| pages/Sales.css                      | CSS              |         10 |          0 |          1 |         11 |
+| pages/Sales.tsx                      | TypeScript React |        204 |          3 |         17 |        224 |
+| pages/Suppliers.tsx                  | TypeScript React |          7 |          0 |          3 |         10 |
+| react-app-env.d.ts                   | TypeScript       |          0 |          1 |          1 |          2 |
+| redux/actions/authActions.ts         | TypeScript       |         89 |          1 |         16 |        106 |
+| redux/actions/categoriesActions.ts   | TypeScript       |         62 |         15 |         13 |         90 |
+| redux/actions/customersActions.ts    | TypeScript       |         61 |         31 |         15 |        107 |
+| redux/actions/index.ts               | TypeScript       |         42 |          0 |          6 |         48 |
+| redux/actions/ordersActions.ts       | TypeScript       |        124 |          3 |         25 |        152 |
+| redux/actions/productsActions.ts     | TypeScript       |        104 |         18 |         29 |        151 |
+| redux/actions/salesActions.ts        | TypeScript       |        113 |          1 |         20 |        134 |
+| redux/actions/suppliersActions.ts    | TypeScript       |         66 |         31 |         15 |        112 |
+| redux/middleware/firestore.ts        | TypeScript       |        118 |          6 |         13 |        137 |
+| redux/middleware/localStorage.ts     | TypeScript       |         47 |          0 |          8 |         55 |
+| redux/middleware/thunks.ts           | TypeScript       |        108 |          6 |         12 |        126 |
+| redux/middleware/types.ts            | TypeScript       |         13 |          6 |          6 |         25 |
+| redux/reducers/authReducers.ts       | TypeScript       |         88 |          0 |          3 |         91 |
+| redux/reducers/categoriesReducers.ts | TypeScript       |         31 |          1 |          3 |         35 |
+| redux/reducers/customersReducers.ts  | TypeScript       |         31 |          1 |          2 |         34 |
+| redux/reducers/drafts.ts             | TypeScript       |         86 |          5 |         11 |        102 |
+| redux/reducers/index.ts              | TypeScript       |         28 |          0 |          4 |         32 |
+| redux/reducers/ordersReducers.ts     | TypeScript       |         97 |          1 |          3 |        101 |
+| redux/reducers/productsReducers.ts   | TypeScript       |         75 |          1 |          3 |         79 |
+| redux/reducers/salesReducers.ts      | TypeScript       |         83 |          1 |          3 |         87 |
+| redux/reducers/suppliersReducers.ts  | TypeScript       |         31 |          1 |          3 |         35 |
+| redux/selectors/productSelectors.ts  | TypeScript       |          5 |          0 |          3 |          8 |
+| redux/store.ts                       | TypeScript       |         10 |          0 |          1 |         11 |
+| redux/types.ts                       | TypeScript       |        136 |          0 |         23 |        159 |
+| serviceWorker.js                     | JavaScript       |         92 |         31 |         13 |        136 |
+| styles/colors.js                     | JavaScript       |          5 |          0 |          3 |          8 |
+| styles/display.js                    | JavaScript       |         18 |          0 |          5 |         23 |
+| styles/index.js                      | JavaScript       |          8 |          0 |          1 |          9 |
+| styles/placement.js                  | JavaScript       |          5 |         22 |          1 |         28 |
+| styles/size.js                       | JavaScript       |          0 |          0 |          1 |          1 |
+| Total                                |                  |      5,182 |        330 |        687 |      6,199 |
++--------------------------------------+------------------+------------+------------+------------+------------+

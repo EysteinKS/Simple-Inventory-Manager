@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Reports from "../components/Reports";
 
-export default () => {
+const History = () => {
   return (
     <div>
-      Logg
+      <Reports/>
     </div>
-  )
-}
+  );
+};
+
+export default History;

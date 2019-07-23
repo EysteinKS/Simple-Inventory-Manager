@@ -31,18 +31,18 @@ export default (state: SalesState = initialState, {type, payload}: AnyAction) =>
       case action.SAVE_SALES_FAILURE:
         return drafts.saveFailure(draft, payload)
       case action.CREATE_SALE:
-        draft.currentSale = payload
+        draft.currentSale = payload as ISale
         draft.currentSale.saleID = state.currentID + 1
         break
       case action.SAVE_CREATED_SALE:
         draft.sales.push(payload)
         draft.sortedSales.push(payload)
-        draft.currentSale = {}
+        draft.currentSale = null
         draft.isSaved = false
         draft.currentID = payload.saleID
         break
       case action.EDIT_SALE:
-        draft.currentSale = state.sales.find(sale => sale.saleID === payload)
+        draft.currentSale = state.sales.find(sale => sale.saleID === payload) as ISale
         break
       case action.SAVE_EDITED_SALE:
         let newArray = state.sales.map(sale => {
@@ -54,11 +54,11 @@ export default (state: SalesState = initialState, {type, payload}: AnyAction) =>
         })
         draft.sales = newArray
         draft.sortedSales = newArray
-        draft.currentSale = {};
+        draft.currentSale = null;
         draft.isSaved = false;
         break;
       case action.CLEAR_CURRENT_SALE:
-        draft.currentSale = {}
+        draft.currentSale = null
         break
       case action.SEND_SALE:
         let saleIndex: number = 0
