@@ -1,8 +1,14 @@
 import React from 'react'
 
 //TODO - ADD TABLE WITH PAGINATION
+
+export interface ITableColumn {
+  name: string
+  width: string
+}
+
 interface ITableProps {
-  columns: string[]
+  columns: ITableColumn[]
 }
 
 const Table: React.FC = ({ children }) => {
@@ -23,7 +29,7 @@ export const TableHeader: React.FC<ITableProps> = ({ columns }) => {
     <thead>
       <tr>
         {columns.map(col => 
-          <th key={"th_" + col}>{col}</th>
+          <th key={"th_" + col.name} style={{ width: col.width }}>{col.name}</th>
         )}
       </tr>
     </thead>

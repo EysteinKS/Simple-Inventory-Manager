@@ -97,7 +97,7 @@ export default function Orders() {
   };
 
   return (
-    <div>
+    <div style={{ margin: "5vh 10vw 10vh 10vw" }}>
       <SectionHeader>
         <Row grid="15% 15% 43.5% 14.5% 12%">
           <NewOrderButton />

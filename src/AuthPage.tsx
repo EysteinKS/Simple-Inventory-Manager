@@ -17,14 +17,12 @@ const RoutePage: FC<RoutePageProps> = ({ component: Component, ...rest }) => (
 const AuthPage: FC = () => {
   //https://github.com/reach/router/issues/242#issuecomment-467082358
   return (
-    <div style={{ margin: "5vh 10vw 10vh 10vw" }}>
-      <Router primary={false}>
-        <RoutePage component={Products} path={routes.HOME} />
-        <RoutePage component={Orders} path={routes.ORDERS} />
-        <RoutePage component={Sales} path={routes.SALES} />
-        <RoutePage component={History} path={routes.HISTORY} />
-      </Router>
-    </div>
+    <Router primary={false}>
+      <RoutePage component={Products} path={routes.HOME} />
+      <RoutePage component={Orders} path={routes.ORDERS} />
+      <RoutePage component={Sales} path={routes.SALES} />
+      <RoutePage component={History} path={routes.HISTORY} />
+    </Router>
   );
 };
 

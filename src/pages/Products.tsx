@@ -103,7 +103,7 @@ export default function Products(){
   const errorGate = useGate(allError, "OR")
 
   return (
-    <Fragment>
+    <div style={{ margin: "5vh 10vw 10vh 10vw" }}>
       <SectionHeader>
         <Row grid="15% 15% 43.5% 14.5% 12%">
           <NewProductButton />
@@ -161,7 +161,7 @@ export default function Products(){
           setCategoriesOpen(false);
         }}
       />}
-    </Fragment>
+    </div>
   );
 };
 

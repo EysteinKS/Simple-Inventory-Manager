@@ -86,9 +86,10 @@ export default function useSaving() {
     }
   }
 
-  const timerRef = React.useRef(null as NodeJS.Timeout | null)
+  const timerRef = React.useRef(null as number | NodeJS.Timeout | null)
   const [ isTimerStarted, setTimerStarted ] = React.useState(false)
   const [ isTimerFinished, setTimerFinished ] = React.useState(true)
+
 
   //Autosave
   const doAutosave = false
@@ -99,9 +100,9 @@ export default function useSaving() {
       console.log("Starting timeout")
       console.time("autosave")
       setTimerStarted(true)
-      timerRef.current = setTimeout(() => {
-        save()
-        console.timeEnd("autosave")
+      timerRef.current = window.setTimeout(() => {
+        save();
+        console.timeEnd("autosave");
       }, 1000)
       setTimerFinished(false)
     }
