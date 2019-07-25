@@ -1,5 +1,5 @@
 
-import React, { MouseEventHandler } from "react"
+import React from "react"
 import Icons from "./Icons"
 import ReactTooltip from "react-tooltip"
 import useSavingGate from "../hooks/useSaving";

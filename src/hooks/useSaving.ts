@@ -106,6 +106,7 @@ export default function useSaving() {
       }, 1000)
       setTimerFinished(false)
     }
+    //eslint-disable-next-line
   }, [isSavingGate, isSavedGate])
 
   React.useEffect(() => {
@@ -115,6 +116,7 @@ export default function useSaving() {
       setTimerFinished(true)
       timerRef.current = null
     }
+    //eslint-disable-next-line
   }, [isTimerFinished, isTimerStarted, isSavedGate])
 
   return [isSavingGate, isSavedGate, savingErrorGate, save]

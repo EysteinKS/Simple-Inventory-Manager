@@ -3,7 +3,7 @@ import Reports from "../components/Reports";
 import Completed from "../components/Completed";
 import styled from "styled-components";
 
-const historyPages = ["reports", "completed"]
+//const historyPages = ["reports", "completed"]
 
 const HistoryNav = styled.nav`
   display: grid;

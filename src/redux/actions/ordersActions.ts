@@ -1,4 +1,4 @@
-import { updateProductAmount, saveProducts } from "./productsActions"
+import { updateProductAmount } from "./productsActions"
 import { getSectionFromFirestore, setSectionToFirestore, convertTimestampsToDates } from "../middleware/thunks"
 import { IOrderedProduct, IOrder } from "../types";
 import { IThunkAction } from "../middleware/types";

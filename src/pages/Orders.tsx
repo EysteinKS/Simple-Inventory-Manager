@@ -1,14 +1,12 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   createOrder,
   editOrder,
   clearCurrentOrder,
-  saveOrders,
   didReceiveOrder,
   deleteOrder
 } from "../redux/actions/ordersActions";
-import { saveSuppliers } from "../redux/actions/suppliersActions";
 import { sort, newOrder, isArrayEmpty } from "../constants/util";
 import "./Orders.css";
 
@@ -26,7 +24,6 @@ import SectionHeader, {
 import CloudStatus from "../components/CloudStatus";
 import Icons from "../components/Icons";
 import Buttons from "../components/Buttons";
-import useGate from "../hooks/useGate";
 
 import useSortableList from "../hooks/useSortableList";
 import produce from "immer";

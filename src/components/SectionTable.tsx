@@ -1,35 +1,42 @@
 import React from 'react'
+import styled from 'styled-components';
 
 //TODO - ADD TABLE WITH PAGINATION
+
+interface ITableProps {
+  style?: any
+}
+
+const Table: React.FC<ITableProps> = ({ children, style }) => {
+  let tableStyle = { 
+    width: "100%",
+    backgroundColor: "white",
+    padding: "10px",
+    border: "2px solid lightgray"
+  }
+
+  return (
+    <table style={style ? style : tableStyle}>
+      {children}
+    </table>
+  )
+}
 
 export interface ITableColumn {
   name: string
   width: string
 }
 
-interface ITableProps {
+interface ITableColumnProps {
   columns: ITableColumn[]
 }
 
-const Table: React.FC = ({ children }) => {
-  return (
-    <table style={{ 
-      width: "100%",
-      backgroundColor: "white",
-      padding: "10px",
-      border: "2px solid lightgray"
-    }}>
-      {children}
-    </table>
-  )
-}
-
-export const TableHeader: React.FC<ITableProps> = ({ columns }) => {
+export const TableHeader: React.FC<ITableColumnProps> = ({ columns }) => {
   return(
     <thead>
       <tr>
         {columns.map(col => 
-          <th key={"th_" + col.name} style={{ width: col.width }}>{col.name}</th>
+          <th key={"th_" + col.name} style={{ width: col.width, padding: "10px" }}>{col.name}</th>
         )}
       </tr>
     </thead>
@@ -46,16 +53,24 @@ export const TableBody: React.FC = ({ children }) => {
 
 interface ITableRow {
   columns: any[]
+  onClick?: () => void
+  style?: any
 }
 
-export const TableRow: React.FC<ITableRow> = ({ columns }) => {
+const StyledRow = styled.tr`
+  ${(props: {hover: boolean}) => {
+    if(props.hover) return `:hover { cursor: pointer }`
+  }}
+`
+
+export const TableRow: React.FC<ITableRow> = ({ columns, onClick, style = {}}) => {
   return(
-    <tr>
+    <StyledRow style={style} hover={Boolean(onClick)} onClick={() => onClick && onClick()}>
       {columns.map((col, i) => 
         <td 
           key={"row_" + i + col}
           style={{ 
-            padding: "5px 0",
+            padding: "10px 0",
             textAlign: "center",
             verticalAlign: "middle  "
           }}
@@ -63,7 +78,7 @@ export const TableRow: React.FC<ITableRow> = ({ columns }) => {
           {col}
         </td>
       )}
-    </tr>
+    </StyledRow>
   )
 }
 

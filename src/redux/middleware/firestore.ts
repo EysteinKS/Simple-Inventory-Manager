@@ -40,7 +40,7 @@ export const getInventory = (message: Function): IThunkAction => {
 
     console.log("localStorage data: ", ls)
     //If no localstorage data
-    if(!ls) {
+    if(!ls || !("location" in ls.auth)) {
       getAllFromFirestore(sectionKeys, dispatch, message)
       setLocalStorage(authKey, {location: { lastChanged: fsLastChanged}})
       return

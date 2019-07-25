@@ -23,3 +23,7 @@ config.js
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.VSCodeCounter/details.md
+.VSCodeCounter/results.csv
+.VSCodeCounter/results.md
+.VSCodeCounter/results.txt

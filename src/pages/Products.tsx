@@ -1,13 +1,11 @@
-import React, { useState, useEffect, Fragment, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   createProduct,
   editProduct,
   clearCurrentProduct,
-  saveProducts,
   toggleProduct
 } from "../redux/actions/productsActions";
-import { saveCategories } from "../redux/actions/categoriesActions"
 import {
   sort,
   getAmount,
@@ -21,7 +19,6 @@ import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, KeyButton,
 import CloudStatus from "../components/CloudStatus"
 import Icons from "../components/Icons"
 import Warning from "../components/Warning"
-import useGate from "../hooks/useGate"
 
 import useSortableList from "../hooks/useSortableList"
 import produce from "immer"
@@ -44,7 +41,7 @@ export default function Products(){
   const [isCategoriesOpen, setCategoriesOpen] = useState(false);
 
   //SORTING
-  const [sorting, setSorting] = useState([null, null] as any[])
+  const [sorting, setSorting] = useState([null, null, null] as any[])
   const { sortedList, setList, setSortingFuncs } = useSortableList(products.products)
   useEffect(() => {
     //console.log("Orders list updated, setting list");
@@ -95,13 +92,6 @@ export default function Products(){
     </button>
   );
 
-  const allIsSaving = useMemo(() => [products.isSaving, categories.isSaving], [products.isSaving, categories.isSaving])
-  const savingGate = useGate(allIsSaving, "OR")
-  const allIsSaved = useMemo(() => [products.isSaved, categories.isSaved], [products.isSaved, categories.isSaved])
-  const savedGate = useGate(allIsSaved, "AND", true)
-  const allError = useMemo(() => [products.savingError, categories.savingError], [products.savingError, categories.savingError])
-  const errorGate = useGate(allError, "OR")
-
   return (
     <div style={{ margin: "5vh 10vw 10vh 10vw" }}>
       <SectionHeader>
@@ -114,16 +104,18 @@ export default function Products(){
         </Row>
         <RowSplitter/>
         <Row grid="9% 1% 18% 1% 18% 1% repeat(5, 8%) 12%" cName="products-header">
-          <Key>#</Key>
+          <SortingKey
+            onClick={dir => sortList(dir, 0, sort.by("productID", dir))}
+          >#</SortingKey>
           <ColumnSplitter/>
           <SortingKey 
-            onClick={dir => sortList(dir, 0, sort.byName(dir))}
+            onClick={dir => sortList(dir, 1, sort.byName(dir))}
           >
             <Icons.FormatQuote/>
           </SortingKey>
           <ColumnSplitter/>
           <SortingKey
-            onClick={dir => sortList(dir, 1, sort.byCategory(categories.categories, dir))}
+            onClick={dir => sortList(dir, 2, sort.byCategory(categories.categories, dir))}
           >
             <Icons.FolderOpen/>
           </SortingKey>

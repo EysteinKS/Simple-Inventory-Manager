@@ -1,14 +1,12 @@
-import React, { useState, useMemo, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import {
   createSale,
-  saveSales,
   editSale,
   clearCurrentSale,
   deleteSale,
   didSendSale
 } from "../redux/actions/salesActions"
-import { saveCustomers } from "../redux/actions/customersActions"
 
 import EditSale from "../components/EditSale"
 import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, SortingKey, TDirections } from "../components/SectionHeader"
@@ -17,7 +15,6 @@ import Icons from "../components/Icons"
 import Buttons from "../components/Buttons"
 import Names from "../components/Names"
 import {isArrayEmpty, newSale, sort} from "../constants/util"
-import useGate from "../hooks/useGate"
 
 import useSortableList from "../hooks/useSortableList";
 import produce from "immer";
@@ -74,13 +71,6 @@ export default function Sales(){
     Kunder
     </button>
   )
-
-  const allIsSaving = useMemo(() => [sales.isSaving, customers.isSaving], [sales.isSaving, customers.isSaving])
-  const savingGate = useGate(allIsSaving, "OR")
-  const allIsSaved = useMemo(() => [sales.isSaved, customers.isSaved], [sales.isSaved, customers.isSaved])
-  const savedGate = useGate(allIsSaved, "AND", true)
-  const allError = useMemo(() => [sales.savingError, customers.savingError], [sales.savingError, customers.savingError])
-  const errorGate = useGate(allError, "OR")
 
   return(
     <div style={{ margin: "5vh 10vw 10vh 10vw" }}>
