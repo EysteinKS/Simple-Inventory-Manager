@@ -1,7 +1,7 @@
 import React from 'react'
-import { IReport, RootState } from '../redux/types';
+import { IReport, RootState } from '../../redux/types';
 import { useSelector } from 'react-redux';
-import Table, { TableHeader, TableBody, TableRow, ITableColumn } from './SectionTable';
+import Table, { TableHeader, TableBody, TableRow, ITableColumn } from '../util/SectionTable';
 import styled from 'styled-components';
 
 const ReportWrapper = styled.div`
@@ -128,7 +128,10 @@ const Report: React.FC = () => {
                 log.changedBy.email,
                 new Date(log.timeChanged).toLocaleString("default", localeStringOpts)
               ]
-              return <TableRow key={"log_row_" + i} columns={columns}/>
+              if("changes" in log && log.changes.length > 0){
+
+              }
+              else return <TableRow key={"log_row_" + i} columns={columns}/>
             })}
           </ReportTable>
       </div>

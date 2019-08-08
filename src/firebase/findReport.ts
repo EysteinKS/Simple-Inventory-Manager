@@ -33,6 +33,10 @@ const findDate = (byDate: IbyDate, date: IDate) => {
   }
 }
 
+const isValidYear = (byDate: IbyDate, year: string) => {
+  return (year in byDate)
+}
+
 const previousYear = (date: IDate): IDate => {
   return {day: "31", month: "12", year: (Number(date.year) - 1).toString()}
 }
@@ -53,9 +57,6 @@ const isValidMonth = (byYear: IbyYear, month: number) => {
   return (month in byYear)
 }
 
-const isValidYear = (byDate: IbyDate, year: string) => {
-  return (year in byDate)
-}
 
 const findMonthInYear = (byYear: IbyYear, date: IDate) => {
   if(isValidMonth(byYear, Number(date.month))) {

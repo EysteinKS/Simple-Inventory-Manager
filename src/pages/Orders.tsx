@@ -10,8 +10,8 @@ import {
 import { sort, newOrder, isArrayEmpty } from "../constants/util";
 import "./Orders.css";
 
-import EditOrder from "../components/EditOrder";
-import ProductName from "../components/ProductName";
+import EditOrder from "../components/inventory/EditOrder";
+import ProductName from "../components/inventory/ProductName";
 import SectionHeader, {
   Row,
   RowSplitter,
@@ -20,10 +20,10 @@ import SectionHeader, {
   Key,
   SortingKey,
   TDirections
-} from "../components/SectionHeader";
-import CloudStatus from "../components/CloudStatus";
-import Icons from "../components/Icons";
-import Buttons from "../components/Buttons";
+} from "../components/util/SectionHeader";
+import CloudStatus from "../components/util/CloudStatus";
+import Icons from "../components/util/Icons";
+import Buttons from "../components/util/Buttons";
 
 import useSortableList from "../hooks/useSortableList";
 import produce from "immer";

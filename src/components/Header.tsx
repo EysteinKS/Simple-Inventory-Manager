@@ -1,15 +1,15 @@
 import React, {useMemo, ReactNode} from 'react'
 import { navigate, HistoryLocation, NavigateFn } from "@reach/router"
 import * as routes from "../constants/routes"
-import Icons from "./Icons"
-import DropDownMenu from "./DropDownMenu"
+import Icons from "./util/Icons"
+import DropDownMenu from "./util/DropDownMenu"
 import MenuList from "@material-ui/core/MenuList"
 import MenuItem from "@material-ui/core/MenuItem"
 import Typography from "@material-ui/core/Typography"
 
 import useLocation from "../hooks/useLocation"
 //eslint-disable-next-line
-import Notifications from "./Notifications"
+import Notifications from "./util/Notifications"
 
 import { auth, doSignOut } from "../firebase/firebase"
 import { useAuthState } from "react-firebase-hooks/auth"

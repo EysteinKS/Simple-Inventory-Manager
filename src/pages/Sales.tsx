@@ -8,11 +8,11 @@ import {
   didSendSale
 } from "../redux/actions/salesActions"
 
-import EditSale from "../components/EditSale"
-import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, SortingKey, TDirections } from "../components/SectionHeader"
-import CloudStatus from "../components/CloudStatus"
-import Icons from "../components/Icons"
-import Buttons from "../components/Buttons"
+import EditSale from "../components/inventory/EditSale"
+import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, SortingKey, TDirections } from "../components/util/SectionHeader"
+import CloudStatus from "../components/util/CloudStatus"
+import Icons from "../components/util/Icons"
+import Buttons from "../components/util/Buttons"
 import Names from "../components/Names"
 import {isArrayEmpty, newSale, sort} from "../constants/util"
 

@@ -2,7 +2,7 @@
 import React from "react"
 import Icons from "./Icons"
 import ReactTooltip from "react-tooltip"
-import useSavingGate from "../hooks/useSaving";
+import useSavingGate from "../../hooks/useSaving";
 
 export default function CloudStatus() {
   const [isSaving, isSaved, error, save] = useSavingGate()

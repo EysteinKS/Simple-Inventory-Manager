@@ -1,14 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { RootState, IOrderedProduct } from "../redux/types";
+import { RootState, IOrderedProduct } from "../../redux/types";
 import styled from "styled-components";
 import Table, {
   ITableColumn,
   TableBody,
   TableHeader,
   TableRow
-} from "./SectionTable";
-import { selectProductNames } from "../redux/selectors/productSelectors";
+} from "../util/SectionTable";
+import { selectProductNames } from "../../redux/selectors/productSelectors";
 
 const localeStringOpts = {
   day: "2-digit",
@@ -145,7 +145,7 @@ interface IExpandableRow {
   columns: any[];
 }
 
-const ExpandableRow: React.FC<IExpandableRow> = ({ columns, children }) => {
+export const ExpandableRow: React.FC<IExpandableRow> = ({ columns, children }) => {
   const [isOpen, setOpen] = React.useState(false);
 
   const rowStyle = React.useMemo(() => {

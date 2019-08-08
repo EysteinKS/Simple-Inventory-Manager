@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react"
 import { useSelector } from "react-redux"
-import Names from "./Names"
-import { IProduct, RootState, IOrderedProduct } from "../redux/types";
+import Names from "../Names"
+import { IProduct, RootState, IOrderedProduct } from "../../redux/types";
 
 interface ISelectProduct {
   style: any,

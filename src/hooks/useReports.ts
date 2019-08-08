@@ -112,7 +112,7 @@ const useReports = (): TuseReports => {
       month: addZero(selectedMonth),
       day: addZero(selectedDay)
     }
-    console.log(date)
+    //console.log(date)
     dispatch(loadReport(date))
   }, [selectedYear, selectedMonth, selectedDay, dispatch])
 

@@ -1,5 +1,5 @@
 import { ISupplier, ICustomer, ISale, IOrder, IProduct, RootState, ICategory, IOrderedProduct } from "../redux/types";
-import { TDirections } from "../components/SectionHeader";
+import { TDirections } from "../components/util/SectionHeader";
 
 //GETTING VALUES
 export const getProductName = (products: IProduct[], id: number) => {
@@ -251,4 +251,8 @@ export const addZero = (str: string) => {
   } else {
     return str
   }
+}
+
+export const isChanged = () => {
+  
 }

@@ -1,6 +1,6 @@
 import React, {useState, useMemo, ReactNode, MouseEvent, FC} from 'react'
 import { useSelector } from "react-redux"
-import { RootState } from '../redux/types';
+import { RootState } from '../../redux/types';
 
 export default function SectionHeader({
   children

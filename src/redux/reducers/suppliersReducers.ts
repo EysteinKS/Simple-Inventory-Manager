@@ -27,7 +27,8 @@ export default (state: SuppliersState = initialState, {type, payload}: AnyAction
           supplierID: draft.suppliers.length + 1,
           name: payload
         })
-        break
+        draft.isSaved = false
+        return draft
       case action.RESET_SUPPLIERS:
         return drafts.resetReducer(initialState)
     }

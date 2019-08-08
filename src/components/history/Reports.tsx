@@ -1,5 +1,5 @@
 import React from 'react'
-import useReports from '../hooks/useReports';
+import useReports from '../../hooks/useReports';
 import Report from './Report';
 
 const Reports = () => {
@@ -20,6 +20,11 @@ const Reports = () => {
   if(!dates.isLoaded && !dates.loadingError){
     return <p>Loading...</p>
   }
+
+  if(dates.loadingError){
+    return <p>Ingen rapporter funnet!</p>
+  }
+
   return (
     <div>
       {dates.isLoaded && 

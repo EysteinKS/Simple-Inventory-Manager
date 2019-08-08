@@ -19,7 +19,8 @@ const initialState = {
     isLoaded: false,
     loadingError: null,
     report: null
-  }
+  },
+  changes: []
 }
 
 export default (state: ReportsState = initialState, {type, payload}: AnyAction) => 
@@ -69,11 +70,15 @@ export default (state: ReportsState = initialState, {type, payload}: AnyAction) 
       case actions.SAVE_REPORT_SUCCESS:
         draft.isSaving = false
         draft.isSaved = true
+        draft.changes = []
         return draft
       case actions.SAVE_REPORT_FAILURE:
         draft.isSaving = false
         draft.isSaved = false
         draft.savingError = payload
+        return draft
+      case actions.ADD_CHANGE:
+        draft.changes.push(payload)
         return draft
       default:
         return draft

@@ -27,7 +27,8 @@ export default (state: CustomersState = initialState, {type, payload}: AnyAction
           customerID: draft.customers.length + 1,
           name: payload
         })
-        break
+        draft.isSaved = false
+        return draft
       case action.RESET_CUSTOMERS:
         return drafts.resetReducer(initialState)
     }  

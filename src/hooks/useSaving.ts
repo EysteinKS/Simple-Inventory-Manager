@@ -63,7 +63,7 @@ export default function useSaving() {
     stateKeys.forEach((key, i) => {
       if (!isSaved[i] && !isSaving[i]) {
         console.log(key + " is unsaved")
-        unsaved.push(key) 
+        unsaved.push(key)
       }
     })
     console.log("unsaved: ", unsaved)

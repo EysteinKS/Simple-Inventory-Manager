@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useCallback} from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { saveCreatedProduct, saveEditedProduct } from "../redux/actions/productsActions"
-import { saveCreatedCategory } from "../redux/actions/categoriesActions"
+import { saveCreatedProduct, saveEditedProduct } from "../../redux/actions/productsActions"
+import { saveCreatedCategory } from "../../redux/actions/categoriesActions"
 import ReactModal from "react-modal"
 import Collapse from "@material-ui/core/Collapse"
-import Icons from "./Icons"
-import { RootState, ICategory, IProduct } from "../redux/types";
+import Icons from "../util/Icons"
+import { RootState, ICategory, IProduct } from "../../redux/types";
+import { addChange } from "../../redux/actions/reportsActions";
 ReactModal.setAppElement("#root");
 
 //TODO
@@ -79,10 +80,7 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
     let productInStore = products[products.findIndex(i => i.productID === returnedProduct.productID)]
     let storeAsJSON = JSON.stringify(productInStore)
     let returnedAsJSON = JSON.stringify(returnedProduct)
-    //console.log("Original product: ", storeAsJSON)
-    //console.log("New product: ", returnedAsJSON)
     let isEqual = (storeAsJSON === returnedAsJSON)
-    //console.log("isEqual: ", isEqual)
     let changed: any[] = [];
     if(!isEqual){
       Object.keys(returnedProduct).forEach(key => {
@@ -96,7 +94,6 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
           })
         }
       })
-      //console.log("Changes: ", changed)
     }
     return { 
       isEqual,
@@ -106,12 +103,19 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
 
   const save = () => {
     if (current.productID > products.length) {
+      dispatch(addChange({
+        type: "NEW_PRODUCT",
+        name: returnedProduct.name,
+        id: returnedProduct.productID,
+        section: "products"
+      }))
       dispatch(saveCreatedProduct(returnedProduct));
       close();
       setInit(false);
     } else {
       let isProductChanged = isChanged()
       if(!isProductChanged.isEqual){
+        console.log(isProductChanged.changed)
         dispatch(saveEditedProduct(returnedProduct));
       }
       close();

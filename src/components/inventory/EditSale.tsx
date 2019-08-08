@@ -1,31 +1,31 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  saveCreatedOrder,
-  saveEditedOrder
-} from "../redux/actions/ordersActions";
-import { saveCreatedSupplier } from "../redux/actions/suppliersActions";
+  saveCreatedSale,
+  saveEditedSale
+} from "../../redux/actions/salesActions";
+import { saveCreatedCustomer } from "../../redux/actions/customersActions";
 import ReactModal from "react-modal";
 import Collapse from "@material-ui/core/Collapse";
-import Icons from "./Icons";
+import Icons from "../util/Icons";
 import ProductName from "./ProductName";
-import SelectProduct from "./SelectProduct";
-import useEditableList from "../hooks/useEditableList"
-import { RootState, ISupplier, IOrderedProduct } from "../redux/types";
+import SelectProduct from "../util/SelectProduct";
+import useEditableList from "../../hooks/useEditableList"
+import { RootState, ICustomer, IOrderedProduct, ISale } from "../../redux/types";
 
-ReactModal.setAppElement("#root")
+ReactModal.setAppElement("#root");
 
-type TEditOrder = {
+type TEditSale = {
   isOpen: boolean,
   close: () => void
 }
 
-export default function EditOrder({ isOpen, close }: TEditOrder) {
-  const current = useSelector((state: RootState) => state.orders.currentOrder);
-  const suppliers = useSelector((state: RootState) => state.suppliers.suppliers);
+export default function EditSale({ isOpen, close }: TEditSale) {
+  const current = useSelector((state: RootState) => state.sales.currentSale) as ISale
+  const customers = useSelector((state: RootState) => state.customers.customers);
   const dispatch = useDispatch();
 
-  const [supplier, setSupplier] = useState();
+  const [customer, setCustomer] = useState();
   const { 
     list: ordered, 
     add: addProduct, 
@@ -36,53 +36,50 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
 
   const [init, setInit] = useState(false);
   if (isOpen && !init) {
-    setSupplier(current.supplierID);
+    console.log("EditSale is open and uninitialized")
+    setCustomer(current.customerID);
     setOrdered(current.ordered);
     setInit(true);
   }
 
-  const [newSupplier, toggleNewSupplier] = useState(false);
-
+  const [newCustomer, toggleNewCustomer] = useState(false);
   useEffect(() => {
-    if(!suppliers.length){
-      toggleNewSupplier(true)
+    if(!customers.length){
+      toggleNewCustomer(true)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
-
   useEffect(() => {
-    if (supplier === "new") {
-      toggleNewSupplier(true);
-    } else if (suppliers.length){
-      toggleNewSupplier(false);
+    if (customer === "new") {
+      toggleNewCustomer(true);
+    } else if (customers.length) {
+      toggleNewCustomer(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [supplier, toggleNewSupplier]);
+  }, [customer, toggleNewCustomer]);
 
   const save = () => {
-    let returnedOrder = {
-      orderID: current.orderID,
-      supplierID: Number(supplier),
+    let returnedSale = {
+      saleID: current.saleID,
+      customerID: Number(customer),
       dateOrdered: new Date(),
-      dateReceived: null,
+      dateSent: null,
       ordered: ordered
     };
     //console.log(returnedOrder)
     if(current.isNew){
-      dispatch(saveCreatedOrder(returnedOrder));
+      dispatch(saveCreatedSale(returnedSale));
     } else {
-      dispatch(saveEditedOrder(returnedOrder));
+      dispatch(saveEditedSale(returnedSale));
     }
     close();
     setInit(false);
   };
 
-  if(!Array.isArray(current.ordered)) {return null}
-
   return (
     <ReactModal
       isOpen={isOpen}
-      contentLabel="Edit order"
+      contentLabel="Edit sale"
       shouldCloseOnOverlayClick={true}
       shouldCloseOnEsc={true}
       onRequestClose={() => {
@@ -103,7 +100,7 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
         }
       }}
     >
-      <p style={{ padding: "10px" }}>ID: {current.orderID}</p>
+      <p style={{ padding: "10px" }}>ID: {current.saleID}</p>
       <form
         style={{
           display: "grid",
@@ -112,42 +109,42 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
           maxHeight: "60vh"
         }}
       >
-        <label htmlFor="supplier">Leverandør</label>
-        <select value={supplier} onChange={e => setSupplier(e.target.value)}>
-          {suppliers && suppliers.map((supplier, key) => (
-            <option key={"supplier_menu_" + supplier.supplierID} value={supplier.supplierID}>
-              {supplier.name}
+        <label htmlFor="customer">Kunde</label>
+        <select value={customer} onChange={e => setCustomer(e.target.value)}>
+          {customers && customers.map((customer, key) => (
+            <option key={"customer_menu_" + customer.customerID} value={customer.customerID}>
+              {customer.name}
             </option>
           ))}
           <option value="new">...</option>
         </select>
         <Collapse
-          in={newSupplier}
+          in={newCustomer}
           style={{
             gridColumn: "2/3"
           }}
         >
-          {newSupplier ? (
-            <AddSupplier
-              visible={(supplier === "new")}
-              suppliers={suppliers}
+          {newCustomer ? (
+            <AddCustomer
+              visible={(customer === "new")}
+              customers={customers}
               close={ID => {
-                setSupplier(ID);
-                toggleNewSupplier(false);
+                setCustomer(ID);
+                toggleNewCustomer(false);
               }}
             />
           ) : null}
         </Collapse>
         <Ordered
           ordered={ordered}
-          add={productID => addProduct({productID: productID, amount: 0})}
+          add={productID => addProduct({productID: productID, amount: 1})}
           edit={(product, index) => editProduct(product, index)}
           remove={productID => removeProduct(productID)}
         />
       </form>
       <div style={{ display: "grid", gridTemplateColumns: "60% 20% 20%" }}>
         <div />
-        <button onClick={save}>Lagre</button>
+        <button onClick={save} disabled={(customer === "new")}>Lagre</button>
         <button
           onClick={() => {
             close();
@@ -161,20 +158,20 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
   );
 };
 
-type TAddSupplier = {
+type TAddCustomer = {
   visible: boolean,
   close: (id: number) => void,
-  suppliers: ISupplier[]
+  customers: ICustomer[]
 }
 
-const AddSupplier = ({ visible, close, suppliers }: TAddSupplier) => {
+const AddCustomer = ({ visible, close, customers }: TAddCustomer) => {
   const [name, setName] = useState("");
   const [ID, setID] = useState();
   const dispatch = useDispatch();
   const save = useCallback(
     event => {
       event.preventDefault();
-      dispatch(saveCreatedSupplier(name));
+      dispatch(saveCreatedCustomer(name));
       close(ID);
     },
     [dispatch, name, close, ID]
@@ -182,9 +179,9 @@ const AddSupplier = ({ visible, close, suppliers }: TAddSupplier) => {
 
   useEffect(() => {
     if(visible) {
-      setID(suppliers.length + 1);
+      setID(customers.length + 1);
     }
-  }, [visible, setID, suppliers]);
+  }, [visible, setID, customers]);
 
   return (
     <div
@@ -265,7 +262,7 @@ const Ordered = ({ ordered, add, edit, remove }: TOrdered) => {
         {ordered.map((product, i) => (
           <OrderedProduct 
             product={product} 
-            key={"ordered_product_" + product.productID} 
+            key={"selected_products_" + product.productID} 
             index={i} 
             edit={(value, index) => edit({productID: product.productID, amount: value}, index)}
             remove={index => remove(index)}/>

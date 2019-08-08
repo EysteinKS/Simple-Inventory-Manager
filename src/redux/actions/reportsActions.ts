@@ -1,4 +1,4 @@
-import { IbyDate, IReport, IDate, RootState, ILoggedOrder, ILoggedSale } from "../types";
+import { IbyDate, IReport, IDate, RootState, ILoggedOrder, ILoggedSale, Changes } from "../types";
 import { getSectionFromFirestore, getCurrentLocation } from "../middleware/thunks";
 import { IThunkAction } from "../middleware/types";
 import { firebase, secondaryFirestore } from "../../firebase/firebase";
@@ -106,7 +106,8 @@ const generateReport = (date: Date, state: RootState): IReport => {
     changedBy: {
       email: state.auth.user.email,
       name: state.auth.user.firstName + " " + state.auth.user.lastName
-    }
+    },
+    changes: state.reports.changes
   }
 
   let allProducts = products.map(p => {
@@ -218,3 +219,9 @@ export const saveReport = (date: Date): IThunkAction =>
       .then(() => dispatch(saveReportSuccess()))
       .catch(err => dispatch(saveReportFailure(err)))
   }
+
+export const ADD_CHANGE = 'ADD_CHANGE'
+export const addChange = (change: Changes) => ({
+  type: ADD_CHANGE,
+  payload: change
+})

@@ -1,6 +1,6 @@
 import React from "react";
-import Reports from "../components/Reports";
-import Completed from "../components/Completed";
+import Reports from "../components/history/Reports";
+import Completed from "../components/history/Completed";
 import styled from "styled-components";
 
 //const historyPages = ["reports", "completed"]

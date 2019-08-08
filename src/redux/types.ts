@@ -1,4 +1,4 @@
-import ProductName from "../components/ProductName";
+import ProductName from "../components/inventory/ProductName";
 
 interface IStringKey {
   [index: string]: any 
@@ -145,6 +145,7 @@ export interface ILoggedChange {
     email: string
     name: string
   }
+  changes: Changes[]
 }
 
 export interface ILoggedProduct {
@@ -233,12 +234,45 @@ export interface IReportsReport {
   report: IReport | null
 }
 
+export type IChangeTypes = 
+"NEW_PRODUCT" | "NEW_ORDER" | "NEW_SUPPLIER" |
+"NEW_SALE" | "NEW_CUSTOMER" | "NEW_LOAN" |
+"EDIT_PRODUCT_INFO" | "EDIT_ORDER_INFO" |
+"EDIT_SUPPLIER_INFO" | "EDIT_SALE_INFO" |
+"EDIT_CUSTOMER_INFO" | "EDIT_LOAN_INFO" |
+"EDIT_PRODUCT_AMOUNT" |
+"RECEIVED_ORDER" | "RECEIVED_LOAN" |
+"SENT_SALE" | "SENT_LOAN" |
+"DELETE_ORDER" | "DELETE_SALE" | "DELETE_LOAN"
+
+export interface IChange {
+  section: string
+  name: string
+  id: number
+  type: IChangeTypes
+}
+
+export interface IChangeValue {
+  key: string
+  value: string | number
+}
+
+export interface IChangeEdit extends IChange {
+  changes: {
+    oldValues: IChangeValue[]
+    newValues: IChangeValue[]
+  }
+}
+
+export type Changes = IChange | IChangeEdit
+
 export interface ReportsState {
   isSaving: boolean
   isSaved: boolean
   savingError: string | null
   dates: IReportsDates
   report: IReportsReport
+  changes: Changes[]
 }
 
 export type AnyState = 

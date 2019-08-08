@@ -13,12 +13,12 @@ import {
 } from "../constants/util";
 import "./Products.css";
 
-import EditProduct from "../components/EditProduct";
+import EditProduct from "../components/inventory/EditProduct";
 import EditCategories from "./Categories";
-import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, KeyButton, SortingKey, TDirections } from "../components/SectionHeader";
-import CloudStatus from "../components/CloudStatus"
-import Icons from "../components/Icons"
-import Warning from "../components/Warning"
+import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, KeyButton, SortingKey, TDirections } from "../components/util/SectionHeader";
+import CloudStatus from "../components/util/CloudStatus"
+import Icons from "../components/util/Icons"
+import Warning from "../components/util/Warning"
 
 import useSortableList from "../hooks/useSortableList"
 import produce from "immer"
