@@ -7,18 +7,25 @@ interface INames {
   id: number
 }
 
+const targetToID: {[key: string]: string} = {
+  products: "productID",
+  customers: "customerID",
+  suppliers: "supplierID",
+  categories: "categoryID"
+}
+
 export default function Names({target, id}: INames) {
-  //console.log("Id: ", id)
-  //console.log("Target: ", target)
   const selector = useSelector((state: RootState) => state[target][target])
-  //console.log("Selector: ", selector[id - 1])
-  let name: string = ""
-  try {
-    name = selector[id - 1].name
-  } catch(err) {
-    console.log(err.message)
-    name = "ERROR"
-  }
+
+  const name = React.useMemo(() => {
+    try {
+      const targetID = targetToID[target]
+      return selector[selector.findIndex((i: any) => i[targetID] === id)].name
+    } catch(err) {
+      return "ERROR"
+    }
+  }, [target, id, selector])
+
   return(
     <React.Fragment>
       {name}

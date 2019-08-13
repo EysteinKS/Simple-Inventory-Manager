@@ -28,6 +28,7 @@ import Buttons from "../components/util/Buttons";
 import useSortableList from "../hooks/useSortableList";
 import produce from "immer";
 import { RootState, IOrder, IOrderedProduct } from "../redux/types";
+import { addChange } from "../redux/actions/reportsActions";
 
 type TOrdered = { productID: number, amount: number }
 type TEdit = (id: number) => void
@@ -230,13 +231,27 @@ const Order = ({ order, edit }: TOrder) => {
         </button>
         <Buttons.Confirm
           message="Vil du slette denne bestillingen?"
-          onConfirm={() => dispatch(deleteOrder(orderID))}
+          onConfirm={() => {
+            dispatch(addChange({
+              type: "DELETE_ORDER",
+              id: orderID,
+              section: "orders"
+            }))
+            dispatch(deleteOrder(orderID))
+          }}
         >
           <Icons.Delete />
         </Buttons.Confirm>
         <Buttons.Confirm
           message="Bekreft mottak av bestilling"
-          onConfirm={() => dispatch(didReceiveOrder(orderID, ordered))}
+          onConfirm={() => {
+            dispatch(addChange({
+              type: "RECEIVED_ORDER",
+              id: orderID,
+              section: "orders"
+            }))
+            dispatch(didReceiveOrder(orderID, ordered))
+          }}
         >
           >
         </Buttons.Confirm>

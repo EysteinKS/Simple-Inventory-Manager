@@ -1,88 +1,98 @@
-filename, language, CSS, TypeScript React, JavaScript, TypeScript, XML, comment, blank, total
+filename, language, CSS, TypeScript React, TypeScript, JavaScript, XML, comment, blank, total
 App.css, CSS, 43, 0, 0, 0, 0, 0, 6, 49
-App.test.js, JavaScript, 0, 0, 8, 0, 0, 0, 2, 10
+App.test.js, JavaScript, 0, 0, 0, 8, 0, 0, 2, 10
 App.tsx, TypeScript React, 0, 76, 0, 0, 0, 0, 13, 89
-AuthPage.tsx, TypeScript React, 0, 26, 0, 0, 0, 1, 4, 31
-components/Buttons.tsx, TypeScript React, 0, 14, 0, 0, 0, 0, 3, 17
-components/CloudStatus.tsx, TypeScript React, 0, 59, 0, 0, 0, 3, 7, 69
-components/DropDownMenu.tsx, TypeScript React, 0, 33, 0, 0, 0, 0, 6, 39
-components/EditOrder.tsx, TypeScript React, 0, 296, 0, 0, 0, 3, 22, 321
-components/EditProduct.tsx, TypeScript React, 0, 203, 0, 0, 0, 18, 16, 237
-components/EditSale.tsx, TypeScript React, 0, 296, 0, 0, 0, 3, 19, 318
-components/Header.tsx, TypeScript React, 0, 211, 0, 0, 0, 1, 28, 240
-components/Icons.tsx, TypeScript React, 0, 76, 0, 0, 0, 3, 8, 87
-components/ItemPage.tsx, TypeScript React, 0, 105, 0, 0, 0, 0, 12, 117
+AuthPage.tsx, TypeScript React, 0, 24, 0, 0, 0, 1, 4, 29
+components/Header.tsx, TypeScript React, 0, 212, 0, 0, 0, 1, 28, 241
 components/Login.tsx, TypeScript React, 0, 87, 0, 0, 0, 1, 11, 99
-components/Names.tsx, TypeScript React, 0, 16, 0, 0, 0, 2, 2, 20
-components/Notifications.tsx, TypeScript React, 0, 74, 0, 0, 0, 0, 12, 86
-components/ProductName.tsx, TypeScript React, 0, 13, 0, 0, 0, 0, 1, 14
-components/ProductSuppliers.tsx, TypeScript React, 0, 2, 0, 0, 0, 10, 3, 15
-components/ProductTransactions.tsx, TypeScript React, 0, 7, 0, 0, 0, 1, 4, 12
-components/SectionHeader.tsx, TypeScript React, 0, 125, 0, 0, 0, 17, 16, 158
-components/SectionList.tsx, TypeScript React, 0, 8, 0, 0, 0, 0, 1, 9
-components/SectionTable.tsx, TypeScript React, 0, 7, 0, 0, 0, 1, 4, 12
-components/SelectProduct.tsx, TypeScript React, 0, 64, 0, 0, 0, 3, 9, 76
+components/Names.tsx, TypeScript React, 0, 22, 0, 0, 0, 3, 2, 27
 components/Status.css, CSS, 14, 0, 0, 0, 0, 0, 2, 16
-components/Warning.tsx, TypeScript React, 0, 13, 0, 0, 0, 0, 2, 15
-constants/api.ts, TypeScript, 0, 0, 0, 49, 0, 0, 6, 55
-constants/mock.ts, TypeScript, 0, 0, 0, 33, 0, 0, 5, 38
-constants/routes.ts, TypeScript, 0, 0, 0, 6, 0, 0, 0, 6
-constants/util.ts, TypeScript, 0, 0, 0, 205, 0, 12, 25, 242
-firebase/firebase.ts, TypeScript, 0, 0, 0, 28, 0, 1, 8, 37
-firebase/types.ts, TypeScript, 0, 0, 0, 18, 0, 0, 2, 20
-hooks/useEditableList.ts, TypeScript, 0, 0, 0, 22, 0, 0, 7, 29
-hooks/useFilterableList.ts, TypeScript, 0, 0, 0, 26, 0, 8, 9, 43
-hooks/useForm.ts, TypeScript, 0, 0, 0, 9, 0, 0, 4, 13
-hooks/useGate.ts, TypeScript, 0, 0, 0, 18, 0, 1, 6, 25
-hooks/useInitialization.ts, TypeScript, 0, 0, 0, 106, 0, 5, 14, 125
-hooks/useLoadedGate.ts, TypeScript, 0, 0, 0, 52, 0, 1, 7, 60
-hooks/useLocation.ts, TypeScript, 0, 0, 0, 21, 0, 1, 4, 26
-hooks/useSearch.ts, TypeScript, 0, 0, 0, 26, 0, 12, 5, 43
-hooks/useSortableList.ts, TypeScript, 0, 0, 0, 28, 0, 0, 6, 34
-hooks/useUser.ts, TypeScript, 0, 0, 0, 3, 0, 0, 0, 3
+components/history/Completed.tsx, TypeScript React, 0, 245, 0, 0, 0, 0, 21, 266
+components/history/Report.tsx, TypeScript React, 0, 161, 0, 0, 0, 0, 15, 176
+components/history/Reports.tsx, TypeScript React, 0, 70, 0, 0, 0, 0, 9, 79
+components/inventory/EditOrder.tsx, TypeScript React, 0, 319, 0, 0, 0, 3, 22, 344
+components/inventory/EditProduct.tsx, TypeScript React, 0, 337, 0, 0, 0, 6, 22, 365
+components/inventory/EditSale.tsx, TypeScript React, 0, 319, 0, 0, 0, 3, 19, 341
+components/inventory/ItemPage.tsx, TypeScript React, 0, 105, 0, 0, 0, 0, 12, 117
+components/inventory/ProductName.tsx, TypeScript React, 0, 13, 0, 0, 0, 0, 1, 14
+components/inventory/ProductSuppliers.tsx, TypeScript React, 0, 2, 0, 0, 0, 10, 3, 15
+components/inventory/ProductTransactions.tsx, TypeScript React, 0, 7, 0, 0, 0, 1, 4, 12
+components/util/Buttons.tsx, TypeScript React, 0, 14, 0, 0, 0, 0, 3, 17
+components/util/CloudStatus.tsx, TypeScript React, 0, 53, 0, 0, 0, 3, 6, 62
+components/util/DropDownMenu.tsx, TypeScript React, 0, 33, 0, 0, 0, 0, 6, 39
+components/util/Icons.tsx, TypeScript React, 0, 76, 0, 0, 0, 3, 8, 87
+components/util/Notifications.tsx, TypeScript React, 0, 74, 0, 0, 0, 0, 12, 86
+components/util/SectionHeader.tsx, TypeScript React, 0, 125, 0, 0, 0, 17, 16, 158
+components/util/SectionList.tsx, TypeScript React, 0, 8, 0, 0, 0, 0, 1, 9
+components/util/SectionTable.tsx, TypeScript React, 0, 72, 0, 0, 0, 1, 12, 85
+components/util/SelectProduct.tsx, TypeScript React, 0, 64, 0, 0, 0, 3, 9, 76
+components/util/Warning.tsx, TypeScript React, 0, 13, 0, 0, 0, 0, 2, 15
+constants/api.ts, TypeScript, 0, 0, 49, 0, 0, 0, 6, 55
+constants/mock.ts, TypeScript, 0, 0, 33, 0, 0, 0, 5, 38
+constants/routes.ts, TypeScript, 0, 0, 6, 0, 0, 0, 0, 6
+constants/util.ts, TypeScript, 0, 0, 238, 0, 0, 12, 28, 278
+firebase/findReport.ts, TypeScript, 0, 0, 78, 0, 0, 1, 19, 98
+firebase/firebase.ts, TypeScript, 0, 0, 29, 0, 0, 1, 8, 38
+firebase/history.ts, TypeScript, 0, 0, 13, 0, 0, 0, 3, 16
+firebase/types.ts, TypeScript, 0, 0, 18, 0, 0, 0, 2, 20
+hooks/useEditableList.ts, TypeScript, 0, 0, 22, 0, 0, 0, 7, 29
+hooks/useFilterableList.ts, TypeScript, 0, 0, 26, 0, 0, 8, 9, 43
+hooks/useForm.ts, TypeScript, 0, 0, 9, 0, 0, 0, 4, 13
+hooks/useGate.ts, TypeScript, 0, 0, 18, 0, 0, 1, 6, 25
+hooks/useInitialization.ts, TypeScript, 0, 0, 106, 0, 0, 5, 14, 125
+hooks/useLoadedGate.ts, TypeScript, 0, 0, 52, 0, 0, 1, 7, 60
+hooks/useLocation.ts, TypeScript, 0, 0, 21, 0, 0, 1, 4, 26
+hooks/useReports.ts, TypeScript, 0, 0, 109, 0, 0, 2, 21, 132
+hooks/useSaving.ts, TypeScript, 0, 0, 106, 0, 0, 3, 14, 123
+hooks/useSearch.ts, TypeScript, 0, 0, 26, 0, 0, 12, 5, 43
+hooks/useSortableList.ts, TypeScript, 0, 0, 28, 0, 0, 0, 6, 34
+hooks/useUser.ts, TypeScript, 0, 0, 3, 0, 0, 0, 0, 3
 index.css, CSS, 14, 0, 0, 0, 0, 0, 2, 16
 index.tsx, TypeScript React, 0, 14, 0, 0, 0, 3, 4, 21
 logo.svg, XML, 0, 0, 0, 0, 7, 0, 1, 8
 pages/Categories.tsx, TypeScript React, 0, 58, 0, 0, 0, 0, 9, 67
 pages/Customers.tsx, TypeScript React, 0, 7, 0, 0, 0, 0, 3, 10
-pages/History.tsx, TypeScript React, 0, 8, 0, 0, 0, 0, 2, 10
+pages/History.tsx, TypeScript React, 0, 53, 0, 0, 0, 1, 7, 61
 pages/Orders.css, CSS, 40, 0, 0, 0, 0, 0, 8, 48
-pages/Orders.tsx, TypeScript React, 0, 272, 0, 0, 0, 6, 22, 300
+pages/Orders.tsx, TypeScript React, 0, 261, 0, 0, 0, 5, 21, 287
 pages/Products.css, CSS, 48, 0, 0, 0, 0, 16, 12, 76
-pages/Products.tsx, TypeScript React, 0, 184, 0, 0, 0, 11, 14, 209
+pages/Products.tsx, TypeScript React, 0, 169, 0, 0, 0, 11, 13, 193
 pages/Profile.tsx, TypeScript React, 0, 7, 0, 0, 0, 0, 3, 10
 pages/Sales.css, CSS, 10, 0, 0, 0, 0, 0, 1, 11
-pages/Sales.tsx, TypeScript React, 0, 204, 0, 0, 0, 3, 17, 224
+pages/Sales.tsx, TypeScript React, 0, 202, 0, 0, 0, 3, 16, 221
 pages/Suppliers.tsx, TypeScript React, 0, 7, 0, 0, 0, 0, 3, 10
 react-app-env.d.ts, TypeScript, 0, 0, 0, 0, 0, 1, 1, 2
-redux/actions/authActions.ts, TypeScript, 0, 0, 0, 89, 0, 1, 16, 106
-redux/actions/categoriesActions.ts, TypeScript, 0, 0, 0, 62, 0, 15, 13, 90
-redux/actions/customersActions.ts, TypeScript, 0, 0, 0, 61, 0, 31, 15, 107
-redux/actions/index.ts, TypeScript, 0, 0, 0, 42, 0, 0, 6, 48
-redux/actions/ordersActions.ts, TypeScript, 0, 0, 0, 124, 0, 3, 25, 152
-redux/actions/productsActions.ts, TypeScript, 0, 0, 0, 104, 0, 18, 29, 151
-redux/actions/salesActions.ts, TypeScript, 0, 0, 0, 113, 0, 1, 20, 134
-redux/actions/suppliersActions.ts, TypeScript, 0, 0, 0, 66, 0, 31, 15, 112
-redux/middleware/firestore.ts, TypeScript, 0, 0, 0, 118, 0, 6, 13, 137
-redux/middleware/localStorage.ts, TypeScript, 0, 0, 0, 47, 0, 0, 8, 55
-redux/middleware/thunks.ts, TypeScript, 0, 0, 0, 108, 0, 6, 12, 126
-redux/middleware/types.ts, TypeScript, 0, 0, 0, 13, 0, 6, 6, 25
-redux/reducers/authReducers.ts, TypeScript, 0, 0, 0, 88, 0, 0, 3, 91
-redux/reducers/categoriesReducers.ts, TypeScript, 0, 0, 0, 31, 0, 1, 3, 35
-redux/reducers/customersReducers.ts, TypeScript, 0, 0, 0, 31, 0, 1, 2, 34
-redux/reducers/drafts.ts, TypeScript, 0, 0, 0, 86, 0, 5, 11, 102
-redux/reducers/index.ts, TypeScript, 0, 0, 0, 28, 0, 0, 4, 32
-redux/reducers/ordersReducers.ts, TypeScript, 0, 0, 0, 97, 0, 1, 3, 101
-redux/reducers/productsReducers.ts, TypeScript, 0, 0, 0, 75, 0, 1, 3, 79
-redux/reducers/salesReducers.ts, TypeScript, 0, 0, 0, 83, 0, 1, 3, 87
-redux/reducers/suppliersReducers.ts, TypeScript, 0, 0, 0, 31, 0, 1, 3, 35
-redux/selectors/productSelectors.ts, TypeScript, 0, 0, 0, 5, 0, 0, 3, 8
-redux/store.ts, TypeScript, 0, 0, 0, 10, 0, 0, 1, 11
-redux/types.ts, TypeScript, 0, 0, 0, 136, 0, 0, 23, 159
-serviceWorker.js, JavaScript, 0, 0, 92, 0, 0, 31, 13, 136
-styles/colors.js, JavaScript, 0, 0, 5, 0, 0, 0, 3, 8
-styles/display.js, JavaScript, 0, 0, 18, 0, 0, 0, 5, 23
-styles/index.js, JavaScript, 0, 0, 8, 0, 0, 0, 1, 9
-styles/placement.js, JavaScript, 0, 0, 5, 0, 0, 22, 1, 28
+redux/actions/authActions.ts, TypeScript, 0, 0, 88, 0, 0, 1, 16, 105
+redux/actions/categoriesActions.ts, TypeScript, 0, 0, 64, 0, 0, 15, 13, 92
+redux/actions/customersActions.ts, TypeScript, 0, 0, 63, 0, 0, 31, 15, 109
+redux/actions/index.ts, TypeScript, 0, 0, 42, 0, 0, 0, 6, 48
+redux/actions/ordersActions.ts, TypeScript, 0, 0, 124, 0, 0, 3, 25, 152
+redux/actions/productsActions.ts, TypeScript, 0, 0, 106, 0, 0, 18, 29, 153
+redux/actions/reportsActions.ts, TypeScript, 0, 0, 195, 0, 0, 3, 29, 227
+redux/actions/salesActions.ts, TypeScript, 0, 0, 114, 0, 0, 1, 20, 135
+redux/actions/suppliersActions.ts, TypeScript, 0, 0, 68, 0, 0, 1, 13, 82
+redux/middleware/changeLog.ts, TypeScript, 0, 0, 22, 0, 0, 0, 4, 26
+redux/middleware/firestore.ts, TypeScript, 0, 0, 119, 0, 0, 6, 13, 138
+redux/middleware/localStorage.ts, TypeScript, 0, 0, 47, 0, 0, 0, 8, 55
+redux/middleware/thunks.ts, TypeScript, 0, 0, 115, 0, 0, 6, 13, 134
+redux/middleware/types.ts, TypeScript, 0, 0, 13, 0, 0, 6, 6, 25
+redux/reducers/authReducers.ts, TypeScript, 0, 0, 88, 0, 0, 0, 3, 91
+redux/reducers/categoriesReducers.ts, TypeScript, 0, 0, 32, 0, 0, 1, 3, 36
+redux/reducers/customersReducers.ts, TypeScript, 0, 0, 32, 0, 0, 1, 2, 35
+redux/reducers/drafts.ts, TypeScript, 0, 0, 81, 0, 0, 5, 10, 96
+redux/reducers/index.ts, TypeScript, 0, 0, 31, 0, 0, 0, 4, 35
+redux/reducers/ordersReducers.ts, TypeScript, 0, 0, 97, 0, 0, 1, 3, 101
+redux/reducers/productsReducers.ts, TypeScript, 0, 0, 75, 0, 0, 1, 3, 79
+redux/reducers/reportsReducers.ts, TypeScript, 0, 0, 83, 0, 0, 0, 5, 88
+redux/reducers/salesReducers.ts, TypeScript, 0, 0, 83, 0, 0, 1, 3, 87
+redux/reducers/suppliersReducers.ts, TypeScript, 0, 0, 32, 0, 0, 1, 3, 36
+redux/selectors/productSelectors.ts, TypeScript, 0, 0, 15, 0, 0, 2, 3, 20
+redux/store.ts, TypeScript, 0, 0, 10, 0, 0, 0, 1, 11
+redux/types.ts, TypeScript, 0, 0, 256, 0, 0, 0, 40, 296
+serviceWorker.js, JavaScript, 0, 0, 0, 92, 0, 31, 13, 136
+styles/colors.js, JavaScript, 0, 0, 0, 5, 0, 0, 3, 8
+styles/display.js, JavaScript, 0, 0, 0, 18, 0, 0, 5, 23
+styles/index.js, JavaScript, 0, 0, 0, 8, 0, 0, 1, 9
+styles/placement.js, JavaScript, 0, 0, 0, 5, 0, 22, 1, 28
 styles/size.js, JavaScript, 0, 0, 0, 0, 0, 0, 1, 1
-Total, -, 169, 2572, 136, 2298, 7, 330, 687, 6199
+Total, -, 169, 3309, 3085, 136, 7, 300, 860, 7866

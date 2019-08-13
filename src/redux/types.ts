@@ -21,6 +21,8 @@ interface SectionState extends SavingState, LoadingState {
   currentID: number
 }
 
+//AUTH
+
 export interface LastChanged {
   global: Date | string,
   sections: {
@@ -59,6 +61,10 @@ export interface AuthState extends SavingState, LoadingState {
   loggingOut: boolean
 }
 
+//AUTH END
+
+//CATEGORIES
+
 export interface ICategory extends IStringKey {
   categoryID: number,
   color?: string,
@@ -69,6 +75,10 @@ export interface CategoriesState extends SectionState, IStringKey {
   categories: Array<ICategory>
 }
 
+//CATEGORIES END
+
+//CUSTOMERS
+
 export interface ICustomer extends IStringKey {
   customerID: number,
   name: string
@@ -77,6 +87,10 @@ export interface ICustomer extends IStringKey {
 export interface CustomersState extends SectionState, IStringKey {
   customers: ICustomer[]
 }
+
+//CUSTOMERS END
+
+//PRODUCTS
 
 export interface IProduct extends IStringKey {
   active: boolean,
@@ -91,6 +105,10 @@ export interface ProductsState extends SectionState, IStringKey {
   products: Array<IProduct>,
   sortedProducts: Array<IProduct>
 }
+
+//PRODUCTS END
+
+//ORDERS
 
 export interface IOrderedProduct {
   amount: number,
@@ -114,6 +132,10 @@ export interface OrdersState extends SectionState {
   history: IOrder[]
 }
 
+//ORDERS END
+
+//SALES
+
 export interface ISale {
   customerID: number,
   dateOrdered: Date | string | null,
@@ -130,6 +152,10 @@ export interface SalesState extends SectionState {
   history: Array<ISale>
 }
 
+//SALES END
+
+//SUPPLIERS
+
 export interface ISupplier {
   name: string,
   supplierID: number
@@ -138,6 +164,10 @@ export interface ISupplier {
 export interface SuppliersState extends SectionState {
   suppliers: Array<ISupplier>
 }
+
+//SUPPLIERS END
+
+//REPORTS
 
 export interface ILoggedChange {
   timeChanged: string
@@ -235,9 +265,9 @@ export interface IReportsReport {
 }
 
 export type IChangeTypes = 
-"NEW_PRODUCT" | "NEW_ORDER" | "NEW_SUPPLIER" |
+"NEW_PRODUCT" | "NEW_CATEGORY" | "NEW_ORDER" | "NEW_SUPPLIER" |
 "NEW_SALE" | "NEW_CUSTOMER" | "NEW_LOAN" |
-"EDIT_PRODUCT_INFO" | "EDIT_ORDER_INFO" |
+"EDIT_PRODUCT_INFO" | "EDIT_CATEGORY_INFO" | "EDIT_ORDER_INFO" |
 "EDIT_SUPPLIER_INFO" | "EDIT_SALE_INFO" |
 "EDIT_CUSTOMER_INFO" | "EDIT_LOAN_INFO" |
 "EDIT_PRODUCT_AMOUNT" |
@@ -247,21 +277,20 @@ export type IChangeTypes =
 
 export interface IChange {
   section: string
-  name: string
+  name?: string
   id: number
   type: IChangeTypes
+  reason?: string
 }
 
 export interface IChangeValue {
   key: string
-  value: string | number
+  oldValue: any
+  newValue: any
 }
 
 export interface IChangeEdit extends IChange {
-  changes: {
-    oldValues: IChangeValue[]
-    newValues: IChangeValue[]
-  }
+  changed: IChangeValue[]
 }
 
 export type Changes = IChange | IChangeEdit
@@ -274,6 +303,8 @@ export interface ReportsState {
   report: IReportsReport
   changes: Changes[]
 }
+
+//REPORTS END
 
 export type AnyState = 
   AuthState | 

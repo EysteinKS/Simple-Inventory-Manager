@@ -1,4 +1,4 @@
-import { ISupplier, ICustomer, ISale, IOrder, IProduct, RootState, ICategory, IOrderedProduct } from "../redux/types";
+import { ISupplier, ICustomer, ISale, IOrder, IProduct, RootState, ICategory, IOrderedProduct, IChangeValue } from "../redux/types";
 import { TDirections } from "../components/util/SectionHeader";
 
 //GETTING VALUES
@@ -253,6 +253,26 @@ export const addZero = (str: string) => {
   }
 }
 
-export const isChanged = () => {
-  
+export const isChanged = (prev: any, next: any) => {
+  let prevAsJSON = JSON.stringify(prev)
+  let nextAsJSON = JSON.stringify(next)
+  let isEqual = (prevAsJSON === nextAsJSON)
+  let changed: IChangeValue[] = []
+  if(!isEqual){
+    Object.keys(next).forEach(key => {
+      let oldKey = prev[key]
+      let newKey = next[key]
+      if(oldKey !== newKey){
+        changed.push({
+          key: key,
+          oldValue: oldKey,
+          newValue: newKey
+        })
+      }
+    })
+  }
+  return {
+    isEqual,
+    changed
+  }
 }

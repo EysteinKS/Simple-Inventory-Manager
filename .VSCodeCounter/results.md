@@ -1,18 +1,18 @@
 # Summary
 
-Date : 2019-07-11 17:23:49
+Date : 2019-08-09 13:17:25
 
 Directory /Users/eystein/Documents/Programmering/lagerstatus/src
 
-Total : 86 files,  5182 codes, 330 comments, 687 blanks, all 6199 lines
+Total : 96 files,  6706 codes, 300 comments, 860 blanks, all 7866 lines
 
 [details](details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| TypeScript React | 31 | 2,572 | 90 | 280 | 2,942 |
-| TypeScript | 41 | 2,298 | 171 | 349 | 2,818 |
+| TypeScript React | 34 | 3,309 | 79 | 340 | 3,728 |
+| TypeScript | 48 | 3,085 | 152 | 462 | 3,699 |
 | CSS | 6 | 169 | 16 | 31 | 216 |
 | JavaScript | 7 | 136 | 53 | 26 | 215 |
 | XML | 1 | 7 | 0 | 1 | 8 |
@@ -20,17 +20,20 @@ Total : 86 files,  5182 codes, 330 comments, 687 blanks, all 6199 lines
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 86 | 5,182 | 330 | 687 | 6,199 |
-| components | 21 | 1,723 | 66 | 188 | 1,977 |
-| constants | 4 | 293 | 12 | 36 | 341 |
-| firebase | 2 | 46 | 1 | 10 | 57 |
-| hooks | 10 | 311 | 28 | 62 | 401 |
-| pages | 11 | 845 | 36 | 94 | 975 |
-| redux | 24 | 1,648 | 129 | 240 | 2,017 |
-| redux/actions | 8 | 661 | 100 | 139 | 900 |
-| redux/middleware | 4 | 286 | 18 | 39 | 343 |
-| redux/reducers | 9 | 550 | 11 | 35 | 596 |
-| redux/selectors | 1 | 5 | 0 | 3 | 8 |
+| . | 96 | 6,706 | 300 | 860 | 7,866 |
+| components | 24 | 2,445 | 55 | 246 | 2,746 |
+| components/history | 3 | 476 | 0 | 45 | 521 |
+| components/inventory | 7 | 1,102 | 23 | 83 | 1,208 |
+| components/util | 10 | 532 | 27 | 75 | 634 |
+| constants | 4 | 326 | 12 | 39 | 377 |
+| firebase | 4 | 138 | 2 | 32 | 172 |
+| hooks | 12 | 526 | 33 | 97 | 656 |
+| pages | 11 | 862 | 36 | 96 | 994 |
+| redux | 27 | 2,095 | 104 | 293 | 2,492 |
+| redux/actions | 9 | 864 | 73 | 166 | 1,103 |
+| redux/middleware | 5 | 316 | 18 | 44 | 378 |
+| redux/reducers | 10 | 634 | 11 | 39 | 684 |
+| redux/selectors | 1 | 15 | 2 | 3 | 20 |
 | styles | 5 | 36 | 22 | 11 | 69 |
 
 [details](details.md)

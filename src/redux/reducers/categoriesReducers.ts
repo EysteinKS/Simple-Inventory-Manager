@@ -27,7 +27,8 @@ export default (state = initialState, { type, payload }: AnyAction) =>
           categoryID: draft.categories.length + 1,
           name: payload
         })
-        break
+        draft.isSaved = false
+        return draft
       case action.RESET_CATEGORIES:
         return drafts.resetReducer(initialState)
     }

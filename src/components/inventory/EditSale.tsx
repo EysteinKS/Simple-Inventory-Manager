@@ -12,6 +12,8 @@ import ProductName from "./ProductName";
 import SelectProduct from "../util/SelectProduct";
 import useEditableList from "../../hooks/useEditableList"
 import { RootState, ICustomer, IOrderedProduct, ISale } from "../../redux/types";
+import { isChanged } from "../../constants/util";
+import { addChange } from "../../redux/actions/reportsActions";
 
 ReactModal.setAppElement("#root");
 
@@ -62,15 +64,30 @@ export default function EditSale({ isOpen, close }: TEditSale) {
     let returnedSale = {
       saleID: current.saleID,
       customerID: Number(customer),
-      dateOrdered: new Date(),
-      dateSent: null,
+      dateOrdered: current.dateOrdered,
+      dateSent: current.dateSent,
       ordered: ordered
     };
     //console.log(returnedOrder)
     if(current.isNew){
+      dispatch(addChange({
+        type: "NEW_SALE",
+        id: returnedSale.saleID,
+        section: "sales"
+      }))
       dispatch(saveCreatedSale(returnedSale));
     } else {
-      dispatch(saveEditedSale(returnedSale));
+      let isSaleChanged = isChanged(current, returnedSale)
+      if(!isSaleChanged.isEqual){
+        console.log(isSaleChanged.changed)
+        dispatch(addChange({
+          type: "EDIT_SALE_INFO",
+          id: returnedSale.saleID,
+          section: "sales",
+          changed: isSaleChanged.changed
+        }))
+        dispatch(saveEditedSale(returnedSale));
+      }
     }
     close();
     setInit(false);
@@ -171,6 +188,12 @@ const AddCustomer = ({ visible, close, customers }: TAddCustomer) => {
   const save = useCallback(
     event => {
       event.preventDefault();
+      dispatch(addChange({
+        type: "NEW_CUSTOMER",
+        id: ID,
+        name,
+        section: "customers"
+      }))
       dispatch(saveCreatedCustomer(name));
       close(ID);
     },

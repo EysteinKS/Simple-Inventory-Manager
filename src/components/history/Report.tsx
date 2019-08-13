@@ -1,15 +1,17 @@
 import React from 'react'
-import { IReport, RootState } from '../../redux/types';
+import { IReport, RootState, Changes } from '../../redux/types';
 import { useSelector } from 'react-redux';
 import Table, { TableHeader, TableBody, TableRow, ITableColumn } from '../util/SectionTable';
 import styled from 'styled-components';
+import { ExpandableRow } from './Completed';
+import ReportChanges from './ReportChanges';
 
 const ReportWrapper = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr;
   background-color: white;
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   padding: 10px;
   margin-top: 10px;
 `
@@ -129,7 +131,7 @@ const Report: React.FC = () => {
                 new Date(log.timeChanged).toLocaleString("default", localeStringOpts)
               ]
               if("changes" in log && log.changes.length > 0){
-
+                return <ExtendedChangeLog key={"log_row_" + i} columns={columns} changes={log.changes}/>
               }
               else return <TableRow key={"log_row_" + i} columns={columns}/>
             })}
@@ -163,13 +165,67 @@ const ReportTable: React.FC<IReportTable> = ({ name, columns, children }) => {
           {name}
         </h2>
     </TableButton>
-    {isOpen && <Table>
-      <TableHeader columns={columns}/>
-      <TableBody>
-        {children}
-      </TableBody>
-    </Table>}
+    {isOpen && (
+      <div
+        style={{
+          padding: "10px",
+          backgroundColor: "white",
+          border: "2px solid lightgray"
+        }}
+      >
+        <Table
+          style={{
+            borderCollapse: "collapse",
+            width: "100%"
+          }}
+        >
+          <TableHeader columns={columns}/>
+          <TableBody>{children}</TableBody>
+        </Table>
+      </div>
+    )}
     </>
+  )
+}
+
+interface ExtendedProps {
+  columns: any[]
+  changes: Changes[]
+}
+
+const ExtendedChangeLog: React.FC<ExtendedProps> = ({ columns, changes }) => {
+  return(
+    <ExpandableRow columns={columns}>
+      <ChangeWrapper>
+      {changes.map((change, i) => 
+        <ReportChanges index={i} key={change.type + "_" + i} change={change}/>
+      )}
+      </ChangeWrapper>
+    </ExpandableRow>
+  )
+}
+
+const StyledChangeContent = styled.ul`
+  width: 100%;
+  margin-bottom: 20px;
+  margin-block-start: 0;
+  padding: 1em 2rem;
+  background-color: rgb(246, 246, 246);
+  border: 2px solid rgb(204, 204, 204);
+  border-top: none;
+  border-image: initial;
+  list-style: none;
+`
+
+const ChangeWrapper: React.FC = ({ children }) => {
+  return(
+    <tr>
+      <td colSpan={4}>
+          <StyledChangeContent>
+            {children}
+          </StyledChangeContent>
+      </td>
+    </tr>
   )
 }
 

@@ -12,6 +12,8 @@ import SelectProduct from "../util/SelectProduct";
 import useEditableList from "../../hooks/useEditableList"
 import { RootState, ISupplier, IOrderedProduct } from "../../redux/types";
 import ProductName from "./ProductName"
+import { addChange } from "../../redux/actions/reportsActions";
+import { isChanged } from "../../constants/util";
 
 ReactModal.setAppElement("#root")
 
@@ -63,21 +65,36 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
     let returnedOrder = {
       orderID: current.orderID,
       supplierID: Number(supplier),
-      dateOrdered: new Date(),
-      dateReceived: null,
+      dateOrdered: current.dateOrdered,
+      dateReceived: current.dateReceived,
       ordered: ordered
     };
     //console.log(returnedOrder)
     if(current.isNew){
+      dispatch(addChange({
+        type: "NEW_ORDER",
+        id: returnedOrder.orderID,
+        section: "orders"
+      }))
       dispatch(saveCreatedOrder(returnedOrder));
     } else {
-      dispatch(saveEditedOrder(returnedOrder));
+      let isOrderChanged = isChanged(current, returnedOrder)
+      if(!isOrderChanged.isEqual){
+        console.log(isOrderChanged.changed)
+        dispatch(addChange({
+          type: "EDIT_ORDER_INFO",
+          id: returnedOrder.orderID,
+          section: "orders",
+          changed: isOrderChanged.changed
+        }))
+        dispatch(saveEditedOrder(returnedOrder));
+      }
     }
     close();
     setInit(false);
   };
 
-  if(!Array.isArray(current.ordered)) {return null}
+  if(!Array.isArray(current.ordered)) return null
 
   return (
     <ReactModal
@@ -174,6 +191,12 @@ const AddSupplier = ({ visible, close, suppliers }: TAddSupplier) => {
   const save = useCallback(
     event => {
       event.preventDefault();
+      dispatch(addChange({
+        type: "NEW_SUPPLIER",
+        id: ID,
+        name,
+        section: "suppliers"
+      }))
       dispatch(saveCreatedSupplier(name));
       close(ID);
     },

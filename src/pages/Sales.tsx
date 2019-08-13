@@ -19,6 +19,7 @@ import {isArrayEmpty, newSale, sort} from "../constants/util"
 import useSortableList from "../hooks/useSortableList";
 import produce from "immer";
 import { RootState, ISale } from "../redux/types";
+import { addChange } from "../redux/actions/reportsActions";
 
 export default function Sales(){
   const dispatch = useDispatch()
@@ -189,11 +190,25 @@ const Sale = ({ sale, edit }: TSale) => {
         <button onClick={() => edit(saleID)}><Icons.Edit/></button>
         <Buttons.Confirm
           message="Vil du slette dette salget?"
-          onConfirm={() => dispatch(deleteSale(saleID))}
+          onConfirm={() => {
+            dispatch(addChange({
+              type: "DELETE_SALE",
+              id: saleID,
+              section: "sales"
+            }))
+            dispatch(deleteSale(saleID))
+          }}
         ><Icons.Delete/></Buttons.Confirm>
         <Buttons.Confirm
           message="Bekreft sending av salg"
-          onConfirm={() => dispatch(didSendSale(saleID, ordered))}
+          onConfirm={() => {
+            dispatch(addChange({
+              type: "SENT_SALE",
+              id: saleID,
+              section: "sales"
+            }))
+            dispatch(didSendSale(saleID, ordered))
+          }}
         >></Buttons.Confirm>
       </div>
       <div style={expandedStyle}>

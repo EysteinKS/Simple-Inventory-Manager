@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from "react"
+import React, {useState, useEffect, useCallback, useMemo} from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { saveCreatedProduct, saveEditedProduct } from "../../redux/actions/productsActions"
 import { saveCreatedCategory } from "../../redux/actions/categoriesActions"
@@ -7,6 +7,7 @@ import Collapse from "@material-ui/core/Collapse"
 import Icons from "../util/Icons"
 import { RootState, ICategory, IProduct } from "../../redux/types";
 import { addChange } from "../../redux/actions/reportsActions";
+import { isChanged } from "../../constants/util";
 ReactModal.setAppElement("#root");
 
 //TODO
@@ -30,6 +31,9 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
   const [active, setActive] = useState(current.active);
   const [comments, setComments] = useState(current.comments)
 
+  const [editAmount, setEditAmount] = useState(false)
+  const [prevAmount, setPrevAmount] = useState(0)
+
   useEffect(() => {
     setComments(current.comments)
     // eslint-disable-next-line
@@ -46,22 +50,11 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
   }
 
   const [newCategory, toggleNewCategory] = useState(false)
-
-/*   useEffect(() => {
-    console.log(categories)
-    if(!categories.length){
-      console.log("Setting toggleNewCategory(true)")
-      toggleNewCategory(true)
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]) */
   
   useEffect(() => {
     if(category === "new"){
-      //console.log("Creating new category!")
       toggleNewCategory(true)
     } else if (categories.length){
-      console.log("Setting toggleNewCategory(false)")
       toggleNewCategory(false)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,33 +69,14 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
     productID: current.productID,
   } as IProduct
 
-  const isChanged = () => {
-    let productInStore = products[products.findIndex(i => i.productID === returnedProduct.productID)]
-    let storeAsJSON = JSON.stringify(productInStore)
-    let returnedAsJSON = JSON.stringify(returnedProduct)
-    let isEqual = (storeAsJSON === returnedAsJSON)
-    let changed: any[] = [];
-    if(!isEqual){
-      Object.keys(returnedProduct).forEach(key => {
-        let oldKey = productInStore[key]
-        let newKey = returnedProduct[key]
-        if(oldKey !== newKey){
-          changed.push({
-            key: key,
-            old: oldKey,
-            new: newKey
-          })
-        }
-      })
-    }
-    return { 
-      isEqual,
-      changed
-    }
-  }
+  const product = useMemo(() => 
+    products[products.findIndex(i => i.productID === returnedProduct.productID)]
+  , [products, returnedProduct])
+
+  const isNew = (current.productID > products.length)
 
   const save = () => {
-    if (current.productID > products.length) {
+    if (isNew) {
       dispatch(addChange({
         type: "NEW_PRODUCT",
         name: returnedProduct.name,
@@ -113,9 +87,17 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
       close();
       setInit(false);
     } else {
-      let isProductChanged = isChanged()
+      let productInStore = products[products.findIndex(i => i.productID === returnedProduct.productID)]
+      let isProductChanged = isChanged(productInStore, returnedProduct)
       if(!isProductChanged.isEqual){
         console.log(isProductChanged.changed)
+        dispatch(addChange({
+          type: "EDIT_PRODUCT_INFO",
+          name: returnedProduct.name,
+          id: returnedProduct.productID,
+          section: "products",
+          changed: isProductChanged.changed
+        }))
         dispatch(saveEditedProduct(returnedProduct));
       }
       close();
@@ -138,19 +120,23 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
           backgroundColor: "rgba(0, 0, 0, 0.5)"
         },
         content: {
-          top: "20vh",
+          top: "10vh",
           left: "5vw",
           right: "5vw",
-          bottom: "10vh"
+          padding: "10px",
+          display: "grid",
+          gridTemplateRows: "10vh 60vh 10vh"
         }
       }}
     >
-      <p>ID: {current.productID}</p>
+      <p style={{ padding: "10px" }}>ID: {current.productID}</p>
       <form style={{
         display: "grid",
         gridTemplateColumns: "50% 50%",
-        justifyContent: "center"
-      }}>
+        justifyContent: "center",
+        maxHeight: "60vh",
+        padding: "1em"
+      }} onSubmit={e => e.preventDefault()}>
         <label htmlFor="name">Navn</label>
         <input
           type="text"
@@ -179,11 +165,19 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
             />
           : null}
           </Collapse>
-        <label htmlFor="amount">På lager</label>
+        {isNew && <label htmlFor="amount">På lager</label>}
+        {!isNew && <div style={{display: "grid", gridTemplateColumns: "80% 20%"}}>
+          <label htmlFor="amount">På lager</label>
+          <button onClick={() => {
+              setPrevAmount(amount)
+              setEditAmount(true)
+          }}>Endre</button>
+        </div>}
         <input
           type="tel"
           name="amount"
           value={amount}
+          disabled={!isNew}
           onChange={event => 
             (!isNaN(event.target.value as any)) 
             ? setAmount(event.target.value.replace(/\s/g,''))
@@ -199,15 +193,30 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
           onChange={() => setActive(!active)}
         />
       </form>
-      <button onClick={save}>Lagre</button>
-      <button
-        onClick={() => {
-          close();
-          setInit(false);
+      <div style={{ display: "grid", gridTemplateColumns: "60% 20% 20%" }}>
+        <div/>
+        <button onClick={save}>Lagre</button>
+        <button
+          onClick={() => {
+            close();
+            setInit(false);
+          }}
+        >
+          Lukk
+        </button>
+      </div>
+      {editAmount && <EditProductAmount 
+        isOpen={editAmount}
+        close={() => setEditAmount(false)}
+        saveAndClose={() => {
+          setEditAmount(false)
+          close()
+          setInit(false)
         }}
-      >
-        Lukk
-      </button>
+        prevAmount={prevAmount}
+        product={product}
+        returnedProduct={returnedProduct}
+      />}
     </ReactModal>
   );
 };
@@ -225,6 +234,12 @@ const AddCategory = ({ visible, close, categories }: TAddCategory) => {
   const save = useCallback(
     (event) => {
       event.preventDefault()
+      dispatch(addChange({
+        type: "NEW_CATEGORY",
+        id: ID,
+        name,
+        section: "categories"
+      }))
       dispatch(saveCreatedCategory(name))
       close(ID)
     },
@@ -266,5 +281,85 @@ const AddCategory = ({ visible, close, categories }: TAddCategory) => {
         <Icons.NewFolder/>
       </button>
     </div>
+  )
+}
+
+interface IAmountProps {
+  isOpen: boolean
+  close: () => void
+  saveAndClose: () => void
+  prevAmount: number
+  product: IProduct
+  returnedProduct: IProduct
+}
+
+const EditProductAmount: React.FC<IAmountProps> = ({ isOpen, close, saveAndClose, prevAmount, product, returnedProduct }) => {
+  const [newAmount, setNewAmount] = useState(prevAmount)
+  const [reason, setReason] = useState("")
+  const dispatch = useDispatch()
+
+  const save = () => {
+    dispatch(addChange({
+      type: "EDIT_PRODUCT_AMOUNT",
+      name: returnedProduct.name,
+      reason,
+      id: returnedProduct.productID,
+      section: "products",
+      changed: [{
+        key: "amount",
+        oldValue: product.amount,
+        newValue: Number(newAmount)
+      }]
+    }))
+    dispatch(saveEditedProduct(returnedProduct))
+    saveAndClose()
+  }
+
+  return(
+    <ReactModal
+        isOpen={isOpen}
+        contentLabel="Edit product amount"
+        shouldCloseOnOverlayClick={true}
+        shouldCloseOnEsc={true}
+        onRequestClose={close}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.5)"
+          },
+          content: {
+            top: "30vh",
+            left: "20vw",
+            right: "20vw",
+            height: "40vh",
+            padding: "1em",
+            display: "grid",
+            gridTemplateRows: "20% 60% 20%"
+          }
+        }}
+        >
+          <h3>Endre antall på lager</h3>
+          <form style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr"
+          }}>
+            <label htmlFor="amount">På lager</label>
+            <input name="amount" type="tel" value={newAmount} onChange={e => setNewAmount(Number(e.target.value))}/>
+            <label htmlFor="reason">Årsak</label>
+            <textarea name="reason" value={reason} onChange={e => setReason(e.target.value)}/>
+          </form>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "60% 20% 20%"
+          }}>
+            <div/>
+            <button 
+              onClick={save}
+              disabled={(prevAmount === newAmount) || (prevAmount === newAmount && reason.length < 1) || reason.length < 1}  
+            >Lagre</button>
+            <button onClick={close}>
+              Lukk
+            </button>
+          </div>
+        </ReactModal>
   )
 }
