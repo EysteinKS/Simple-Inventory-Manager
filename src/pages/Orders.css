@@ -12,11 +12,6 @@
   border-bottom: black 1px solid;
 }
 
-.order-list {
-  max-height: 63vh;
-  overflow-y: scroll;
-}
-
 .order {
   background-color: #bbb;
   margin: 5px;

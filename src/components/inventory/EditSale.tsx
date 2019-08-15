@@ -12,7 +12,7 @@ import ProductName from "./ProductName";
 import SelectProduct from "../util/SelectProduct";
 import useEditableList from "../../hooks/useEditableList"
 import { RootState, ICustomer, IOrderedProduct, ISale } from "../../redux/types";
-import { isChanged } from "../../constants/util";
+import { isChanged, shouldLog } from "../../constants/util";
 import { addChange } from "../../redux/actions/reportsActions";
 
 ReactModal.setAppElement("#root");
@@ -38,7 +38,6 @@ export default function EditSale({ isOpen, close }: TEditSale) {
 
   const [init, setInit] = useState(false);
   if (isOpen && !init) {
-    console.log("EditSale is open and uninitialized")
     setCustomer(current.customerID);
     setOrdered(current.ordered);
     setInit(true);
@@ -68,7 +67,6 @@ export default function EditSale({ isOpen, close }: TEditSale) {
       dateSent: current.dateSent,
       ordered: ordered
     };
-    //console.log(returnedOrder)
     if(current.isNew){
       dispatch(addChange({
         type: "NEW_SALE",
@@ -79,7 +77,7 @@ export default function EditSale({ isOpen, close }: TEditSale) {
     } else {
       let isSaleChanged = isChanged(current, returnedSale)
       if(!isSaleChanged.isEqual){
-        console.log(isSaleChanged.changed)
+        shouldLog("Changed sale content", isSaleChanged.changed)
         dispatch(addChange({
           type: "EDIT_SALE_INFO",
           id: returnedSale.saleID,

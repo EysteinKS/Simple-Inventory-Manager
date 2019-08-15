@@ -92,7 +92,7 @@ export async function getReportByDate(date: IDate) {
     const reports = await secondaryFirestore.doc("Barcontrol/Reports").get()
 
   } catch(err) {
-    console.log(`Error getting report for ${date.year}-${date.month}-${date.day}:` , err)
+    console.error(`Error getting report for ${date.year}-${date.month}-${date.day}:` , err)
   }
 
 }

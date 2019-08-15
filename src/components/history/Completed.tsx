@@ -9,6 +9,7 @@ import Table, {
   TableRow
 } from "../util/SectionTable";
 import { selectProductNames } from "../../redux/selectors/productSelectors";
+import { shouldLog } from "../../constants/util";
 
 const localeStringOpts = {
   day: "2-digit",
@@ -41,7 +42,7 @@ const Completed = () => {
   }, []);
 
   const ordersContent = React.useMemo(() => {
-    console.log("Calculating content in orders history");
+    shouldLog("Calculating content in orders history")
     let sorted = [...orderHistory].sort((a, b) => {
       return a.orderID - b.orderID;
     });
@@ -85,7 +86,7 @@ const Completed = () => {
   }, []);
 
   const salesContent = React.useMemo(() => {
-    console.log("Calculating content in sales history");
+    shouldLog("Calculating content in sales history")
     let sorted = [...saleHistory].sort((a, b) => {
       return a.saleID - b.saleID;
     });

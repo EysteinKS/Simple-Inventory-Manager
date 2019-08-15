@@ -220,7 +220,7 @@ const StyledChangeContent = styled.ul`
 const ChangeWrapper: React.FC = ({ children }) => {
   return(
     <tr>
-      <td colSpan={4}>
+      <td colSpan={3}>
           <StyledChangeContent>
             {children}
           </StyledChangeContent>

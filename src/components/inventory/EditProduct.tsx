@@ -7,7 +7,7 @@ import Collapse from "@material-ui/core/Collapse"
 import Icons from "../util/Icons"
 import { RootState, ICategory, IProduct } from "../../redux/types";
 import { addChange } from "../../redux/actions/reportsActions";
-import { isChanged } from "../../constants/util";
+import { isChanged, shouldLog } from "../../constants/util";
 ReactModal.setAppElement("#root");
 
 //TODO
@@ -41,7 +41,6 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
 
   const [init, setInit] = useState(false);
   if (isOpen && !init) {
-    //console.log(current);
     setName(current.name);
     setCategory(current.categoryID);
     setAmount(current.amount);
@@ -90,7 +89,7 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
       let productInStore = products[products.findIndex(i => i.productID === returnedProduct.productID)]
       let isProductChanged = isChanged(productInStore, returnedProduct)
       if(!isProductChanged.isEqual){
-        console.log(isProductChanged.changed)
+        shouldLog("Changed product info", isProductChanged.changed)
         dispatch(addChange({
           type: "EDIT_PRODUCT_INFO",
           name: returnedProduct.name,
@@ -311,7 +310,7 @@ const EditProductAmount: React.FC<IAmountProps> = ({ isOpen, close, saveAndClose
         newValue: Number(newAmount)
       }]
     }))
-    dispatch(saveEditedProduct(returnedProduct))
+    dispatch(saveEditedProduct({...returnedProduct, amount: Number(newAmount)}))
     saveAndClose()
   }
 

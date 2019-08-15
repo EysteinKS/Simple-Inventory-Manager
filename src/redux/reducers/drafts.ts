@@ -27,21 +27,16 @@ const loadSuccess = (
   targets: string[] | string, 
   payload: any
   ) => {
-  //console.log("loadSuccess payload: ", payload)
-  //console.log("Input of loadSuccess: ", {draft, targets, payload})
   let newDraft = {...draft, ...payload} as any
   newDraft.isLoading = false
   newDraft.isLoaded = true
   if(Array.isArray(targets)){
-    //console.log("targets is array")
     targets.forEach(target => {
       newDraft[target] = payload[targets[0]]
     })
   } else if(typeof targets === "string"){
-    //console.log("targets is string")
     newDraft[targets] = payload[targets]
   }
-  //console.log("Returning draft: ", newDraft)
   return newDraft
 }
 

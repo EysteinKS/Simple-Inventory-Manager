@@ -2,7 +2,7 @@ import React from "react";
 import { RootState, IReportsDates, IReportsReport } from "../redux/types";
 import { useSelector, useDispatch } from "react-redux";
 import { loadReportDates, loadReport } from "../redux/actions/reportsActions";
-import { addZero } from "../constants/util";
+import { addZero, shouldLog } from "../constants/util";
 
 export interface IDateArrays {
   years: string[]
@@ -44,7 +44,7 @@ const useReports = (): TuseReports => {
 
   React.useEffect(() => {
     if(!dates.isLoaded){
-      console.log("Loading report dates...")
+      shouldLog("Loading report dates...")
       dispatch(loadReportDates())
     }
     //eslint-disable-next-line
@@ -112,7 +112,6 @@ const useReports = (): TuseReports => {
       month: addZero(selectedMonth),
       day: addZero(selectedDay)
     }
-    //console.log(date)
     dispatch(loadReport(date))
   }, [selectedYear, selectedMonth, selectedDay, dispatch])
 

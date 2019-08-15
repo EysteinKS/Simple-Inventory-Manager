@@ -32,22 +32,6 @@ export const loadCustomers = () =>
       }
     })
 
-/* export const oldLoadCustomers = () => {
-  return (dispatch, getState) => {
-    const state = getState()
-    dispatch(loadCustomersBegin())
-    firestore.doc(`${state.auth.currentLocation}/Customers`).get()
-      .then(res => {
-        let data = res.data()
-        let customers = data.customers
-        let currentID = data.currentID
-        console.log("Loaded customers successfully")
-        dispatch(loadCustomersSuccess(customers, currentID))
-      })
-      .catch(err => loadCustomersFailure(err))
-  }
-} */
-
 //SAVING
 
 export const SAVE_CUSTOMERS_BEGIN = 'SAVE_CUSTOMERS_BEGIN'
@@ -79,22 +63,6 @@ export const saveCustomers = (date: Date) =>
         currentID: state.customers.currentID
       }
     })
-
-/* export const oldSaveCustomers = (customers) => {
-  return (dispatch, getState) => {
-    const state = getState()
-    dispatch(saveCustomersBegin())
-    firestore.doc(`${state.auth.currentLocation}/Customers`).set({
-      customers: state.customers.customers,
-      currentID: state.customers.currentID
-    }, {merge: true})
-      .then(() => {
-        dispatch(saveCustomersSuccess())
-        dispatch(saveLastChanged("customers"))
-      })
-      .catch(err => dispatch(saveCustomersFailure(err)))
-  }
-} */
 
 export const SAVE_CREATED_CUSTOMER = 'SAVE_CREATED_CUSTOMER'
 export const saveCreatedCustomer = (name: string) => ({

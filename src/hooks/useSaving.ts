@@ -9,6 +9,7 @@ import { saveProducts } from "../redux/actions/productsActions";
 import { saveReport } from "../redux/actions/reportsActions";
 import { saveSales } from "../redux/actions/salesActions";
 import { saveSuppliers } from "../redux/actions/suppliersActions";
+import { shouldLog } from "../constants/util";
 
 const stateKeys = [
   "categories",
@@ -62,11 +63,11 @@ export default function useSaving() {
     let unsaved: string[] = []
     stateKeys.forEach((key, i) => {
       if (!isSaved[i] && !isSaving[i]) {
-        console.log(key + " is unsaved")
+        shouldLog(key + " is unsaved")
         unsaved.push(key)
       }
     })
-    console.log("unsaved: ", unsaved)
+    shouldLog("unsaved: ", unsaved)
     return unsaved
   }
 
@@ -74,14 +75,14 @@ export default function useSaving() {
   const save = () => {
     if(((!isSavingGate && !isSavedGate) || savingErrorGate)) {
       let unsavedSections = getUnsavedSections()
-      console.log("Saving...")
+      shouldLog("Saving...")
       let date = new Date()
       try {
         unsavedSections.forEach(section => {
           if(section !== "reports") dispatch(savingActions[section](date))
         })
-      } catch(err) {console.log(err)}
-      console.log("Saving report from save")
+      } catch(err) {console.error(err)}
+      shouldLog("Saving report from save")
       dispatch(saveReport(date))
     }
   }
@@ -96,8 +97,8 @@ export default function useSaving() {
 
   React.useEffect(() => {
     if(doAutosave && !isTimerStarted && !isSavedGate){
-      console.log("Saving content...")
-      console.log("Starting timeout")
+      shouldLog("Saving content...")
+      shouldLog("Starting timeout")
       console.time("autosave")
       setTimerStarted(true)
       timerRef.current = window.setTimeout(() => {
@@ -111,7 +112,7 @@ export default function useSaving() {
 
   React.useEffect(() => {
     if(doAutosave && !isTimerFinished && isTimerStarted && isSavedGate){
-      console.log("Finished timeout")
+      shouldLog("Finished timeout")
       setTimerStarted(false)
       setTimerFinished(true)
       timerRef.current = null

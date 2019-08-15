@@ -34,12 +34,12 @@ export default function useInitialization() {
     }
   }, [dispatch, user, userLoggingOut])
 
-  const [timer, setTimer] = useState(false)
+  //USED TO SHOW TIME TAKEN UNTIL THE PAGE IS LOADED
+  /* const [timer, setTimer] = useState(false)
   useEffect(() => {
     if(initializingUser || loadingMessage === "Logging in..." || userLoggingOut){
       if(!timer){
         setTimer(true)
-        console.log("Time until interactive...")
         console.time("Time until interactive")
       }
     } else if (!user && !initializingUser) {
@@ -48,7 +48,7 @@ export default function useInitialization() {
         console.timeEnd("Time until interactive")
       }
     }
-  }, [user, initializingUser, userLoggingOut, loadingMessage, timer])
+  }, [user, initializingUser, userLoggingOut, loadingMessage, timer]) */
 
   //FETCH USER
   useEffect(() => {
@@ -108,8 +108,6 @@ export default function useInitialization() {
   useEffect(() => {
     if(isLoadedGate) {
       setLoadingMessage("Loaded!")
-      setTimer(false)
-      console.timeEnd("Time until interactive")
     }
   }, [isLoadedGate])
 

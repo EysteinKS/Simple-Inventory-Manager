@@ -13,7 +13,7 @@ import useEditableList from "../../hooks/useEditableList"
 import { RootState, ISupplier, IOrderedProduct } from "../../redux/types";
 import ProductName from "./ProductName"
 import { addChange } from "../../redux/actions/reportsActions";
-import { isChanged } from "../../constants/util";
+import { isChanged, shouldLog } from "../../constants/util";
 
 ReactModal.setAppElement("#root")
 
@@ -69,7 +69,7 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
       dateReceived: current.dateReceived,
       ordered: ordered
     };
-    //console.log(returnedOrder)
+    shouldLog("Returned order:", returnedOrder)
     if(current.isNew){
       dispatch(addChange({
         type: "NEW_ORDER",
@@ -80,7 +80,7 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
     } else {
       let isOrderChanged = isChanged(current, returnedOrder)
       if(!isOrderChanged.isEqual){
-        console.log(isOrderChanged.changed)
+        shouldLog("Changed order content: ", isOrderChanged.changed)
         dispatch(addChange({
           type: "EDIT_ORDER_INFO",
           id: returnedOrder.orderID,

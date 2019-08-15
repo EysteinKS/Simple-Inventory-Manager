@@ -43,7 +43,6 @@ export default function Orders() {
   const [ sorting, setSorting ] = useState([null, null, null] as any[]);
   const { sortedList, setList, setSortingFuncs } = useSortableList(orders.orders as IOrder[])
   useEffect(() => {
-    //console.log("Orders list updated, setting list");
     setList(orders.orders);
     setSortingFuncs(sorting);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -131,7 +130,7 @@ export default function Orders() {
           </Key>
         </Row>
       </SectionHeader>
-      {isArrayEmpty(sortedList) ? null : (
+      {!isArrayEmpty(sortedList) && (
         <List
           list={sortedList as IOrder[]}
           edit={id => {
@@ -159,7 +158,7 @@ type TList = {
 const List = ({ list, edit }: TList) => {
   if (list) {
     return (
-      <div className="order-list">
+      <div>
         {list.map((order, index) => (
           <Order order={order} key={"order_" + order.orderID} edit={edit} />
         ))}
@@ -180,8 +179,6 @@ const Order = ({ order, edit }: TOrder) => {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useDispatch();
   const suppliers = useSelector((state: RootState) => state.suppliers.suppliers);
-
-  //console.log("Order: ", order)
 
   let detailStyle;
   if (expanded) {

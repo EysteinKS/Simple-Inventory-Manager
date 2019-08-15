@@ -169,7 +169,6 @@ export const filterByOrdered = (isFiltered: boolean, products: IProduct[]) => {
 
 //CREATING
 export const newProduct = (id: number): IProduct => {
-  //console.log("Creating product with id: ", id)
   return {
     productID: id,
     name: "",
@@ -253,26 +252,104 @@ export const addZero = (str: string) => {
   }
 }
 
+
+const areArraysEqual = (oldVal: any[], newVal: any[]) => {
+  if(oldVal === newVal) return true
+  if(oldVal.length !== newVal.length) return false
+
+  let prev = [...oldVal].sort((a, b) => a.productID - b.productID)
+  let next = [...newVal].sort((a, b) => a.productID - b.productID)
+
+  for(let i = 0; i < prev.length; ++i){
+    if(prev[i] !== next[i]) return false
+  }
+
+  return true
+}
+
+const compareArrays = (oldVal: any[], newVal: any[]) => {
+  let oldVals = []
+  let newVals = []
+  let checkedVals = []
+
+  const sortFunc = (a: any, b: any) => {
+    if(a.productID < b.productID){
+      return -1
+    }
+    else {
+      return 0
+    }
+  }
+  
+  let oldSorted = [...oldVal].sort(sortFunc)
+  let newSorted = [...newVal].sort(sortFunc)
+
+  for(let i = 0; i < oldSorted.length; i++){
+    let oldIndex = oldSorted[i]
+    const indexInNew = newSorted.findIndex(i => i.productID === oldIndex.productID)
+    if(indexInNew < 0){
+      oldVals.push(oldIndex)
+      newVals.push(null)
+    } else {
+      let newIndex = newSorted[indexInNew]
+      if(oldIndex.amount !== newIndex.amount){
+        oldVals.push(oldIndex)
+        newVals.push(newIndex)
+      }
+    }
+    checkedVals.push(oldIndex.productID)
+  }
+
+  for(let i = 0; i < newSorted.length; i++){
+    if(!checkedVals.includes(newSorted[i].productID)){
+      oldVals.push(null)
+      newVals.push(newSorted[i])
+    }
+  }
+
+  return {
+    oldVals, newVals
+  }
+}
+
 export const isChanged = (prev: any, next: any) => {
+  //Checks if a state object has changed at all
   let prevAsJSON = JSON.stringify(prev)
   let nextAsJSON = JSON.stringify(next)
   let isEqual = (prevAsJSON === nextAsJSON)
+
   let changed: IChangeValue[] = []
   if(!isEqual){
     Object.keys(next).forEach(key => {
       let oldKey = prev[key]
       let newKey = next[key]
-      if(oldKey !== newKey){
+      if(Array.isArray(oldKey) && !areArraysEqual(oldKey, newKey)){
+        const { oldVals, newVals } = compareArrays(oldKey, newKey)
         changed.push({
           key: key,
-          oldValue: oldKey,
-          newValue: newKey
+          oldValue: oldVals,
+          newValue: newVals
         })
+      } else {
+        if(oldKey !== newKey){
+          changed.push({
+            key: key,
+            oldValue: oldKey,
+            newValue: newKey
+          })
+        }
       }
     })
+    shouldLog("Changed: ", changed)
   }
   return {
     isEqual,
     changed
+  }
+}
+
+export const shouldLog = (message: any, opt?: any) => {
+  if(process.env.NODE_ENV === "development" && process.env.REACT_APP_SHOW_LOG === "yes"){
+    (opt) ? console.log(message, opt) : console.log(message)
   }
 }

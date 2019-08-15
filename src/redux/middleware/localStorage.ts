@@ -1,4 +1,5 @@
 import store from "store"
+import { shouldLog } from "../../constants/util";
 
 interface IStringKeys {
   [index: string]: string
@@ -50,6 +51,6 @@ export const setLocalStorage = (key = "", value = {}) => {
 }
 
 export const clearLocalStorage = () => {
-  console.log("Clearing localStorage")
+  shouldLog("Clearing localStorage")
   store.clearAll()
 }

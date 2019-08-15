@@ -2,8 +2,7 @@ import { IbyDate, IReport, IDate, RootState, ILoggedOrder, ILoggedSale, Changes 
 import { getSectionFromFirestore, getCurrentLocation } from "../middleware/thunks";
 import { IThunkAction } from "../middleware/types";
 import { firebase, secondaryFirestore } from "../../firebase/firebase";
-import { findInArray, addZero } from "../../constants/util";
-
+import { findInArray, addZero, shouldLog } from "../../constants/util";
 
 const thisSection = "reports"
 
@@ -81,7 +80,7 @@ export const saveReportBegin = () => {
 
 export const SAVE_REPORT_SUCCESS = 'SAVE_REPORT_SUCCESS'
 export const saveReportSuccess = () => {
-  console.log("Saved report")
+  shouldLog("Saved report")
   return {
     type: SAVE_REPORT_SUCCESS
   }

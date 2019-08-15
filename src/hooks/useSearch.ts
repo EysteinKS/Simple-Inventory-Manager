@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react"
+import { shouldLog } from "../constants/util";
 
 const valuesToLowercase = (obj: any = {}) => 
   Object.keys(obj).reduce((result: any, key: string) => {
     if(typeof obj[key] === "string"){
-      console.log(result)
+      shouldLog(result)
       result[key] = obj[key].toLowerCase()
     } else {
       result[key] = obj[key]

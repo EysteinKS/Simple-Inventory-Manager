@@ -24,6 +24,7 @@ import { resetSales } from "../redux/actions/salesActions"
 import { resetSuppliers } from "../redux/actions/suppliersActions"
 import { resetAuth } from "../redux/actions/authActions"
 import { RootState, AuthState } from '../redux/types';
+import { shouldLog } from '../constants/util';
 
 type THeader = {
   locationIsLoaded: boolean
@@ -128,10 +129,10 @@ const LoggedIn = ({ authUser, resetRedux }: TLoggedIn) =>
   </div>
   {/*<Notifications/>*/}
   <button onClick={() => {
-    console.log("Signing out")
+    shouldLog("Signing out")
     doSignOut()
     clearLocalStorage()
-    console.log("Resetting redux")
+    shouldLog("Resetting redux")
     resetRedux()
   }} style={{padding: "1vh"}}>Logg ut</button>
 </>
@@ -177,6 +178,7 @@ interface ISection {
 }
 
 const SectionSelector = () => {
+  const userRole = useSelector((state: RootState) => state.auth.user.role)
   const [open, setOpen] = React.useState(false)
   const anchorRef = React.useRef(null as any)
   const currentLocation = useLocation()
@@ -196,10 +198,18 @@ const SectionSelector = () => {
     {name: "Produkter", linkTo: routes.HOME, icon: <Icons.Storage/>},
     {name: "Bestillinger", linkTo: routes.ORDERS, icon: <Icons.Archive/>},
     {name: "Salg", linkTo: routes.SALES, icon: <Icons.Unarchive/>},
-    {name: "Logg", linkTo: routes.HISTORY, icon: <Icons.AccessTime/>}
+    {name: "Logg", linkTo: routes.HISTORY, icon: <Icons.AccessTime/>},
+    {name: "Admin", linkTo: routes.ADMIN, icon: <p>A</p>}
   ]
 
-  const filteredSections = sections.filter(section => section.linkTo !== currentLocation.location.pathname)
+  const filteredSections = React.useMemo(() => {
+    let sectionList
+    sectionList = sections.filter(section => section.linkTo !== currentLocation.location.pathname)
+    if(userRole !== "admin"){
+      sectionList = sectionList.filter(section => section.name !== "Admin")
+    }
+    return sectionList
+  }, [currentLocation, userRole, sections])
 
   return(
     <div style={{ display: "flex", placeItems: "center" }}>

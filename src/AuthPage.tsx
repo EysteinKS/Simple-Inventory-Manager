@@ -5,6 +5,8 @@ import Products from "./pages/Products";
 import Orders from "./pages/Orders";
 import Sales from "./pages/Sales";
 import History from "./pages/History";
+import Admin from "./pages/Admin";
+import Loans from "./pages/Loans";
 
 interface RoutePageProps extends RouteComponentProps {
   component: FC
@@ -21,7 +23,9 @@ const AuthPage: FC = () => {
       <RoutePage component={Products} path={routes.HOME} />
       <RoutePage component={Orders} path={routes.ORDERS} />
       <RoutePage component={Sales} path={routes.SALES} />
+      <RoutePage component={Loans} path={routes.LOANS} />
       <RoutePage component={History} path={routes.HISTORY} />
+      <RoutePage component={Admin} path={routes.ADMIN} />
     </Router>
   );
 };

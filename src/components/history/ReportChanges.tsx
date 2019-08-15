@@ -1,6 +1,6 @@
 import React from 'react'
 import Names from '../Names';
-import { Changes, IChangeValue } from '../../redux/types';
+import { Changes, IChangeValue, IOrderedProduct } from '../../redux/types';
 import styled from 'styled-components';
 
 const NEW = [
@@ -124,6 +124,7 @@ const ItemHeader = styled.div`
 
 const ItemContent = styled.div`
   padding: 0 5em;
+  background-color: #fff;
 `
 
 const TargetInfo: ChangeComponent = ({ change, children }) => {
@@ -175,12 +176,34 @@ const EditedKey: React.FC<{changed: IChangeValue}> = ({changed}) => {
   const keyText = editKeyToString[changed.key]
   const sectionWithName = shouldGetName(changed.key)
 
+  if(Array.isArray(changed.oldValue) && Array.isArray(changed.newValue)){
+    return(
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr"
+      }}>
+        <p>Før</p>
+        <p>Etter</p>
+        <div>
+          {changed.oldValue.map((prod: IOrderedProduct, i) => 
+            <OrderedChange key={"old_change_" + i} product={prod} nullText="..."/>  
+          )}
+        </div>
+        <div>
+          {changed.newValue.map((prod: IOrderedProduct, i) => 
+            <OrderedChange key={"new_change_" + i} product={prod} nullText="..."/>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   if(sectionWithName){
     oldValue = <Names target={sectionWithName} id={changed.oldValue}/>
     newValue = <Names target={sectionWithName} id={changed.newValue}/>
   } else {
     oldValue = String(changed.oldValue)
-    newValue = String(changed.newValue)
+    newValue = String(changed.newValue)    
   }
 
   return(
@@ -212,6 +235,23 @@ const shouldGetName = (key: string) => {
     return keySections[key]
   } else {
     return false
+  }
+}
+
+interface IOrderedChange {
+  product: IOrderedProduct
+  nullText: string
+}
+
+const OrderedChange = ({ product, nullText }: IOrderedChange) => {
+  if(product == null){
+    return(
+      <p>{nullText}</p>
+    )
+  } else {
+    return(
+      <p>{product.amount}x <Names target={"products"} id={product.productID}/></p>
+    )
   }
 }
 
@@ -273,6 +313,7 @@ const useName = (change: Changes) => {
       case "CATEGORY":
         doShowName = true
         nameSection = "categories"
+        break;
       default:
         break;
     }

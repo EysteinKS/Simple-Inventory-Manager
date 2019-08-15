@@ -22,6 +22,7 @@ import {
 import {
   AnyAction
 } from "redux"
+import { shouldLog } from "../../constants/util";
 
 export const sections = {
   categories: "Categories",
@@ -38,7 +39,7 @@ export const getInventory = (message: Function): IThunkAction => {
     let fsLastChanged = state.auth.location.lastChanged
     let ls = getAllStorage() as RootState
 
-    console.log("localStorage data: ", ls)
+    shouldLog("localStorage data: ", ls)
     //If no localstorage data
     if(!ls || !("location" in ls.auth)) {
       getAllFromFirestore(sectionKeys, dispatch, message)
@@ -48,10 +49,7 @@ export const getInventory = (message: Function): IThunkAction => {
     let lsLastChanged = ls.auth.location.lastChanged
 
     let localStorageToTimeString = new Date(lsLastChanged.global).toString()
-    //console.log(localStorageToTimeString)
     let firestoreToTimeString = fsLastChanged.global.toString()  
-    //console.log(firestoreToTimeString)
-    //console.log("ls === fs: ", firestoreToTimeString === localStorageToTimeString)
     if(firestoreToTimeString === localStorageToTimeString){
       return getAllFromLocalStorage(sectionKeys, dispatch, ls, message)
     }
@@ -59,7 +57,7 @@ export const getInventory = (message: Function): IThunkAction => {
     //Check which values are changed
     let isChanged = []
     let isUnchanged = []
-    console.log("Checking for changes in firestore...")
+    shouldLog("Checking for changes in firestore...")
     for(let k in fsLastChanged.sections){
       let fsDateToString = fsLastChanged.sections[k].toString()
       let lsDateToString = new Date(lsLastChanged.sections[k]).toString()
@@ -120,7 +118,7 @@ const getAllFromLocalStorage = (
   localStorage: RootState, 
   message: Function
   ) => {
-  console.log("Getting all data from localStorage")
+  shouldLog("Getting all data from localStorage")
   Object.keys(keys).forEach(k => {
     localDataFromKey(k, dispatch, localStorage, message)
   })
@@ -131,7 +129,7 @@ const getAllFromFirestore = (
   dispatch: TDispatch, 
   message: Function
   ) => {
-  console.log("Getting all data from firestore")
+  shouldLog("Getting all data from firestore")
   Object.keys(keys).forEach(k => {
     firestoreDataFromKey(k, dispatch, message)
   })

@@ -1,4 +1,4 @@
-import {useMemo, useEffect} from "react"
+import {useMemo} from "react"
 import {useSelector, shallowEqual} from "react-redux"
 import useGate from "./useGate"
 import { RootState } from "../redux/types";
@@ -51,10 +51,6 @@ export default function useLodadedGate() {
   const isLoadingGate = useGate(isLoadingArr, "OR");
   const isLoadedGate = useGate(isLoadedArr, "AND");
   const loadingErrorGate = useGate(loadingErrorArr, "OR");
-
-  useEffect(() => {
-    //console.log(`isLoadingGate: ${isLoadingGate}, isLoadedGate: ${isLoadedGate}, loadingErrorGate: ${loadingErrorGate}`)
-  }, [isLoadingGate, isLoadedGate, loadingErrorGate])
 
   return [isLoadingGate, isLoadedGate, loadingErrorGate]
 }

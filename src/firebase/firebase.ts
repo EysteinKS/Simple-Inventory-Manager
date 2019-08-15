@@ -9,6 +9,9 @@ type FirebaseApp = firebase.app.App
 let secondary: FirebaseApp
 let secondaryFirestore: FirebaseFirestore
 
+let temp: FirebaseApp
+let tempFirestore: FirebaseFirestore
+
 export const appsAmount = firebase.apps.length
 
 if (!firebase.apps.length) {
@@ -20,6 +23,15 @@ export const initializeLocation = (config: FirebaseAppConfig) => {
   secondary = firebase.initializeApp(config, "secondary")
   secondaryFirestore = secondary.firestore()
   //secondaryAuth = secondary.auth()
+}
+
+export const connectToTemp = (config: FirebaseAppConfig) => {
+  temp = firebase.initializeApp(config, "temp")
+  tempFirestore = temp.firestore()
+}
+
+export const disconnectFromTemp = () => {
+  temp.delete()
 }
 
 export const doSignOut = () => {
@@ -35,4 +47,5 @@ export {
   firestore,
   auth,
   secondaryFirestore,
+  tempFirestore
 }

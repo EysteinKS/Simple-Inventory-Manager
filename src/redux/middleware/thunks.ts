@@ -1,7 +1,7 @@
 import { secondaryFirestore } from "../../firebase/firebase";
 import { setLocalStorage } from "./localStorage";
 import { saveLastChanged } from "../actions/authActions";
-import { parseDate } from "../../constants/util";
+import { parseDate, shouldLog } from "../../constants/util";
 
 import { IThunkAction } from "./types";
 import { RootState } from "../types";
@@ -57,7 +57,7 @@ export const getSectionFromFirestore = (
     .then(res => {
       let data = res.data();
       if (!handleResponse || typeof handleResponse !== "function") {
-        console.log(`Loaded ${section} successfully`);
+        shouldLog(`Loaded ${section} successfully`);
         dispatch(onSuccess(data));
         setLocalStorage(section, data);
       } else if (typeof handleResponse === "function") {

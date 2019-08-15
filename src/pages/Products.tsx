@@ -9,7 +9,8 @@ import {
 import {
   sort,
   getAmount,
-  newProduct
+  newProduct,
+  shouldLog
 } from "../constants/util";
 import "./Products.css";
 
@@ -44,7 +45,6 @@ export default function Products(){
   const [sorting, setSorting] = useState([null, null, null] as any[])
   const { sortedList, setList, setSortingFuncs } = useSortableList(products.products)
   useEffect(() => {
-    //console.log("Orders list updated, setting list");
     setList(products.products);
     setSortingFuncs(sorting);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -125,7 +125,7 @@ export default function Products(){
           <Key><Icons.Unarchive/></Key>
           <Key><Icons.Functions/></Key>
           <div/>
-          <KeyButton onClick={() => console.log("TODO: useFilterableList")}>{/* !isFiltered ? <Icons.VisibilityOff/> : <Icons.Visibility/> */}</KeyButton>
+          <KeyButton onClick={() => shouldLog("TODO: useFilterableList")}>{/* !isFiltered ? <Icons.VisibilityOff/> : <Icons.Visibility/> */}</KeyButton>
         </Row>
       </SectionHeader>
       <div className="product-list">

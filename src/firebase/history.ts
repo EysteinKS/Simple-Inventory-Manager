@@ -11,6 +11,6 @@ export async function getCollectionFromFirestore() {
   try {
     const docs = await secondaryFirestore.collection("Barcontrol").get()
   } catch(err) {
-    console.log("Error creating report: ", err)
+    console.error("Error creating report: ", err)
   }
 }

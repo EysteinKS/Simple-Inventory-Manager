@@ -38,7 +38,6 @@ export const loadUser = (uid: string): IThunkAction => {
     firestore.doc(`Users/${uid}`).get()
       .then(res => {
         let data = res.data() as UserState
-        //console.log(data)
         dispatch(loadUserSuccess(data))
       })
       .catch(err => dispatch(loadUserFailure(err.message)))
@@ -94,7 +93,7 @@ export const saveLastChanged = (section: string, date: Date): IThunkAction => {
           }
         }
       setLocalStorage(authKey, { location: updatedAuthStorage })
-    }).catch(err => {console.log("error saving lastChanged: ", err.message)})
+    }).catch(err => {console.error("error saving lastChanged: ", err.message)})
   }  
 }
 
