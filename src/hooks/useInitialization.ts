@@ -7,7 +7,8 @@ import {
   setLocationColor,
   setLocationLogo,
   setAllLastChanged,
-  userSignedOut
+  userSignedOut,
+  setNewChanges
 } from "../redux/actions/authActions";
 
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -16,6 +17,7 @@ import { RootState, LastChanged } from "../redux/types"
 import { ClientData } from "../firebase/types"
 import { getInventory } from  "../redux/middleware/firestore"
 import { parseDate } from "../constants/util"
+import { listenToUpdates } from "../firebase/Subscription";
 
 export default function useInitialization() {
   const [user, initializingUser] = useAuthState(auth);
@@ -84,6 +86,7 @@ export default function useInitialization() {
       });
   }
 
+
   //LOAD LOCATION WHEN USER IS LOADED
   useEffect(() => {
     if (authIsLoaded) {
@@ -108,7 +111,10 @@ export default function useInitialization() {
   useEffect(() => {
     if(isLoadedGate) {
       setLoadingMessage("Loaded!")
+      const onChange = () => dispatch(setNewChanges())
+      listenToUpdates(authCurrentLocation, onChange)
     }
+    //eslint-disable-next-line
   }, [isLoadedGate])
 
   return {

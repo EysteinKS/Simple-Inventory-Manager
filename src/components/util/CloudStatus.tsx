@@ -3,9 +3,12 @@ import React from "react"
 import Icons from "./Icons"
 import ReactTooltip from "react-tooltip"
 import useSavingGate from "../../hooks/useSaving";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/types";
 
 export default function CloudStatus() {
   const [isSaving, isSaved, error, save] = useSavingGate()
+  const hasNewChanges = useSelector((state: RootState) => state.auth.hasNewChanges)
 
   let icon = <Icons.CloudDone/>
   let tooltip
@@ -29,6 +32,11 @@ export default function CloudStatus() {
     tooltip = "En feil oppsto! Prøv igjen?"
     styling["cursor"] = "pointer"
     styling["backgroundColor"] = "#ff9999"
+  } else if(hasNewChanges) {
+    icon = <Icons.WarningIcon/>
+    tooltip = "Nye endringer oppdaget, last inn siden på nytt!"
+    styling["cursor"] = "pointer"
+    styling["backgroundColor"] = "#ff9999"
   } else if(isSaving){
     icon = <Icons.CloudUpload/>
     tooltip = "Lagrer..."
@@ -44,12 +52,19 @@ export default function CloudStatus() {
     styling["backgroundColor"] = "#21b110"
   }
   
+  const onClick = () => {
+    if(hasNewChanges) {
+      window.location.reload()
+    } else if(typeof save !== "boolean") {
+      save()
+    }
+  }
 
   return (
     <>
       <button 
         data-tip data-for="cloudTooltip"
-        onClick={() => (typeof save !== "boolean") && save()}
+        onClick={onClick}
         style={styling}
       >
         {icon}

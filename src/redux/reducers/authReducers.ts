@@ -39,6 +39,7 @@ const initialState: AuthState = {
   isSaved: true,
   savingError: null,
   loggingOut: false,
+  hasNewChanges: false,
   error: null
 }
 
@@ -84,6 +85,9 @@ export default (state: AuthState = initialState, { type, payload }: AnyAction) =
         let resetDraft = { ...initialState, loggingOut: true }
         setLocalStorage(authKey, resetDraft)
         return resetDraft
+      case action.SET_NEW_CHANGES:
+        draft.hasNewChanges = true
+        return draft
       default:
         return state
     }

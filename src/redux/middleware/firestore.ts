@@ -71,7 +71,7 @@ export const getInventory = (message: Function): IThunkAction => {
 
     if(isChanged.length && isChanged.length === Object.keys(fsActions).length){
       getAllFromFirestore(sectionKeys, dispatch, message)
-      setLocalStorage(authKey, {lastChanged: fsLastChanged})
+      setLocalStorage(authKey, {location: { lastChanged: fsLastChanged}})
       return
     }
 
@@ -85,7 +85,7 @@ export const getInventory = (message: Function): IThunkAction => {
         firestoreDataFromKey(k, dispatch, message)
       })
     }
-    setLocalStorage(authKey, {lastChanged: fsLastChanged})
+    setLocalStorage(authKey, {location: {lastChanged: fsLastChanged}})
   }
 }
 
@@ -96,7 +96,7 @@ const firestoreDataFromKey = (
   message(`Loading data from firestore...`)
   let load = fsActions[key]
   dispatch(load())
-} 
+}
 
 const localDataFromKey = (
   key: string, 

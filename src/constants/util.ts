@@ -349,7 +349,7 @@ export const isChanged = (prev: any, next: any) => {
 }
 
 export const shouldLog = (message: any, opt?: any) => {
-  if(process.env.NODE_ENV === "development" && process.env.REACT_APP_SHOW_LOG === "yes"){
+  if(process.env.NODE_ENV === "development" && process.env.REACT_APP_SHOW_LOG === "no"){
     (opt) ? console.log(message, opt) : console.log(message)
   }
 }

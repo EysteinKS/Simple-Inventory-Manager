@@ -56,9 +56,10 @@ export interface LocationState {
 }
 
 export interface AuthState extends SavingState, LoadingState {
-  user: UserState,
+  user: UserState
   location: LocationState
   loggingOut: boolean
+  hasNewChanges: boolean
 }
 
 //AUTH END

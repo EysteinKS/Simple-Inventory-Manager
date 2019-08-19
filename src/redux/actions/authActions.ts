@@ -102,3 +102,8 @@ export const RESET_AUTH = 'RESET_AUTH'
 export const resetAuth = () => ({
   type: RESET_AUTH
 })
+
+export const SET_NEW_CHANGES = 'SET_NEW_CHANGES'
+export const setNewChanges = () => ({
+  type: SET_NEW_CHANGES
+})

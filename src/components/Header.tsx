@@ -25,6 +25,7 @@ import { resetSuppliers } from "../redux/actions/suppliersActions"
 import { resetAuth } from "../redux/actions/authActions"
 import { RootState, AuthState } from '../redux/types';
 import { shouldLog } from '../constants/util';
+import Subscription from '../firebase/Subscription';
 
 type THeader = {
   locationIsLoaded: boolean
@@ -103,6 +104,11 @@ const UserSelector = () => {
     dispatch(resetSuppliers())
   }
 
+  const unsub = () => {
+    const sub = Subscription.getInstance()
+    sub.unsubscribe()
+  }
+
   return(
     <div style={{ 
       display: "grid",
@@ -110,17 +116,18 @@ const UserSelector = () => {
       gridTemplateColumns: "1fr 4fr 2fr",
       placeItems: "center"
      }}>
-      {user ? <LoggedIn authUser={authUser} resetRedux={resetRedux}/> : <NotLoggedIn/>}
+      {user ? <LoggedIn authUser={authUser} resetRedux={resetRedux} unsub={unsub}/> : <NotLoggedIn/>}
     </div>
   )
 }
 
 type TLoggedIn = {
   authUser: AuthState,
-  resetRedux: () => void
+  resetRedux: () => void,
+  unsub: () => void
 }
 
-const LoggedIn = ({ authUser, resetRedux }: TLoggedIn) => 
+const LoggedIn = ({ authUser, resetRedux, unsub }: TLoggedIn) => 
 <>
   <Icons.AccountCircle fontSize="large"/>
   <div style={{ justifySelf: "left", display: "flex" }}>
@@ -128,12 +135,13 @@ const LoggedIn = ({ authUser, resetRedux }: TLoggedIn) =>
     <><Typography>{authUser.user.lastName}</Typography></>
   </div>
   {/*<Notifications/>*/}
-  <button onClick={() => {
-    shouldLog("Signing out")
-    doSignOut()
-    clearLocalStorage()
-    shouldLog("Resetting redux")
-    resetRedux()
+  <button onClick={async () => {
+    await shouldLog("Signing out")
+    await unsub()
+    await doSignOut()
+    await clearLocalStorage()
+    await shouldLog("Resetting redux")
+    await resetRedux()
   }} style={{padding: "1vh"}}>Logg ut</button>
 </>
 

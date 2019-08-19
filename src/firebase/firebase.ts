@@ -18,7 +18,6 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseAuthConfig);
 }
 
-
 export const initializeLocation = (config: FirebaseAppConfig) => {
   secondary = firebase.initializeApp(config, "secondary")
   secondaryFirestore = secondary.firestore()
