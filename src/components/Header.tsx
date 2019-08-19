@@ -150,35 +150,6 @@ const NotLoggedIn = () =>
   <Typography style={{gridColumn: "1/5"}}>Logg inn</Typography>
 </>
 
-type THeaderLink = {
-  children: ReactNode,
-  linkTo: string,
-  onClick: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void,
-  name: string
-}
-
-const HeaderLink = ({children, linkTo, onClick, name}: THeaderLink) => {
-  return(
-    <MenuItem style={{
-      position: "relative",
-      borderStyle: "outset",
-      borderColor: "rgba(255, 255, 255, 0.4)",
-      backgroundColor: "#fbfbfb",
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr 1fr",
-      padding: "10px",
-      height: "5vh"
-    }}
-      onClick={e => {
-        navigate(linkTo)
-        onClick(e)}}
-    >
-      {children}
-      <Typography style={{ placeSelf: "center" }}>{name}</Typography>
-    </MenuItem>
-  )
-}
-
 interface ISection {
   name: string,
   linkTo: string,
@@ -211,13 +182,13 @@ const SectionSelector = () => {
   ]
 
   const filteredSections = React.useMemo(() => {
-    let sectionList
-    sectionList = sections.filter(section => section.linkTo !== currentLocation.location.pathname)
+    let sectionList = sections
+    //sectionList = sections.filter(section => section.linkTo !== currentLocation.location.pathname)
     if(userRole !== "admin"){
       sectionList = sectionList.filter(section => section.name !== "Admin")
     }
     return sectionList
-  }, [currentLocation, userRole, sections])
+  }, [userRole, sections])
 
   return(
     <div style={{ display: "flex", placeItems: "center" }}>
@@ -225,13 +196,51 @@ const SectionSelector = () => {
       <DropDownMenu anchorEl={anchorRef.current} open={open} data-style={{width: "33vw", zIndex: "11"}} onClickAway={handleClose}>
         <MenuList style={{paddingTop: "0px"}}>
           {filteredSections.map((section, i)=> {
-            return <HeaderLink linkTo={section.linkTo} onClick={handleClose} name={section.name} key={"section_" + i}>
+            return <HeaderLink 
+                linkTo={section.linkTo} 
+                onClick={handleClose} 
+                name={section.name} 
+                currentLocation={currentLocation.location.pathname}
+                key={"section_" + i}>
               {section.icon}
             </HeaderLink>
           })}
         </MenuList>
       </DropDownMenu>
     </div>
+  )
+}
+
+type THeaderLink = {
+  children: ReactNode,
+  linkTo: string,
+  onClick: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void,
+  name: string
+  currentLocation: string
+}
+
+const HeaderLink = ({children, linkTo, onClick, name, currentLocation}: THeaderLink) => {
+  return(
+    <MenuItem style={{
+      position: "relative",
+      borderStyle: "outset",
+      borderColor: "rgba(255, 255, 255, 0.4)",
+      backgroundColor: "#fbfbfb",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      padding: "10px",
+      height: "5vh"
+    }}
+      onClick={e => {
+        if(linkTo !== currentLocation) {
+          navigate(linkTo)
+          onClick(e)
+        }
+      }}
+    >
+      {children}
+      <Typography style={{ placeSelf: "center" }}>{name}</Typography>
+    </MenuItem>
   )
 }
 
@@ -247,12 +256,13 @@ type TCurrentSection = {
 
 const CurrentSection = ({onClick, thisRef, sections, current }: TCurrentSection) => {
   let currentSection = sections.find(section => section.linkTo === current.location.pathname) as ISection
+  console.log(currentSection)
 
   return(
-    <button ref={thisRef} onClick={onClick} style={{width: "33vw", height: "80%"}}>
+    <button ref={thisRef} onClick={onClick} style={{width: "33vw", height: "4vh"}}>
       <div style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr"}}>
-      {currentSection.icon}
-      <Typography style={{placeSelf: "center"}}>{currentSection.name}</Typography>
+      {currentSection && currentSection.icon}
+      <Typography style={{placeSelf: "center"}}>{currentSection && currentSection.name}</Typography>
       </div>
     </button>
   )

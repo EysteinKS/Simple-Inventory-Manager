@@ -37,11 +37,11 @@ export default function CloudStatus() {
     tooltip = "Nye endringer oppdaget, last inn siden på nytt!"
     styling["cursor"] = "pointer"
     styling["backgroundColor"] = "#ff9999"
-  } else if(isSaving){
+  } else if(isSaving) {
     icon = <Icons.CloudUpload/>
     tooltip = "Lagrer..."
     styling["backgroundColor"] = "#ffe599"
-  } else if (!isSaving && !isSaved){
+  } else if (!isSaving && !isSaved) {
     icon = <Icons.CloudOff/>
     tooltip = "Lagre endringer?"
     styling["cursor"] = "pointer"

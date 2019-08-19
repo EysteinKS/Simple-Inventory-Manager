@@ -1,14 +1,13 @@
-import React, { ReactNode, FC } from "react";
+import React, { FC } from "react";
 
-import AuthPage from "./AuthPage"
 import Header from "./components/Header";
-import Login from "./components/Login";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import "./App.css";
 
 import useInitialization from "./hooks/useInitialization"
+import MainRouter from "./Router";
 
 const App: FC = () => {
   const {
@@ -19,25 +18,8 @@ const App: FC = () => {
     setLoadingMessage,
     loggedIn, 
   } = useInitialization()
-  
+
   return(
-    <AppWrapper isLoaded={isLoadedGate}>
-      {(loading) ? <PageLoading message={loadingMessage}/>
-      : (loadingErrorGate) ? <p>Error!</p>
-      : (!loggedIn) ? <NonAuthPage setMessage={setLoadingMessage}/>
-      : (isLoadedGate && loggedIn) ? <AuthPage/>
-      : <PageLoading message={loadingMessage}/>}
-    </AppWrapper>
-  )
-}
-
-interface WrapperProps {
-  children: ReactNode,
-  isLoaded: boolean
-}
-
-const AppWrapper: FC<WrapperProps> = ({ children, isLoaded }) => {
-  return (
     <>
       <CssBaseline />
       <main
@@ -46,37 +28,33 @@ const AppWrapper: FC<WrapperProps> = ({ children, isLoaded }) => {
           overflow: "hidden"
         }}
       >
-        <Header locationIsLoaded={isLoaded} />
+        <Header locationIsLoaded={isLoadedGate} />
         <section
           style={{ 
             height: "100%", 
             overflowY: "scroll", 
             marginTop: "5vh" }}
         >
-          {children}
+          {(loading) ? <PageLoading message={loadingMessage}/>
+          : (loadingErrorGate) ? <p>Error!</p>
+          : <MainRouter 
+              loggedIn={loggedIn} 
+              loading={loading} 
+              isLoaded={isLoadedGate} 
+              message={loadingMessage}
+              setMessage={setLoadingMessage}
+            />}
         </section>
       </main>
     </>
-  );
-};
-
-interface NonAuthProps {
-  setMessage: (message: string) => void
+  )
 }
-
-const NonAuthPage: FC<NonAuthProps> = ({ setMessage }) => {
-  return (
-    <div style={{ margin: "5vh 10vw 10vh 10vw", display: "grid" }}>
-      <Login setMessage={setMessage}/>
-    </div>
-  );
-};
 
 interface PageLoadingProps {
   message: string
 }
 
-const PageLoading: FC<PageLoadingProps> = ({ message }) => (
+export const PageLoading: FC<PageLoadingProps> = ({ message }) => (
   <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
     <div style={{display: "grid", gridTemplateColumns: "1fr", placeSelf: "center"}}>
       <CircularProgress style={{ placeSelf: "center"}}/>
