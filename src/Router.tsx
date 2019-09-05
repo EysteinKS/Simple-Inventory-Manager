@@ -69,15 +69,11 @@ interface MainRouterProps {
 
 const MainRouter = ({loggedIn, isLoaded, message, setMessage}: MainRouterProps) => {
   if(loggedIn && isLoaded){
-    return(
-      <AuthRouter/>
-    )
+    return <AuthRouter/>
   } else if(loggedIn && !isLoaded) {
     return <PageLoading message={message}/>
   } else {
-    return(
-      <NonAuthRouter setMessage={setMessage}/>
-    )
+    return <NonAuthRouter setMessage={setMessage}/>
   }
 }
 

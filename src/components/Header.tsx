@@ -256,8 +256,6 @@ type TCurrentSection = {
 
 const CurrentSection = ({onClick, thisRef, sections, current }: TCurrentSection) => {
   let currentSection = sections.find(section => section.linkTo === current.location.pathname) as ISection
-  console.log(currentSection)
-
   return(
     <button ref={thisRef} onClick={onClick} style={{width: "33vw", height: "4vh"}}>
       <div style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr"}}>

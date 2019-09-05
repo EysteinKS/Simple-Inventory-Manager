@@ -24,12 +24,10 @@ import Warning from "../components/util/Warning"
 import useSortableList from "../hooks/useSortableList"
 import produce from "immer"
 import { IProduct, RootState } from "../redux/types";
+import { OrdersInfo, SalesInfo } from "../components/util/HoverInfo";
 
 //TODO
 //Show icon if product contains a comment
-//Show ID
-//Hover orders and sales to see all active with dates
-//Warning when product sum is in minus
 
 export default function Products(){
   //REDUX
@@ -181,8 +179,8 @@ const Product = ({ product, edit }: TProductWithEdit) => {
       <p className="product-name">{product.name}</p>
       <p className="product-category">{category}</p>
       <p>{amount || 0}</p>
-      <p>{ordered || 0}</p>
-      <p>{reserved || 0}</p>
+      <OrderedWithInfo productID={product.productID} amount={ordered}/>
+      <ReservedWithInfo productID={product.productID} amount={reserved}/>
       <p>{total}</p>
       {(total < 0) ? <Warning style={{ placeSelf: "center" }}/> : <div/>}
       <button onClick={() => dispatch(toggleProduct(product.productID))}>{product.active ? <Icons.Visibility/>: <Icons.VisibilityOff/>}</button>
@@ -190,4 +188,28 @@ const Product = ({ product, edit }: TProductWithEdit) => {
     </div>
   );
 };
-  
+
+interface InfoProps {
+  productID: number
+  amount: number
+}
+
+const OrderedWithInfo: React.FC<InfoProps> = ({productID, amount}) => {
+  const handle = `product_${productID}_ordered`
+  return(
+    <>
+      <p data-tip data-for={handle}>{amount || 0}</p>
+      {(amount > 0) && <OrdersInfo handle={handle} productID={productID}/>}
+    </>
+  )
+}
+
+const ReservedWithInfo: React.FC<InfoProps> = ({productID, amount}) => {
+  const handle = `product_${productID}_reserved`
+  return(
+    <>
+      <p data-tip data-for={handle}>{amount || 0}</p>
+      {(amount > 0) && <SalesInfo handle={handle} productID={productID}/>}
+    </>
+  )
+}
