@@ -10,6 +10,7 @@ import Loans from "./pages/Loans";
 import Login from "./components/Login";
 import NotFound from "./pages/NotFound";
 import { PageLoading } from "./App";
+import Profile from "./pages/Profile";
 
 interface RoutePageProps extends RouteComponentProps {
   component: FC
@@ -28,6 +29,7 @@ export const AuthRouter: FC = () => {
       <RoutePage component={Sales} path={routes.SALES} />
       <RoutePage component={Loans} path={routes.LOANS} />
       <RoutePage component={History} path={routes.HISTORY} />
+      <RoutePage component={Profile} path={routes.PROFILE} />
       <RoutePage component={Admin} path={routes.ADMIN} />
       <RoutePage component={NotFound} default/>
     </Router>

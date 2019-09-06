@@ -24,7 +24,8 @@ const Admin = () => {
   }
 
   return (
-    <div>
+    <div style={{ margin: "5vh 10vw 10vh 10vw" }}>
+      ADMIN
       <Clients/>
       <Users/>
     </div>
@@ -33,7 +34,7 @@ const Admin = () => {
 
 const NonAdmin = () => {
   return(
-    <div>
+    <div style={{ margin: "5vh 10vw 10vh 10vw" }}>
       <p>This page is only available to administrators</p>
       <button onClick={() => navigate("/")}>Go home</button>
     </div>

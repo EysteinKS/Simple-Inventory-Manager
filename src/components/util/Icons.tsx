@@ -45,6 +45,7 @@ import AccessTime from "@material-ui/icons/AccessTime"
 import AccountCircle from "@material-ui/icons/AccountCircle"
 import Notifications from "@material-ui/icons/Notifications"
 import NotificationsActive from "@material-ui/icons/NotificationsActive"
+import Assessment from "@material-ui/icons/Assessment"
 
 export default {
   Visibility,
@@ -83,5 +84,6 @@ export default {
   AccessTime,
   AccountCircle,
   Notifications,
-  NotificationsActive
+  NotificationsActive,
+  Assessment
 }

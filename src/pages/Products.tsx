@@ -25,6 +25,7 @@ import useSortableList from "../hooks/useSortableList"
 import produce from "immer"
 import { IProduct, RootState } from "../redux/types";
 import { OrdersInfo, SalesInfo } from "../components/util/HoverInfo";
+import styled from "styled-components";
 
 //TODO
 //Show icon if product contains a comment
@@ -194,11 +195,24 @@ interface InfoProps {
   amount: number
 }
 
+const AmountField = styled.p`
+  width: 80%;
+  text-align: center;
+  :hover {
+    cursor: help;
+  }
+`
+
 const OrderedWithInfo: React.FC<InfoProps> = ({productID, amount}) => {
   const handle = `product_${productID}_ordered`
+
+  if(amount <= 0){
+    return(<p>{amount}</p>)
+  }
+
   return(
     <>
-      <p data-tip data-for={handle}>{amount || 0}</p>
+      <AmountField data-tip data-for={handle}>{amount || 0}</AmountField>
       {(amount > 0) && <OrdersInfo handle={handle} productID={productID}/>}
     </>
   )
@@ -206,9 +220,14 @@ const OrderedWithInfo: React.FC<InfoProps> = ({productID, amount}) => {
 
 const ReservedWithInfo: React.FC<InfoProps> = ({productID, amount}) => {
   const handle = `product_${productID}_reserved`
+
+  if(amount <= 0){
+    return(<p>{amount}</p>)
+  }
+
   return(
     <>
-      <p data-tip data-for={handle}>{amount || 0}</p>
+      <AmountField data-tip data-for={handle}>{amount || 0}</AmountField>
       {(amount > 0) && <SalesInfo handle={handle} productID={productID}/>}
     </>
   )

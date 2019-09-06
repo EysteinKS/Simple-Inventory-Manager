@@ -26,6 +26,8 @@ import { resetAuth } from "../redux/actions/authActions"
 import { RootState, AuthState } from '../redux/types';
 import { shouldLog } from '../constants/util';
 import Subscription from '../firebase/Subscription';
+import LinkWrapper from './util/LinkWrapper';
+import styled from 'styled-components';
 
 type THeader = {
   locationIsLoaded: boolean
@@ -81,11 +83,15 @@ const LocationSelector = () => {
 
   if(locationLogo){
     return(
-      <img src={locationLogo} alt={locationName} style={{ height: "5vh", padding: "0.5rem" }}/>
+      <LinkWrapper linkTo="/">
+      <img src={locationLogo} alt={locationName} style={{ height: "5vh", padding: "0.5rem", placeSelf: "start" }}/>
+      </LinkWrapper>
     )
   }
   return(
+    <LinkWrapper linkTo="/">
     <Typography variant="h4" style={{placeSelf: "center"}}>{locationName || "LAGER"}</Typography>
+    </LinkWrapper>
   )
 }
 
@@ -129,7 +135,9 @@ type TLoggedIn = {
 
 const LoggedIn = ({ authUser, resetRedux, unsub }: TLoggedIn) => 
 <>
-  <Icons.AccountCircle fontSize="large"/>
+  <LinkWrapper linkTo="/profile">
+    <Icons.AccountCircle fontSize="large"/>
+  </LinkWrapper>
   <div style={{ justifySelf: "left", display: "flex" }}>
     <><Typography>{authUser.user.firstName}&nbsp;</Typography></>
     <><Typography>{authUser.user.lastName}</Typography></>
@@ -178,7 +186,8 @@ const SectionSelector = () => {
     {name: "Bestillinger", linkTo: routes.ORDERS, icon: <Icons.Archive/>},
     {name: "Salg", linkTo: routes.SALES, icon: <Icons.Unarchive/>},
     {name: "Logg", linkTo: routes.HISTORY, icon: <Icons.AccessTime/>},
-    {name: "Admin", linkTo: routes.ADMIN, icon: <p>A</p>}
+    {name: "Profil", linkTo: routes.PROFILE, icon: <Icons.AccountCircle/>},
+    {name: "Admin", linkTo: routes.ADMIN, icon: <Icons.Assessment/>}
   ]
 
   const filteredSections = React.useMemo(() => {
@@ -238,11 +247,17 @@ const HeaderLink = ({children, linkTo, onClick, name, currentLocation}: THeaderL
         }
       }}
     >
-      {children}
+      <NoMargin>{children}</NoMargin>
       <Typography style={{ placeSelf: "center" }}>{name}</Typography>
     </MenuItem>
   )
 }
+
+const NoMargin = styled.div`
+  & > * {
+    margin: 0
+  }
+`
 
 type TCurrentSection = {
   onClick: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void,
