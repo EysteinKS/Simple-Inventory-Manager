@@ -5,6 +5,7 @@ import Table, { TableHeader, TableBody, TableRow, ITableColumn } from '../util/S
 import styled from 'styled-components';
 import { ExpandableRow } from './Completed';
 import ReportChanges from './ReportChanges';
+import { shouldLog } from '../../constants/util';
 
 const ReportWrapper = styled.div`
   width: 100%;
@@ -32,14 +33,14 @@ const useReport = () => useSelector((state: RootState) =>
 const localeStringOpts = {
   day: "2-digit",
   month: "2-digit",
-  year: "numeric",
+  year: "2-digit",
   hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit"
+  minute: "2-digit"
 }
 
 const Report: React.FC = () => {
   const report = useReport()
+  shouldLog("Loaded report: ", report)
 
   const reversedChangelog = React.useMemo(() => {
     let arr = [...report.changeLog]
@@ -118,6 +119,34 @@ const Report: React.FC = () => {
             ]
             return <TableRow key={"sale_row_" + sale.saleID} columns={columns}/>
           })}
+          </ReportTable>
+          {/* Loans */}
+          <ReportTable name="Loans" columns={[
+            {name: "ID", width: "15%"},
+            {name: "CUSTOMER", width: "20%"},
+            {name: "ORDERED", width: "20%"},
+            {name: "SENT", width: "20%"},
+            {name: "AMOUNT", width: "15%"}
+          ]}>
+            {report.loans.active.map(loan => {
+              let sent = () => {
+                if(loan.dateSent == null) { return "-" }
+                else {
+                  return new Date(loan.dateSent).toLocaleString("default", localeStringOpts)
+                }
+              }
+              let columns = [
+                loan.loanID,
+                loan.customer.name,
+                new Date(loan.dateOrdered as string).toLocaleString("default", localeStringOpts),
+                sent(),
+                loan.ordered.reduce((acc, cur) => {
+                  acc += cur.amount
+                  return acc
+                }, 0)
+              ]
+              return <TableRow key={"loan_row_" + loan.loanID} columns={columns}/>
+            })}
           </ReportTable>
           <ReportTable name="Changelog" columns={[
             {name: "NAME", width: "33%"}, 

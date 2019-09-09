@@ -41,6 +41,9 @@ import ArrowRight from "@material-ui/icons/KeyboardArrowRight"
 import LocalShipping from "@material-ui/icons/LocalShipping"
 import AccessTime from "@material-ui/icons/AccessTime"
 
+//LOANS
+import Cached from "@material-ui/icons/Cached"
+
 //AUTH
 import AccountCircle from "@material-ui/icons/AccountCircle"
 import Notifications from "@material-ui/icons/Notifications"
@@ -85,5 +88,6 @@ export default {
   AccountCircle,
   Notifications,
   NotificationsActive,
-  Assessment
+  Assessment,
+  Cached
 }

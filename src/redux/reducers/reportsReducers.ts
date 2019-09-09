@@ -80,6 +80,8 @@ export default (state: ReportsState = initialState, {type, payload}: AnyAction) 
       case actions.ADD_CHANGE:
         draft.changes.push(payload)
         return draft
+      case actions.RESET_REPORTS:
+        return initialState
       default:
         return draft
     }

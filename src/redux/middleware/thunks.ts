@@ -18,7 +18,8 @@ const firestoreSections: IStringKeys = {
   products: "Products",
   sales: "Sales",
   suppliers: "Suppliers",
-  reports: "Reports"
+  reports: "Reports",
+  loans: "Loans"
 };
 
 const getSectionString = (section: string) => {
@@ -121,6 +122,10 @@ export const setSectionToFirestore = (
   let sectionString = getSectionString(section);
   let dataToSave = saveFromState(state);
   dispatch(onBegin());
+  shouldLog("setSectionToFirestore: ", {
+    location: `${location}/${sectionString}`,
+    dataToSave
+  })
   secondaryFirestore
     .doc(`${location}/${sectionString}`)
     .set(dataToSave, { merge: true })

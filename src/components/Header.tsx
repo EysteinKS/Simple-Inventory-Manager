@@ -28,6 +28,8 @@ import { shouldLog } from '../constants/util';
 import Subscription from '../firebase/Subscription';
 import LinkWrapper from './util/LinkWrapper';
 import styled from 'styled-components';
+import { resetReports } from '../redux/actions/reportsActions';
+import { resetLoans } from '../redux/actions/loansActions';
 
 type THeader = {
   locationIsLoaded: boolean
@@ -108,6 +110,8 @@ const UserSelector = () => {
     dispatch(resetProducts())
     dispatch(resetSales())
     dispatch(resetSuppliers())
+    dispatch(resetReports())
+    dispatch(resetLoans())
   }
 
   const unsub = () => {
@@ -185,6 +189,7 @@ const SectionSelector = () => {
     {name: "Produkter", linkTo: routes.HOME, icon: <Icons.Storage/>},
     {name: "Bestillinger", linkTo: routes.ORDERS, icon: <Icons.Archive/>},
     {name: "Salg", linkTo: routes.SALES, icon: <Icons.Unarchive/>},
+    {name: "Utlån", linkTo: routes.LOANS, icon: <Icons.Cached/>},
     {name: "Logg", linkTo: routes.HISTORY, icon: <Icons.AccessTime/>},
     {name: "Profil", linkTo: routes.PROFILE, icon: <Icons.AccountCircle/>},
     {name: "Admin", linkTo: routes.ADMIN, icon: <Icons.Assessment/>}

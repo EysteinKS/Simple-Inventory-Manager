@@ -28,7 +28,8 @@ const initialState: AuthState = {
         customers: new Date("2019-07-01T19:45:00"),
         orders: new Date("2019-07-01T19:45:00"),
         sales: new Date("2019-07-01T19:45:00"),
-        suppliers: new Date("2019-07-01T19:45:00")
+        suppliers: new Date("2019-07-01T19:45:00"),
+        loans: new Date("2019-07-01T19:45:00")
       }
     }
   },

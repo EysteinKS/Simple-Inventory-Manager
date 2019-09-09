@@ -36,22 +36,6 @@ export default function useInitialization() {
     }
   }, [dispatch, user, userLoggingOut])
 
-  //USED TO SHOW TIME TAKEN UNTIL THE PAGE IS LOADED
-  /* const [timer, setTimer] = useState(false)
-  useEffect(() => {
-    if(initializingUser || loadingMessage === "Logging in..." || userLoggingOut){
-      if(!timer){
-        setTimer(true)
-        console.time("Time until interactive")
-      }
-    } else if (!user && !initializingUser) {
-      if(timer){
-        setTimer(false)
-        console.timeEnd("Time until interactive")
-      }
-    }
-  }, [user, initializingUser, userLoggingOut, loadingMessage, timer]) */
-
   //FETCH USER
   useEffect(() => {
     if (user && !isLoadingUser && !authIsLoaded && !userLoggingOut) {

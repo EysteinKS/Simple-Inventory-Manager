@@ -7,6 +7,7 @@ import orders from "./ordersReducers"
 import reports from "./reportsReducers"
 import sales from "./salesReducers"
 import suppliers from "./suppliersReducers"
+import loans from "./loansReducers"
 
 import { Reducer } from "redux"
 
@@ -18,7 +19,8 @@ interface CombinedReducers {
   products: Reducer,
   reports: Reducer,
   sales: Reducer,
-  suppliers: Reducer
+  suppliers: Reducer,
+  loans: Reducer
 }
 
 const reducers: CombinedReducers = {
@@ -29,7 +31,8 @@ const reducers: CombinedReducers = {
   products,
   reports,
   sales,
-  suppliers
+  suppliers,
+  loans
 }
 
 export default combineReducers(reducers)

@@ -10,6 +10,7 @@ import { saveReport } from "../redux/actions/reportsActions";
 import { saveSales } from "../redux/actions/salesActions";
 import { saveSuppliers } from "../redux/actions/suppliersActions";
 import { shouldLog } from "../constants/util";
+import { saveLoans } from "../redux/actions/loansActions";
 
 const stateKeys = [
   "categories",
@@ -18,7 +19,8 @@ const stateKeys = [
   "products",
   "reports",
   "sales",
-  "suppliers"
+  "suppliers",
+  "loans"
 ]
 
 const savingActions: any = {
@@ -27,7 +29,8 @@ const savingActions: any = {
   orders: saveOrders,
   products: saveProducts,
   sales: saveSales,
-  suppliers: saveSuppliers
+  suppliers: saveSuppliers,
+  loans: saveLoans
 }
 
 interface IsavingState {

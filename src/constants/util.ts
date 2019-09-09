@@ -1,4 +1,4 @@
-import { ISupplier, ICustomer, ISale, IOrder, IProduct, RootState, ICategory, IOrderedProduct, IChangeValue } from "../redux/types";
+import { ISupplier, ICustomer, ISale, IOrder, IProduct, RootState, ICategory, IOrderedProduct, IChangeValue, ILoan } from "../redux/types";
 import { TDirections } from "../components/util/SectionHeader";
 
 //GETTING VALUES
@@ -203,11 +203,41 @@ export const newSale = (id: number): ISale => {
   }
 }
 
+export const newLoan = (id: number): ILoan => {
+  let date = new Date()
+  return {
+    loanID: id,
+    customerID: 1,
+    dateOrdered: date,
+    dateSent: null,
+    dateReceived: null,
+    ordered: [],
+    isNew: true
+  }
+}
+
 //CREATING END
 
 //BOOLEANS
 export const isArrayEmpty = (arr: any[]) => {
   return (!Array.isArray(arr) || !arr.length)
+}
+
+const defaultDateOpts = {
+  year: "2-digit",
+  month: "2-digit",
+  day: "2-digit"
+}
+
+export const dateToString = (date: string | Date | null, opts = defaultDateOpts) => {
+  if(typeof date === "string"){
+    let stringToDate = new Date(date)
+    return stringToDate.toLocaleDateString("default", opts)
+  } else if(date) {
+    return date.toLocaleDateString("default", opts)
+  } else {
+    return null
+  }
 }
 
 //DATE HANDLING

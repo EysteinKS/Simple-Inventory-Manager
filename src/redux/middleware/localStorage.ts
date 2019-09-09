@@ -11,7 +11,8 @@ export interface ISectionKeys extends IStringKeys {
   orders: string,
   products: string,
   sales: string,
-  suppliers: string
+  suppliers: string,
+  loans: string
 }
 
 export interface ICombinedKeys extends ISectionKeys {
@@ -25,7 +26,8 @@ export const sectionKeys: ISectionKeys = {
   orders: "orders",
   products: "products",
   sales: "sales",
-  suppliers: "suppliers"
+  suppliers: "suppliers",
+  loans: "loans"
 }
 export const combinedKeys: ICombinedKeys = {
   ...sectionKeys,

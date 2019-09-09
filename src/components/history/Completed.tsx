@@ -14,10 +14,9 @@ import { shouldLog } from "../../constants/util";
 const localeStringOpts = {
   day: "2-digit",
   month: "2-digit",
-  year: "numeric",
+  year: "2-digit",
   hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit"
+  minute: "2-digit"
 };
 
 const Completed = () => {
@@ -30,6 +29,7 @@ const Completed = () => {
   const customers = useSelector(
     (state: RootState) => state.customers.customers
   );
+  const loanHistory = useSelector((state: RootState) => state.loans.history)
 
   const ordersColumns = React.useMemo(() => {
     return [
@@ -119,16 +119,73 @@ const Completed = () => {
     });
   }, [saleHistory, customers, productNames]);
 
+  const loansColumns = React.useMemo(() => {
+    return [
+      { name: "ID", width: "10%" },
+      { name: "CUSTOMER", width: "20%" },
+      { name: "ORDERED", width: "20%" },
+      { name: "SENT", width: "20%" },
+      { name: "RECEIVED", width: "20%" },
+      { name: "AMOUNT", width: "10%" }
+    ];
+  }, []);
+
+  const loansContent = React.useMemo(() => {
+    shouldLog("Calculating content in orders history")
+    let sorted = [...loanHistory].sort((a, b) => {
+      return a.loanID - b.loanID;
+    });
+    return sorted.map(loan => {
+      let customerName =
+        customers[customers.findIndex(i => i.customerID === loan.customerID)]
+          .name;
+      let ordered = new Date(loan.dateOrdered as string).toLocaleString(
+        "default",
+        localeStringOpts
+      );
+      let sent = new Date(loan.dateSent as string).toLocaleString(
+        "default",
+        localeStringOpts
+      )
+      let received = new Date(loan.dateReceived as string).toLocaleString(
+        "default",
+        localeStringOpts
+      );
+      let amount = loan.ordered.reduce((acc, cur) => {
+        acc += cur.amount;
+        return acc;
+      }, 0);
+      let columns = [loan.loanID, customerName, ordered, sent, received, amount];
+      return (
+        <ExpandableRow key={"order_history_" + loan.loanID} columns={columns}>
+          <OrderedProducts
+            id={"order_" + loan.loanID}
+            ordered={loan.ordered}
+            names={productNames}
+            columns={6}
+          />
+        </ExpandableRow>
+      );
+    });
+  }, [loanHistory, customers, productNames]);
+
   return (
     <div>
       {/* ORDERS */}
+      {(orderHistory.length > 0) &&
       <HistoryTable name="Orders" columns={ordersColumns}>
         {ordersContent}
-      </HistoryTable>
+      </HistoryTable>}
       {/* SALES */}
+      {(saleHistory.length > 0) &&
       <HistoryTable name="Sales" columns={salesColumns}>
         {salesContent}
-      </HistoryTable>
+      </HistoryTable>}
+      {/* LOANS */}
+      {(loanHistory.length > 0) &&
+      <HistoryTable name="Loans" columns={loansColumns}>
+        {loansContent}
+      </HistoryTable>}
     </div>
   );
 };
@@ -176,6 +233,7 @@ interface IOrderedProducts {
   id: string;
   names: { [key: number]: string };
   ordered: IOrderedProduct[];
+  columns?: number
 }
 
 const OrderedCell = styled.td`
@@ -185,7 +243,8 @@ const OrderedCell = styled.td`
 const OrderedProducts: React.FC<IOrderedProducts> = ({
   id,
   names,
-  ordered
+  ordered,
+  columns = 5
 }) => {
   const orderedList = React.useMemo(() => {
     let sorted = ordered.sort((a, b) => a.productID - b.productID);
@@ -202,7 +261,7 @@ const OrderedProducts: React.FC<IOrderedProducts> = ({
 
   return (
     <tr>
-      <td colSpan={5} style={{ borderTop: "2px solid #ccc" }}>
+      <td colSpan={columns} style={{ borderTop: "2px solid #ccc" }}>
         <table
           style={{
             width: "100%",

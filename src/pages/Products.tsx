@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   createProduct,
@@ -24,8 +24,9 @@ import Warning from "../components/util/Warning"
 import useSortableList from "../hooks/useSortableList"
 import produce from "immer"
 import { IProduct, RootState } from "../redux/types";
-import { OrdersInfo, SalesInfo } from "../components/util/HoverInfo";
+import { OrdersInfo, SalesInfo, LoansInfo } from "../components/util/HoverInfo";
 import styled from "styled-components";
+import { hasActiveLoans } from "../redux/selectors/loansSelectors";
 
 //TODO
 //Show icon if product contains a comment
@@ -63,6 +64,16 @@ export default function Products(){
       setSortingFuncs(newSorting);
     }
   }
+
+  const activeLoans = useSelector(hasActiveLoans)
+  const iconRows = useMemo(() => {
+    if(!activeLoans){
+      return "9% 1% 18% 1% 18% 1% repeat(5, 8%) 12%" 
+    } else {
+      return "9% 1% 18% 1% 18% 1% repeat(6, 7%) 10%" 
+    }
+  }, [activeLoans])
+
 
   const buttonStyle = {
     height: "75%",
@@ -102,7 +113,7 @@ export default function Products(){
           <CloudStatus/>
         </Row>
         <RowSplitter/>
-        <Row grid="9% 1% 18% 1% 18% 1% repeat(5, 8%) 12%" cName="products-header">
+        <Row grid={iconRows} cName="products-header">
           <SortingKey
             onClick={dir => sortList(dir, 0, sort.by("productID", dir))}
           >#</SortingKey>
@@ -122,6 +133,7 @@ export default function Products(){
           <Key><Icons.Storage/></Key>
           <Key><Icons.Archive/></Key>
           <Key><Icons.Unarchive/></Key>
+          {activeLoans && <Key><Icons.Cached/></Key>}
           <Key><Icons.Functions/></Key>
           <div/>
           <KeyButton onClick={() => shouldLog("TODO: useFilterableList")}>{/* !isFiltered ? <Icons.VisibilityOff/> : <Icons.Visibility/> */}</KeyButton>
@@ -164,31 +176,61 @@ type TProductWithEdit = {
 const Product = ({ product, edit }: TProductWithEdit) => {
   const dispatch = useDispatch()
   const categories = useSelector((state: RootState) => state.categories.categories);
+  const hasLoans = useSelector(hasActiveLoans)
   const category = categories[product.categoryID - 1].name;
-  //const category = getCategoryName(categories, product.categoryID)
   let orders = useSelector((state: RootState) => state.orders.orders);
   let sales = useSelector((state: RootState) => state.sales.sales)
+  let loans = useSelector((state: RootState) => state.loans.loans)
   let ordered = getAmount(orders, product.productID);
-  let reserved = getAmount(sales, product.productID)
+  let reserved = getAmount(sales, product.productID);
+  let loaned = getAmount(loans, product.productID)
   let amount = product.amount;
 
-  const total = amount + (ordered || 0) - (reserved || 0);
+  const total = amount + (ordered || 0) - (reserved || 0) - (loaned || 0);
 
   return (
-    <div className={`product ${!product.active ? "inactive" : ""} ${(product.active && total < 0)}`}>
+    <StyledProduct active={product.active} hasLoans={hasLoans}>
       <p>{product.productID}</p>
       <p className="product-name">{product.name}</p>
       <p className="product-category">{category}</p>
-      <p>{amount || 0}</p>
+      <p>{amount || "-"}</p>
       <OrderedWithInfo productID={product.productID} amount={ordered}/>
       <ReservedWithInfo productID={product.productID} amount={reserved}/>
-      <p>{total}</p>
-      {(total < 0) ? <Warning style={{ placeSelf: "center" }}/> : <div/>}
+      {hasLoans && <LoansWithInfo productID={product.productID} amount={loaned}/>}
+      <p>{total || 0}</p>
+      {(total < 0) ? <Warning style={{ justifySelf: "start", alignSelf: "center" }}/> : <div/>}
       <button onClick={() => dispatch(toggleProduct(product.productID))}>{product.active ? <Icons.Visibility/>: <Icons.VisibilityOff/>}</button>
       <button onClick={() => edit(product.productID)}><Icons.Edit/></button>
-    </div>
+    </StyledProduct>
   );
 };
+
+type TStyledProduct = {
+  active: boolean
+  hasLoans: boolean
+}
+
+const StyledProduct = styled.div`
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  background-color: #EEEDE3;
+  :nth-child(2n){
+    background-color: #FFFFF3;
+  }
+  grid-template-columns: 10% 19% 19% repeat(4, 8%) 6% 7% 7%;
+  ${(props: TStyledProduct) => {
+    const { hasLoans } = props
+    if(hasLoans) return `
+    grid-template-columns: 10% 19% 19% repeat(5, 7%) 5% 6% 6%`
+  }}
+  ${(props: TStyledProduct) => {
+    const { active } = props
+    if(!active) return `
+    background-color: #FDE5E5 !important
+    color: rgb(190, 190, 190)`
+  }}
+`
 
 interface InfoProps {
   productID: number
@@ -207,12 +249,12 @@ const OrderedWithInfo: React.FC<InfoProps> = ({productID, amount}) => {
   const handle = `product_${productID}_ordered`
 
   if(amount <= 0){
-    return(<p>{amount}</p>)
+    return(<p>-</p>)
   }
 
   return(
     <>
-      <AmountField data-tip data-for={handle}>{amount || 0}</AmountField>
+      <AmountField data-tip data-for={handle}>{amount || "-"}</AmountField>
       {(amount > 0) && <OrdersInfo handle={handle} productID={productID}/>}
     </>
   )
@@ -222,13 +264,28 @@ const ReservedWithInfo: React.FC<InfoProps> = ({productID, amount}) => {
   const handle = `product_${productID}_reserved`
 
   if(amount <= 0){
-    return(<p>{amount}</p>)
+    return(<p>-</p>)
   }
 
   return(
     <>
-      <AmountField data-tip data-for={handle}>{amount || 0}</AmountField>
+      <AmountField data-tip data-for={handle}>{amount || "-"}</AmountField>
       {(amount > 0) && <SalesInfo handle={handle} productID={productID}/>}
+    </>
+  )
+}
+
+const LoansWithInfo: React.FC<InfoProps> = ({productID, amount}) => {
+  const handle = `product_${productID}_loans`
+
+  if(amount <= 0){
+    return(<p>-</p>)
+  }
+
+  return(
+    <>
+      <AmountField data-tip data-for={handle}>{amount || "-"}</AmountField>
+      {(amount > 0) && <LoansInfo handle={handle} productID={productID}/>}
     </>
   )
 }

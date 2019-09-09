@@ -14,7 +14,7 @@ import CloudStatus from "../components/util/CloudStatus"
 import Icons from "../components/util/Icons"
 import Buttons from "../components/util/Buttons"
 import Names from "../components/Names"
-import {isArrayEmpty, newSale, sort} from "../constants/util"
+import {isArrayEmpty, newSale, sort, dateToString} from "../constants/util"
 
 import useSortableList from "../hooks/useSortableList";
 import produce from "immer";
@@ -153,23 +153,7 @@ const Sale = ({ sale, edit }: TSale) => {
     expandedStyle = { backgroundColor: "#e6e6e6", padding: "10px", display: "grid", placeItems: "center" }
   }
 
-  let orderDate
-  if(typeof dateOrdered === "string"){
-    let stringToDate = new Date(dateOrdered)
-    orderDate = stringToDate.toLocaleDateString("default", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    })
-  } else if (dateOrdered){
-    orderDate = dateOrdered.toLocaleDateString("default", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    });
-  } else {
-    orderDate = null
-  }
+  let orderDate = dateToString(dateOrdered)
   
   let totalProducts = ordered.reduce((acc, cur) => acc + cur.amount, 0)
 

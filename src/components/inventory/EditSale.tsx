@@ -1,19 +1,17 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   saveCreatedSale,
   saveEditedSale
 } from "../../redux/actions/salesActions";
-import { saveCreatedCustomer } from "../../redux/actions/customersActions";
 import ReactModal from "react-modal";
 import Collapse from "@material-ui/core/Collapse";
-import Icons from "../util/Icons";
-import ProductName from "./ProductName";
-import SelectProduct from "../util/SelectProduct";
 import useEditableList from "../../hooks/useEditableList"
-import { RootState, ICustomer, IOrderedProduct, ISale } from "../../redux/types";
+import { RootState, ISale } from "../../redux/types";
 import { isChanged, shouldLog } from "../../constants/util";
 import { addChange } from "../../redux/actions/reportsActions";
+import AddCustomer from "./AddCustomer";
+import OrderedProducts from "./OrderedProducts";
 
 ReactModal.setAppElement("#root");
 
@@ -150,7 +148,7 @@ export default function EditSale({ isOpen, close }: TEditSale) {
             />
           ) : null}
         </Collapse>
-        <Ordered
+        <OrderedProducts
           ordered={ordered}
           add={productID => addProduct({productID: productID, amount: 1})}
           edit={(product, index) => editProduct(product, index)}
@@ -170,169 +168,5 @@ export default function EditSale({ isOpen, close }: TEditSale) {
         </button>
       </div>
     </ReactModal>
-  );
-};
-
-type TAddCustomer = {
-  visible: boolean,
-  close: (id: number) => void,
-  customers: ICustomer[]
-}
-
-const AddCustomer = ({ visible, close, customers }: TAddCustomer) => {
-  const [name, setName] = useState("");
-  const [ID, setID] = useState();
-  const dispatch = useDispatch();
-  const save = useCallback(
-    event => {
-      event.preventDefault();
-      dispatch(addChange({
-        type: "NEW_CUSTOMER",
-        id: ID,
-        name,
-        section: "customers"
-      }))
-      dispatch(saveCreatedCustomer(name));
-      close(ID);
-    },
-    [dispatch, name, close, ID]
-  );
-
-  useEffect(() => {
-    if(visible) {
-      setID(customers.length + 1);
-    }
-  }, [visible, setID, customers]);
-
-  return (
-    <div
-      style={{
-        gridColumn: "2 / 3",
-        marginTop: "5px",
-        marginBottom: "20px",
-        display: "flex",
-        flexWrap: "nowrap",
-        justifyContent: "center"
-      }}
-    >
-      <input
-        type="text"
-        value={name}
-        onChange={e => setName(e.target.value)}
-        placeholder="Navn"
-        style={{
-          width: "100"
-        }}
-      />
-      <button
-        onClick={e => save(e)}
-        style={{
-          width: "10vw",
-          backgroundColor: "rgb(255, 220, 0)"
-        }}
-      >
-        <Icons.NewFolder />
-      </button>
-    </div>
-  );
-};
-
-type TOrdered = {
-  ordered: IOrderedProduct[],
-  add: (newListItem: any) => void,
-  edit: (updated: any, index: number) => void,
-  remove: (index: number) => void
-}
-
-const Ordered = ({ ordered, add, edit, remove }: TOrdered) => {
-  const [showAdd, setAdd] = useState(false);
-
-  return (
-    <div
-      style={{
-        gridColumn: "1 / 3",
-        padding: "3%",
-        maxHeight: "100%",
-        overflowY: "auto"
-      }}
-    >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "20% 60% 20%",
-          backgroundColor: "lightgray",
-          marginTop: "0px",
-          padding: "5px"
-        }}
-      >
-        <button
-          onClick={e => {
-            e.preventDefault();
-            setAdd(!showAdd);
-          }}
-        >
-          +
-        </button>
-        <span
-          style={{ marginTop: "0px", paddingLeft: "10px", placeSelf: "center" }}
-        >
-          Produkter
-        </span>
-      </div>
-      <ul style={{ listStyleType: "none", padding: "5px", margin: "0px" }}>
-        {ordered.map((product, i) => (
-          <OrderedProduct 
-            product={product} 
-            key={"selected_products_" + product.productID} 
-            index={i} 
-            edit={(value, index) => edit({productID: product.productID, amount: value}, index)}
-            remove={index => remove(index)}/>
-        ))}
-      </ul>
-      <Collapse in={showAdd}>
-        <SelectProduct
-          style={{
-            height: "30vh",
-            overflowY: "scroll"
-          }}
-          onSelect={productID => add(productID)}
-          selected={ordered}
-        />
-      </Collapse>
-    </div>
-  );
-};
-
-type TOrderedProduct = {
-  product: IOrderedProduct,
-  edit: (updated: any, index: number) => void,
-  remove: (index: number) => void,
-  index: number
-}
-
-const OrderedProduct = ({ product, edit, remove, index }: TOrderedProduct) => {
-  const { productID, amount } = product;
-
-  return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "50% 40% 10%",
-        borderBottom: "black 1px solid",
-        marginBottom: "10px",
-        paddingBottom: "5px"
-      }}
-    >
-      <ProductName id={productID} />
-      <input
-        type="tel"
-        value={amount}
-        onChange={e => edit(Number(e.target.value), index)}
-      />
-      <button onClick={e => {
-        e.preventDefault()
-        remove(index)
-      }}><Icons.Delete/></button>
-    </div>
   );
 };

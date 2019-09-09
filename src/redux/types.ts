@@ -31,7 +31,8 @@ export interface LastChanged {
     customers: Date | string,
     orders: Date | string,
     sales: Date | string,
-    suppliers: Date | string
+    suppliers: Date | string,
+    loans: Date | string
   }
 }
 
@@ -138,11 +139,11 @@ export interface OrdersState extends SectionState {
 //SALES
 
 export interface ISale {
-  customerID: number,
-  dateOrdered: Date | string | null,
-  dateSent: Date | string | null,
-  ordered: Array<IOrderedProduct>,
-  saleID: number,
+  customerID: number
+  dateOrdered: Date | string | null
+  dateSent: Date | string | null
+  ordered: Array<IOrderedProduct>
+  saleID: number
   isNew?: boolean
 }
 
@@ -154,6 +155,26 @@ export interface SalesState extends SectionState {
 }
 
 //SALES END
+
+//LOANS
+
+export interface ILoan {
+  customerID: number
+  dateOrdered: Date | string | null
+  dateSent: Date | string | null
+  dateReceived: Date | string | null
+  ordered: Array<IOrderedProduct>
+  loanID: number,
+  isNew?: boolean
+}
+
+export interface LoansState extends SectionState {
+  loans: Array<ILoan>
+  currentLoan: ILoan | null
+  history: Array<ILoan>
+}
+
+//LOANS END
 
 //SUPPLIERS
 
@@ -218,6 +239,17 @@ export interface ILoggedSale {
   ordered: ILoggedOrdered[]
 }
 
+export interface ILoggedLoan {
+  loanID: number
+  customer: {
+    customerID: number
+    name: string
+  }
+  dateOrdered: string | null
+  dateSent: string | null
+  ordered: ILoggedOrdered[]
+}
+
 export interface IReport {
   date: string
   changeLog: Array<ILoggedChange>
@@ -234,6 +266,9 @@ export interface IReport {
     new: number[] | never []
     active: ILoggedSale[]
     received: number[] | never[]
+  }
+  loans: {
+    active: ILoggedLoan[]
   }
 }
 
@@ -314,7 +349,8 @@ export type AnyState =
   ProductsState |
   OrdersState |
   SalesState |
-  SuppliersState
+  SuppliersState |
+  LoansState
 
 export interface RootState {
   readonly auth: AuthState,
@@ -323,6 +359,7 @@ export interface RootState {
   readonly products: ProductsState,
   readonly orders: OrdersState,
   readonly sales: SalesState,
+  readonly loans: LoansState,
   readonly suppliers: SuppliersState,
   readonly reports: ReportsState,
   [index: string]: any

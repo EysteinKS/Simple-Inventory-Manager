@@ -20,7 +20,7 @@ export default class Subscription {
   }
 
   public unsubscribe() {
-    console.log("Unsubscribing...")
+    shouldLog("Unsubscribing...")
     this.unsub()
   }
 }
@@ -37,6 +37,7 @@ export const listenToUpdates = (client: string, onChange: () => void) => {
 
     const lastChanged = () => {
       const ls = getAllStorage() as RootState
+      shouldLog("ls: ", ls)
       return ls.auth.location.lastChanged.global as string
     }
 

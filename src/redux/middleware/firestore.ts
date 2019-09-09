@@ -9,19 +9,10 @@ import {
 } from "./localStorage"
 import { fsActions, lsBeginActions, lsSuccessActions } from "../actions"
 
-import {
-  RootState
-} from "../types"
-import {
-  TDispatch,
-  IThunkAction,
-} from "./types"
-import {
-  ThunkDispatch
-} from "redux-thunk"
-import {
-  AnyAction
-} from "redux"
+import { RootState } from "../types"
+import { TDispatch, IThunkAction } from "./types"
+import { ThunkDispatch } from "redux-thunk"
+import { AnyAction } from "redux"
 import { shouldLog } from "../../constants/util";
 
 export const sections = {
@@ -30,7 +21,8 @@ export const sections = {
   orders: "Orders",
   products: "Products",
   sales: "Sales",
-  suppliers: "Suppliers"
+  suppliers: "Suppliers",
+  loans: "Loans"
 }
 
 export const getInventory = (message: Function): IThunkAction => {

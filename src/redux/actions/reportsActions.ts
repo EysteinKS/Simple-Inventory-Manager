@@ -1,4 +1,4 @@
-import { IbyDate, IReport, IDate, RootState, ILoggedOrder, ILoggedSale, Changes } from "../types";
+import { IbyDate, IReport, IDate, RootState, ILoggedOrder, ILoggedSale, Changes, ILoggedLoan } from "../types";
 import { getSectionFromFirestore, getCurrentLocation } from "../middleware/thunks";
 import { IThunkAction } from "../middleware/types";
 import { firebase, secondaryFirestore } from "../../firebase/firebase";
@@ -99,6 +99,7 @@ const generateReport = (date: Date, state: RootState): IReport => {
   let suppliers = state.suppliers.suppliers
   let sales = state.sales.sales
   let customers = state.customers.customers
+  let loans = state.loans.loans
 
   let loggedChange = {
     timeChanged: date.toISOString(),
@@ -168,6 +169,25 @@ const generateReport = (date: Date, state: RootState): IReport => {
     } as ILoggedSale
   })
 
+  let allLoans: ILoggedLoan[] = loans.map(l => {
+    return {
+      loanID: l.loanID,
+      customer: {
+        customerID: l.customerID,
+        name: findInArray(customers, "customerID", l.customerID).name
+      },
+      dateOrdered: dateToString(l.dateOrdered),
+      dateSent: dateToString(l.dateSent),
+      ordered: l.ordered.map(ordered => {
+        return {
+          amount: ordered.amount,
+          productID: ordered.productID,
+          name: findInArray(products, "productID", ordered.productID).name
+        }
+      })
+    }
+  })
+
   let report: IReport = {
     date: date.toISOString(),
     changeLog: [loggedChange],
@@ -184,6 +204,9 @@ const generateReport = (date: Date, state: RootState): IReport => {
       new: [],
       active: allSales,
       received: []
+    },
+    loans: {
+      active: allLoans
     }
   }
   return report
@@ -223,4 +246,9 @@ export const ADD_CHANGE = 'ADD_CHANGE'
 export const addChange = (change: Changes) => ({
   type: ADD_CHANGE,
   payload: change
+})
+
+export const RESET_REPORTS = 'RESET_REPORTS'
+export const resetReports = () => ({
+  type: RESET_REPORTS
 })

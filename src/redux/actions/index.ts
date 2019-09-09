@@ -7,6 +7,7 @@ import { loadSuppliers, loadSuppliersBegin, loadSuppliersSuccess } from "./suppl
 
 import { IThunkAction } from "../middleware/types"
 import { AnyAction, ActionCreator } from "redux"
+import { loadLoans, loadLoansBegin, loadLoansSuccess } from "./loansActions";
 
 export interface ILoadActions<T> {
   categories: T,
@@ -15,6 +16,7 @@ export interface ILoadActions<T> {
   products: T,
   sales: T,
   suppliers: T,
+  loans: T,
   [index: string]: any
 }
 
@@ -26,7 +28,8 @@ export const fsActions: ILoadActions<IThunkActionCreator> = {
   orders: loadOrders,
   products: loadProducts,
   sales: loadSales,
-  suppliers: loadSuppliers
+  suppliers: loadSuppliers,
+  loans: loadLoans
 }
 
 export const lsBeginActions: ILoadActions<ActionCreator<AnyAction>> = {
@@ -35,7 +38,8 @@ export const lsBeginActions: ILoadActions<ActionCreator<AnyAction>> = {
   orders: loadOrdersBegin,
   products: loadProductsBegin,
   sales: loadSalesBegin,
-  suppliers: loadSuppliersBegin
+  suppliers: loadSuppliersBegin,
+  loans: loadLoansBegin
 }
 
 export const lsSuccessActions: ILoadActions<ActionCreator<AnyAction>> = {
@@ -44,5 +48,6 @@ export const lsSuccessActions: ILoadActions<ActionCreator<AnyAction>> = {
   orders: loadOrdersSuccess,
   products: loadProductsSuccess,
   sales: loadSalesSuccess,
-  suppliers: loadSuppliersSuccess
+  suppliers: loadSuppliersSuccess,
+  loans: loadLoansSuccess
 }

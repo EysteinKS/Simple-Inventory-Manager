@@ -2,6 +2,7 @@ import React from 'react'
 import ReactTooltip from "react-tooltip"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/types"
+import { shouldLog } from '../../constants/util';
 
 const HoverInfo: React.FC<{handle: string}> = ({handle, children}) => {
   return(
@@ -16,6 +17,11 @@ interface IProps {
   handle: string
 }
 
+type InfoReturn = {
+  id: number,
+  name: string,
+  amount: number
+}
 
 export const OrdersInfo: React.FC<IProps> = ({ productID, handle }) => {
   const ordersWithProduct = useSelector((state: RootState) => {
@@ -81,6 +87,54 @@ export const SalesInfo: React.FC<IProps> = ({ productID, handle }) => {
   return(
     <HoverInfo handle={handle}>
       {orderedArray.map(order => <InfoRow key={"product_orders_" + order.id} name={order.name} amount={order.amount}/>)}
+    </HoverInfo>
+  )
+}
+
+export const LoansInfo: React.FC<IProps> = ({ productID, handle }) => {
+  const loansWithProduct = useSelector((state: RootState) => {
+    const allLoans = state.loans.loans
+    const filteredOrders = allLoans.filter(loan => {
+      let doesContainProduct = false
+      loan.ordered.forEach(order => {
+        if(doesContainProduct === false){
+          if(order.productID === productID){
+            doesContainProduct = true
+          }
+        }
+      })
+      return doesContainProduct
+    })
+    return filteredOrders
+  })
+
+  const customers = useSelector((state: RootState) => state.customers.customers)
+
+  const orderedArrays = React.useMemo(() => {
+    let ordered: InfoReturn[] = []
+    let sent: InfoReturn[] = []
+    loansWithProduct.forEach(loan => {
+      const productOrder = loan.ordered[loan.ordered.findIndex(line => line.productID === productID)]
+      const customerName = customers[customers.findIndex(cust => cust.customerID === loan.customerID)].name
+      let ret = {id: loan.loanID, name: customerName, amount: productOrder.amount}
+      if(loan.dateSent == null){
+        ordered.push(ret)
+      } else {
+        sent.push(ret)
+      }
+    })
+    return [ordered, sent]
+  }, [productID, loansWithProduct, customers])
+
+  shouldLog("Loans orderedArrays: ", orderedArrays)
+  shouldLog("Loans orderedArrays[1].length === ", Boolean(orderedArrays[1].length))
+
+  return(
+    <HoverInfo handle={handle}>
+      {(orderedArrays[0].length > 0) && <p style={{textAlign: "center"}}>Bestilt</p>}
+      {(orderedArrays[0].length > 0) && orderedArrays[0].map(order => <InfoRow key={"product_ordered_loans_" + order.id} name={order.name} amount={order.amount}/>)}
+      {(orderedArrays[1].length > 0) && <p style={{textAlign: "center"}}>Sendt</p>}
+      {(orderedArrays[1].length > 0) && orderedArrays[1].map(order => <InfoRow key={"product_sent_loans_" + order.id} name={order.name} amount={order.amount}/>)}
     </HoverInfo>
   )
 }
