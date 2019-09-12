@@ -23,10 +23,13 @@ export default (state: CustomersState = initialState, {type, payload}: AnyAction
       case action.SAVE_CUSTOMERS_FAILURE:
         return drafts.saveFailure(draft, payload)
       case action.SAVE_CREATED_CUSTOMER:
+        let newID = draft.customers.length + 1
+        draft.currentID = newID
         draft.customers.push({
-          customerID: draft.customers.length + 1,
+          customerID: newID,
           name: payload
         })
+        
         draft.isSaved = false
         return draft
       case action.RESET_CUSTOMERS:

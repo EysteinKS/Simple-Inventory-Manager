@@ -23,6 +23,7 @@ export default (state: SuppliersState = initialState, {type, payload}: AnyAction
       case action.SAVE_SUPPLIERS_FAILURE:
         return drafts.saveFailure(draft, payload)
       case action.SAVE_CREATED_SUPPLIER:
+        draft.currentID = draft.suppliers.length +1
         draft.suppliers.push({
           supplierID: draft.suppliers.length + 1,
           name: payload

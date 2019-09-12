@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react"
+import React, { useState, useCallback } from "react"
 import { ICustomer } from "../../redux/types";
 import { useDispatch } from "react-redux";
 import { addChange } from "../../redux/actions/reportsActions";
@@ -13,10 +13,10 @@ type TAddCustomer = {
 
 const AddCustomer = ({ visible, close, customers }: TAddCustomer) => {
   const [name, setName] = useState("");
-  const [ID, setID] = useState();
   const dispatch = useDispatch();
   const save = useCallback(
     event => {
+      const ID = customers.length + 1
       event.preventDefault();
       dispatch(addChange({
         type: "NEW_CUSTOMER",
@@ -27,14 +27,8 @@ const AddCustomer = ({ visible, close, customers }: TAddCustomer) => {
       dispatch(saveCreatedCustomer(name));
       close(ID);
     },
-    [dispatch, name, close, ID]
+    [dispatch, name, close, customers.length]
   );
-
-  useEffect(() => {
-    if(visible) {
-      setID(customers.length + 1);
-    }
-  }, [visible, setID, customers]);
 
   return (
     <div

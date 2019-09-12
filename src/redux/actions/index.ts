@@ -1,13 +1,17 @@
 import * as cat from "./categoriesActions"
 import * as cus from "./customersActions"
-import { loadOrders, loadOrdersBegin, loadOrdersSuccess } from "./ordersActions"
-import { loadProducts, loadProductsBegin, loadProductsSuccess } from "./productsActions"
-import { loadSales, loadSalesBegin, loadSalesSuccess } from "./salesActions"
-import { loadSuppliers, loadSuppliersBegin, loadSuppliersSuccess } from "./suppliersActions"
+import { loadOrders, loadOrdersBegin, loadOrdersSuccess, resetOrders } from "./ordersActions"
+import { loadProducts, loadProductsBegin, loadProductsSuccess, resetProducts } from "./productsActions"
+import { loadSales, loadSalesBegin, loadSalesSuccess, resetSales } from "./salesActions"
+import { loadSuppliers, loadSuppliersBegin, loadSuppliersSuccess, resetSuppliers } from "./suppliersActions"
 
 import { IThunkAction } from "../middleware/types"
 import { AnyAction, ActionCreator } from "redux"
-import { loadLoans, loadLoansBegin, loadLoansSuccess } from "./loansActions";
+import { loadLoans, loadLoansBegin, loadLoansSuccess, resetLoans } from "./loansActions";
+import { resetAuth } from "./authActions";
+import { resetCategories } from "./categoriesActions";
+import { resetCustomers } from "./customersActions";
+import { resetReports } from "./reportsActions";
 
 export interface ILoadActions<T> {
   categories: T,
@@ -50,4 +54,17 @@ export const lsSuccessActions: ILoadActions<ActionCreator<AnyAction>> = {
   sales: loadSalesSuccess,
   suppliers: loadSuppliersSuccess,
   loans: loadLoansSuccess
+}
+
+export const resetRedux = (): IThunkAction => 
+  async (dispatch) => {
+    dispatch(resetAuth())
+    dispatch(resetCategories())
+    dispatch(resetCustomers())
+    dispatch(resetOrders())
+    dispatch(resetProducts())
+    dispatch(resetSales())
+    dispatch(resetSuppliers())
+    dispatch(resetReports())
+    dispatch(resetLoans())
 }

@@ -224,6 +224,7 @@ export const saveReport = (date: Date): IThunkAction =>
     let docName = `${addZero(currentMonth.toString())}-${addZero(currentDay.toString())}`
 
     let report = generateReport(date, state)
+    shouldLog("Saving report: ", report)
 
     dispatch(saveReportBegin())
 

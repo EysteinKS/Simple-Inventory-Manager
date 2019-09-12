@@ -13,7 +13,7 @@ const valuesToLowercase = (obj: any = {}) =>
   }, {})
 
 type TFilter = (item: string | any, search: string) => boolean
-type TUseSearchReturn = [any[], (search: string) => void]
+type TUseSearchReturn = [any[], (search: string) => void, (list: any[]) => void]
 
 /**
  * Hook that filters a list based on a callback function
@@ -32,13 +32,13 @@ export default function useSearch(list: any[], filters: TFilter): TUseSearchRetu
   const [search, setSearch] = useState("")
 
   useEffect(() => {
-      if(filters && search.length){
-        let filteredList = list.filter(item => filters(valuesToLowercase(item), search))
-        setFiltered(filteredList)
-      } else {
-        setFiltered(list)
-      }
-  }, [search])
+    if(filters && search.length){
+      let filteredList = list.filter(item => filters(valuesToLowercase(item), search))
+      setFiltered(filteredList)
+    } else {
+      setFiltered(list)
+    }
+  }, [search, filters, list])
 
-  return [filtered, setSearch]
+  return [filtered, setSearch, setFiltered]
 }

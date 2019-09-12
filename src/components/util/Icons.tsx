@@ -43,12 +43,16 @@ import AccessTime from "@material-ui/icons/AccessTime"
 
 //LOANS
 import Cached from "@material-ui/icons/Cached"
+import Search from "@material-ui/icons/Search"
+import Done from "@material-ui/icons/Done"
 
 //AUTH
 import AccountCircle from "@material-ui/icons/AccountCircle"
 import Notifications from "@material-ui/icons/Notifications"
 import NotificationsActive from "@material-ui/icons/NotificationsActive"
 import Assessment from "@material-ui/icons/Assessment"
+
+import ArrowBack from "@material-ui/icons/ArrowBack"
 
 export default {
   Visibility,
@@ -89,5 +93,8 @@ export default {
   Notifications,
   NotificationsActive,
   Assessment,
-  Cached
+  Cached,
+  Search,
+  Done,
+  ArrowBack
 }

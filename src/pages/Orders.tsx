@@ -10,7 +10,7 @@ import {
 import { sort, newOrder, isArrayEmpty } from "../constants/util";
 import "./Orders.css";
 
-import EditOrder from "../components/inventory/EditOrder";
+import EditOrder from "../components/inventory/EditModals/EditOrder";
 import ProductName from "../components/inventory/ProductName";
 import SectionHeader, {
   Row,
@@ -26,7 +26,6 @@ import Icons from "../components/util/Icons";
 import Buttons from "../components/util/Buttons";
 
 import useSortableList from "../hooks/useSortableList";
-import produce from "immer";
 import { RootState, IOrder, IOrderedProduct } from "../redux/types";
 import { addChange } from "../redux/actions/reportsActions";
 
@@ -41,27 +40,13 @@ export default function Orders() {
 
   //SORTING
   const [ sorting, setSorting ] = useState([null, null, null] as any[]);
-  const { sortedList, setList, setSortingFuncs } = useSortableList(orders.orders as IOrder[])
+  const { sortedList, setList, sortFunc } = useSortableList(orders.orders as IOrder[])
   useEffect(() => {
     setList(orders.orders);
-    setSortingFuncs(sorting);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orders.orders]);
-  const sortList = (dir: TDirections, index: number, func: Function) => {
-    if (dir !== null) {
-      let newSorting = produce(sorting, draft => {
-        draft[index] = func;
-      });
-      setSorting(newSorting);
-      setSortingFuncs(newSorting);
-    } else {
-      let newSorting = produce(sorting, draft => {
-        draft[index] = null;
-      });
-      setSorting(newSorting);
-      setSortingFuncs(newSorting);
-    }
-  };
+
+  const sortList = (dir: TDirections, index: number, func: Function) => sortFunc(setSorting)(dir, index, func, sorting)
 
   const buttonStyle = {
     height: "75%",

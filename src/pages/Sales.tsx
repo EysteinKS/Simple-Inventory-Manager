@@ -8,7 +8,7 @@ import {
   didSendSale
 } from "../redux/actions/salesActions"
 
-import EditSale from "../components/inventory/EditSale"
+import EditSale from "../components/inventory/EditModals/EditSale"
 import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, SortingKey, TDirections } from "../components/util/SectionHeader"
 import CloudStatus from "../components/util/CloudStatus"
 import Icons from "../components/util/Icons"
@@ -17,7 +17,6 @@ import Names from "../components/Names"
 import {isArrayEmpty, newSale, sort, dateToString} from "../constants/util"
 
 import useSortableList from "../hooks/useSortableList";
-import produce from "immer";
 import { RootState, ISale } from "../redux/types";
 import { addChange } from "../redux/actions/reportsActions";
 
@@ -29,27 +28,12 @@ export default function Sales(){
 
   //SORTING
   const [sorting, setSorting] = useState([null, null, null] as any[])
-  const { sortedList, setList, setSortingFuncs } = useSortableList(sales.sales)
+  const { sortedList, setList, sortFunc } = useSortableList(sales.sales)
   useEffect(() => {
     setList(sales.sales)
-    setSortingFuncs(sorting)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sales.sales])
-  const sortList = (dir: TDirections, index: number, func: Function) => {
-    if (dir !== null) {
-      let newSorting = produce(sorting, draft => {
-        draft[index] = func;
-      });
-      setSorting(newSorting);
-      setSortingFuncs(newSorting);
-    } else {
-      let newSorting = produce(sorting, draft => {
-        draft[index] = null;
-      });
-      setSorting(newSorting);
-      setSortingFuncs(newSorting);
-    }
-  }
+  const sortList = (dir: TDirections, index: number, func: Function) => sortFunc(setSorting)(dir, index, func, sorting)
 
   const buttonStyle = {
     height: "75%",

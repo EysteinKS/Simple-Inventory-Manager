@@ -1,13 +1,13 @@
 import React, {useState, useEffect, useCallback, useMemo} from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { saveCreatedProduct, saveEditedProduct } from "../../redux/actions/productsActions"
-import { saveCreatedCategory } from "../../redux/actions/categoriesActions"
+import { saveCreatedProduct, saveEditedProduct } from "../../../redux/actions/productsActions"
+import { saveCreatedCategory } from "../../../redux/actions/categoriesActions"
 import ReactModal from "react-modal"
 import Collapse from "@material-ui/core/Collapse"
-import Icons from "../util/Icons"
-import { RootState, ICategory, IProduct } from "../../redux/types";
-import { addChange } from "../../redux/actions/reportsActions";
-import { isChanged, shouldLog } from "../../constants/util";
+import Icons from "../../util/Icons"
+import { RootState, ICategory, IProduct } from "../../../redux/types";
+import { addChange } from "../../../redux/actions/reportsActions";
+import { isChanged, shouldLog } from "../../../constants/util";
 ReactModal.setAppElement("#root");
 
 //TODO
@@ -26,7 +26,7 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
   const dispatch = useDispatch();
 
   const [name, setName] = useState(current.name);
-  const [category, setCategory] = useState(current.categoryID);
+  const [category, setCategory] = useState(current.categoryID || "new");
   const [amount, setAmount] = useState(current.amount);
   const [active, setActive] = useState(current.active);
   const [comments, setComments] = useState(current.comments)
@@ -42,7 +42,11 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
   const [init, setInit] = useState(false);
   if (isOpen && !init) {
     setName(current.name);
-    setCategory(current.categoryID);
+    if(categories.length > 0){
+      setCategory(current.categoryID);
+    } else {
+      setCategory("new")
+    }
     setAmount(current.amount);
     setActive(current.active);
     setInit(true);
@@ -73,6 +77,10 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
   , [products, returnedProduct])
 
   const isNew = (current.productID > products.length)
+
+  const savingDisabled = useMemo(() => {
+    return (name.length <= 0 || category === "new")
+  }, [name, category])
 
   const save = () => {
     if (isNew) {
@@ -194,7 +202,10 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
       </form>
       <div style={{ display: "grid", gridTemplateColumns: "60% 20% 20%" }}>
         <div/>
-        <button onClick={save}>Lagre</button>
+        <button 
+          onClick={save}
+          disabled={savingDisabled}
+        >Lagre</button>
         <button
           onClick={() => {
             close();

@@ -14,7 +14,7 @@ import {
 } from "../constants/util";
 import "./Products.css";
 
-import EditProduct from "../components/inventory/EditProduct";
+import EditProduct from "../components/inventory/EditModals/EditProduct";
 import EditCategories from "./Categories";
 import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, KeyButton, SortingKey, TDirections } from "../components/util/SectionHeader";
 import CloudStatus from "../components/util/CloudStatus"
@@ -22,7 +22,6 @@ import Icons from "../components/util/Icons"
 import Warning from "../components/util/Warning"
 
 import useSortableList from "../hooks/useSortableList"
-import produce from "immer"
 import { IProduct, RootState } from "../redux/types";
 import { OrdersInfo, SalesInfo, LoansInfo } from "../components/util/HoverInfo";
 import styled from "styled-components";
@@ -43,27 +42,13 @@ export default function Products(){
 
   //SORTING
   const [sorting, setSorting] = useState([null, null, null] as any[])
-  const { sortedList, setList, setSortingFuncs } = useSortableList(products.products)
+  const { sortedList, setList, sortFunc } = useSortableList(products.products)
   useEffect(() => {
     setList(products.products);
-    setSortingFuncs(sorting);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products.products]);
-  const sortList = (dir: TDirections, index: number, func: Function) => {
-    if (dir !== null) {
-      let newSorting = produce(sorting, draft => {
-        draft[index] = func;
-      });
-      setSorting(newSorting);
-      setSortingFuncs(newSorting);
-    } else {
-      let newSorting = produce(sorting, draft => {
-        draft[index] = null;
-      });
-      setSorting(newSorting);
-      setSortingFuncs(newSorting);
-    }
-  }
+
+  const sortList = (dir: TDirections, index: number, func: Function) => sortFunc(setSorting)(dir, index, func, sorting)
 
   const activeLoans = useSelector(hasActiveLoans)
   const iconRows = useMemo(() => {

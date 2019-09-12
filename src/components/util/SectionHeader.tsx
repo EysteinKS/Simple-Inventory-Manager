@@ -117,9 +117,10 @@ export const KeyButton: FC<IButton> = ({children, onClick}) => {
 export type TDirections = "asc" | "desc" | null
 interface ISortingKey {
   onClick: (event: TDirections) => void
+  style?: any
 }
 
-export const SortingKey: FC<ISortingKey> = ({ children, onClick }) => {
+export const SortingKey: FC<ISortingKey> = ({ children, onClick, style = {}}) => {
   const withoutBorder = {border: "none", padding: "16px", background: "none"}
   const [direction, setDirection] = useState(null as TDirections)
 
@@ -140,7 +141,7 @@ export const SortingKey: FC<ISortingKey> = ({ children, onClick }) => {
 
   return(
     <button
-      style={withoutBorder}
+      style={{...withoutBorder, ...style}}
       onClick={() => {
         let nextDir: TDirections = getNextDirection(direction)
         changeDirection(nextDir)

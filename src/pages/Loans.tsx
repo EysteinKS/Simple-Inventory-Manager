@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, ILoan } from '../redux/types';
 import useSortableList from '../hooks/useSortableList';
 import SectionHeader, { TDirections, Row, Title, RowSplitter, SortingKey, ColumnSplitter, Key } from '../components/util/SectionHeader';
-import produce from 'immer';
 import styled from 'styled-components';
 import { createLoan, deleteLoan, didSendLoan, didReceiveLoan, editLoan, clearCurrentLoan } from '../redux/actions/loansActions';
 import { newLoan, sort, isArrayEmpty, dateToString } from '../constants/util';
@@ -12,7 +11,7 @@ import Icons from '../components/util/Icons';
 import Names from '../components/Names';
 import Buttons from '../components/util/Buttons';
 import { addChange } from '../redux/actions/reportsActions';
-import EditLoan from '../components/inventory/EditLoan';
+import EditLoan from '../components/inventory/EditModals/EditLoan';
 
 /*
 TODO
@@ -36,28 +35,14 @@ export default function Loans() {
 
   //SORTING
   const [sorting, setSorting] = useState([null, null, null] as any[])
-  const { sortedList, setList, setSortingFuncs } = useSortableList(loans.loans)
+  const { sortedList, setList, sortFunc } = useSortableList(loans.loans)
+
   useEffect(() => {
     setList(loans.loans)
-    setSortingFuncs(sorting)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loans.loans])
 
-  const sortList = (dir: TDirections, index: number, func: Function) => {
-    if (dir !== null){
-      let newSorting = produce(sorting, draft => {
-        draft[index] = func
-      })
-      setSorting(newSorting)
-      setSortingFuncs(newSorting)
-    } else {
-      let newSorting = produce(sorting, draft => {
-        draft[index] = null
-      })
-      setSorting(newSorting)
-      setSortingFuncs(newSorting)
-    }
-  }
+  const sortList = (dir: TDirections, index: number, func: Function) => sortFunc(setSorting)(dir, index, func, sorting)
 
   const NewLoanButton = () => (
     <MainButton onClick={() => {

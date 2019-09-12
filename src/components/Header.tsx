@@ -16,20 +16,13 @@ import { useAuthState } from "react-firebase-hooks/auth"
 import { useDispatch, useSelector } from "react-redux"
 
 import { clearLocalStorage } from "../redux/middleware/localStorage"
-import { resetCategories } from "../redux/actions/categoriesActions"
-import { resetCustomers } from "../redux/actions/customersActions"
-import { resetOrders } from "../redux/actions/ordersActions"
-import { resetProducts } from "../redux/actions/productsActions"
-import { resetSales } from "../redux/actions/salesActions"
-import { resetSuppliers } from "../redux/actions/suppliersActions"
-import { resetAuth } from "../redux/actions/authActions"
 import { RootState, AuthState } from '../redux/types';
 import { shouldLog } from '../constants/util';
 import Subscription from '../firebase/Subscription';
 import LinkWrapper from './util/LinkWrapper';
 import styled from 'styled-components';
-import { resetReports } from '../redux/actions/reportsActions';
-import { resetLoans } from '../redux/actions/loansActions';
+import { Dispatch } from 'redux';
+import { resetRedux } from '../redux/actions';
 
 type THeader = {
   locationIsLoaded: boolean
@@ -102,18 +95,6 @@ const UserSelector = () => {
   const authUser = useSelector((state: RootState) => state.auth)
   const dispatch = useDispatch()
 
-  const resetRedux = () => {
-    dispatch(resetAuth())
-    dispatch(resetCategories())
-    dispatch(resetCustomers())
-    dispatch(resetOrders())
-    dispatch(resetProducts())
-    dispatch(resetSales())
-    dispatch(resetSuppliers())
-    dispatch(resetReports())
-    dispatch(resetLoans())
-  }
-
   const unsub = () => {
     const sub = Subscription.getInstance()
     sub.unsubscribe()
@@ -126,18 +107,18 @@ const UserSelector = () => {
       gridTemplateColumns: "1fr 4fr 2fr",
       placeItems: "center"
      }}>
-      {user ? <LoggedIn authUser={authUser} resetRedux={resetRedux} unsub={unsub}/> : <NotLoggedIn/>}
+      {user ? <LoggedIn authUser={authUser} dispatch={dispatch} unsub={unsub}/> : <NotLoggedIn/>}
     </div>
   )
 }
 
 type TLoggedIn = {
-  authUser: AuthState,
-  resetRedux: () => void,
+  authUser: AuthState
+  dispatch: Dispatch<any>
   unsub: () => void
 }
 
-const LoggedIn = ({ authUser, resetRedux, unsub }: TLoggedIn) => 
+const LoggedIn = ({ authUser, dispatch, unsub }: TLoggedIn) => 
 <>
   <LinkWrapper linkTo="/profile">
     <Icons.AccountCircle fontSize="large"/>
@@ -153,8 +134,8 @@ const LoggedIn = ({ authUser, resetRedux, unsub }: TLoggedIn) =>
     await doSignOut()
     await clearLocalStorage()
     await shouldLog("Resetting redux")
-    await resetRedux()
-  }} style={{padding: "1vh"}}>Logg ut</button>
+    await dispatch(resetRedux())
+  }} style={{height: "4vh", padding: "1vh"}}>Logg ut</button>
 </>
 
 const NotLoggedIn = () => 

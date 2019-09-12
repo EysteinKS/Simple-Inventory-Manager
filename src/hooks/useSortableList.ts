@@ -1,4 +1,6 @@
 import { useState, Dispatch, SetStateAction } from "react";
+import { TDirections } from "../components/util/SectionHeader";
+import produce from "immer";
 
 const isFunction = (input: any) => typeof input === "function";
 export type TSetList = Dispatch<SetStateAction<any[]>>
@@ -29,5 +31,21 @@ export default function useSortableList(arr: any[] = []) {
     }
   };
 
-  return { sortedList, setList, setSortingFuncs }
+  const sortFunc = (setSorting: (sorting: any[]) => void) => (dir: TDirections, index: number, func: Function, sorting: any[]) => {
+    if (dir !== null) {
+      let newSorting = produce(sorting, draft => {
+        draft[index] = func;
+      });
+      setSorting(newSorting);
+      setSortingFuncs(newSorting);
+    } else {
+      let newSorting = produce(sorting, draft => {
+        draft[index] = null;
+      });
+      setSorting(newSorting);
+      setSortingFuncs(newSorting);
+    }
+  }
+
+  return { sortedList, setList, sortFunc }
 }

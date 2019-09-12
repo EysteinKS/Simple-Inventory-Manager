@@ -17,7 +17,7 @@ interface LoadingState {
   error: string | null
 }
 
-interface SectionState extends SavingState, LoadingState {
+interface SectionState extends SavingState, LoadingState, IStringKey {
   currentID: number
 }
 
