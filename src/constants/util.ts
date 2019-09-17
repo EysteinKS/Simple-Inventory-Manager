@@ -285,6 +285,7 @@ export const addZero = (str: string) => {
 
 const areArraysEqual = (oldVal: any[], newVal: any[]) => {
   if(oldVal === newVal) return true
+  if(JSON.stringify(oldVal) === JSON.stringify(newVal)) return true
   if(oldVal.length !== newVal.length) return false
 
   let prev = [...oldVal].sort((a, b) => a.productID - b.productID)
@@ -407,7 +408,7 @@ export const isChanged = (prev: any, next: any) => {
           oldValue: oldVals,
           newValue: newVals
         })
-      } else {
+      } else if (!Array.isArray(oldKey)) {
         if(oldKey !== newKey){
           changed.push({
             key: key,
