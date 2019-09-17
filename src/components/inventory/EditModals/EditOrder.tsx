@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { RootState, IOrder } from '../../../redux/types';
 import { useSelector, useDispatch } from 'react-redux';
 import useEditableList from '../../../hooks/useEditableList';
@@ -12,6 +12,7 @@ import Names from '../../Names';
 import Icons from '../../util/Icons';
 import { StyledFooter, StyledDetails, ProductWithEdit, CenteredText, TargetWithEdit, EndText, IDText, StyledHeader } from './styles';
 import { saveCreatedOrder, saveEditedOrder } from '../../../redux/actions/ordersActions';
+import useProducts from '../../../hooks/useProducts';
 
 ReactModal.setAppElement("#root");
 
@@ -28,6 +29,20 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
 
   const [supplier, setSupplier] = useState()
   const [view, setView] = useState("details" as ViewTypes)
+
+  const suppliers = useSelector((state: RootState) => state.suppliers.suppliers)
+  const [products, setSupplierProducts] = useProducts()
+
+  useEffect(() => {
+    if(supplier !== null && typeof supplier === "number"){
+      const thisSupplier = suppliers[suppliers.findIndex(s => s.supplierID === supplier)]
+      if("products" in thisSupplier && thisSupplier.products && thisSupplier.products.length > 0){
+        setSupplierProducts(thisSupplier.products)
+      } else {
+        setSupplierProducts([])
+      }
+    }
+  }, [supplier, suppliers, setSupplierProducts])
 
   const viewText = useMemo(() => {
     switch(view){
@@ -125,6 +140,7 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
       }}/>}
       {(view === "products") &&
       <OrderedProducts
+        products={products}
         ordered={ordered}
         add={productID => addProduct({productID, amount: 1})}
         edit={(product, index) => editProduct(product, index)}

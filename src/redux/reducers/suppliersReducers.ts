@@ -26,8 +26,14 @@ export default (state: SuppliersState = initialState, {type, payload}: AnyAction
         draft.currentID = draft.suppliers.length +1
         draft.suppliers.push({
           supplierID: draft.suppliers.length + 1,
-          name: payload
+          name: payload,
+          products: []
         })
+        draft.isSaved = false
+        return draft
+      case action.SAVE_EDITED_SUPPLIER:
+        let supplierIndex = draft.suppliers.findIndex(s => s.supplierID === payload.supplierID)
+        draft.suppliers[supplierIndex] = payload
         draft.isSaved = false
         return draft
       case action.RESET_SUPPLIERS:

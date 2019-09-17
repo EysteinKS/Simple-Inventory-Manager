@@ -28,6 +28,7 @@ import Buttons from "../components/util/Buttons";
 import useSortableList from "../hooks/useSortableList";
 import { RootState, IOrder, IOrderedProduct } from "../redux/types";
 import { addChange } from "../redux/actions/reportsActions";
+import EditSuppliers from "./Suppliers"
 
 type TOrdered = { productID: number, amount: number }
 type TEdit = (id: number) => void
@@ -37,6 +38,7 @@ export default function Orders() {
   const orders = useSelector((state: RootState) => state.orders);
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const [isOrderOpen, setOrderOpen] = useState(false);
+  const [isSuppliersOpen, setSuppliersOpen] = useState(false)
 
   //SORTING
   const [ sorting, setSorting ] = useState([null, null, null] as any[]);
@@ -70,7 +72,7 @@ export default function Orders() {
       <button
         style={buttonStyle}
         onClick={() => {
-          //setSuppliersOpen(true);
+          setSuppliersOpen(true);
         }}
       >
         Leverandører
@@ -130,6 +132,10 @@ export default function Orders() {
           setOrderOpen(false);
           dispatch(clearCurrentOrder());
         }}
+      />}
+      {isSuppliersOpen && <EditSuppliers
+        isOpen={isSuppliersOpen}
+        close={() => setSuppliersOpen(false)}
       />}
     </div>
   );

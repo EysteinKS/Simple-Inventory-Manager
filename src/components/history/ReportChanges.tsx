@@ -248,9 +248,13 @@ const OrderedChange = ({ product, nullText }: IOrderedChange) => {
     return(
       <p>{nullText}</p>
     )
-  } else {
+  } else if (product.amount && product.productID) {
     return(
       <p>{product.amount}x <Names target={"products"} id={product.productID}/></p>
+    )
+  } else {
+    return(
+      <p><Names target={"products"} id={product as unknown as number}/></p>
     )
   }
 }

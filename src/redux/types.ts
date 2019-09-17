@@ -179,8 +179,9 @@ export interface LoansState extends SectionState {
 //SUPPLIERS
 
 export interface ISupplier {
-  name: string,
+  name: string
   supplierID: number
+  products: number[]
 }
 
 export interface SuppliersState extends SectionState {

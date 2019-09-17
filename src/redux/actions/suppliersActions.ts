@@ -75,6 +75,13 @@ export const saveCreatedSupplier = (name: string) => ({
   payload: name
 })
 
+export const SAVE_EDITED_SUPPLIER = "SAVE_EDITED_SUPPLIER"
+export const saveEditedSupplier = (edited: ISupplier) => ({
+  type: SAVE_EDITED_SUPPLIER,
+  payload: edited
+})
+
+
 export const RESET_SUPPLIERS = 'RESET_SUPPLIERS'
 export const resetSuppliers = () => ({
   type: RESET_SUPPLIERS

@@ -1,36 +1,44 @@
-import React from "react"
-import { IOrderedProduct, IProduct } from "../../redux/types";
+import React, { useMemo } from "react"
+import { IProduct } from "../../redux/types";
 import SelectProduct from "./SelectProduct";
 import ProductName from "./ProductName";
 import Icons from "../util/Icons";
 import styled from "styled-components";
 
-type TOrdered = {
+interface IProps {
   products: IProduct[]
-  ordered: IOrderedProduct[],
+  selected: number[],
   add: (newListItem: any) => void,
-  edit: (updated: any, index: number) => void,
   remove: (index: number) => void
 }
 
-const OrderedProducts = ({ products, ordered, add, edit, remove }: TOrdered) => {
+const SuppliersProducts = ({ products, selected, add, remove }: IProps) => {
+  const selectedProducts = useMemo(() => {
+    let list = selected.map(id => ({
+      productID: id,
+      amount: 0
+    }))
+    return list
+  }, [selected])
+
   return (
     <StyledWrapper>
       <StyledSection>
         <SelectProduct
+          height="35vh"
+          ignoreInactive={true}
           products={products}
           onSelect={productID => add(productID)}
-          selected={ordered}
+          selected={selectedProducts}
         />
       </StyledSection>
       <StyledSection>
         <ul style={{ listStyleType: "none", padding: "5px", margin: "0px" }}>
-          {ordered.map((product, i) => (
-            <OrderedProduct 
-              product={product} 
+          {selectedProducts.map((product, i) => (
+            <SuppliersProduct 
+              product={product.productID} 
               key={"selected_products_" + product.productID} 
               index={i} 
-              edit={(value, index) => edit({productID: product.productID, amount: value}, index)}
               remove={index => remove(index)}/>
           ))}
         </ul>
@@ -40,30 +48,22 @@ const OrderedProducts = ({ products, ordered, add, edit, remove }: TOrdered) => 
 };
 
 type TOrderedProduct = {
-  product: IOrderedProduct,
-  edit: (updated: any, index: number) => void,
+  product: number,
   remove: (index: number) => void,
   index: number
 }
 
-const OrderedProduct = ({ product, edit, remove, index }: TOrderedProduct) => {
-  const { productID, amount } = product;
-
+const SuppliersProduct = ({ product, remove, index }: TOrderedProduct) => {
   return (
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "50% 40% 10%",
+        gridTemplateColumns: "80% 20%",
         marginBottom: "10px",
         paddingBottom: "5px"
       }}
     >
-      <ProductName id={productID} />
-      <input
-        type="tel"
-        value={amount}
-        onChange={e => edit(Number(e.target.value), index)}
-      />
+      <ProductName id={product} />
       <button onClick={e => {
         e.preventDefault()
         remove(index)
@@ -79,10 +79,11 @@ const StyledWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 2em;
+  grid-column: 1 / 3;
 `
 
 const StyledSection = styled.div`
 
 `
 
-export default OrderedProducts
+export default SuppliersProducts

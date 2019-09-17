@@ -229,7 +229,6 @@ const AddButton = styled.button`
   height: 50px;
   background-color: #fff;
   border-color: #ddd
-  border-radius: 0 0 15px 15px;
 `
 
 const AddWrapper = styled.div`
@@ -244,7 +243,9 @@ const AddInput = styled.input`
 
 const ScrollableList = styled.div`
   overflow-y: overlay;
+  height: 50vh;
   max-height: 50vh;
+  border-bottom: 1px solid #ddd;
 `
 
 export default SelectTarget

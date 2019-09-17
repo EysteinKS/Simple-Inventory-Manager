@@ -12,6 +12,7 @@ import Names from '../../Names';
 import Icons from '../../util/Icons';
 import { StyledFooter, StyledDetails, ProductWithEdit, CenteredText, TargetWithEdit, EndText, IDText, StyledHeader } from './styles';
 import { saveCreatedSale, saveEditedSale } from '../../../redux/actions/salesActions';
+import useProducts from '../../../hooks/useProducts';
 
 ReactModal.setAppElement("#root");
 
@@ -24,6 +25,7 @@ type ViewTypes = "details" | "customer" | "products"
 
 export default function EditSale({ isOpen, close }: TEditSale) {
   const current = useSelector((state: RootState) => state.sales.currentSale) as ISale
+  const [products] = useProducts()
   const dispatch = useDispatch()
 
   const [customer, setCustomer] = useState()
@@ -125,6 +127,7 @@ export default function EditSale({ isOpen, close }: TEditSale) {
       }}/>}
       {(view === "products") &&
       <OrderedProducts
+        products={products}
         ordered={ordered}
         add={productID => addProduct({productID, amount: 1})}
         edit={(product, index) => editProduct(product, index)}

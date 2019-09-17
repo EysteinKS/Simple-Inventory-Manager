@@ -9,18 +9,23 @@ import { sort } from '../../constants/util'
 import Icons from '../util/Icons'
 
 interface ISelectProduct {
-  style?: any,
+  products: IProduct[]
+  height?: string
+  ignoreInactive?: boolean
   onSelect: (id: number) => void,
   selected: IOrderedProduct[]
 }
 
-const SelectProduct: React.FC<ISelectProduct> = ({ onSelect, selected }) => {
-  const products = useSelector((state: RootState) => state.products.products)
+const SelectProduct: React.FC<ISelectProduct> = ({ products, height = "55vh", ignoreInactive = false, onSelect, selected }) => {
   const [search, setSearch] = useState("")
 
   const list = useMemo(() => {
     let productList: IProduct[] = []
-    productList = products.filter(product => product.active)
+    if(ignoreInactive){
+      productList = products
+    } else {
+      productList = products.filter(product => product.active)
+    }
     if(Array.isArray(selected) && selected.length > 0){
       const selectedIDs = selected.map(sel => sel.productID)
       productList = productList.filter(product => !selectedIDs.includes(product.productID))
@@ -45,7 +50,7 @@ const SelectProduct: React.FC<ISelectProduct> = ({ onSelect, selected }) => {
   }, [list])
 
   return (
-    <StyledWrapper>
+    <StyledWrapper height={height}>
       <SelectHeader setSearch={setSearch} sortList={sortList}/>
       <StyledList>
         {sortedList.map(prod => <Product key={"selectable_product_" + prod.productID} product={prod} onSelect={onSelect}/>)}
@@ -111,7 +116,7 @@ const StyledWrapper = styled.div`
   width: 100%;
   display: grid;
   grid-template-rows: 1fr 10fr;
-  height: 55vh;
+  height: ${(props: { height: string }) => props.height}
 `
 
 const StyledHeader = styled.div`

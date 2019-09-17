@@ -298,6 +298,17 @@ const areArraysEqual = (oldVal: any[], newVal: any[]) => {
 }
 
 const compareArrays = (oldVal: any[], newVal: any[]) => {
+  const isPrimitive = () => (typeof oldVal[0] === "number" || typeof oldVal[0] === "string")
+  if(isPrimitive()){
+    shouldLog("Comparing primitive arrays")
+    return comparePrimitiveArrays(oldVal, newVal)
+  } else {
+    shouldLog("Comparing object arrays")
+    return compareObjectArrays(oldVal, newVal)
+  }
+}
+
+const compareObjectArrays = (oldVal: any[], newVal: any[]) => {
   let oldVals = []
   let newVals = []
   let checkedVals = []
@@ -332,6 +343,42 @@ const compareArrays = (oldVal: any[], newVal: any[]) => {
 
   for(let i = 0; i < newSorted.length; i++){
     if(!checkedVals.includes(newSorted[i].productID)){
+      oldVals.push(null)
+      newVals.push(newSorted[i])
+    }
+  }
+
+  return {
+    oldVals, newVals
+  }
+}
+
+const comparePrimitiveArrays = (oldVal: any[], newVal: any[]) => {
+  let oldVals = []
+  let newVals = []
+  let checkedVals = []
+
+  let oldSorted = [...oldVal].sort((a, b) => a - b)
+  let newSorted = [...newVal].sort((a, b) => a - b)
+
+  for(let i = 0; i < oldSorted.length; i++){
+    let oldIndex = oldSorted[i]
+    const indexInNew = newSorted.findIndex(i => i === oldIndex)
+    if(indexInNew < 0){
+      oldVals.push(oldIndex)
+      newVals.push(null)
+    } else {
+      let newIndex = newSorted[indexInNew]
+      if(oldIndex !== newIndex){
+        oldVals.push(oldIndex)
+        newVals.push(newIndex)
+      }
+    }
+    checkedVals.push(oldIndex)
+  }
+
+  for(let i = 0; i < newSorted.length; i++){
+    if(!checkedVals.includes(newSorted[i])){
       oldVals.push(null)
       newVals.push(newSorted[i])
     }
