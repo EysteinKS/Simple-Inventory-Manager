@@ -2,6 +2,7 @@ import { updateProductAmount } from "./productsActions"
 import { getSectionFromFirestore, setSectionToFirestore, convertTimestampsToDates } from "../middleware/thunks"
 import { IOrderedProduct, IOrder } from "../types";
 import { IThunkAction } from "../middleware/types";
+import { addChange } from "./reportsActions";
 
 const thisSection = "orders"
 
@@ -149,3 +150,23 @@ export const RESET_ORDERS = 'RESET_ORDERS'
 export const resetOrders = () => ({
   type: RESET_ORDERS
 })
+
+export const UNDO_ORDER = 'UNDO_ORDER'
+export const undoOrder = (id: number) => ({
+  type: UNDO_ORDER,
+  payload: id
+})
+
+export const didUndoOrder = (id: number, ordered: IOrderedProduct[]): IThunkAction => {
+  return async (dispatch) => {
+    dispatch(undoOrder(id))
+    ordered.forEach(product => {
+      dispatch(updateProductAmount(product.productID, -Math.abs(product.amount)))
+    })
+    dispatch(addChange({
+      type: "UNDO_ORDER",
+      id,
+      section: "orders"
+    }))
+  }
+}

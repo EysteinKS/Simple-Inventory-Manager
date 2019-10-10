@@ -2,6 +2,7 @@ import { updateProductAmount } from "./productsActions"
 import { getSectionFromFirestore, setSectionToFirestore, convertTimestampsToDates } from "../middleware/thunks"
 import { ISale, IOrderedProduct, SalesState } from "../types";
 import { IThunkAction } from "../middleware/types";
+import { addChange } from "./reportsActions";
 
 const thisSection = "sales"
 
@@ -132,3 +133,23 @@ export const RESET_SALES = 'RESET_SALES'
 export const resetSales = () => ({
   type: RESET_SALES
 })
+
+export const UNDO_SALE = 'UNDO_SALE'
+export const undoSale = (id: number) => ({
+  type: UNDO_SALE,
+  payload: id
+})
+
+export const didUndoSale = (id: number, ordered: IOrderedProduct[]): IThunkAction => {
+  return async (dispatch) => {
+    dispatch(undoSale(id))
+    ordered.forEach(product => {
+      dispatch(updateProductAmount(product.productID, product.amount))
+    })
+    dispatch(addChange({
+      type: "UNDO_SALE",
+      id,
+      section: "sales"
+    }))
+  }
+}

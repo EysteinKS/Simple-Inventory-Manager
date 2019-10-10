@@ -90,7 +90,7 @@ const TargetHeader: React.FC<HeaderProps> = ({ setSearch, sortList, idKey }) => 
     return(
       <StyledHeader>
         <CenteredText>Søk</CenteredText>
-        <input type="text" value={input} onChange={e => setInput(e.target.value)}/>
+        <input autoFocus type="text" value={input} onChange={e => setInput(e.target.value)}/>
         <SearchButton onClick={() => setSearching(false)}><Icons.Done/></SearchButton>
       </StyledHeader>
     )

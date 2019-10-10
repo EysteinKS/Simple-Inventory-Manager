@@ -9,8 +9,8 @@ import Admin from "./pages/Admin";
 import Loans from "./pages/Loans";
 import Login from "./components/Login";
 import NotFound from "./pages/NotFound";
-import { PageLoading } from "./App";
 import Profile from "./pages/Profile";
+import { PageLoading } from "./components/util/PageLoading";
 
 interface RoutePageProps extends RouteComponentProps {
   component: FC

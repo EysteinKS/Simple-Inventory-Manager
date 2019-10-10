@@ -137,7 +137,7 @@ export default function EditSale({ isOpen, close }: TEditSale) {
         <div/>
         <button 
           onClick={save} 
-          disabled={(customer === "new" || view === "products" || view === "customer")}
+          disabled={(customer === "new" || view === "customer" || ordered.length < 1)}
         >Lagre</button>
         <button onClick={() => {
           close()

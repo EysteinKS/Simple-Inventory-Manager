@@ -2,7 +2,7 @@ import React, {useState, Dispatch, SetStateAction} from "react"
 import {useSelector} from "react-redux"
 
 import ReactModal from "react-modal"
-import { RootState, ICategory } from "../redux/types";
+import { RootState, ICategory } from "../../redux/types";
 ReactModal.setAppElement("#root")
 
 type TClose = (event: (React.MouseEvent | React.KeyboardEvent)) => void

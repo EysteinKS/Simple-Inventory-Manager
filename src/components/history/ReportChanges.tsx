@@ -58,11 +58,20 @@ const deleteText = {
   DELETE_LOAN: "Utlån slettet"
 }
 
+const UNDO = ["UNDO_ORDER", "UNDO_SALE", "UNDO_LOAN"]
+
+const undoText = {
+  UNDO_ORDER: "Bestilling angret",
+  UNDO_SALE: "Salg angret",
+  UNDO_LOAN: "Utlån angret"
+}
+
 const typeText = {
   ...newText,
   ...editText,
   ...sentOrReceivedText,
-  ...deleteText
+  ...deleteText,
+  ...undoText
 }
 
 interface IProps {
@@ -90,6 +99,8 @@ const ReportChanges: React.FC<MainProps> = ({ change, index }) => {
       return <SentOrReceived change={change}/>
     } else if(DELETE.includes(type)) {
       return <Delete change={change}/>
+    } else if (UNDO.includes(type)) {
+      return <Undo change={change}/>
     } else {
       return <p>Error!</p>
     }
@@ -116,7 +127,7 @@ const ItemHeader = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
   place-items: center;
-  background-color: #ddd
+  background-color: #ddd;
   :hover {
     cursor: pointer
   }
@@ -288,6 +299,14 @@ const SentOrReceived: ChangeComponent = ({ change }) => {
 }
 
 const Delete: ChangeComponent = ({ change }) => {
+  return(
+    <>
+      <TargetInfo change={change}/>
+    </>
+  )
+}
+
+const Undo: ChangeComponent = ({ change }) => {
   return(
     <>
       <TargetInfo change={change}/>

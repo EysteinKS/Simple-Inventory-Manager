@@ -37,7 +37,7 @@ const SuppliersProducts = ({ products, selected, add, remove }: IProps) => {
           {selectedProducts.map((product, i) => (
             <SuppliersProduct 
               product={product.productID} 
-              key={"selected_products_" + product.productID} 
+              key={"selected_supplier_products_" + product.productID} 
               index={i} 
               remove={index => remove(index)}/>
           ))}

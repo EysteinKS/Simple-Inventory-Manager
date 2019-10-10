@@ -1,16 +1,16 @@
 import React, { useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { RootState, ISupplier } from '../redux/types'
+import { RootState, ISupplier } from '../../redux/types'
 import ReactModal from 'react-modal'
-import Icons from '../components/util/Icons'
-import { StyledHeader, StyledDetails, IDText, EndText, StyledFooter } from '../components/inventory/EditModals/styles'
-import SuppliersProducts from '../components/inventory/SuppliersProducts'
-import useProducts from '../hooks/useProducts'
-import useEditableList from '../hooks/useEditableList'
-import { isChanged, shouldLog } from '../constants/util'
-import { addChange } from '../redux/actions/reportsActions'
-import { saveEditedSupplier, saveCreatedSupplier } from '../redux/actions/suppliersActions'
+import Icons from '../../components/util/Icons'
+import { StyledHeader, StyledDetails, IDText, EndText, StyledFooter } from '../../components/inventory/EditModals/styles'
+import SuppliersProducts from '../../components/inventory/SuppliersProducts'
+import useProducts from '../../hooks/useProducts'
+import useEditableList from '../../hooks/useEditableList'
+import { isChanged, shouldLog } from '../../constants/util'
+import { addChange } from '../../redux/actions/reportsActions'
+import { saveEditedSupplier, saveCreatedSupplier } from '../../redux/actions/suppliersActions'
 ReactModal.setAppElement("#root")
 
 interface IProps {

@@ -20,7 +20,7 @@ type TEditProduct = {
 }
 
 export default function EditProduct({ isOpen, close }: TEditProduct) {
-  const current = useSelector((state: RootState) => state.products.currentProduct);
+  const current = useSelector((state: RootState) => state.products.currentProduct) as IProduct
   const products = useSelector((state: RootState) => state.products.products);
   const categories = useSelector((state: RootState) => state.categories.categories)
   const dispatch = useDispatch();
@@ -187,7 +187,7 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
           disabled={!isNew}
           onChange={event => 
             (!isNaN(event.target.value as any)) 
-            ? setAmount(event.target.value.replace(/\s/g,''))
+            ? setAmount(Number(event.target.value.replace(/\s/g,'')))
             : null
           }/>
         <label htmlFor="comments">Kommentar</label>

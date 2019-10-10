@@ -53,6 +53,7 @@ import NotificationsActive from "@material-ui/icons/NotificationsActive"
 import Assessment from "@material-ui/icons/Assessment"
 
 import ArrowBack from "@material-ui/icons/ArrowBack"
+import Undo from "@material-ui/icons/Undo"
 
 export default {
   Visibility,
@@ -96,5 +97,6 @@ export default {
   Cached,
   Search,
   Done,
-  ArrowBack
+  ArrowBack,
+  Undo
 }

@@ -79,7 +79,7 @@ const SelectHeader: React.FC<ISelectHeader> = ({ setSearch, sortList }) => {
     return(
       <StyledHeader>
         <SearchText>Søk</SearchText>
-        <SearchInput type="text" value={input} onChange={e => search(e.target.value)}/>
+        <SearchInput autoFocus type="text" value={input} onChange={e => search(e.target.value)}/>
         <SearchButton onClick={() => setSearching(false)}><Icons.Done/></SearchButton>
       </StyledHeader>
     )
@@ -123,11 +123,16 @@ const StyledHeader = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   height: 5vh;
+  border-bottom: 2px solid #ddd;
+  padding: 0.2em;
+  margin-bottom: 0.5em;
+  background-color: #fff;
 `
 
 const SearchText = styled.p`
   margin: 0;
-  place-self: center;
+  align-self: center;
+  justify-self: center;
 `
 
 const CenteredText = styled.p`
@@ -144,6 +149,7 @@ const SearchInput = styled.input`
 const StyledList = styled.div`
   overflow-y: overlay;
   max-height: 50vh;
+  padding: 0 0.5em 0 0.5em;
 `
 
 export default SelectProduct

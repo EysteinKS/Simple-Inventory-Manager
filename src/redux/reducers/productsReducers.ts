@@ -21,7 +21,7 @@ export default (state: ProductsState = initialState, { type, payload }: AnyActio
       case action.LOAD_PRODUCTS_SUCCESS:
         return drafts.loadSuccess(
           draft,
-          ["products", "sortedProducts"],
+          "products",
           payload
         );
       case action.LOAD_PRODUCTS_FAILURE:
@@ -37,37 +37,27 @@ export default (state: ProductsState = initialState, { type, payload }: AnyActio
         break;
       case action.SAVE_CREATED_PRODUCT:
         draft.products.push(payload);
-        draft.sortedProducts.push(payload);
-        draft.currentProduct = {};
+        draft.currentProduct = null;
         draft.isSaved = false;
         break;
-      case action.EDIT_PRODUCT:
+      case action.SET_CURRENT_PRODUCT:
         draft.currentProduct = state.products[payload - 1];
         break;
       case action.SAVE_EDITED_PRODUCT:
         draft.products[payload.productID - 1] = payload;
-        draft.sortedProducts = draft.products;
-        draft.currentProduct = {};
+        draft.currentProduct = null;
         draft.isSaved = false;
         break;
       case action.CLEAR_CURRENT_PRODUCT:
-        draft.currentProduct = {};
+        draft.currentProduct = null;
         break;
       case action.TOGGLE_PRODUCT:
         draft.products[payload - 1].active = !state.products[payload - 1]
           .active;
-        draft.sortedProducts = draft.products;
         draft.isSaved = false;
-        break;
-      case action.SORT_PRODUCTS:
-        draft.sortedProducts.sort(payload);
-        break;
-      case action.FILTER_PRODUCTS:
-        draft.sortedProducts = draft.products.filter(payload);
         break;
       case action.UPDATE_PRODUCT_AMOUNT:
         draft.products[payload.id - 1].amount += payload.amount
-        draft.sortedProducts = draft.products
         draft.isSaved = false;
         break;
       case action.RESET_PRODUCTS:

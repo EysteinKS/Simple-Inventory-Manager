@@ -104,8 +104,8 @@ export interface IProduct extends IStringKey {
 }
 
 export interface ProductsState extends SectionState, IStringKey {
-  products: Array<IProduct>,
-  sortedProducts: Array<IProduct>
+  products: Array<IProduct>
+  currentProduct: IProduct | null
 }
 
 //PRODUCTS END
@@ -118,20 +118,20 @@ export interface IOrderedProduct {
 }
 
 export interface IOrder {
-  dateOrdered: Date | string | null,
-  dateReceived: Date | string | null,
-  orderID: number,
-  supplierID: number,
-  ordered: Array<IOrderedProduct>,
-  isNew?: boolean,
-  active?: boolean
+  dateOrdered: Date | string | null;
+  dateReceived: Date | string | null;
+  orderID: number;
+  supplierID: number;
+  ordered: Array<IOrderedProduct>;
+  isNew?: boolean;
+  active?: boolean;
+  isDeleted?: boolean;
 }
 
 export interface OrdersState extends SectionState {
-  orders: IOrder[],
-  sortedOrders: IOrder[],
-  currentOrder?: IOrder | any,
-  history: IOrder[]
+  orders: IOrder[];
+  currentOrder?: IOrder | any;
+  history: IOrder[];
 }
 
 //ORDERS END
@@ -145,11 +145,11 @@ export interface ISale {
   ordered: Array<IOrderedProduct>
   saleID: number
   isNew?: boolean
+  isDeleted?: boolean
 }
 
 export interface SalesState extends SectionState {
   sales: Array<ISale>,
-  sortedSales: Array<ISale>,
   currentSale: ISale | null,
   history: Array<ISale>
 }
@@ -166,6 +166,7 @@ export interface ILoan {
   ordered: Array<IOrderedProduct>
   loanID: number,
   isNew?: boolean
+  isDeleted?: boolean
 }
 
 export interface LoansState extends SectionState {
@@ -310,7 +311,8 @@ export type IChangeTypes =
 "EDIT_PRODUCT_AMOUNT" |
 "RECEIVED_ORDER" | "RECEIVED_LOAN" |
 "SENT_SALE" | "SENT_LOAN" |
-"DELETE_ORDER" | "DELETE_SALE" | "DELETE_LOAN"
+"DELETE_ORDER" | "DELETE_SALE" | "DELETE_LOAN" |
+"UNDO_SALE" | "UNDO_ORDER" | "UNDO_LOAN"
 
 export interface IChange {
   section: string

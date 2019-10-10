@@ -6,19 +6,19 @@ import {
   clearCurrentSale,
   deleteSale,
   didSendSale
-} from "../redux/actions/salesActions"
+} from "../../redux/actions/salesActions"
 
-import EditSale from "../components/inventory/EditModals/EditSale"
-import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, SortingKey, TDirections } from "../components/util/SectionHeader"
-import CloudStatus from "../components/util/CloudStatus"
-import Icons from "../components/util/Icons"
-import Buttons from "../components/util/Buttons"
-import Names from "../components/Names"
-import {isArrayEmpty, newSale, sort, dateToString} from "../constants/util"
+import EditSale from "../../components/inventory/EditModals/EditSale"
+import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, SortingKey, TDirections } from "../../components/util/SectionHeader"
+import CloudStatus from "../../components/util/CloudStatus"
+import Icons from "../../components/util/Icons"
+import Buttons from "../../components/util/Buttons"
+import Names from "../../components/Names"
+import {isArrayEmpty, newSale, sort, dateToString} from "../../constants/util"
 
-import useSortableList from "../hooks/useSortableList";
-import { RootState, ISale } from "../redux/types";
-import { addChange } from "../redux/actions/reportsActions";
+import useSortableList from "../../hooks/useSortableList";
+import { RootState, ISale } from "../../redux/types";
+import { addChange } from "../../redux/actions/reportsActions";
 
 export default function Sales(){
   const dispatch = useDispatch()

@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, ILoan } from '../redux/types';
-import useSortableList from '../hooks/useSortableList';
-import SectionHeader, { TDirections, Row, Title, RowSplitter, SortingKey, ColumnSplitter, Key } from '../components/util/SectionHeader';
+import { useSelector } from 'react-redux';
+import { RootState, ILoan } from '../../redux/types';
+import useSortableList from '../../hooks/useSortableList';
+import SectionHeader, { TDirections, Row, Title, RowSplitter, SortingKey, ColumnSplitter, Key } from '../../components/util/SectionHeader';
 import styled from 'styled-components';
-import { createLoan, deleteLoan, didSendLoan, didReceiveLoan, editLoan, clearCurrentLoan } from '../redux/actions/loansActions';
-import { newLoan, sort, isArrayEmpty, dateToString } from '../constants/util';
-import CloudStatus from '../components/util/CloudStatus';
-import Icons from '../components/util/Icons';
-import Names from '../components/Names';
-import Buttons from '../components/util/Buttons';
-import { addChange } from '../redux/actions/reportsActions';
-import EditLoan from '../components/inventory/EditModals/EditLoan';
+import { sort, isArrayEmpty, dateToString } from '../../constants/util';
+import CloudStatus from '../../components/util/CloudStatus';
+import Icons from '../../components/util/Icons';
+import Names from '../../components/Names';
+import Buttons from '../../components/util/Buttons';
+import EditLoan from '../../components/inventory/EditModals/EditLoan';
+import useLoans from '../../redux/hooks/useLoans';
 
 /*
 TODO
@@ -28,10 +27,11 @@ const MainButton = styled.button`
 `
 
 export default function Loans() {
-  const dispatch = useDispatch()
   const loans = useSelector((state: RootState) => state.loans)
   const customers = useSelector((state: RootState) => state.customers)
   const [isLoanOpen, setLoanOpen] = useState(false)
+
+  const { createNewLoan, editLoan, clearCurrentLoan } = useLoans()
 
   //SORTING
   const [sorting, setSorting] = useState([null, null, null] as any[])
@@ -46,7 +46,7 @@ export default function Loans() {
 
   const NewLoanButton = () => (
     <MainButton onClick={() => {
-      dispatch(createLoan(newLoan(loans.currentID + 1)))
+      createNewLoan()
       setLoanOpen(true)
     }}>
       Legg til
@@ -79,14 +79,14 @@ export default function Loans() {
       {(isArrayEmpty(sortedList))
         ? null
         : <List list={sortedList} edit={id => {
-          dispatch(editLoan(id))
+          editLoan(id)
           setLoanOpen(true)
         }}/>}
       {isLoanOpen && <EditLoan
         isOpen={isLoanOpen}
         close={() => {
           setLoanOpen(false)
-          dispatch(clearCurrentLoan())
+          clearCurrentLoan()
         }}/>}
     </div>
   )
@@ -121,7 +121,7 @@ const Loan = ({loan, edit, index}: TLoan) => {
     ordered
   } = loan
   const [expanded, setExpanded] = useState(false)
-  const dispatch = useDispatch()
+  const { deleteLoan, sentLoan, receivedLoan } = useLoans()
 
   let expandedStyle;
   if(!expanded) {
@@ -144,17 +144,12 @@ const Loan = ({loan, edit, index}: TLoan) => {
         <p>{totalProducts}</p>
         <div/>
         <button onClick={() => setExpanded(!expanded)}>=</button>
-        <button disabled={(dateSent != null)} onClick={() => edit(loanID)}><Icons.Edit/></button>
+        <button onClick={() => edit(loanID)}><Icons.Edit/></button>
         <Buttons.Confirm
           message="Vil du slette dette lånet?"
           disabled={(dateSent != null)}
           onConfirm={() => {
-            dispatch(addChange({
-              type: "DELETE_LOAN",
-              id: loanID,
-              section: "loans"
-            }))
-            dispatch(deleteLoan(loanID))
+            deleteLoan(loanID)
           }}>
             <Icons.Delete/>
         </Buttons.Confirm>
@@ -162,12 +157,7 @@ const Loan = ({loan, edit, index}: TLoan) => {
           message="Bekreft sending av utlån"
           disabled={(dateSent != null)}
           onConfirm={() => {
-            dispatch(addChange({
-              type: "SENT_LOAN",
-              id: loanID,
-              section: "loans"
-            }))
-            dispatch(didSendLoan(loanID, ordered))
+            sentLoan(loanID, ordered)
           }}>
             <Icons.Unarchive/>
         </Buttons.Confirm>
@@ -175,12 +165,7 @@ const Loan = ({loan, edit, index}: TLoan) => {
           message="Bekreft mottak av utlån"
           disabled={(dateSent == null)}
           onConfirm={() => {
-            dispatch(addChange({
-              type: "RECEIVED_LOAN",
-              id: loanID,
-              section: "loans"
-            }))
-            dispatch(didReceiveLoan(loanID, ordered))
+            receivedLoan(loanID, ordered)
           }}>
             <Icons.Archive/>
         </Buttons.Confirm>

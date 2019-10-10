@@ -1,6 +1,6 @@
 import React from "react";
-import Reports from "../components/history/Reports";
-import Completed from "../components/history/Completed";
+import Reports from "../../components/history/Reports";
+import Completed from "../../components/history/Completed";
 import styled from "styled-components";
 
 //const historyPages = ["reports", "completed"]
@@ -16,18 +16,18 @@ const NavButton = styled.button`
   font-size: 15px;
   color: ${(props: {isActive: boolean}) => {
     if(props.isActive){
-      return "#fff;"
+      return "#fff"
     } else {
-      return "#000;"
+      return "#000"
     }
-  }}
+  }};
   background-color: ${(props: {isActive: boolean}) => {
     if(props.isActive){
-      return "#777;"
+      return "#777"
     } else {
-      return "#ccc;"
+      return "#ccc"
     }
-  }}
+  }};
   :hover {
     cursor: pointer;
   };

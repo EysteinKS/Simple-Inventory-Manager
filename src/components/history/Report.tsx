@@ -3,9 +3,9 @@ import { IReport, RootState, Changes } from '../../redux/types';
 import { useSelector } from 'react-redux';
 import Table, { TableHeader, TableBody, TableRow, ITableColumn } from '../util/SectionTable';
 import styled from 'styled-components';
-import { ExpandableRow } from './Completed';
 import ReportChanges from './ReportChanges';
 import { shouldLog } from '../../constants/util';
+import { ExpandableRow } from '../util/ExpandableRow';
 
 const ReportWrapper = styled.div`
   width: 100%;

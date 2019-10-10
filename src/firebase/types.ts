@@ -18,3 +18,9 @@ export interface ClientData {
   lastChanged: LastChanged,
   firebaseConfig: FirebaseAppConfig
 }
+
+export interface ClientRequest {
+  name: string
+  dateRequested: Date
+  email: string
+}

@@ -1,8 +1,10 @@
 /* eslint-disable */
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/types';
+import { RootState } from '../../redux/types';
 import { navigate } from '@reach/router';
+import { createNewClient, updateClientData, initializeClientFirestore, createNewUser } from '../../firebase/admin';
+import { demoConfig } from '../../config';
 
 /*
 TODO:
@@ -42,9 +44,17 @@ const NonAdmin = () => {
 }
 
 const Clients = () => {
+  const createNew = () => createNewClient("Demo", "Demo")
+  const addData = () => updateClientData("Demo", {
+    firebaseConfig: demoConfig
+  })
+  const initialize = () => initializeClientFirestore("Demo", demoConfig)
+
   return(
     <div>
-
+      <button onClick={createNew}>Add Demo Client</button>
+      <button onClick={addData}>Add data to client</button>
+      <button onClick={initialize}>Initialize client firestore</button>
     </div>
   )
 }
@@ -58,9 +68,11 @@ const NewClient = () => {
 }
 
 const Users = () => {
+  const createUser = () => createNewUser("demo@demo.com", "Demo123", ["Demo", "User"], "Demo")
+
   return(
     <div>
-
+      <button onClick={createUser}>Create new user</button>
     </div>
   )
 }

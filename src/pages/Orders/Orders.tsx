@@ -6,12 +6,12 @@ import {
   clearCurrentOrder,
   didReceiveOrder,
   deleteOrder
-} from "../redux/actions/ordersActions";
-import { sort, newOrder, isArrayEmpty } from "../constants/util";
+} from "../../redux/actions/ordersActions";
+import { sort, newOrder, isArrayEmpty } from "../../constants/util";
 import "./Orders.css";
 
-import EditOrder from "../components/inventory/EditModals/EditOrder";
-import ProductName from "../components/inventory/ProductName";
+import EditOrder from "../../components/inventory/EditModals/EditOrder";
+import ProductName from "../../components/inventory/ProductName";
 import SectionHeader, {
   Row,
   RowSplitter,
@@ -20,15 +20,15 @@ import SectionHeader, {
   Key,
   SortingKey,
   TDirections
-} from "../components/util/SectionHeader";
-import CloudStatus from "../components/util/CloudStatus";
-import Icons from "../components/util/Icons";
-import Buttons from "../components/util/Buttons";
+} from "../../components/util/SectionHeader";
+import CloudStatus from "../../components/util/CloudStatus";
+import Icons from "../../components/util/Icons";
+import Buttons from "../../components/util/Buttons";
 
-import useSortableList from "../hooks/useSortableList";
-import { RootState, IOrder, IOrderedProduct } from "../redux/types";
-import { addChange } from "../redux/actions/reportsActions";
-import EditSuppliers from "./Suppliers"
+import useSortableList from "../../hooks/useSortableList";
+import { RootState, IOrder, IOrderedProduct } from "../../redux/types";
+import { addChange } from "../../redux/actions/reportsActions";
+import EditSuppliers from "../Suppliers/Suppliers"
 
 type TOrdered = { productID: number, amount: number }
 type TEdit = (id: number) => void

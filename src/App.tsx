@@ -1,13 +1,11 @@
 import React, { FC } from "react";
-
 import Header from "./components/Header";
-
-import CircularProgress from "@material-ui/core/CircularProgress";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import "./App.css";
 
 import useInitialization from "./hooks/useInitialization"
 import MainRouter from "./Router";
+import { PageLoading } from "./components/util/PageLoading";
+import GlobalStyle from "./styles/globalStyle";
 
 const App: FC = () => {
   const {
@@ -22,6 +20,7 @@ const App: FC = () => {
   return(
     <>
       <CssBaseline />
+      <GlobalStyle/>
       <main
         style={{
           height: "100vh",
@@ -49,18 +48,5 @@ const App: FC = () => {
     </>
   )
 }
-
-interface PageLoadingProps {
-  message: string
-}
-
-export const PageLoading: FC<PageLoadingProps> = ({ message }) => (
-  <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
-    <div style={{display: "grid", gridTemplateColumns: "1fr", placeSelf: "center"}}>
-      <CircularProgress style={{ placeSelf: "center"}}/>
-      <p style={{ height: "2vh", placeSelf: "center" }}>{message}</p>
-    </div>
-  </div>
-);
 
 export default App;

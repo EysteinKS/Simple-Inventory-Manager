@@ -70,21 +70,6 @@ export const saveProducts = (date: Date) =>
       }
     })
 
-/* export const oldSaveProducts = () => {
-  return (dispatch, getState) => {
-    const state = getState()
-    dispatch(saveProductsBegin())
-    firestore.doc(`${state.auth.currentLocation}/Products`).set({
-      products: state.products.products
-    }, {merge: true})
-      .then(() => {
-        dispatch(saveProductsSuccess())
-        dispatch(saveLastChanged("products"))
-      })
-      .catch(err => dispatch(saveProductsFailure(err)))
-  }
-} */
-
 //PRODUCT HANDLING
 
 export const CREATE_PRODUCT = 'CREATE_PRODUCT'
@@ -99,9 +84,9 @@ export const saveCreatedProduct = (created: IProduct) => ({
   payload: created
 })
 
-export const EDIT_PRODUCT = 'EDIT_PRODUCT'
-export const editProduct = (id: number) => ({
-  type: EDIT_PRODUCT,
+export const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT'
+export const setCurrentProduct = (id: number) => ({
+  type: SET_CURRENT_PRODUCT,
   payload: id
 })
 
@@ -130,21 +115,6 @@ export const updateProductAmount = (id: number, amount: number) => ({
   payload: {id, amount}
 })
 
-
-//PRODUCT VISIBILITY
-
-
-export const SORT_PRODUCTS = "SORT_PRODUCTS"
-export const sortProducts = (func: Function) => ({
-  type: SORT_PRODUCTS,
-  payload: func
-})
-
-export const FILTER_PRODUCTS = 'FILTER_PRODUCTS'
-export const filterProducts = (func: Function) => ({
-  type: FILTER_PRODUCTS,
-  payload: func
-})
 
 export const RESET_PRODUCTS = 'RESET_PRODUCTS'
 export const resetProducts = () => ({

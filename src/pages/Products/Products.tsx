@@ -2,30 +2,30 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   createProduct,
-  editProduct,
+  setCurrentProduct,
   clearCurrentProduct,
-  toggleProduct
-} from "../redux/actions/productsActions";
+} from "../../redux/actions/productsActions";
 import {
   sort,
   getAmount,
   newProduct,
   shouldLog
-} from "../constants/util";
+} from "../../constants/util";
 import "./Products.css";
 
-import EditProduct from "../components/inventory/EditModals/EditProduct";
-import EditCategories from "./Categories";
-import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, KeyButton, SortingKey, TDirections } from "../components/util/SectionHeader";
-import CloudStatus from "../components/util/CloudStatus"
-import Icons from "../components/util/Icons"
-import Warning from "../components/util/Warning"
+import EditProduct from "../../components/inventory/EditModals/EditProduct";
+import EditCategories from "../Categories/Categories";
+import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, KeyButton, SortingKey, TDirections } from "../../components/util/SectionHeader";
+import CloudStatus from "../../components/util/CloudStatus"
+import Icons from "../../components/util/Icons"
+import Warning from "../../components/util/Warning"
 
-import useSortableList from "../hooks/useSortableList"
-import { IProduct, RootState } from "../redux/types";
-import { OrdersInfo, SalesInfo, LoansInfo } from "../components/util/HoverInfo";
+import useSortableList from "../../hooks/useSortableList"
+import { IProduct, RootState } from "../../redux/types";
+import { OrdersInfo, SalesInfo, LoansInfo } from "../../components/util/HoverInfo";
 import styled from "styled-components";
-import { hasActiveLoans } from "../redux/selectors/loansSelectors";
+import { hasActiveLoans } from "../../redux/selectors/loansSelectors";
+import ProductHistory from "../../components/inventory/ProductHistory";
 
 //TODO
 //Show icon if product contains a comment
@@ -38,6 +38,7 @@ export default function Products(){
 
   //MODALS
   const [isProductOpen, setProductOpen] = useState(false);
+  const [isHistoryOpen, setHistoryOpen] = useState(false);
   const [isCategoriesOpen, setCategoriesOpen] = useState(false);
 
   //SORTING
@@ -132,9 +133,15 @@ export default function Products(){
               key={"product_" + product.productID}
               product={product}
               edit={id => {
-                dispatch(editProduct(id));
+                dispatch(setCurrentProduct(id));
                 setProductOpen(true);
-              }}/>))}
+              }}
+              showHistory={id => {
+                dispatch(setCurrentProduct(id))
+                setHistoryOpen(true)
+              }}
+            />
+        ))}
       </div>
       {isProductOpen && <EditProduct
         isOpen={isProductOpen}
@@ -149,6 +156,13 @@ export default function Products(){
           setCategoriesOpen(false);
         }}
       />}
+      {isHistoryOpen && <ProductHistory
+        isOpen={isHistoryOpen}
+        close={() => {
+          setHistoryOpen(false);
+          dispatch(clearCurrentProduct())
+        }}
+      />}
     </div>
   );
 };
@@ -156,10 +170,10 @@ export default function Products(){
 type TProductWithEdit = {
   product: IProduct,
   edit: (id: number) => void
+  showHistory: (id: number) => void
 }
 
-const Product = ({ product, edit }: TProductWithEdit) => {
-  const dispatch = useDispatch()
+const Product = ({ product, edit, showHistory }: TProductWithEdit) => {
   const categories = useSelector((state: RootState) => state.categories.categories);
   const hasLoans = useSelector(hasActiveLoans)
   const category = categories[product.categoryID - 1].name;
@@ -171,7 +185,13 @@ const Product = ({ product, edit }: TProductWithEdit) => {
   let loaned = getAmount(loans, product.productID)
   let amount = product.amount;
 
-  const total = amount + (ordered || 0) - (reserved || 0) - (loaned || 0);
+  const total = useMemo(() => {
+    if((amount + ordered + reserved + loaned) === 0){
+      return "-"
+    } else {
+      return (amount + (ordered || 0) - (reserved || 0) - (loaned || 0))
+    }
+  }, [amount, ordered, reserved, loaned])
 
   return (
     <StyledProduct active={product.active} hasLoans={hasLoans}>
@@ -184,7 +204,7 @@ const Product = ({ product, edit }: TProductWithEdit) => {
       {hasLoans && <LoansWithInfo productID={product.productID} amount={loaned}/>}
       <p>{total || 0}</p>
       {(total < 0) ? <Warning style={{ justifySelf: "start", alignSelf: "center" }}/> : <div/>}
-      <button onClick={() => dispatch(toggleProduct(product.productID))}>{product.active ? <Icons.Visibility/>: <Icons.VisibilityOff/>}</button>
+      <button onClick={() => showHistory(product.productID)}>H</button>
       <button onClick={() => edit(product.productID)}><Icons.Edit/></button>
     </StyledProduct>
   );

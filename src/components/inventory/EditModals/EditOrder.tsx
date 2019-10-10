@@ -150,7 +150,7 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
         <div/>
         <button 
           onClick={save} 
-          disabled={(supplier === "new" || view === "products" || view === "supplier")}
+          disabled={(supplier === "new" || view === "supplier" || ordered.length < 1)}
         >Lagre</button>
         <button onClick={() => {
           close()

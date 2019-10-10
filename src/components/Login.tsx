@@ -74,7 +74,8 @@ const LoginForm = ({ message, setError }: TLoginForm) => {
   //https://medium.com/paul-jaworski/turning-off-autocomplete-in-chrome-ee3ff8ef0908
   return(
     <form style={formStyle} onSubmit={login} autoComplete="new-password">
-      <TextField 
+      <TextField
+        autoFocus 
         style={emailStyle} 
         type="text"
         label="E-post"

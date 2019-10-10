@@ -1,9 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { RootState, ILoan } from '../../../redux/types';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import useEditableList from '../../../hooks/useEditableList';
-import { addChange } from '../../../redux/actions/reportsActions';
-import { saveCreatedLoan, saveEditedLoan } from '../../../redux/actions/loansActions';
 import { isChanged, shouldLog } from '../../../constants/util';
 import ReactModal from 'react-modal';
 import OrderedProducts from '../OrderedProducts';
@@ -13,6 +11,7 @@ import Names from '../../Names';
 import Icons from '../../util/Icons';
 import { StyledFooter, StyledDetails, ProductWithEdit, CenteredText, TargetWithEdit, EndText, IDText, StyledHeader } from './styles';
 import useProducts from '../../../hooks/useProducts';
+import useLoans from '../../../redux/hooks/useLoans';
 
 ReactModal.setAppElement("#root");
 
@@ -26,7 +25,8 @@ type ViewTypes = "details" | "customer" | "products"
 export default function EditLoan({ isOpen, close }: TEditLoan) {
   const current = useSelector((state: RootState) => state.loans.currentLoan) as ILoan
   const [products] = useProducts()
-  const dispatch = useDispatch()
+
+  const { saveCreatedLoan, saveEditedLoan } = useLoans()
 
   const [customer, setCustomer] = useState()
   const [view, setView] = useState("details" as ViewTypes)
@@ -69,23 +69,12 @@ export default function EditLoan({ isOpen, close }: TEditLoan) {
       ordered
     }
     if(current.isNew){
-      dispatch(addChange({
-        type: "NEW_LOAN",
-        id: returnedLoan.loanID,
-        section: "loans"
-      }))
-      dispatch(saveCreatedLoan(returnedLoan))
+      saveCreatedLoan(returnedLoan)
     } else {
       let isLoanChanged = isChanged(current, returnedLoan)
       if(!isLoanChanged.isEqual){
         shouldLog("Changed loan content", isLoanChanged.changed)
-        dispatch(addChange({
-          type: "EDIT_LOAN_INFO",
-          id: returnedLoan.loanID,
-          section: "loans",
-          changed: isLoanChanged.changed
-        }))
-        dispatch(saveEditedLoan(returnedLoan))
+        saveEditedLoan(returnedLoan, isLoanChanged.changed)
       }
     }
     close()
@@ -138,7 +127,7 @@ export default function EditLoan({ isOpen, close }: TEditLoan) {
         <div/>
         <button 
           onClick={save} 
-          disabled={(customer === "new" || view === "products" || view === "customer")}
+          disabled={(customer === "new" || view === "customer" || ordered.length < 1)}
         >Lagre</button>
         <button onClick={() => {
           close()
