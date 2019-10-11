@@ -2,7 +2,6 @@ import React from 'react'
 import ReactModal from 'react-modal'
 import { useSelector } from 'react-redux';
 import { RootState, IProduct } from '../../../redux/types';
-import Names from '../../Names';
 import { ItemWrapper, HistoryContent, ListHeader, ListWrapper, HistoryTitle } from './styles';
 import useNames from '../../../hooks/useNames';
 ReactModal.setAppElement("#root");
@@ -31,7 +30,7 @@ const ProductHistory: React.FC<IProps> = ({ isOpen, close }) => {
       date: Date.parse(order.dateReceived as string),
       amount: order.ordered[order.ordered.findIndex(p => p.productID === product.productID)].amount
     }
-  }), [ordersByProduct])
+  }), [ordersByProduct, product.productID])
 
   const salesByProduct = useSelector((state: RootState) => {
     let allSales = state.sales.history.filter(sale => !sale.isDeleted)
@@ -49,7 +48,7 @@ const ProductHistory: React.FC<IProps> = ({ isOpen, close }) => {
       date: Date.parse(sale.dateSent as string),
       amount: sale.ordered[sale.ordered.findIndex(p => p.productID === product.productID)].amount
     }
-  }), [salesByProduct])
+  }), [salesByProduct, product.productID])
 
   const loansByProduct = useSelector((state: RootState) => {
     let allLoans = state.loans.history.filter(loan => !loan.isDeleted)
@@ -67,7 +66,7 @@ const ProductHistory: React.FC<IProps> = ({ isOpen, close }) => {
       date: Date.parse(loan.dateReceived as string),
       amount: loan.ordered[loan.ordered.findIndex(p => p.productID === product.productID)].amount
     }
-  }), [loansByProduct])
+  }), [loansByProduct, product.productID])
 
   const combinedHistory = React.useMemo(() => {
     let combined = memoizedOrders.concat(memoizedSales).concat(memoizedLoans)

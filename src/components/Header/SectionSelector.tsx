@@ -1,147 +1,15 @@
-import React, {useMemo, ReactNode} from 'react'
-import { navigate, HistoryLocation, NavigateFn } from "@reach/router"
-import * as routes from "../constants/routes"
-import Icons from "./util/Icons"
-import DropDownMenu from "./util/DropDownMenu"
+import React, { ReactNode } from "react"
+import { useSelector } from "react-redux"
+import { RootState } from "../../redux/types"
+import useLocation from "../../hooks/useLocation"
+import Icons from "../util/Icons"
+import DropDownMenu from "../util/DropDownMenu"
 import MenuList from "@material-ui/core/MenuList"
 import MenuItem from "@material-ui/core/MenuItem"
 import Typography from "@material-ui/core/Typography"
-
-import useLocation from "../hooks/useLocation"
-//eslint-disable-next-line
-import Notifications from "./util/Notifications"
-
-import { auth, doSignOut } from "../firebase/firebase"
-import { useAuthState } from "react-firebase-hooks/auth"
-import { useDispatch, useSelector } from "react-redux"
-
-import { clearLocalStorage } from "../redux/middleware/localStorage"
-import { RootState, AuthState } from '../redux/types';
-import { shouldLog } from '../constants/util';
-import Subscription from '../firebase/Subscription';
-import LinkWrapper from './util/LinkWrapper';
-import styled from 'styled-components';
-import { Dispatch } from 'redux';
-import { resetRedux } from '../redux/actions';
-
-type THeader = {
-  locationIsLoaded: boolean
-}
-
-export default function Header({ locationIsLoaded }: THeader) {
-  const defaultColor = "#a9a9a9"
-  const primaryColor = useSelector((state: RootState) => state.auth.location.primaryColor)
-  const bckColor = useMemo(() => {
-    if(primaryColor && locationIsLoaded){
-      return primaryColor
-    } else {
-      return defaultColor
-    }
-  }, [primaryColor, locationIsLoaded])
-
-  const fixedPosition = {
-    position: "fixed",
-    width: "100%",
-    top: "0",
-    zIndex: "10",
-  }
-
-  return (
-    <header style={{
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr 1fr",
-      height: "5.1vh",
-      columnGap: "2px",
-      justifyItems: "center",
-      borderBottom: "gray 2px solid",
-      backgroundColor: bckColor,
-      ...fixedPosition
-    } as any}>
-    {locationIsLoaded && <AuthHeader/>}
-    </header>
-  )
-}
-
-const AuthHeader = () => {
-  return(
-    <>
-      <LocationSelector/>
-      <UserSelector/>
-      <SectionSelector/>
-    </>
-  )
-}
-
-const LocationSelector = () => {
-  const locationName = useSelector((state: RootState) => state.auth.location.name)
-  const locationLogo = useSelector((state: RootState) => state.auth.location.logoUrl)
-
-  if(locationLogo){
-    return(
-      <LinkWrapper linkTo="/">
-      <img src={locationLogo} alt={locationName} style={{ height: "5vh", padding: "0.5rem", placeSelf: "start" }}/>
-      </LinkWrapper>
-    )
-  }
-  return(
-    <LinkWrapper linkTo="/">
-    <Typography variant="h4" style={{placeSelf: "center"}}>{locationName || "LAGER"}</Typography>
-    </LinkWrapper>
-  )
-}
-
-const UserSelector = () => {
-  const [user] = useAuthState(auth)
-  const authUser = useSelector((state: RootState) => state.auth)
-  const dispatch = useDispatch()
-
-  const unsub = () => {
-    const sub = Subscription.getInstance()
-    sub.unsubscribe()
-  }
-
-  return(
-    <div style={{ 
-      display: "grid",
-      width: "100%",
-      gridTemplateColumns: "1fr 4fr 2fr",
-      placeItems: "center"
-     }}>
-      {user ? <LoggedIn authUser={authUser} dispatch={dispatch} unsub={unsub}/> : <NotLoggedIn/>}
-    </div>
-  )
-}
-
-type TLoggedIn = {
-  authUser: AuthState
-  dispatch: Dispatch<any>
-  unsub: () => void
-}
-
-const LoggedIn = ({ authUser, dispatch, unsub }: TLoggedIn) => 
-<>
-  <LinkWrapper linkTo="/profile">
-    <Icons.AccountCircle fontSize="large"/>
-  </LinkWrapper>
-  <div style={{ justifySelf: "left", display: "flex" }}>
-    <><Typography>{authUser.user.firstName}&nbsp;</Typography></>
-    <><Typography>{authUser.user.lastName}</Typography></>
-  </div>
-  {/*<Notifications/>*/}
-  <button onClick={async () => {
-    await shouldLog("Signing out")
-    await unsub()
-    await doSignOut()
-    await clearLocalStorage()
-    await shouldLog("Resetting redux")
-    await dispatch(resetRedux())
-  }} style={{height: "4vh", padding: "1vh"}}>Logg ut</button>
-</>
-
-const NotLoggedIn = () => 
-<>
-  <Typography style={{gridColumn: "1/5"}}>Logg inn</Typography>
-</>
+import { navigate, HistoryLocation, NavigateFn } from "@reach/router"
+import * as routes from "../../constants/routes"
+import { NoMargin } from "./styles"
 
 interface ISection {
   name: string,
@@ -228,8 +96,8 @@ const HeaderLink = ({children, linkTo, onClick, name, currentLocation}: THeaderL
     }}
       onClick={e => {
         if(linkTo !== currentLocation) {
-          navigate(linkTo)
           onClick(e)
+          navigate(linkTo)
         }
       }}
     >
@@ -238,12 +106,6 @@ const HeaderLink = ({children, linkTo, onClick, name, currentLocation}: THeaderL
     </MenuItem>
   )
 }
-
-const NoMargin = styled.div`
-  & > * {
-    margin: 0
-  }
-`
 
 type TCurrentSection = {
   onClick: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void,
@@ -266,3 +128,5 @@ const CurrentSection = ({onClick, thisRef, sections, current }: TCurrentSection)
     </button>
   )
 }
+
+export default SectionSelector

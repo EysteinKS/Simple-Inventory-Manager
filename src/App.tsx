@@ -31,7 +31,7 @@ const App: FC = () => {
         <section
           style={{ 
             height: "100%", 
-            overflowY: "scroll", 
+            overflowY: "auto", 
             marginTop: "5vh" }}
         >
           {(loading) ? <PageLoading message={loadingMessage}/>
