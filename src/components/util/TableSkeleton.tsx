@@ -2,6 +2,8 @@ import React from 'react'
 import SectionHeader, { Row, RowSplitter, Key, ColumnSplitter } from './SectionHeader'
 import styled from 'styled-components'
 import CloudStatus from './CloudStatus'
+import Icons from './Icons'
+import { TableWrapper } from '../../styles/table'
 
 interface IProps {
   title: string
@@ -9,20 +11,20 @@ interface IProps {
 
 const TableSkeleton: React.FC<IProps> = ({ title }) => {
   return (
-    <div style={{ margin: "5vh 10vw 10vh" }}>
+    <TableWrapper>
       <SectionHeader>
         <Row grid="15% 15% 43.5% 14.5% 12%">
-          <SkeletonButton>...</SkeletonButton>
-          <SkeletonButton>...</SkeletonButton>
+          <SkeletonButton/>
+          <SkeletonButton/>
           <h1 style={{ placeSelf: "center" }}>{title}</h1>
           <br/>
           <CloudStatus/>
         </Row>
         <RowSplitter/>
         <Row grid="10% 1% 10% 1% 10% 1% 10% 1% 56%">
-          <Key>...</Key>
+          <Key>#</Key>
           <ColumnSplitter/>
-          <Key>...</Key>
+          <Key><Icons.FormatQuote/></Key>
           <ColumnSplitter/>
           <Key>...</Key>
           <ColumnSplitter/>
@@ -35,7 +37,7 @@ const TableSkeleton: React.FC<IProps> = ({ title }) => {
           <SkeletonItem index={index} key={"placeholder_" + item}/>
         )}
       </SkeletonList>
-    </div>
+    </TableWrapper>
   )
 }
 
@@ -59,7 +61,7 @@ const SkeletonItem = styled.div`
       return "linear-gradient(-60deg, #E0E0E0, #FFFFFF)"
     }
   }};
-  background-size: 200% 200%;
+  background-size: 400% 400%;
   animation: pulse 1.2s ease infinite;
   @keyframes pulse {
     0% {

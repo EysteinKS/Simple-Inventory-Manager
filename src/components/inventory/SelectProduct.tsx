@@ -16,7 +16,7 @@ interface ISelectProduct {
   selected: IOrderedProduct[]
 }
 
-const SelectProduct: React.FC<ISelectProduct> = ({ products, height = "55vh", ignoreInactive = false, onSelect, selected }) => {
+const SelectProduct: React.FC<ISelectProduct> = ({ products, height = "57vh", ignoreInactive = false, onSelect, selected }) => {
   const [search, setSearch] = useState("")
 
   const list = useMemo(() => {
@@ -53,7 +53,7 @@ const SelectProduct: React.FC<ISelectProduct> = ({ products, height = "55vh", ig
     <StyledWrapper height={height}>
       <SelectHeader setSearch={setSearch} sortList={sortList}/>
       <StyledList>
-        {sortedList.map(prod => <Product key={"selectable_product_" + prod.productID} product={prod} onSelect={onSelect}/>)}
+        {sortedList.map((prod, index)=> <Product key={"selectable_product_" + prod.productID} index={index} product={prod} onSelect={onSelect}/>)}
       </StyledList>
     </StyledWrapper>
   )
@@ -97,18 +97,19 @@ const SelectHeader: React.FC<ISelectHeader> = ({ setSearch, sortList }) => {
 interface ProductProps {
   product: IProduct,
   onSelect: (id: number) => void
+  index: number
 }
-const Product = ({product, onSelect}: ProductProps) => {
+const Product = ({product, onSelect, index}: ProductProps) => {
   const { productID, name, categoryID } = product
   return(
-    <div style={{display: "grid", gridTemplateColumns: "40% 40% 20%"}}>
+    <ProductWrapper index={index}>
       <CenteredText>{name}</CenteredText>
       <CenteredText><Names target="categories" id={categoryID}/></CenteredText>
       <button onClick={(e) => {
         e.preventDefault()
         onSelect(productID)
       }}>Velg</button>
-    </div>
+    </ProductWrapper>
   )
 }
 
@@ -125,7 +126,6 @@ const StyledHeader = styled.div`
   height: 5vh;
   border-bottom: 2px solid #ddd;
   padding: 0.2em;
-  margin-bottom: 0.5em;
   background-color: #fff;
 `
 
@@ -147,9 +147,22 @@ const SearchInput = styled.input`
 `
 
 const StyledList = styled.div`
-  overflow-y: overlay;
-  max-height: 50vh;
-  padding: 0 0.5em 0 0.5em;
+  overflow-y: hidden;
+  :hover {
+    overflow-y: overlay;
+  };
+`
+
+const ProductWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 40% 40% 20%;
+  background-color: ${(props: {index: number}) => {
+    if(props.index % 2 === 0){
+      return "#F3F3F3"
+    } else {
+      return "#E8E8E8"
+    }
+  }};
 `
 
 export default SelectProduct

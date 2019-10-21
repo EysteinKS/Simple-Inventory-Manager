@@ -4,13 +4,13 @@ import { RootState, ILoan } from '../../redux/types';
 import useSortableList from '../../hooks/useSortableList';
 import SectionHeader, { TDirections, Row, Title, RowSplitter, SortingKey, ColumnSplitter, Key } from '../../components/util/SectionHeader';
 import styled from 'styled-components';
-import { sort, isArrayEmpty, dateToString } from '../../constants/util';
+import { sort, isArrayEmpty } from '../../constants/util';
 import CloudStatus from '../../components/util/CloudStatus';
 import Icons from '../../components/util/Icons';
-import Names from '../../components/Names';
-import Buttons from '../../components/util/Buttons';
 import EditLoan from '../../components/inventory/EditModals/EditLoan';
 import useLoans from '../../redux/hooks/useLoans';
+import Loan from "./Loan"
+import { TableWrapper } from '../../styles/table';
 
 /*
 TODO
@@ -54,7 +54,7 @@ export default function Loans() {
   )
 
   return(
-    <div style={{ margin: "5vh 10vw 10vh 10vw" }}>
+    <TableWrapper>
       <SectionHeader>
         <Row grid="15% 15% 43.5% 14.5% 12%">
           <NewLoanButton/>
@@ -88,7 +88,7 @@ export default function Loans() {
           setLoanOpen(false)
           clearCurrentLoan()
         }}/>}
-    </div>
+    </TableWrapper>
   )
 }
 
@@ -105,89 +105,3 @@ const List = ({ list, edit }: TList) => {
     </div>
   )
 }
-
-type TLoan = {
-  loan: ILoan
-  edit: (id: number) => void
-  index: number
-}
-
-const Loan = ({loan, edit, index}: TLoan) => {
-  const {
-    loanID,
-    customerID,
-    dateOrdered,
-    dateSent,
-    ordered
-  } = loan
-  const [expanded, setExpanded] = useState(false)
-  const { deleteLoan, sentLoan, receivedLoan } = useLoans()
-
-  let expandedStyle;
-  if(!expanded) {
-    expandedStyle = { display: "none" }
-  } else {
-    expandedStyle = { backgroundColor: "#e6e6e6", padding: "10px", display: "grid", placeItems: "center" }
-  }
-
-  let orderDate = dateToString(dateOrdered)
-  let sentDate = dateToString(dateSent)
-  let totalProducts = ordered.reduce((acc, cur) => acc + cur.amount, 0)
-
-  return(
-    <>
-      <StyledLoan index={index}>
-        <p>{loanID}</p>
-        <p><Names target="customers" id={customerID}/></p>
-        <p>{orderDate}</p>
-        <p>{sentDate || "-"}</p>
-        <p>{totalProducts}</p>
-        <div/>
-        <button onClick={() => setExpanded(!expanded)}>=</button>
-        <button onClick={() => edit(loanID)}><Icons.Edit/></button>
-        <Buttons.Confirm
-          message="Vil du slette dette lånet?"
-          disabled={(dateSent != null)}
-          onConfirm={() => {
-            deleteLoan(loanID)
-          }}>
-            <Icons.Delete/>
-        </Buttons.Confirm>
-        <Buttons.Confirm
-          message="Bekreft sending av utlån"
-          disabled={(dateSent != null)}
-          onConfirm={() => {
-            sentLoan(loanID, ordered)
-          }}>
-            <Icons.Unarchive/>
-        </Buttons.Confirm>
-        <Buttons.Confirm
-          message="Bekreft mottak av utlån"
-          disabled={(dateSent == null)}
-          onConfirm={() => {
-            receivedLoan(loanID, ordered)
-          }}>
-            <Icons.Archive/>
-        </Buttons.Confirm>
-      </StyledLoan>
-      {expanded && <div style={expandedStyle}>
-        {ordered.map((prod, i) => (
-          <div key={"loan_product_" + i}>{prod.amount}x <Names target="products" id={prod.productID}/></div>
-        ))}
-      </div>}
-    </>
-  )
-}
-
-const StyledLoan = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 11%) 5% repeat(5, 8%);
-  justify-items: center;
-  background-color: ${(props: {index: number}) => {
-    if(props.index % 2 === 0){
-      return "#E2E2E2"
-    } else {
-      return "#F3F3F3"
-    }
-  }};
-`

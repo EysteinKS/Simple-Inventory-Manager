@@ -41,3 +41,9 @@ export const ProductWithEdit = styled.div`
 export const IDText = styled(CenteredText)`
   grid-column: 1/3;
 `
+
+export const ProductList = styled.div`
+  grid-column: 1 / 3;
+  height: 43vh;
+  overflow: overlay;
+`

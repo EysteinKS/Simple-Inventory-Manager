@@ -9,7 +9,7 @@ import SelectTarget from '../SelectTarget';
 import EditModal, { OrderedProduct } from './EditModal';
 import Names from '../../Names';
 import Icons from '../../util/Icons';
-import { StyledFooter, StyledDetails, ProductWithEdit, CenteredText, TargetWithEdit, EndText, IDText, StyledHeader } from './styles';
+import { StyledFooter, StyledDetails, ProductWithEdit, CenteredText, TargetWithEdit, EndText, IDText, StyledHeader, ProductList } from './styles';
 import useProducts from '../../../hooks/useProducts';
 import useLoans from '../../../redux/hooks/useLoans';
 
@@ -106,9 +106,9 @@ export default function EditLoan({ isOpen, close }: TEditLoan) {
           <CenteredText style={{ gridColumn: "2/3" }}>Produkter</CenteredText>
           <button onClick={() => setView("products")}><Icons.Edit/></button>
         </ProductWithEdit>
-        <div style={{ gridColumn: "1/3" }}>
+        <ProductList>
           {ordered.map(product => <OrderedProduct key={"ordered_product_" + product.productID} product={product}/>)}
-        </div>
+        </ProductList>
       </StyledDetails>}
       {(view === "customer") &&
       <SelectTarget type="customers" select={(id) => {

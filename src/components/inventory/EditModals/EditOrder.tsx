@@ -10,7 +10,7 @@ import SelectTarget from '../SelectTarget';
 import EditModal, { OrderedProduct } from './EditModal';
 import Names from '../../Names';
 import Icons from '../../util/Icons';
-import { StyledFooter, StyledDetails, ProductWithEdit, CenteredText, TargetWithEdit, EndText, IDText, StyledHeader } from './styles';
+import { StyledFooter, StyledDetails, ProductWithEdit, CenteredText, TargetWithEdit, EndText, IDText, StyledHeader, ProductList } from './styles';
 import { saveCreatedOrder, saveEditedOrder } from '../../../redux/actions/ordersActions';
 import useProducts from '../../../hooks/useProducts';
 
@@ -129,9 +129,9 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
           <CenteredText style={{ gridColumn: "2/3" }}>Produkter</CenteredText>
           <button onClick={() => setView("products")}><Icons.Edit/></button>
         </ProductWithEdit>
-        <div style={{ gridColumn: "1/3" }}>
+        <ProductList>
           {ordered.map(product => <OrderedProduct key={"ordered_product_" + product.productID} product={product}/>)}
-        </div>
+        </ProductList>
       </StyledDetails>}
       {(view === "supplier") &&
       <SelectTarget type="suppliers" select={(id) => {

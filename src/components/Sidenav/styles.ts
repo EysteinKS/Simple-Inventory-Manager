@@ -15,14 +15,19 @@ export const SectionItem = styled.li`
   grid-template-columns: 1fr 1fr 1fr;
   place-items: center;
   place-content: center;
+  box-sizing: border-box;
   border-bottom: 1px solid #CCC;
   ${(props: {current: boolean}) => css`
     color: ${props.current ? "#FFF" : "#000"};
     background-color: ${props.current ? "#BDBDBD" : "#FFF"};
   `}
-  :hover {
-    background-color: #DEDEDE;
-    cursor: pointer;
+  ${(props: {current: boolean}) => 
+    (!props.current) && css`
+      :hover {
+        background-color: #DEDEDE;
+        cursor: pointer;
+      }
+    `
   }
 `
 
@@ -34,5 +39,5 @@ export const SectionIcon = styled.div`
 `
 
 export const SectionName = styled.p`
-
+  margin: 0
 `

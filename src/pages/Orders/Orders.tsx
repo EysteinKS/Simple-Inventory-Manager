@@ -3,15 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   createOrder,
   editOrder,
-  clearCurrentOrder,
-  didReceiveOrder,
-  deleteOrder
+  clearCurrentOrder
 } from "../../redux/actions/ordersActions";
 import { sort, newOrder, isArrayEmpty } from "../../constants/util";
-import "./Orders.css";
 
 import EditOrder from "../../components/inventory/EditModals/EditOrder";
-import ProductName from "../../components/inventory/ProductName";
 import SectionHeader, {
   Row,
   RowSplitter,
@@ -23,14 +19,13 @@ import SectionHeader, {
 } from "../../components/util/SectionHeader";
 import CloudStatus from "../../components/util/CloudStatus";
 import Icons from "../../components/util/Icons";
-import Buttons from "../../components/util/Buttons";
 
 import useSortableList from "../../hooks/useSortableList";
-import { RootState, IOrder, IOrderedProduct } from "../../redux/types";
-import { addChange } from "../../redux/actions/reportsActions";
+import { RootState, IOrder } from "../../redux/types";
 import EditSuppliers from "../Suppliers/Suppliers"
+import Order from "./Order"
+import { TableWrapper } from "../../styles/table";
 
-type TOrdered = { productID: number, amount: number }
 type TEdit = (id: number) => void
 
 export default function Orders() {
@@ -81,7 +76,7 @@ export default function Orders() {
   };
 
   return (
-    <div style={{ margin: "5vh 10vw 10vh 10vw" }}>
+    <TableWrapper>
       <SectionHeader>
         <Row grid="15% 15% 43.5% 14.5% 12%">
           <NewOrderButton />
@@ -137,7 +132,7 @@ export default function Orders() {
         isOpen={isSuppliersOpen}
         close={() => setSuppliersOpen(false)}
       />}
-    </div>
+    </TableWrapper>
   );
 }
 
@@ -151,124 +146,11 @@ const List = ({ list, edit }: TList) => {
     return (
       <div>
         {list.map((order, index) => (
-          <Order order={order} key={"order_" + order.orderID} edit={edit} />
+          <Order order={order} key={"order_" + order.orderID} edit={edit} index={index}/>
         ))}
       </div>
     );
   } else {
     return <div>No orders found!</div>;
   }
-};
-
-type TOrder = {
-  order: IOrder,
-  edit: TEdit
-}
-
-const Order = ({ order, edit }: TOrder) => {
-  const { orderID, supplierID, dateOrdered, dateReceived, ordered } = order;
-  const [expanded, setExpanded] = useState(false);
-  const dispatch = useDispatch();
-  const suppliers = useSelector((state: RootState) => state.suppliers.suppliers);
-
-  let detailStyle;
-  if (expanded) {
-    detailStyle = "order-details";
-  } else {
-    detailStyle = "order-details collapsed";
-  }
-
-  let orderDate
-  if(typeof dateOrdered === "string"){
-    let stringToDate = new Date(dateOrdered)
-    orderDate = stringToDate.toLocaleDateString("default", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    })
-  } else if (dateOrdered) {
-    orderDate = dateOrdered.toLocaleDateString("default", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    })
-  }
-  
-  let receivedDate = null
-  if(dateReceived && typeof dateReceived === "object"){
-    receivedDate = dateReceived.toLocaleDateString("default", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    })
-  }
-
-  let totalOrdered = ordered.reduce((acc: number, cur: TOrdered) => acc + cur.amount, 0);
-
-  return (
-    <div className="order">
-      <div className="order-grid">
-        <p>{orderID}</p>
-        <p>{suppliers[supplierID - 1].name}</p>
-        <p>{orderDate}</p>
-        <p>{totalOrdered}</p>
-        <div />
-        <button onClick={() => setExpanded(!expanded)}>=</button>
-        <button onClick={() => edit(orderID)}>
-          <Icons.Edit />
-        </button>
-        <Buttons.Confirm
-          message="Vil du slette denne bestillingen?"
-          onConfirm={() => {
-            dispatch(addChange({
-              type: "DELETE_ORDER",
-              id: orderID,
-              section: "orders"
-            }))
-            dispatch(deleteOrder(orderID))
-          }}
-        >
-          <Icons.Delete />
-        </Buttons.Confirm>
-        <Buttons.Confirm
-          message="Bekreft mottak av bestilling"
-          onConfirm={() => {
-            dispatch(addChange({
-              type: "RECEIVED_ORDER",
-              id: orderID,
-              section: "orders"
-            }))
-            dispatch(didReceiveOrder(orderID, ordered))
-          }}
-        >
-          >
-        </Buttons.Confirm>
-      </div>
-      <div className={detailStyle}>
-        <div className="order-time">
-          <p>Bestilt: {orderDate}</p>
-          <p>Mottatt: {receivedDate || "Nei"}</p>
-        </div>
-        <div className="order-content">
-          {ordered.map((prod: IOrderedProduct, i: number) => (
-            <Product product={prod} key={orderID + "product" + i} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-type TProduct = {
-  product: IOrderedProduct
-}
-
-const Product = ({ product }: TProduct) => {
-  return (
-    <div>
-      <span>
-        {product.amount}x <ProductName id={product.productID} />
-      </span>
-    </div>
-  );
 };

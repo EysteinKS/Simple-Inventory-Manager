@@ -7,25 +7,32 @@ import {
 } from "../../redux/actions/productsActions";
 import {
   sort,
-  getAmount,
   newProduct,
   shouldLog
 } from "../../constants/util";
-import "./Products.css";
 
 import EditProduct from "../../components/inventory/EditModals/EditProduct";
 import EditCategories from "../Categories/Categories";
-import SectionHeader, { Row, RowSplitter, ColumnSplitter, Title, Key, KeyButton, SortingKey, TDirections } from "../../components/util/SectionHeader";
+import SectionHeader, { 
+  Row, 
+  RowSplitter, 
+  ColumnSplitter, 
+  Title, 
+  Key, 
+  KeyButton, 
+  SortingKey, 
+  TDirections 
+} from "../../components/util/SectionHeader";
 import CloudStatus from "../../components/util/CloudStatus"
 import Icons from "../../components/util/Icons"
-import Warning from "../../components/util/Warning"
 
 import useSortableList from "../../hooks/useSortableList"
-import { IProduct, RootState } from "../../redux/types";
-import { OrdersInfo, SalesInfo, LoansInfo } from "../../components/util/HoverInfo";
-import styled from "styled-components";
+import { RootState } from "../../redux/types";
 import { hasActiveLoans } from "../../redux/selectors/loansSelectors";
 import ProductHistory from "../../components/inventory/ProductHistory";
+import { TableWrapper } from "../../styles/table";
+import { ProductList  } from "./styles";
+import Product from "./Product";
 
 //TODO
 //Show icon if product contains a comment
@@ -89,7 +96,7 @@ export default function Products(){
   );
 
   return (
-    <div style={{ margin: "5vh 10vw 10vh 10vw" }}>
+    <TableWrapper>
       <SectionHeader>
         <Row grid="15% 15% 43.5% 14.5% 12%">
           <NewProductButton />
@@ -99,7 +106,7 @@ export default function Products(){
           <CloudStatus/>
         </Row>
         <RowSplitter/>
-        <Row grid={iconRows} cName="products-header">
+        <Row grid={iconRows}>
           <SortingKey
             onClick={dir => sortList(dir, 0, sort.by("productID", dir))}
           >#</SortingKey>
@@ -125,10 +132,10 @@ export default function Products(){
           <KeyButton onClick={() => shouldLog("TODO: useFilterableList")}>{/* !isFiltered ? <Icons.VisibilityOff/> : <Icons.Visibility/> */}</KeyButton>
         </Row>
       </SectionHeader>
-      <div className="product-list">
+      <ProductList>
         {(!Array.isArray(sortedList) || !sortedList.length)
           ? null
-          : sortedList.map((product, key) => (
+          : sortedList.map((product, index) => (
             <Product
               key={"product_" + product.productID}
               product={product}
@@ -140,9 +147,10 @@ export default function Products(){
                 dispatch(setCurrentProduct(id))
                 setHistoryOpen(true)
               }}
+              index={index}
             />
         ))}
-      </div>
+      </ProductList>
       {isProductOpen && <EditProduct
         isOpen={isProductOpen}
         close={() => {
@@ -163,134 +171,6 @@ export default function Products(){
           dispatch(clearCurrentProduct())
         }}
       />}
-    </div>
+    </TableWrapper>
   );
 };
-
-type TProductWithEdit = {
-  product: IProduct,
-  edit: (id: number) => void
-  showHistory: (id: number) => void
-}
-
-const Product = ({ product, edit, showHistory }: TProductWithEdit) => {
-  const categories = useSelector((state: RootState) => state.categories.categories);
-  const hasLoans = useSelector(hasActiveLoans)
-  const category = categories[product.categoryID - 1].name;
-  let orders = useSelector((state: RootState) => state.orders.orders);
-  let sales = useSelector((state: RootState) => state.sales.sales)
-  let loans = useSelector((state: RootState) => state.loans.loans)
-  let ordered = getAmount(orders, product.productID);
-  let reserved = getAmount(sales, product.productID);
-  let loaned = getAmount(loans, product.productID)
-  let amount = product.amount;
-
-  const total = useMemo(() => {
-    if((amount + ordered + reserved + loaned) === 0){
-      return "-"
-    } else {
-      return (amount + (ordered || 0) - (reserved || 0) - (loaned || 0))
-    }
-  }, [amount, ordered, reserved, loaned])
-
-  return (
-    <StyledProduct active={product.active} hasLoans={hasLoans}>
-      <p>{product.productID}</p>
-      <p className="product-name">{product.name}</p>
-      <p className="product-category">{category}</p>
-      <p>{amount || "-"}</p>
-      <OrderedWithInfo productID={product.productID} amount={ordered}/>
-      <ReservedWithInfo productID={product.productID} amount={reserved}/>
-      {hasLoans && <LoansWithInfo productID={product.productID} amount={loaned}/>}
-      <p>{total || 0}</p>
-      {(total < 0) ? <Warning style={{ justifySelf: "start", alignSelf: "center" }}/> : <div/>}
-      <button onClick={() => showHistory(product.productID)}>H</button>
-      <button onClick={() => edit(product.productID)}><Icons.Edit/></button>
-    </StyledProduct>
-  );
-};
-
-type TStyledProduct = {
-  active: boolean
-  hasLoans: boolean
-}
-
-const StyledProduct = styled.div`
-  display: grid;
-  justify-items: center;
-  width: 100%;
-  background-color: #EEEDE3;
-  :nth-child(2n){
-    background-color: #FFFFF3;
-  }
-  grid-template-columns: 10% 19% 19% repeat(4, 8%) 6% 7% 7%;
-  ${(props: TStyledProduct) => {
-    const { hasLoans } = props
-    if(hasLoans) return `
-    grid-template-columns: 10% 19% 19% repeat(5, 7%) 5% 6% 6%`
-  }}
-  ${(props: TStyledProduct) => {
-    const { active } = props
-    if(!active) return `
-    background-color: #FDE5E5 !important
-    color: rgb(190, 190, 190)`
-  }}
-`
-
-interface InfoProps {
-  productID: number
-  amount: number
-}
-
-const AmountField = styled.p`
-  width: 80%;
-  text-align: center;
-  :hover {
-    cursor: help;
-  }
-`
-
-const OrderedWithInfo: React.FC<InfoProps> = ({productID, amount}) => {
-  const handle = `product_${productID}_ordered`
-
-  if(amount <= 0){
-    return(<p>-</p>)
-  }
-
-  return(
-    <>
-      <AmountField data-tip data-for={handle}>{amount || "-"}</AmountField>
-      {(amount > 0) && <OrdersInfo handle={handle} productID={productID}/>}
-    </>
-  )
-}
-
-const ReservedWithInfo: React.FC<InfoProps> = ({productID, amount}) => {
-  const handle = `product_${productID}_reserved`
-
-  if(amount <= 0){
-    return(<p>-</p>)
-  }
-
-  return(
-    <>
-      <AmountField data-tip data-for={handle}>{amount || "-"}</AmountField>
-      {(amount > 0) && <SalesInfo handle={handle} productID={productID}/>}
-    </>
-  )
-}
-
-const LoansWithInfo: React.FC<InfoProps> = ({productID, amount}) => {
-  const handle = `product_${productID}_loans`
-
-  if(amount <= 0){
-    return(<p>-</p>)
-  }
-
-  return(
-    <>
-      <AmountField data-tip data-for={handle}>{amount || "-"}</AmountField>
-      {(amount > 0) && <LoansInfo handle={handle} productID={productID}/>}
-    </>
-  )
-}

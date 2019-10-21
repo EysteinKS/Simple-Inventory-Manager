@@ -33,8 +33,9 @@ const App: FC = () => {
             height: "100%",
             overflow: "overlay", 
             overflowX: "hidden", 
-            marginTop: "5vh" }}
-        >
+            marginTop: "5vh",
+            background: "linear-gradient(-10deg, #e3e3e3, #FFF)" 
+          }}>
           {(loading) ? <PageLoading message={loadingMessage}/>
           : (loadingErrorGate) ? <p>Error!</p>
           : <MainRouter 
