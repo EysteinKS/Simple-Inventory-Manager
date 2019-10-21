@@ -13,3 +13,11 @@ export const PageLoading: React.FC<PageLoadingProps> = ({ message }) => (
     </div>
   </div>
 );
+
+export const NoTextLoading = () => {
+  return(
+    <div style={{ display: "grid", gridTemplateColumns: "1fr", height: "95vh"}}>
+      <CircularProgress style={{ placeSelf: "center" }}/>
+    </div>
+  )
+}

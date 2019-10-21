@@ -30,8 +30,9 @@ const App: FC = () => {
         <Header locationIsLoaded={isLoadedGate} />
         <section
           style={{ 
-            height: "100%", 
-            overflowY: "auto", 
+            height: "100%",
+            overflow: "overlay", 
+            overflowX: "hidden", 
             marginTop: "5vh" }}
         >
           {(loading) ? <PageLoading message={loadingMessage}/>

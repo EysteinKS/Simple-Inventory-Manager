@@ -1,9 +1,8 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, ICategory, ICustomer, ISupplier, IChangeTypes } from '../../redux/types';
 import useSortableList from '../../hooks/useSortableList';
 import styled from 'styled-components';
-import useSearch from '../../hooks/useSearch';
 import { SortingKey, TDirections } from '../util/SectionHeader';
 import Icons from '../util/Icons';
 import { sort } from '../../constants/util';
@@ -42,29 +41,27 @@ const SelectTarget: React.FC<IProps> = ({type, select}) => {
   }, [type])
 
   //SEARCH & SORT
-  const searchFilter = (item: ItemTypes, search: string) => item.name.includes(search)
-  const [searched, setSearch, setSearchList] = useSearch(targets, searchFilter)
-
-  useEffect(() => {
-    setSearchList(targets)
-    /* eslint-disable-next-line */
-  }, [targets])
-
   const [sorting, setSorting] = useState([null, null] as any[])
-  const { sortedList, setList, sortFunc } = useSortableList(searched)
-
-  useEffect(() => {
-    setList(searched)
-    /* eslint-disable-next-line */
-  }, [searched])
-
+  const { sortedList, sortFunc } = useSortableList(targets)
   const sortList = (dir: TDirections, index: number, func: Function) => sortFunc(setSorting)(dir, index, func, sorting)
   
+  const [searchString, setSearchString] = useState("")
+  const targetList = React.useMemo(() => {
+    if(searchString.length < 1){
+      return sortedList
+    }
+    let search = searchString.toLowerCase()
+    return sortedList.filter(item => {
+      let itemName = item.name.toLowerCase()
+      return itemName.includes(search)
+    })
+  }, [sortedList, searchString])
+
   return (
     <StyledWrapper>
-      <TargetHeader setSearch={setSearch} sortList={sortList} idKey={idKey}/>
+      <TargetHeader search={searchString} setSearch={setSearchString} sortList={sortList} idKey={idKey}/>
       <ScrollableList>
-        {sortedList.map((item) => <TargetItem key={"select_" + item.name} item={item} select={select}/>)}
+        {targetList.map((item) => <TargetItem key={"select_" + item.name} item={item} select={select}/>)}
         <AddItem targets={targets} type={type}/>
       </ScrollableList>
     </StyledWrapper>
@@ -72,25 +69,20 @@ const SelectTarget: React.FC<IProps> = ({type, select}) => {
 }
 
 interface HeaderProps {
+  search: string
   setSearch: (search: string) => void
   sortList: (dir: TDirections, index: number, func: Function) => void
   idKey: string
 }
 
-const TargetHeader: React.FC<HeaderProps> = ({ setSearch, sortList, idKey }) => {
+const TargetHeader: React.FC<HeaderProps> = ({ search, setSearch, sortList, idKey }) => {
   const [isSearching, setSearching] = useState(false)
-  const [input, setInput] = useState("")
-
-  useEffect(() => {
-    setSearch(input)
-    /* eslint-disable-next-line */
-  }, [input])
 
   if(isSearching){
     return(
       <StyledHeader>
         <CenteredText>Søk</CenteredText>
-        <input autoFocus type="text" value={input} onChange={e => setInput(e.target.value)}/>
+        <input autoFocus type="text" value={search} onChange={e => setSearch(e.target.value)}/>
         <SearchButton onClick={() => setSearching(false)}><Icons.Done/></SearchButton>
       </StyledHeader>
     )

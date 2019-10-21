@@ -17,7 +17,7 @@ export const HeaderWrapper = styled.header`
 export const UserWrapper = styled.div`
   display: grid;
   width: 100%;
-  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-columns: 1fr 4fr 2fr;
   place-items: center;
 `
 

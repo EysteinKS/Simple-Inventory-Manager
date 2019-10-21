@@ -8,7 +8,7 @@ const StyledPopover = withStyles({
     top: "5vh !important",
     left: "67vw !important",
     width: "33vw !important",
-    border: "2px outset rgba(255, 255, 255, 0.4)" 
+    border: "none"
   }
 })(Popover)
 

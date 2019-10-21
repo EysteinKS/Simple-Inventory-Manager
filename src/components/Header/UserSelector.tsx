@@ -53,7 +53,7 @@ const LoggedIn = ({ authUser, dispatch, unsub }: TLoggedIn) =>
       clearLocalStorage()
       shouldLog("Resetting redux")
       dispatch(resetRedux())
-    }} style={{height: "4vh", padding: "1vh"}}>Logg ut</button>
+    }} style={{height: "4vh", padding: "0"}}>Logg ut</button>
   </>
 
 const NotLoggedIn = () => 

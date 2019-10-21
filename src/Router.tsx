@@ -1,37 +1,43 @@
 import React, { FC } from "react";
 import { Router, RouteComponentProps } from "@reach/router";
 import * as routes from "./constants/routes";
-import Products from "./pages/Products";
-import Orders from "./pages/Orders";
-import Sales from "./pages/Sales";
-import History from "./pages/History";
-import Admin from "./pages/Admin";
-import Loans from "./pages/Loans";
-import Login from "./components/Login";
+import { PageLoading, NoTextLoading } from "./components/util/PageLoading";
+import TableSkeleton from "./components/util/TableSkeleton";
 import NotFound from "./pages/NotFound";
-import Profile from "./pages/Profile";
-import { PageLoading } from "./components/util/PageLoading";
+import Login from "./components/Login";
+
+const Products = React.lazy(() => import("./pages/Products"));
+const Orders = React.lazy(() => import("./pages/Orders"));
+const Sales = React.lazy(() => import("./pages/Sales"));
+const History = React.lazy(() => import("./pages/History"));
+const Admin = React.lazy(() => import("./pages/Admin"));
+const Loans = React.lazy(() => import("./pages/Loans"));
+const Profile = React.lazy(() => import("./pages/Profile"));
 
 interface RoutePageProps extends RouteComponentProps {
   component: FC
+  fallback: FC<any>
+  fbprops?: any
 }
 
-const RoutePage: FC<RoutePageProps> = ({ component: Component, ...rest }) => (
-  <Component {...rest}/>
+const RoutePage: FC<RoutePageProps> = ({ component: Component, fallback: Fallback, fbprops, ...rest }) => (
+  <React.Suspense fallback={<Fallback {...fbprops}/>}>
+    <Component {...rest}/>
+  </React.Suspense>
 )
 
 export const AuthRouter: FC = () => {
   //https://github.com/reach/router/issues/242#issuecomment-467082358
   return (
     <Router primary={false}>
-      <RoutePage component={Products} path={routes.HOME} />
-      <RoutePage component={Orders} path={routes.ORDERS} />
-      <RoutePage component={Sales} path={routes.SALES} />
-      <RoutePage component={Loans} path={routes.LOANS} />
-      <RoutePage component={History} path={routes.HISTORY} />
-      <RoutePage component={Profile} path={routes.PROFILE} />
-      <RoutePage component={Admin} path={routes.ADMIN} />
-      <RoutePage component={NotFound} default/>
+      <RoutePage component={Products} path={routes.HOME} fallback={TableSkeleton} fbprops={{title: "Produkter"}}/>
+      <RoutePage component={Orders} path={routes.ORDERS} fallback={TableSkeleton} fbprops={{title: "Bestillinger"}}/>
+      <RoutePage component={Sales} path={routes.SALES} fallback={TableSkeleton} fbprops={{title: "Salg"}}/>
+      <RoutePage component={Loans} path={routes.LOANS} fallback={TableSkeleton} fbprops={{title: "Utlån"}}/>
+      <RoutePage component={History} path={routes.HISTORY} fallback={NoTextLoading}/>
+      <RoutePage component={Profile} path={routes.PROFILE} fallback={NoTextLoading}/>
+      <RoutePage component={Admin} path={routes.ADMIN} fallback={NoTextLoading}/>
+      <RoutePage component={NotFound} default fallback={NoTextLoading}/>
     </Router>
   );
 };

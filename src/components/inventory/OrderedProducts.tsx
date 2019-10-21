@@ -60,7 +60,6 @@ const OrderedProduct = ({ product, edit, remove, index }: TOrderedProduct) => {
         </InputButton>
         <InputField
           type="number"
-          min={1}
           value={amount}
           onChange={e => edit(Number(e.target.value), index)}
         />

@@ -95,7 +95,7 @@ const ProductHistory: React.FC<IProps> = ({ isOpen, close }) => {
         }
       }}
     >
-      <HistoryTitle>Historikk for {product.name}</HistoryTitle>
+      <HistoryTitle>Historikk - {product.name}</HistoryTitle>
       <HistoryList>
         {combinedHistory.map(item => 
           <HistoryItem key={"prod_" + product.productID + "_" + item.type + "_" + item.id} item={item}/>  
