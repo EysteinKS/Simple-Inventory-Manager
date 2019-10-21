@@ -22,28 +22,31 @@ import Icons from "../../components/util/Icons";
 
 import useSortableList from "../../hooks/useSortableList";
 import { RootState, IOrder } from "../../redux/types";
-import EditSuppliers from "../Suppliers/Suppliers"
-import Order from "./Order"
+import EditSuppliers from "../Suppliers/Suppliers";
+import Order from "./Order";
 import { TableWrapper } from "../../styles/table";
 
-type TEdit = (id: number) => void
+type TEdit = (id: number) => void;
 
 export default function Orders() {
   const dispatch = useDispatch();
   const orders = useSelector((state: RootState) => state.orders);
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const [isOrderOpen, setOrderOpen] = useState(false);
-  const [isSuppliersOpen, setSuppliersOpen] = useState(false)
+  const [isSuppliersOpen, setSuppliersOpen] = useState(false);
 
   //SORTING
-  const [ sorting, setSorting ] = useState([null, null, null] as any[]);
-  const { sortedList, setList, sortFunc } = useSortableList(orders.orders as IOrder[])
+  const [sorting, setSorting] = useState([null, null, null] as any[]);
+  const { sortedList, setList, sortFunc } = useSortableList(
+    orders.orders as IOrder[]
+  );
   useEffect(() => {
     setList(orders.orders);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orders.orders]);
 
-  const sortList = (dir: TDirections, index: number, func: Function) => sortFunc(setSorting)(dir, index, func, sorting)
+  const sortList = (dir: TDirections, index: number, func: Function) =>
+    sortFunc(setSorting)(dir, index, func, sorting);
 
   const buttonStyle = {
     height: "75%",
@@ -83,16 +86,16 @@ export default function Orders() {
           <SuppliersButton />
           <Title>Bestillinger</Title>
           <br />
-          <CloudStatus/>
+          <CloudStatus />
         </Row>
-        <RowSplitter/>
+        <RowSplitter />
         <Row grid="14% 1% 14% 1% 14% 1% 15%">
           <SortingKey
             onClick={dir => sortList(dir, 0, sort.by("orderID", dir))}
           >
             #
           </SortingKey>
-          <ColumnSplitter/>
+          <ColumnSplitter />
           <SortingKey
             onClick={dir =>
               sortList(dir, 1, sort.bySupplier(suppliers.suppliers, dir))
@@ -100,13 +103,13 @@ export default function Orders() {
           >
             <Icons.Business />
           </SortingKey>
-          <ColumnSplitter/>
+          <ColumnSplitter />
           <SortingKey
             onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}
           >
             <Icons.AccessTime />
           </SortingKey>
-          <ColumnSplitter/>
+          <ColumnSplitter />
           <Key>
             <Icons.ShoppingCart />
           </Key>
@@ -121,32 +124,41 @@ export default function Orders() {
           }}
         />
       )}
-      {isOrderOpen && <EditOrder
-        isOpen={isOrderOpen}
-        close={() => {
-          setOrderOpen(false);
-          dispatch(clearCurrentOrder());
-        }}
-      />}
-      {isSuppliersOpen && <EditSuppliers
-        isOpen={isSuppliersOpen}
-        close={() => setSuppliersOpen(false)}
-      />}
+      {isOrderOpen && (
+        <EditOrder
+          isOpen={isOrderOpen}
+          close={() => {
+            setOrderOpen(false);
+            dispatch(clearCurrentOrder());
+          }}
+        />
+      )}
+      {isSuppliersOpen && (
+        <EditSuppliers
+          isOpen={isSuppliersOpen}
+          close={() => setSuppliersOpen(false)}
+        />
+      )}
     </TableWrapper>
   );
 }
 
 type TList = {
-  list: IOrder[],
-  edit: TEdit
-}
+  list: IOrder[];
+  edit: TEdit;
+};
 
 const List = ({ list, edit }: TList) => {
   if (list) {
     return (
       <div>
         {list.map((order, index) => (
-          <Order order={order} key={"order_" + order.orderID} edit={edit} index={index}/>
+          <Order
+            order={order}
+            key={"order_" + order.orderID}
+            edit={edit}
+            index={index}
+          />
         ))}
       </div>
     );

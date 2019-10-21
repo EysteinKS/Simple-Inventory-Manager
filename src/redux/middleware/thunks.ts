@@ -125,7 +125,7 @@ export const setSectionToFirestore = (
   shouldLog("setSectionToFirestore: ", {
     location: `${location}/${sectionString}`,
     dataToSave
-  })
+  });
   secondaryFirestore
     .doc(`${location}/${sectionString}`)
     .set(dataToSave, { merge: true })

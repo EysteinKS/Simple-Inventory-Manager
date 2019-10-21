@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useMemo } from "react";
 import { IProduct } from "../../redux/types";
 import SelectProduct from "./SelectProduct";
 import ProductName from "./ProductName";
@@ -6,10 +6,10 @@ import Icons from "../util/Icons";
 import styled from "styled-components";
 
 interface IProps {
-  products: IProduct[]
-  selected: number[],
-  add: (newListItem: any) => void,
-  remove: (index: number) => void
+  products: IProduct[];
+  selected: number[];
+  add: (newListItem: any) => void;
+  remove: (index: number) => void;
 }
 
 const SuppliersProducts = ({ products, selected, add, remove }: IProps) => {
@@ -17,9 +17,9 @@ const SuppliersProducts = ({ products, selected, add, remove }: IProps) => {
     let list = selected.map(id => ({
       productID: id,
       amount: 0
-    }))
-    return list
-  }, [selected])
+    }));
+    return list;
+  }, [selected]);
 
   return (
     <StyledWrapper>
@@ -35,11 +35,12 @@ const SuppliersProducts = ({ products, selected, add, remove }: IProps) => {
       <StyledSection>
         <ul style={{ listStyleType: "none", padding: "5px", margin: "0px" }}>
           {selectedProducts.map((product, i) => (
-            <SuppliersProduct 
-              product={product.productID} 
-              key={"selected_supplier_products_" + product.productID} 
-              index={i} 
-              remove={index => remove(index)}/>
+            <SuppliersProduct
+              product={product.productID}
+              key={"selected_supplier_products_" + product.productID}
+              index={i}
+              remove={index => remove(index)}
+            />
           ))}
         </ul>
       </StyledSection>
@@ -48,10 +49,10 @@ const SuppliersProducts = ({ products, selected, add, remove }: IProps) => {
 };
 
 type TOrderedProduct = {
-  product: number,
-  remove: (index: number) => void,
-  index: number
-}
+  product: number;
+  remove: (index: number) => void;
+  index: number;
+};
 
 const SuppliersProduct = ({ product, remove, index }: TOrderedProduct) => {
   return (
@@ -64,10 +65,14 @@ const SuppliersProduct = ({ product, remove, index }: TOrderedProduct) => {
       }}
     >
       <ProductName id={product} />
-      <button onClick={e => {
-        e.preventDefault()
-        remove(index)
-      }}><Icons.Delete/></button>
+      <button
+        onClick={e => {
+          e.preventDefault();
+          remove(index);
+        }}
+      >
+        <Icons.Delete />
+      </button>
     </div>
   );
 };
@@ -80,10 +85,8 @@ const StyledWrapper = styled.div`
   grid-template-columns: 1fr 1fr;
   column-gap: 2em;
   grid-column: 1 / 3;
-`
+`;
 
-const StyledSection = styled.div`
+const StyledSection = styled.div``;
 
-`
-
-export default SuppliersProducts
+export default SuppliersProducts;

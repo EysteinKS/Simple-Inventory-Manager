@@ -4,7 +4,7 @@ export const ListWrapper = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-`
+`;
 
 export const SectionItem = styled.li`
   width: 100%;
@@ -16,28 +16,28 @@ export const SectionItem = styled.li`
   place-items: center;
   place-content: center;
   box-sizing: border-box;
-  border-bottom: 1px solid #CCC;
-  ${(props: {current: boolean}) => css`
+  border-bottom: 1px solid #ccc;
+  ${(props: { current: boolean }) => css`
     color: ${props.current ? "#FFF" : "#000"};
     background-color: ${props.current ? "#BDBDBD" : "#FFF"};
   `}
-  ${(props: {current: boolean}) => 
-    (!props.current) && css`
+  ${(props: { current: boolean }) =>
+    !props.current &&
+    css`
       :hover {
-        background-color: #DEDEDE;
+        background-color: #dedede;
         cursor: pointer;
       }
-    `
-  }
-`
+    `}
+`;
 
 export const SectionIcon = styled.div`
   justify-self: start;
   & > * {
-    margin: 0
+    margin: 0;
   }
-`
+`;
 
 export const SectionName = styled.p`
-  margin: 0
-`
+  margin: 0;
+`;

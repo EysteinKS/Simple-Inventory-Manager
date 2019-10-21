@@ -1,11 +1,11 @@
-import React from 'react'
-import HistoryTable from './HistoryTable';
-import { useSelector } from 'react-redux';
-import { selectProductNames } from '../../../redux/selectors/productSelectors';
-import { RootState } from '../../../redux/types';
-import { shouldLog } from '../../../constants/util';
-import { ExpandableRow } from '../../util/ExpandableRow';
-import OrderedProducts from './OrderedProducts';
+import React from "react";
+import HistoryTable from "./HistoryTable";
+import { useSelector } from "react-redux";
+import { selectProductNames } from "../../../redux/selectors/productSelectors";
+import { RootState } from "../../../redux/types";
+import { shouldLog } from "../../../constants/util";
+import { ExpandableRow } from "../../util/ExpandableRow";
+import OrderedProducts from "./OrderedProducts";
 
 const localeStringOpts = {
   day: "2-digit",
@@ -20,7 +20,7 @@ const CompletedLoans = () => {
   const customers = useSelector(
     (state: RootState) => state.customers.customers
   );
-  const loanHistory = useSelector((state: RootState) => state.loans.history)
+  const loanHistory = useSelector((state: RootState) => state.loans.history);
 
   const loansColumns = React.useMemo(() => {
     return [
@@ -34,7 +34,7 @@ const CompletedLoans = () => {
   }, []);
 
   const loansContent = React.useMemo(() => {
-    shouldLog("Calculating content in orders history")
+    shouldLog("Calculating content in orders history");
     let sorted = [...loanHistory].sort((a, b) => {
       return a.loanID - b.loanID;
     });
@@ -49,7 +49,7 @@ const CompletedLoans = () => {
       let sent = new Date(loan.dateSent as string).toLocaleString(
         "default",
         localeStringOpts
-      )
+      );
       let received = new Date(loan.dateReceived as string).toLocaleString(
         "default",
         localeStringOpts
@@ -58,10 +58,17 @@ const CompletedLoans = () => {
         acc += cur.amount;
         return acc;
       }, 0);
-      let columns = [loan.loanID, customerName, ordered, sent, received, amount];
+      let columns = [
+        loan.loanID,
+        customerName,
+        ordered,
+        sent,
+        received,
+        amount
+      ];
       return (
-        <ExpandableRow 
-          key={"order_history_" + loan.loanID} 
+        <ExpandableRow
+          key={"order_history_" + loan.loanID}
           columns={columns}
           isDeleted={false}
         >
@@ -76,15 +83,15 @@ const CompletedLoans = () => {
     });
   }, [loanHistory, customers, productNames]);
 
-  if(loanHistory.length > 0){
-    return(
+  if (loanHistory.length > 0) {
+    return (
       <HistoryTable name="Loans" columns={loansColumns}>
         {loansContent}
       </HistoryTable>
-    )
+    );
   } else {
-    return null
+    return null;
   }
-}
+};
 
-export default CompletedLoans
+export default CompletedLoans;

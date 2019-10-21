@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import Header from "./components/Header";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-import useInitialization from "./hooks/useInitialization"
+import useInitialization from "./hooks/useInitialization";
 import MainRouter from "./Router";
 import { PageLoading } from "./components/util/PageLoading";
 import GlobalStyle from "./styles/globalStyle";
@@ -14,13 +14,13 @@ const App: FC = () => {
     loadingErrorGate,
     loadingMessage,
     setLoadingMessage,
-    loggedIn, 
-  } = useInitialization()
+    loggedIn
+  } = useInitialization();
 
-  return(
+  return (
     <>
       <CssBaseline />
-      <GlobalStyle/>
+      <GlobalStyle />
       <main
         style={{
           height: "100vh",
@@ -29,26 +29,31 @@ const App: FC = () => {
       >
         <Header locationIsLoaded={isLoadedGate} />
         <section
-          style={{ 
+          style={{
             height: "100%",
-            overflow: "overlay", 
-            overflowX: "hidden", 
+            overflow: "overlay",
+            overflowX: "hidden",
             marginTop: "5vh",
-            background: "linear-gradient(-10deg, #e3e3e3, #FFF)" 
-          }}>
-          {(loading) ? <PageLoading message={loadingMessage}/>
-          : (loadingErrorGate) ? <p>Error!</p>
-          : <MainRouter 
-              loggedIn={loggedIn} 
-              loading={loading} 
-              isLoaded={isLoadedGate} 
+            background: "linear-gradient(-10deg, #e3e3e3, #FFF)"
+          }}
+        >
+          {loading ? (
+            <PageLoading message={loadingMessage} />
+          ) : loadingErrorGate ? (
+            <p>Error!</p>
+          ) : (
+            <MainRouter
+              loggedIn={loggedIn}
+              loading={loading}
+              isLoaded={isLoadedGate}
               message={loadingMessage}
               setMessage={setLoadingMessage}
-            />}
+            />
+          )}
         </section>
       </main>
     </>
-  )
-}
+  );
+};
 
 export default App;

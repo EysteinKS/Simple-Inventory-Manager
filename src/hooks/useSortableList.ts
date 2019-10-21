@@ -3,14 +3,14 @@ import { TDirections } from "../components/util/SectionHeader";
 import produce from "immer";
 
 const isFunction = (input: any) => typeof input === "function";
-export type TSetList = Dispatch<SetStateAction<any[]>>
+export type TSetList = Dispatch<SetStateAction<any[]>>;
 
 export default function useSortableList(arr: any[] = []) {
   const [sortedList, updateList] = useState(arr);
 
   const setList = (arr: any[]) => {
-    updateList(arr)
-  }
+    updateList(arr);
+  };
 
   const setSortingFuncs = (funcArray: any[]) => {
     if (funcArray.length) {
@@ -18,20 +18,24 @@ export default function useSortableList(arr: any[] = []) {
         setList(arr);
       } else {
         updateList(cur => {
-          let newList = [...cur]
+          let newList = [...cur];
           funcArray.forEach(func => {
             if (isFunction(func)) {
               newList.sort(func);
             }
           });
-          return newList
-        }
-        );
+          return newList;
+        });
       }
     }
   };
 
-  const sortFunc = (setSorting: (sorting: any[]) => void) => (dir: TDirections, index: number, func: Function, sorting: any[]) => {
+  const sortFunc = (setSorting: (sorting: any[]) => void) => (
+    dir: TDirections,
+    index: number,
+    func: Function,
+    sorting: any[]
+  ) => {
     if (dir !== null) {
       let newSorting = produce(sorting, draft => {
         draft[index] = func;
@@ -45,7 +49,7 @@ export default function useSortableList(arr: any[] = []) {
       setSorting(newSorting);
       setSortingFuncs(newSorting);
     }
-  }
+  };
 
-  return { sortedList, setList, sortFunc }
+  return { sortedList, setList, sortFunc };
 }

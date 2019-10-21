@@ -1,15 +1,15 @@
-import React from "react"
-import Icons from "./Icons"
+import React from "react";
+import Icons from "./Icons";
 
 interface IWarning {
-  [x: string]: any
+  [x: string]: any;
 }
 
 export default function Warning({ children, ...props }: IWarning) {
-  return(
+  return (
     <>
-      <Icons.WarningIcon {...props}/>
+      <Icons.WarningIcon {...props} />
       {children ? children : null}
     </>
-  )
+  );
 }

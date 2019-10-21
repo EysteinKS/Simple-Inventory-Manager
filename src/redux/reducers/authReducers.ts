@@ -1,8 +1,8 @@
-import * as action from "../actions/authActions"
-import { setLocalStorage, authKey } from "../middleware/localStorage"
-import produce from "immer"
+import * as action from "../actions/authActions";
+import { setLocalStorage, authKey } from "../middleware/localStorage";
+import produce from "immer";
 import { AuthState } from "../types";
-import { AnyAction } from "redux"
+import { AnyAction } from "redux";
 
 const initialState: AuthState = {
   user: {
@@ -42,54 +42,68 @@ const initialState: AuthState = {
   loggingOut: false,
   hasNewChanges: false,
   error: null
-}
+};
 
-export default (state: AuthState = initialState, { type, payload }: AnyAction) => 
+export default (
+  state: AuthState = initialState,
+  { type, payload }: AnyAction
+) =>
   produce(state, draft => {
-    switch(type){
+    switch (type) {
       case action.USER_SIGNED_OUT:
-        draft.loggingOut = false
-        break
+        draft.loggingOut = false;
+        break;
+
       case action.USER_LOGGING_IN:
       case action.LOAD_USER_BEGIN:
-        draft.isLoading = true
-        draft.isLoaded = false
-        draft.loadingError = null
-        break
+        draft.isLoading = true;
+        draft.isLoaded = false;
+        draft.loadingError = null;
+        break;
+
       case action.LOAD_USER_SUCCESS:
-        draft.user = payload
-        draft.isLoading = false
-        draft.isLoaded = true
-        break
+        draft.user = payload;
+        draft.isLoading = false;
+        draft.isLoaded = true;
+        break;
+
       case action.LOAD_USER_FAILURE:
-        draft.isLoading = false
-        draft.isLoaded = true
-        draft.loadingError = payload
-        break
+        draft.isLoading = false;
+        draft.isLoaded = true;
+        draft.loadingError = payload;
+        break;
+
       case action.SET_LOCATION_NAME:
-        draft.location.name = payload
-        break
+        draft.location.name = payload;
+        break;
+
       case action.SET_LOCATION_LOGO:
-        draft.location.logoUrl = payload
-        break
+        draft.location.logoUrl = payload;
+        break;
+
       case action.SET_LOCATION_COLOR:
-        draft.location.primaryColor = payload
-        break
+        draft.location.primaryColor = payload;
+        break;
+
       case action.SET_ALL_LAST_CHANGED:
-        draft.location.lastChanged = payload
-        break
-      case action.SET_LAST_CHANGED: 
-        draft.location.lastChanged.global = payload.date
-        draft.location.lastChanged.sections[payload.section] = payload.date
-        break
+        draft.location.lastChanged = payload;
+        break;
+
+      case action.SET_LAST_CHANGED:
+        draft.location.lastChanged.global = payload.date;
+        draft.location.lastChanged.sections[payload.section] = payload.date;
+        break;
+
       case action.RESET_AUTH:
-        let resetDraft = { ...initialState, loggingOut: true }
-        setLocalStorage(authKey, resetDraft)
-        return resetDraft
+        let resetDraft = { ...initialState, loggingOut: true };
+        setLocalStorage(authKey, resetDraft);
+        return resetDraft;
+
       case action.SET_NEW_CHANGES:
-        draft.hasNewChanges = true
-        return draft
+        draft.hasNewChanges = true;
+        return draft;
+
       default:
-        return state
+        return state;
     }
-  })
+  });

@@ -4,12 +4,16 @@ import {
   tempFirestore,
   connectToTemp,
   disconnectFromTemp
-} from "./firebase"
+} from "./firebase";
 import { shouldLog } from "../constants/util";
 
 //USERS
 
-const generateUserSettings = (email: string, name: string[], location: string) => ({
+const generateUserSettings = (
+  email: string,
+  name: string[],
+  location: string
+) => ({
   currentLocation: location,
   email,
   firstName: name[0],
@@ -20,60 +24,67 @@ const generateUserSettings = (email: string, name: string[], location: string) =
     isInactiveVisible: true,
     language: "NO"
   }
-})
+});
 
-export const createNewUser = async (email: string, password: string, name: string[], location: string) => {
+export const createNewUser = async (
+  email: string,
+  password: string,
+  name: string[],
+  location: string
+) => {
   try {
-    const user = await auth.createUserWithEmailAndPassword(email, password)
-    const uid = user.user && user.user.uid
-    const settings = generateUserSettings(email, name, location)
-    firestore.doc(`Users/${uid}`).set(settings)
-      .then(() => shouldLog(`User created with uid ${uid}`))
-  } catch(err) {
-    shouldLog("Error creating new user: ", err)
+    const user = await auth.createUserWithEmailAndPassword(email, password);
+    const uid = user.user && user.user.uid;
+    const settings = generateUserSettings(email, name, location);
+    firestore
+      .doc(`Users/${uid}`)
+      .set(settings)
+      .then(() => shouldLog(`User created with uid ${uid}`));
+  } catch (err) {
+    shouldLog("Error creating new user: ", err);
   }
-}
+};
 
 const resetUserPassword = () => {
   //IS IT POSSIBLE TO SEND RESET REQUEST TO OTHER USER?
-}
+};
 
 const updateUserData = () => {
   //USE FIRESTORE TO UPDATE USER DATA
-}
+};
 
 export const users = {
   createNewUser,
   resetUserPassword,
   updateUserData
-}
+};
 
 //USERS END
 
 //CLIENTS
 
 export interface IClientData {
-  Users: Array<{ email: string, role: "user" | "admin", uid: string }>
-  firebaseConfig: any
+  Users: Array<{ email: string; role: "user" | "admin"; uid: string }>;
+  firebaseConfig: any;
   lastChanged: {
-    global: Date | string,
+    global: Date | string;
     sections: {
-      categories: Date | string,
-      customers: Date | string,
-      loans: Date | string,
-      products: Date | string,
-      sales: Date | string,
-      suppliers: Date | string,
-    }
-  },
-  logoUrl: string,
-  name: string,
-  primaryColor: string
+      categories: Date | string;
+      customers: Date | string;
+      loans: Date | string;
+      products: Date | string;
+      sales: Date | string;
+      suppliers: Date | string;
+    };
+  };
+  logoUrl: string;
+  name: string;
+  primaryColor: string;
 }
 
 //ADD CLIENT TO LIST IN FIRESTORE
 export const createNewClient = (clientName: string, fullName: string) => {
-  const creationDate = new Date()
+  const creationDate = new Date();
   const clientData: IClientData = {
     Users: [],
     firebaseConfig: {
@@ -98,15 +109,15 @@ export const createNewClient = (clientName: string, fullName: string) => {
     logoUrl: "",
     name: fullName,
     primaryColor: "#e3aa39"
-  }
-  firestore.doc(`Clients/${clientName}`).set(clientData)
-}
+  };
+  firestore.doc(`Clients/${clientName}`).set(clientData);
+};
 
 export const updateClientData = (clientName: string, data: any) => {
-  firestore.doc(`Clients/${clientName}`).set(data, {merge: true})
-}
+  firestore.doc(`Clients/${clientName}`).set(data, { merge: true });
+};
 
-const initialClientFirestore: {[key: string]: any} = {
+const initialClientFirestore: { [key: string]: any } = {
   Categories: {
     categories: [],
     history: [],
@@ -145,30 +156,38 @@ const initialClientFirestore: {[key: string]: any} = {
     history: [],
     currentID: 0
   }
-}
+};
 
 //USE FIREBASE CONFIG TO INITIALIZE TEMPFIRESTORE
-export const initializeClientFirestore = async (clientName: string, config: any) => {
-  await connectToTemp(config)
-  let savedSections = 0
+export const initializeClientFirestore = async (
+  clientName: string,
+  config: any
+) => {
+  await connectToTemp(config);
+  let savedSections = 0;
   Object.keys(initialClientFirestore).forEach(async section => {
-    shouldLog(`Initializing section ${section} with data `, initialClientFirestore[section])
-    tempFirestore.doc(`${clientName}/${section}`).set(initialClientFirestore[section])
-    .then(() => {
-      shouldLog(`Saved section ${section}`)
-      savedSections++
-      if(savedSections === 8){
-        disconnectFromTemp()
-      }
-    })
-    .catch(err => shouldLog(err))
-  })
-}
+    shouldLog(
+      `Initializing section ${section} with data `,
+      initialClientFirestore[section]
+    );
+    tempFirestore
+      .doc(`${clientName}/${section}`)
+      .set(initialClientFirestore[section])
+      .then(() => {
+        shouldLog(`Saved section ${section}`);
+        savedSections++;
+        if (savedSections === 8) {
+          disconnectFromTemp();
+        }
+      })
+      .catch(err => shouldLog(err));
+  });
+};
 
 export const clients = {
   createNewClient,
   updateClientData,
   initializeClientFirestore
-}
+};
 
 //CLIENTS END

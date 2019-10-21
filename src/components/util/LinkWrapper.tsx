@@ -1,20 +1,18 @@
-import React from 'react'
-import { navigate } from "@reach/router"
-import styled from 'styled-components';
+import React from "react";
+import { navigate } from "@reach/router";
+import styled from "styled-components";
 
 const StyledWrapper = styled.div`
-  width: 100%
+  width: 100%;
   :hover {
-    cursor: pointer
+    cursor: pointer;
   }
-`
+`;
 
-const LinkWrapper: React.FC<{linkTo: string}> = ({linkTo, children}) => {
+const LinkWrapper: React.FC<{ linkTo: string }> = ({ linkTo, children }) => {
   return (
-    <StyledWrapper onClick={() => navigate(linkTo)}>
-      {children}
-    </StyledWrapper>
-  )
-}
+    <StyledWrapper onClick={() => navigate(linkTo)}>{children}</StyledWrapper>
+  );
+};
 
-export default LinkWrapper
+export default LinkWrapper;

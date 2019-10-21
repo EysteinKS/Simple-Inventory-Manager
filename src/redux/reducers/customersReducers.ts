@@ -1,38 +1,48 @@
 /* eslint-disable default-case*/
-import * as action from "../actions/customersActions"
-import produce from "immer"
-import drafts from "./drafts"
+import * as action from "../actions/customersActions";
+import produce from "immer";
+import drafts from "./drafts";
 import { AnyAction } from "redux";
 import { CustomersState } from "../types";
 
-const initialState: CustomersState = drafts.initializeState({customers: []})
+const initialState: CustomersState = drafts.initializeState({ customers: [] });
 
-export default (state: CustomersState = initialState, {type, payload}: AnyAction) => 
+export default (
+  state: CustomersState = initialState,
+  { type, payload }: AnyAction
+) =>
   produce(state, draft => {
-    switch(type){
+    switch (type) {
       case action.LOAD_CUSTOMERS_BEGIN:
-        return drafts.loadBegin(draft)
+        return drafts.loadBegin(draft);
+
       case action.LOAD_CUSTOMERS_SUCCESS:
-        return drafts.loadSuccess(draft, "customers", payload)
+        return drafts.loadSuccess(draft, "customers", payload);
+
       case action.LOAD_CUSTOMERS_FAILURE:
-        return drafts.loadFailure(draft, payload)
+        return drafts.loadFailure(draft, payload);
+
       case action.SAVE_CUSTOMERS_BEGIN:
-        return drafts.saveBegin(draft)
+        return drafts.saveBegin(draft);
+
       case action.SAVE_CUSTOMERS_SUCCESS:
-        return drafts.saveSuccess(draft)
+        return drafts.saveSuccess(draft);
+
       case action.SAVE_CUSTOMERS_FAILURE:
-        return drafts.saveFailure(draft, payload)
+        return drafts.saveFailure(draft, payload);
+
       case action.SAVE_CREATED_CUSTOMER:
-        let newID = draft.customers.length + 1
-        draft.currentID = newID
+        let newID = draft.customers.length + 1;
+        draft.currentID = newID;
         draft.customers.push({
           customerID: newID,
           name: payload
-        })
-        
-        draft.isSaved = false
-        return draft
+        });
+
+        draft.isSaved = false;
+        return draft;
+
       case action.RESET_CUSTOMERS:
-        return drafts.resetReducer(initialState)
-    }  
-})
+        return drafts.resetReducer(initialState);
+    }
+  });

@@ -1,18 +1,26 @@
-import React, {useState, Dispatch, SetStateAction} from "react"
-import {useSelector} from "react-redux"
+import React, { useState, Dispatch, SetStateAction } from "react";
+import { useSelector } from "react-redux";
 
-import ReactModal from "react-modal"
+import ReactModal from "react-modal";
 import { RootState, ICategory } from "../../redux/types";
-ReactModal.setAppElement("#root")
+ReactModal.setAppElement("#root");
 
-type TClose = (event: (React.MouseEvent | React.KeyboardEvent)) => void
-type TBooleanState = Dispatch<SetStateAction<boolean>>
+type TClose = (event: React.MouseEvent | React.KeyboardEvent) => void;
+type TBooleanState = Dispatch<SetStateAction<boolean>>;
 
-export default function EditCategories({ isOpen, close }: {isOpen: boolean, close: TClose}) {
-  const categories = useSelector((state: RootState) => state.categories.categories)
-  const [isEditing, setEditing] = useState(false)
+export default function EditCategories({
+  isOpen,
+  close
+}: {
+  isOpen: boolean;
+  close: TClose;
+}) {
+  const categories = useSelector(
+    (state: RootState) => state.categories.categories
+  );
+  const [isEditing, setEditing] = useState(false);
 
-  return(
+  return (
     <ReactModal
       isOpen={isOpen}
       contentLabel="Categories"
@@ -32,36 +40,40 @@ export default function EditCategories({ isOpen, close }: {isOpen: boolean, clos
       }}
     >
       <h3>Kategorier</h3>
-      {isEditing
-      ? <EditCategory setEdit={setEditing}/>
-      : <CategoryList categories={categories}/>}
+      {isEditing ? (
+        <EditCategory setEdit={setEditing} />
+      ) : (
+        <CategoryList categories={categories} />
+      )}
     </ReactModal>
-  )
+  );
 }
 
 interface ICategoryList {
-  categories: ICategory[]}
+  categories: ICategory[];
+}
 
-type TCategoryList = (categories: ICategory[]) => JSX.Element[]
+type TCategoryList = (categories: ICategory[]) => JSX.Element[];
 
 const CategoryList = ({ categories }: ICategoryList) => {
   return (
     <>
-      {categories.map((category, i) => 
-        <Category category={category} key={i}/>)}
+      {categories.map((category, i) => (
+        <Category category={category} key={i} />
+      ))}
     </>
-  )
-}
+  );
+};
 
-const Category = ({ category }: {category: ICategory}) => {
+const Category = ({ category }: { category: ICategory }) => {
   return (
     <div>
       <p>{category.name}</p>
       <button onClick={() => {}}>Rediger</button>
     </div>
-  )
-}
+  );
+};
 
 const EditCategory = ({ setEdit }: { setEdit: TBooleanState }) => {
-  return null
-}
+  return null;
+};

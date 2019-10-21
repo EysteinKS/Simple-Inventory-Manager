@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { globalHistory } from '@reach/router';
+import { useState, useEffect } from "react";
+import { globalHistory } from "@reach/router";
 
 const useLocation = () => {
   const initialState = {
     location: globalHistory.location,
-    navigate: globalHistory.navigate,
+    navigate: globalHistory.navigate
   };
 
   const [state, setState] = useState(initialState);

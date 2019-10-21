@@ -1,21 +1,24 @@
-import React from 'react'
+import React from "react";
 import ReactModal from "react-modal";
-import { IOrderedProduct } from '../../../redux/types';
-import ProductName from '../ProductName';
+import { IOrderedProduct } from "../../../redux/types";
+import ProductName from "../ProductName";
 ReactModal.setAppElement("#root");
 
 interface IProps {
-  isOpen: boolean
-  label: string
-  onClose: () => void
-  rows?: string
+  isOpen: boolean;
+  label: string;
+  onClose: () => void;
+  rows?: string;
 }
 
-const defaultRows = "10vh 60vh 10vh"
+const defaultRows = "10vh 60vh 10vh";
 
 const EditModal: React.FC<IProps> = ({
-  isOpen, label, onClose, 
-  rows = defaultRows, children
+  isOpen,
+  label,
+  onClose,
+  rows = defaultRows,
+  children
 }) => {
   return (
     <ReactModal
@@ -40,22 +43,24 @@ const EditModal: React.FC<IProps> = ({
     >
       {children}
     </ReactModal>
-  )
-}
+  );
+};
 
 interface OrderedProductProps {
-  product: IOrderedProduct
+  product: IOrderedProduct;
 }
 
 export const OrderedProduct: React.FC<OrderedProductProps> = ({ product }) => {
-  return(
-    <div style={{display: "grid", gridTemplateColumns: "1fr"}}>
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
       <p style={{ placeSelf: "center" }}>
-        <span><ProductName id={product.productID}/></span>
-        <span>  x{product.amount}</span>
+        <span>
+          <ProductName id={product.productID} />
+        </span>
+        <span> x{product.amount}</span>
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default EditModal
+export default EditModal;

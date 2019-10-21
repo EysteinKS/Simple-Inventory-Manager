@@ -6,9 +6,9 @@ import CompletedLoans from "./Completed/CompletedLoans";
 const Completed = () => {
   return (
     <div>
-      <CompletedOrders/>
-      <CompletedSales/>
-      <CompletedLoans/>
+      <CompletedOrders />
+      <CompletedSales />
+      <CompletedLoans />
     </div>
   );
 };

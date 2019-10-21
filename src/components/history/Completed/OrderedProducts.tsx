@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import styled, { css } from "styled-components";
 import { IOrderedProduct } from "../../../redux/types";
 
@@ -12,10 +12,12 @@ interface IOrderedProducts {
 
 const OrderedCell = styled.td`
   text-align: center;
-  ${(props: {isDeleted: boolean}) => props.isDeleted && css`
-    text-decoration: line-through;
-    color: #888;
-  `}
+  ${(props: { isDeleted: boolean }) =>
+    props.isDeleted &&
+    css`
+      text-decoration: line-through;
+      color: #888;
+    `}
 `;
 
 const OrderedProducts: React.FC<IOrderedProducts> = ({
@@ -61,7 +63,7 @@ const OrderedProducts: React.FC<IOrderedProducts> = ({
           </thead>
           <tbody>
             {orderedList}
-            <tr style={{ height: "1em" }}/>
+            <tr style={{ height: "1em" }} />
             {children}
           </tbody>
         </table>
@@ -70,4 +72,4 @@ const OrderedProducts: React.FC<IOrderedProducts> = ({
   );
 };
 
-export default OrderedProducts
+export default OrderedProducts;

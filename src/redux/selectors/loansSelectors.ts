@@ -1,9 +1,9 @@
-import { createSelector } from "reselect"
-import { RootState } from "../types"
+import { createSelector } from "reselect";
+import { RootState } from "../types";
 
-const loansSelector = (state: RootState) => state.loans.loans
+const loansSelector = (state: RootState) => state.loans.loans;
 
 export const hasActiveLoans = createSelector(
   [loansSelector],
-  (loans) => (loans.length > 0)
-)
+  loans => loans.length > 0
+);

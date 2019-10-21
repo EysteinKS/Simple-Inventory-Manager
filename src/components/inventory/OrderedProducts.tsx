@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import { IOrderedProduct, IProduct } from "../../redux/types";
 import SelectProduct from "./SelectProduct";
 import ProductName from "./ProductName";
@@ -6,14 +6,20 @@ import Icons from "../util/Icons";
 import styled from "styled-components";
 
 type TOrdered = {
-  products: IProduct[]
-  ordered: IOrderedProduct[],
-  add: (newListItem: any) => void,
-  edit: (updated: any, index: number) => void,
-  remove: (index: number) => void
-}
+  products: IProduct[];
+  ordered: IOrderedProduct[];
+  add: (newListItem: any) => void;
+  edit: (updated: any, index: number) => void;
+  remove: (index: number) => void;
+};
 
-const OrderedProducts = ({ products, ordered, add, edit, remove }: TOrdered) => {
+const OrderedProducts = ({
+  products,
+  ordered,
+  add,
+  edit,
+  remove
+}: TOrdered) => {
   return (
     <StyledWrapper>
       <StyledSection overflow="hidden">
@@ -26,11 +32,13 @@ const OrderedProducts = ({ products, ordered, add, edit, remove }: TOrdered) => 
       <StyledSection overflow="overlay">
         <StyledList>
           {ordered.map((product, i) => (
-            <OrderedProduct 
-              product={product} 
-              key={"selected_ordered_products_" + product.productID} 
-              index={i} 
-              edit={(value, index) => edit({productID: product.productID, amount: value}, index)}
+            <OrderedProduct
+              product={product}
+              key={"selected_ordered_products_" + product.productID}
+              index={i}
+              edit={(value, index) =>
+                edit({ productID: product.productID, amount: value }, index)
+              }
               remove={index => remove(index)}
             />
           ))}
@@ -44,28 +52,30 @@ const StyledList = styled.ul`
   list-style-type: none;
   padding: 0px;
   margin: 0px;
-`
+`;
 
 type TOrderedProduct = {
-  product: IOrderedProduct,
-  edit: (updated: any, index: number) => void,
-  remove: (index: number) => void,
-  index: number
-}
+  product: IOrderedProduct;
+  edit: (updated: any, index: number) => void;
+  remove: (index: number) => void;
+  index: number;
+};
 
 const OrderedProduct = ({ product, edit, remove, index }: TOrderedProduct) => {
   const { productID, amount } = product;
   const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-    event.target.select()
+    event.target.select();
   };
 
   return (
     <ProductWrapper index={index}>
-      <NameWrapper><ProductName id={productID}/></NameWrapper>
+      <NameWrapper>
+        <ProductName id={productID} />
+      </NameWrapper>
       <InputWrapper>
-        <InputButton 
+        <InputButton
           side="left"
-          onClick={() => (amount > 1) && edit(amount - 1, index)}
+          onClick={() => amount > 1 && edit(amount - 1, index)}
           tabIndex={-1}
         >
           -
@@ -76,7 +86,7 @@ const OrderedProduct = ({ product, edit, remove, index }: TOrderedProduct) => {
           onChange={e => edit(Number(e.target.value), index)}
           onFocus={handleFocus}
         />
-        <InputButton 
+        <InputButton
           side="right"
           onClick={() => edit(amount + 1, index)}
           tabIndex={-1}
@@ -85,11 +95,14 @@ const OrderedProduct = ({ product, edit, remove, index }: TOrderedProduct) => {
         </InputButton>
       </InputWrapper>
       <DeleteProduct
-        tabIndex={-1} 
+        tabIndex={-1}
         onClick={e => {
-          e.preventDefault()
-          remove(index)
-      }}><Icons.Delete/></DeleteProduct>
+          e.preventDefault();
+          remove(index);
+        }}
+      >
+        <Icons.Delete />
+      </DeleteProduct>
     </ProductWrapper>
   );
 };
@@ -100,49 +113,49 @@ const ProductWrapper = styled.div`
   height: 50px;
   column-gap: 1em;
   padding: 0.3em;
-  background-color: ${(props: {index: number}) => {
-    if(props.index % 2 === 0){
-      return "#F3F3F3"
+  background-color: ${(props: { index: number }) => {
+    if (props.index % 2 === 0) {
+      return "#F3F3F3";
     } else {
-      return "#E8E8E8"
+      return "#E8E8E8";
     }
   }};
-`
+`;
 
 const NameWrapper = styled.p`
   padding-left: 1em;
   margin: 0.7em 0;
   text-align: start;
   align-self: center;
-`
+`;
 
 const InputButton = styled.button`
-  background-color: #FFF;
+  background-color: #fff;
   font-weight: 400;
   font-size: 16px;
-  border: 1px solid #AAA;
-  border-radius: ${(props: {side: string}) => {
-    if(props.side === "left") return "0.5em 0 0 0.5em"
-    else if(props.side === "right") return "0 0.5em 0.5em 0"
-  }}
-`
+  border: 1px solid #aaa;
+  border-radius: ${(props: { side: string }) => {
+    if (props.side === "left") return "0.5em 0 0 0.5em";
+    else if (props.side === "right") return "0 0.5em 0.5em 0";
+  }};
+`;
 
 const InputField = styled.input`
   width: 100%;
-  border: 1px solid #AAA;
+  border: 1px solid #aaa;
   text-align: center;
   ::-webkit-inner-spin-button,
   ::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-`
+`;
 
 const InputWrapper = styled.div`
   display: grid;
   grid-template-columns: 1.5fr 2fr 1.5fr;
   padding: 0.2em;
-`
+`;
 
 const StyledWrapper = styled.div`
   padding: 1%;
@@ -151,11 +164,11 @@ const StyledWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 1em;
-`
+`;
 
 const DeleteProduct = styled.button`
-  border: 1px solid #AAA;
-`
+  border: 1px solid #aaa;
+`;
 
 const StyledSection = styled.div`
   background-color: #fbfbfb;
@@ -164,8 +177,8 @@ const StyledSection = styled.div`
   overflow-y: hidden;
   overflow-x: hidden;
   :hover {
-    overflow-y: ${(props: {overflow: string}) => props.overflow};
+    overflow-y: ${(props: { overflow: string }) => props.overflow};
   }
-`
+`;
 
-export default OrderedProducts
+export default OrderedProducts;

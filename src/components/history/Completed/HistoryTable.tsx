@@ -1,6 +1,10 @@
-import React from 'react'
-import Table, { ITableColumn, TableHeader, TableBody } from '../../util/SectionTable';
-import { TableButton } from './styles';
+import React from "react";
+import Table, {
+  ITableColumn,
+  TableHeader,
+  TableBody
+} from "../../util/SectionTable";
+import { TableButton } from "./styles";
 
 interface IHistoryTable {
   name: string;
@@ -38,4 +42,4 @@ const HistoryTable: React.FC<IHistoryTable> = ({ name, columns, children }) => {
   );
 };
 
-export default HistoryTable
+export default HistoryTable;

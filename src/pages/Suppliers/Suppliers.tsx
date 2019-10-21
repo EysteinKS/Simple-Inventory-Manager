@@ -1,26 +1,37 @@
-import React, { useState, useMemo } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-import { RootState, ISupplier } from '../../redux/types'
-import ReactModal from 'react-modal'
-import Icons from '../../components/util/Icons'
-import { StyledHeader, StyledDetails, IDText, EndText, StyledFooter } from '../../components/inventory/EditModals/styles'
-import SuppliersProducts from '../../components/inventory/SuppliersProducts'
-import useProducts from '../../hooks/useProducts'
-import useEditableList from '../../hooks/useEditableList'
-import { isChanged, shouldLog } from '../../constants/util'
-import { addChange } from '../../redux/actions/reportsActions'
-import { saveEditedSupplier, saveCreatedSupplier } from '../../redux/actions/suppliersActions'
-ReactModal.setAppElement("#root")
+import { RootState, ISupplier } from "../../redux/types";
+import ReactModal from "react-modal";
+import Icons from "../../components/util/Icons";
+import {
+  StyledHeader,
+  StyledDetails,
+  IDText,
+  EndText,
+  StyledFooter
+} from "../../components/inventory/EditModals/styles";
+import SuppliersProducts from "../../components/inventory/SuppliersProducts";
+import useProducts from "../../hooks/useProducts";
+import useEditableList from "../../hooks/useEditableList";
+import { isChanged, shouldLog } from "../../constants/util";
+import { addChange } from "../../redux/actions/reportsActions";
+import {
+  saveEditedSupplier,
+  saveCreatedSupplier
+} from "../../redux/actions/suppliersActions";
+ReactModal.setAppElement("#root");
 
 interface IProps {
-  isOpen: boolean
-  close: () => void
+  isOpen: boolean;
+  close: () => void;
 }
 
 export default function EditSuppliers({ isOpen, close }: IProps) {
-  const suppliers = useSelector((state: RootState) => state.suppliers.suppliers)
-  const [supplier, setSupplier] = useState(null as ISupplier | null)
+  const suppliers = useSelector(
+    (state: RootState) => state.suppliers.suppliers
+  );
+  const [supplier, setSupplier] = useState(null as ISupplier | null);
 
   return (
     <ReactModal
@@ -43,148 +54,187 @@ export default function EditSuppliers({ isOpen, close }: IProps) {
         }
       }}
     >
-      {(supplier == null) && <SupplierList suppliers={suppliers} edit={setSupplier}/>}
-      {(supplier && supplier.name) && <EditSupplier supplier={supplier} back={() => setSupplier(null)} close={close}/>}
+      {supplier == null && (
+        <SupplierList suppliers={suppliers} edit={setSupplier} />
+      )}
+      {supplier && supplier.name && (
+        <EditSupplier
+          supplier={supplier}
+          back={() => setSupplier(null)}
+          close={close}
+        />
+      )}
     </ReactModal>
-  )
+  );
 }
 
 interface SupplierListProps {
-  suppliers: ISupplier[]
-  edit: (supplier: ISupplier) => void
+  suppliers: ISupplier[];
+  edit: (supplier: ISupplier) => void;
 }
 
 const SupplierList: React.FC<SupplierListProps> = ({ suppliers, edit }) => {
-  const [add, setAdd] = useState(false)
+  const [add, setAdd] = useState(false);
 
-  return(
+  return (
     <>
       <StyledHeader>
-        <br/>
-        <h3 style={{textAlign: "center"}}>Leverandører</h3>
+        <br />
+        <h3 style={{ textAlign: "center" }}>Leverandører</h3>
       </StyledHeader>
       <div>
-        {suppliers.map(supplier => <SupplierItem key={"supplier_" + supplier.supplierID} supplier={supplier} edit={edit}/>)}
-        {(!add) ? <button onClick={() => setAdd(true)}>Legg til</button>
-        : <AddSupplier close={() => setAdd(false)}/>}
+        {suppliers.map(supplier => (
+          <SupplierItem
+            key={"supplier_" + supplier.supplierID}
+            supplier={supplier}
+            edit={edit}
+          />
+        ))}
+        {!add ? (
+          <button onClick={() => setAdd(true)}>Legg til</button>
+        ) : (
+          <AddSupplier close={() => setAdd(false)} />
+        )}
       </div>
     </>
-  )
-}
+  );
+};
 
 interface SupplierItemProps {
-  supplier: ISupplier
-  edit: (supplier: ISupplier) => void
+  supplier: ISupplier;
+  edit: (supplier: ISupplier) => void;
 }
 
 const SupplierItem: React.FC<SupplierItemProps> = ({ supplier, edit }) => {
-  return(
-    <div style={{
-      display: "grid",
-      gridTemplateColumns: "1fr 4fr 1fr"
-    }}>
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 4fr 1fr"
+      }}
+    >
       <p>{supplier.supplierID}</p>
       <p>{supplier.name}</p>
-      <button onClick={() => edit(supplier)}><Icons.Edit/></button>
+      <button onClick={() => edit(supplier)}>
+        <Icons.Edit />
+      </button>
     </div>
-  )
-}
+  );
+};
 
 const AddSupplier = ({ close }: { close: () => void }) => {
-  const nextID = useSelector((state: RootState) => state.suppliers.currentID + 1)
-  const [name, setName] = useState("")
-  const dispatch = useDispatch()
+  const nextID = useSelector(
+    (state: RootState) => state.suppliers.currentID + 1
+  );
+  const [name, setName] = useState("");
+  const dispatch = useDispatch();
 
   const save = () => {
-    dispatch(addChange({
-      type: "NEW_SUPPLIER",
-      id: nextID,
-      name,
-      section: "suppliers"
-    }))
-    dispatch(saveCreatedSupplier(name))
-    setName("")
-    close()
-  }
+    dispatch(
+      addChange({
+        type: "NEW_SUPPLIER",
+        id: nextID,
+        name,
+        section: "suppliers"
+      })
+    );
+    dispatch(saveCreatedSupplier(name));
+    setName("");
+    close();
+  };
 
-  return(
-    <div style={{
-      display: "grid",
-      gridTemplateColumns: "2fr 8fr 1fr 1fr"
-    }}>
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "2fr 8fr 1fr 1fr"
+      }}
+    >
       <p>{nextID}</p>
-      <input type="text" value={name} onChange={e => setName(e.target.value)}/>
-      <button onClick={save} disabled={(name.length < 1)}>Lagre</button>
+      <input type="text" value={name} onChange={e => setName(e.target.value)} />
+      <button onClick={save} disabled={name.length < 1}>
+        Lagre
+      </button>
       <button onClick={close}>Avbryt</button>
     </div>
-  )
-}
+  );
+};
 
 interface EditSupplierProps {
-  supplier: ISupplier
-  back: () => void
-  close: () => void
+  supplier: ISupplier;
+  back: () => void;
+  close: () => void;
 }
 
-const EditSupplier: React.FC<EditSupplierProps> = ({ supplier, back, close }) => {
-  const [products] = useProducts()
+const EditSupplier: React.FC<EditSupplierProps> = ({
+  supplier,
+  back,
+  close
+}) => {
+  const [products] = useProducts();
   const supplierProducts = useMemo(() => {
-    if(supplier.products) {
-      return supplier.products
+    if (supplier.products) {
+      return supplier.products;
     } else {
-      return [] as number[]
+      return [] as number[];
     }
-  }, [supplier])
+  }, [supplier]);
 
-  const {
-    list,
-    add: addProduct,
-    remove: removeProduct
-  } = useEditableList(supplierProducts)
+  const { list, add: addProduct, remove: removeProduct } = useEditableList(
+    supplierProducts
+  );
 
   const selected = useMemo(() => {
-    return list.sort((a, b) => a - b)
-  }, [list])
+    return list.sort((a, b) => a - b);
+  }, [list]);
 
-  shouldLog("Supplier product list: ", selected)
+  shouldLog("Supplier product list: ", selected);
 
-  const [name, setName] = useState(supplier.name)
-  const dispatch = useDispatch()
+  const [name, setName] = useState(supplier.name);
+  const dispatch = useDispatch();
 
   const save = () => {
     let returnedSupplier: ISupplier = {
       supplierID: supplier.supplierID,
       name,
       products: []
-    }
-    if(selected.length > 0){
-      returnedSupplier.products = selected
+    };
+    if (selected.length > 0) {
+      returnedSupplier.products = selected;
     }
 
-    let isSupplierChanged = isChanged(supplier, returnedSupplier)
-    if(!isSupplierChanged.isEqual) {
-      shouldLog("Changed Supplier", isSupplierChanged.changed)
-      dispatch(addChange({
-        type: "EDIT_SUPPLIER_INFO",
-        id: returnedSupplier.supplierID,
-        section: "suppliers",
-        changed: isSupplierChanged.changed
-      }))
-      dispatch(saveEditedSupplier(returnedSupplier))
+    let isSupplierChanged = isChanged(supplier, returnedSupplier);
+    if (!isSupplierChanged.isEqual) {
+      shouldLog("Changed Supplier", isSupplierChanged.changed);
+      dispatch(
+        addChange({
+          type: "EDIT_SUPPLIER_INFO",
+          id: returnedSupplier.supplierID,
+          section: "suppliers",
+          changed: isSupplierChanged.changed
+        })
+      );
+      dispatch(saveEditedSupplier(returnedSupplier));
     }
-    close()
-  }
+    close();
+  };
 
-  return(
+  return (
     <>
       <StyledHeader>
-        <button onClick={back}><Icons.ArrowBack/></button>
-        <h3 style={{textAlign: "center"}}>Rediger</h3>
+        <button onClick={back}>
+          <Icons.ArrowBack />
+        </button>
+        <h3 style={{ textAlign: "center" }}>Rediger</h3>
       </StyledHeader>
       <StyledDetails>
         <IDText>ID: {supplier.supplierID}</IDText>
         <EndText>Navn: </EndText>
-        <input type="text" value={name} onChange={e => setName(e.target.value)}/>
+        <input
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
+        />
         <IDText>Produkter</IDText>
         <SuppliersProducts
           products={products}
@@ -194,10 +244,10 @@ const EditSupplier: React.FC<EditSupplierProps> = ({ supplier, back, close }) =>
         />
       </StyledDetails>
       <StyledFooter>
-        <br/>
+        <br />
         <button onClick={save}>Lagre</button>
         <button onClick={close}>Lukk</button>
       </StyledFooter>
     </>
-  )
-}
+  );
+};

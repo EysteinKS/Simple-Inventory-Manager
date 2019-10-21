@@ -1,48 +1,60 @@
-import React, { useState, useMemo } from 'react'
-import { RootState, ILoan } from '../../../redux/types';
-import { useSelector } from 'react-redux';
-import useEditableList from '../../../hooks/useEditableList';
-import { isChanged, shouldLog } from '../../../constants/util';
-import ReactModal from 'react-modal';
-import OrderedProducts from '../OrderedProducts';
-import SelectTarget from '../SelectTarget';
-import EditModal, { OrderedProduct } from './EditModal';
-import Names from '../../Names';
-import Icons from '../../util/Icons';
-import { StyledFooter, StyledDetails, ProductWithEdit, CenteredText, TargetWithEdit, EndText, IDText, StyledHeader, ProductList } from './styles';
-import useProducts from '../../../hooks/useProducts';
-import useLoans from '../../../redux/hooks/useLoans';
+import React, { useState, useMemo } from "react";
+import { RootState, ILoan } from "../../../redux/types";
+import { useSelector } from "react-redux";
+import useEditableList from "../../../hooks/useEditableList";
+import { isChanged, shouldLog } from "../../../constants/util";
+import ReactModal from "react-modal";
+import OrderedProducts from "../OrderedProducts";
+import SelectTarget from "../SelectTarget";
+import EditModal, { OrderedProduct } from "./EditModal";
+import Names from "../../Names";
+import Icons from "../../util/Icons";
+import {
+  StyledFooter,
+  StyledDetails,
+  ProductWithEdit,
+  CenteredText,
+  TargetWithEdit,
+  EndText,
+  IDText,
+  StyledHeader,
+  ProductList
+} from "./styles";
+import useProducts from "../../../hooks/useProducts";
+import useLoans from "../../../redux/hooks/useLoans";
 
 ReactModal.setAppElement("#root");
 
 type TEditLoan = {
-  isOpen: boolean,
-  close: () => void
-}
+  isOpen: boolean;
+  close: () => void;
+};
 
-type ViewTypes = "details" | "customer" | "products"
+type ViewTypes = "details" | "customer" | "products";
 
 export default function EditLoan({ isOpen, close }: TEditLoan) {
-  const current = useSelector((state: RootState) => state.loans.currentLoan) as ILoan
-  const [products] = useProducts()
+  const current = useSelector(
+    (state: RootState) => state.loans.currentLoan
+  ) as ILoan;
+  const [products] = useProducts();
 
-  const { saveCreatedLoan, saveEditedLoan } = useLoans()
+  const { saveCreatedLoan, saveEditedLoan } = useLoans();
 
-  const [customer, setCustomer] = useState()
-  const [view, setView] = useState("details" as ViewTypes)
+  const [customer, setCustomer] = useState();
+  const [view, setView] = useState("details" as ViewTypes);
 
   const viewText = useMemo(() => {
-    switch(view){
+    switch (view) {
       case "details":
-        return "Utlån"
+        return "Utlån";
       case "customer":
-        return "Kunde"
+        return "Kunde";
       case "products":
-        return "Produkter"
+        return "Produkter";
       default:
-        return ""
+        return "";
     }
-  }, [view])
+  }, [view]);
 
   const {
     list: ordered,
@@ -50,13 +62,13 @@ export default function EditLoan({ isOpen, close }: TEditLoan) {
     edit: editProduct,
     remove: removeProduct,
     replace: setOrdered
-  } = useEditableList(current.ordered)
+  } = useEditableList(current.ordered);
 
-  const [init, setInit] = useState(false)
+  const [init, setInit] = useState(false);
   if (isOpen && !init) {
-    setCustomer(current.customerID)
-    setOrdered(current.ordered)
-    setInit(true)
+    setCustomer(current.customerID);
+    setOrdered(current.ordered);
+    setInit(true);
   }
 
   const save = () => {
@@ -67,73 +79,97 @@ export default function EditLoan({ isOpen, close }: TEditLoan) {
       dateSent: current.dateSent,
       dateReceived: current.dateReceived,
       ordered
-    }
-    if(current.isNew){
-      saveCreatedLoan(returnedLoan)
+    };
+    if (current.isNew) {
+      saveCreatedLoan(returnedLoan);
     } else {
-      let isLoanChanged = isChanged(current, returnedLoan)
-      if(!isLoanChanged.isEqual){
-        shouldLog("Changed loan content", isLoanChanged.changed)
-        saveEditedLoan(returnedLoan, isLoanChanged.changed)
+      let isLoanChanged = isChanged(current, returnedLoan);
+      if (!isLoanChanged.isEqual) {
+        shouldLog("Changed loan content", isLoanChanged.changed);
+        saveEditedLoan(returnedLoan, isLoanChanged.changed);
       }
     }
-    close()
-    setInit(false)
-  }
+    close();
+    setInit(false);
+  };
 
   return (
-    <EditModal
-      isOpen={isOpen}
-      label="Edit Loan"
-      onClose={close}
-    >
+    <EditModal isOpen={isOpen} label="Edit Loan" onClose={close}>
       <StyledHeader>
-        {(view === "details")
-          ? <br/>
-          : <button onClick={() => setView("details")}><Icons.ArrowBack/></button>
-        }
+        {view === "details" ? (
+          <br />
+        ) : (
+          <button onClick={() => setView("details")}>
+            <Icons.ArrowBack />
+          </button>
+        )}
         <CenteredText>{viewText}</CenteredText>
       </StyledHeader>
-      {(view === "details") &&
-      <StyledDetails>
-        <IDText>ID: {current.loanID}</IDText>
-        <EndText>Kunde:</EndText>
-        <TargetWithEdit>
-          <p><Names target="customers" id={customer}/></p>
-          <button onClick={() => setView("customer")}><Icons.Edit/></button>
-        </TargetWithEdit>
-        <ProductWithEdit>
-          <CenteredText style={{ gridColumn: "2/3" }}>Produkter</CenteredText>
-          <button onClick={() => setView("products")}><Icons.Edit/></button>
-        </ProductWithEdit>
-        <ProductList>
-          {ordered.map(product => <OrderedProduct key={"ordered_product_" + product.productID} product={product}/>)}
-        </ProductList>
-      </StyledDetails>}
-      {(view === "customer") &&
-      <SelectTarget type="customers" select={(id) => {
-        setCustomer(id)
-        setView("details")
-      }}/>}
-      {(view === "products") &&
-      <OrderedProducts
-        products={products}
-        ordered={ordered}
-        add={productID => addProduct({productID, amount: 1})}
-        edit={(product, index) => editProduct(product, index)}
-        remove={productID => removeProduct(productID)}
-      />}
+      {view === "details" && (
+        <StyledDetails>
+          <IDText>ID: {current.loanID}</IDText>
+          <EndText>Kunde:</EndText>
+          <TargetWithEdit>
+            <p>
+              <Names target="customers" id={customer} />
+            </p>
+            <button onClick={() => setView("customer")}>
+              <Icons.Edit />
+            </button>
+          </TargetWithEdit>
+          <ProductWithEdit>
+            <CenteredText style={{ gridColumn: "2/3" }}>Produkter</CenteredText>
+            <button onClick={() => setView("products")}>
+              <Icons.Edit />
+            </button>
+          </ProductWithEdit>
+          <ProductList>
+            {ordered.map(product => (
+              <OrderedProduct
+                key={"ordered_product_" + product.productID}
+                product={product}
+              />
+            ))}
+          </ProductList>
+        </StyledDetails>
+      )}
+      {view === "customer" && (
+        <SelectTarget
+          type="customers"
+          select={id => {
+            setCustomer(id);
+            setView("details");
+          }}
+        />
+      )}
+      {view === "products" && (
+        <OrderedProducts
+          products={products}
+          ordered={ordered}
+          add={productID => addProduct({ productID, amount: 1 })}
+          edit={(product, index) => editProduct(product, index)}
+          remove={productID => removeProduct(productID)}
+        />
+      )}
       <StyledFooter>
-        <div/>
-        <button 
-          onClick={save} 
-          disabled={(customer === "new" || view === "customer" || ordered.length < 1)}
-        >Lagre</button>
-        <button onClick={() => {
-          close()
-          setInit(false)
-        }}>Lukk</button>
+        <div />
+        <button
+          onClick={save}
+          disabled={
+            customer === "new" || view === "customer" || ordered.length < 1
+          }
+        >
+          Lagre
+        </button>
+        <button
+          onClick={() => {
+            close();
+            setInit(false);
+          }}
+        >
+          Lukk
+        </button>
       </StyledFooter>
     </EditModal>
-  )
+  );
 }
