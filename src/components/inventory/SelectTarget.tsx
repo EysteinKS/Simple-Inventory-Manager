@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   RootState,
@@ -49,7 +49,14 @@ const SelectTarget: React.FC<IProps> = ({ type, select }) => {
 
   //SEARCH & SORT
   const [sorting, setSorting] = useState([null, null] as any[]);
-  const { sortedList, sortFunc } = useSortableList(targets);
+  const { sortedList, setList, sortFunc } = useSortableList(targets);
+
+  useEffect(() => {
+    if(targets.length !== sortedList.length){
+      setList(targets)
+    }
+  }, [targets])
+
   const sortList = (dir: TDirections, index: number, func: Function) =>
     sortFunc(setSorting)(dir, index, func, sorting);
 
