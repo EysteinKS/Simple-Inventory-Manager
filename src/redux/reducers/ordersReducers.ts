@@ -42,7 +42,6 @@ export default (
 
       case action.SAVE_CREATED_ORDER:
         draft.orders.push(payload);
-        draft.sortedOrders.push(payload);
         draft.currentOrder = {};
         draft.isSaved = false;
         draft.currentID = payload.orderID;
@@ -74,14 +73,6 @@ export default (
       case action.TOGGLE_ORDER:
         draft.orders[payload - 1].active = !state.orders[payload - 1].active;
         draft.isSaved = false;
-        break;
-
-      case action.SORT_ORDERS:
-        draft.sortedOrders.sort(payload);
-        break;
-
-      case action.FILTER_ORDERS:
-        draft.sortedOrders = draft.orders.filter(payload);
         break;
 
       case action.RECEIVED_ORDER:

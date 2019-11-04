@@ -155,6 +155,7 @@ const Report: React.FC = () => {
           })}
         </ReportTable>
         {/* Loans */}
+        {report.loans &&
         <ReportTable
           name="Loans"
           columns={[
@@ -194,6 +195,7 @@ const Report: React.FC = () => {
             );
           })}
         </ReportTable>
+        }
         <ReportTable
           name="Changelog"
           columns={[

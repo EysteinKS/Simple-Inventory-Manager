@@ -275,9 +275,9 @@ export interface IReport {
 }
 
 export interface IDate {
-  year: string;
-  month: string;
-  day: string;
+  year: string | number;
+  month: string | number;
+  day: string | number;
 }
 
 export interface IbyDate {
