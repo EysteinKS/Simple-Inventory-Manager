@@ -1,67 +1,57 @@
 import React, { useState, FormEvent, ChangeEvent } from "react";
-import { useDispatch } from "react-redux";
-import { userLoggingIn } from "../redux/actions/authActions";
-import { auth } from "../firebase/firebase";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
+import { TLogin } from "../hooks/useInitialization";
+import styled from "styled-components";
+import { navigate } from "@reach/router";
 
-type TLogin = {
-  setMessage: (message: string) => void;
+type IProps = {
+  doLogin: TLogin;
 };
 
-export default function Login({ setMessage }: TLogin) {
-  const [error, setError] = useState(null as boolean | null);
-  const dispatch = useDispatch();
-  const onLogin = (m: string) => {
-    setMessage(m);
-    dispatch(userLoggingIn());
-  };
+//TODO
+//ADD BUTTON AND PAGE FOR PASSWORD RESETTING
 
+export default function Login({ doLogin }: IProps) {
   return (
     <>
       <Typography variant="h3" style={{ justifySelf: "center" }}>
         Innlogging
       </Typography>
-      <LoginForm message={onLogin} setError={bool => setError(bool)} />
-      {error && <Typography>{error}</Typography>}
+      <LoginForm doLogin={doLogin} />
     </>
   );
 }
 
 type TLoginForm = {
-  message: (m: string) => void;
-  setError: (bool: boolean) => void;
+  doLogin: TLogin;
 };
 
-const LoginForm = ({ message, setError }: TLoginForm) => {
+const LoginForm = ({ doLogin }: TLoginForm) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null as string | null);
+  const [loggingIn, setLoggingIn] = useState(false);
 
-  const login = (e: FormEvent<HTMLFormElement>) => {
+  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+    setError(null);
+    setLoggingIn(true);
     e.preventDefault();
-    message("Logging in...");
-    auth.signInWithEmailAndPassword(email, password).catch(err => {
-      setError(err.message);
+    doLogin(email, password, () => {
+      setLoggingIn(false);
+      setError("Brukernavn eller passord er ugyldig");
     });
   };
 
-  const formStyle = {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    padding: "2vw 10vw 2vw 10vw",
-    columnGap: "5vw"
-  };
   const emailStyle = {
-    gridColumn: "1/3"
+    gridColumn: "1/3",
+    gridRow: "2/3"
   };
   const passwordStyle = {
-    gridColumn: "3/5"
-  };
-  const submitStyle = {
-    gridColumn: "1/5",
-    justifySelf: "center",
-    marginTop: "1vw"
+    gridColumn: "3/5",
+    gridRow: "2/3"
   };
 
   const handleEmail = (e: ChangeEvent<HTMLInputElement>) => {
@@ -72,9 +62,14 @@ const LoginForm = ({ message, setError }: TLoginForm) => {
     setPassword(e.target.value);
   };
 
+  const handleForgotPW = () => {
+    navigate("/forgot");
+  };
+
   //https://medium.com/paul-jaworski/turning-off-autocomplete-in-chrome-ee3ff8ef0908
   return (
-    <form style={formStyle} onSubmit={login} autoComplete="new-password">
+    <StyledForm onSubmit={handleLogin} autoComplete="new-password">
+      {error && <ErrorMessage>{error}</ErrorMessage>}
       <TextField
         autoFocus
         style={emailStyle}
@@ -95,7 +90,56 @@ const LoginForm = ({ message, setError }: TLoginForm) => {
         data-minlength="8"
         autoComplete="new-password"
       />
-      <input style={submitStyle} type="submit" value="Logg inn" />
-    </form>
+      <FormBottom>
+        {loggingIn ? (
+          <CircularProgress style={{ placeSelf: "center" }} />
+        ) : (
+          <LoginButton>Logg inn</LoginButton>
+        )}
+        <ForgotPassword onClick={handleForgotPW}>Glemt passord?</ForgotPassword>
+      </FormBottom>
+    </StyledForm>
   );
 };
+
+const StyledForm = styled.form`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 7vh);
+  padding: 2vh 10vw;
+  column-gap: 5vw;
+`;
+
+const ErrorMessage = styled.p`
+  color: #c72222de;
+  text-align: center;
+  grid-column: span 4;
+`;
+
+const FormBottom = styled.div`
+  margin-top: 1em;
+  grid-column: span 4;
+  grid-row: 3/4;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  & > * {
+    margin: 0.5em;
+  }
+`;
+
+const ForgotPassword = styled.p`
+  text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
+  color: #666;
+  justify-self: center;
+`;
+
+const LoginButton = styled.button`
+  border-radius: 0;
+  justify-self: center;
+  width: auto;
+  padding: 0.5em 1em;
+  font-size: 16px;
+`;

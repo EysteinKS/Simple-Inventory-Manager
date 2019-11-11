@@ -8,7 +8,8 @@ import {
   setLocationLogo,
   setAllLastChanged,
   userSignedOut,
-  setNewChanges
+  setNewChanges,
+  userLoggingIn
 } from "../redux/actions/authActions";
 
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -18,6 +19,12 @@ import { ClientData } from "../firebase/types";
 import { getInventory } from "../redux/middleware/firestore";
 import { parseDate } from "../constants/util";
 import { listenToUpdates } from "../firebase/Subscription";
+
+export type TLogin = (
+  email: string,
+  password: string,
+  onError: () => void
+) => void;
 
 export default function useInitialization() {
   const [user, initializingUser] = useAuthState(auth);
@@ -102,12 +109,25 @@ export default function useInitialization() {
     //eslint-disable-next-line
   }, [isLoadedGate]);
 
+  const login: TLogin = (email, password, onError) => {
+    setLoadingMessage("Logging in...");
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        dispatch(userLoggingIn());
+      })
+      .catch(err => {
+        onError();
+      });
+  };
+
   return {
     loading: loading,
     isLoadedGate,
     loadingErrorGate,
     loadingMessage,
     setLoadingMessage,
+    login,
     loggedIn: Boolean(user)
   };
 }

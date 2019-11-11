@@ -5,6 +5,8 @@ import { PageLoading, NoTextLoading } from "./components/util/PageLoading";
 import TableSkeleton from "./components/util/TableSkeleton";
 import NotFound from "./pages/NotFound";
 import Login from "./components/Login";
+import ForgotPassword from "./components/ForgotPassword"
+import { TLogin } from "./hooks/useInitialization";
 
 const Products = React.lazy(() => import("./pages/Products"));
 const Orders = React.lazy(() => import("./pages/Orders"));
@@ -80,26 +82,31 @@ export const AuthRouter: FC = () => {
 };
 
 interface NonAuthRouteProps {
-  setMessage: (message: string) => void;
+  login: TLogin;
 }
 
-export const NonAuthRouter: FC<NonAuthRouteProps> = ({ setMessage }) => {
+export const NonAuthRouter: FC<NonAuthRouteProps> = ({ login }) => {
   return (
     <Router primary={false}>
-      <NonAuthPage setMessage={setMessage} default />
+      <RoutePage 
+        component={ForgotPassword}
+        path={routes.FORGOT_PASSWORD}
+        fallback={NoTextLoading}
+      />
+      <NonAuthPage login={login} default/>
     </Router>
   );
 };
 
 interface NonAuthProps {
-  setMessage: (message: string) => void;
+  login: TLogin;
   default: boolean;
 }
 
-const NonAuthPage: FC<NonAuthProps> = ({ setMessage }) => {
+const NonAuthPage: FC<NonAuthProps> = ({ login }) => {
   return (
     <div style={{ margin: "5vh 10vw 10vh 10vw", display: "grid" }}>
-      <Login setMessage={setMessage} />
+      <Login doLogin={login}/>
     </div>
   );
 };
@@ -109,21 +116,21 @@ interface MainRouterProps {
   loading: boolean;
   isLoaded: boolean;
   message: string;
-  setMessage: (message: string) => void;
+  login: TLogin;
 }
 
 const MainRouter = ({
   loggedIn,
   isLoaded,
   message,
-  setMessage
+  login
 }: MainRouterProps) => {
   if (loggedIn && isLoaded) {
     return <AuthRouter />;
   } else if (loggedIn && !isLoaded) {
     return <PageLoading message={message} />;
   } else {
-    return <NonAuthRouter setMessage={setMessage} />;
+    return <NonAuthRouter login={login}/>;
   }
 };
 

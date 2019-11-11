@@ -7,3 +7,4 @@ export const SIGN_IN = "/signin";
 export const LOANS = "/loans";
 export const ADMIN = "/admin";
 export const PROFILE = "/profile";
+export const FORGOT_PASSWORD = "/forgot";

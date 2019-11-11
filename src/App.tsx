@@ -13,7 +13,7 @@ const App: FC = () => {
     isLoadedGate,
     loadingErrorGate,
     loadingMessage,
-    setLoadingMessage,
+    login,
     loggedIn
   } = useInitialization();
 
@@ -47,7 +47,7 @@ const App: FC = () => {
               loading={loading}
               isLoaded={isLoadedGate}
               message={loadingMessage}
-              setMessage={setLoadingMessage}
+              login={login}
             />
           )}
         </section>
