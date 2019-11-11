@@ -33,3 +33,10 @@ export const SectionText = styled.h4`
   align-self: center;
   justify-self: center;
 `;
+
+export const NonAuthTitle = styled.h2`
+  margin: 0;
+  justify-self: start;
+  align-self: center;
+  padding-left: 0.5em;
+`;

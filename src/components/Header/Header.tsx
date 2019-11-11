@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 
 import { RootState } from "../../redux/types";
-import { HeaderWrapper } from "./styles";
+import { HeaderWrapper, NonAuthTitle } from "./styles";
 import LocationSelector from "./LocationSelector";
 import UserSelector from "./UserSelector";
 import SectionSelector from "./SectionSelector";
@@ -25,7 +25,7 @@ export default function Header({ locationIsLoaded }: THeader) {
 
   return (
     <HeaderWrapper bckColor={bckColor}>
-      {locationIsLoaded ? <AuthHeader /> : <div />}
+      {locationIsLoaded ? <AuthHeader /> : <NonAuthHeader />}
     </HeaderWrapper>
   );
 }
@@ -39,3 +39,11 @@ const AuthHeader = () => {
     </>
   );
 };
+
+const NonAuthHeader = () => {
+  return(
+    <>
+      <NonAuthTitle>Lagerstyring</NonAuthTitle>
+    </>
+  )
+}
