@@ -128,7 +128,7 @@ export default (
         orderToUndo.dateReceived = null;
         orderToUndo.isDeleted = false;
 
-        draft.orders = insertIntoArray(draft.orders, orderToUndo, "orderID");
+        draft.orders = insertIntoArray(state.orders, orderToUndo, "orderID");
         draft.isSaved = false;
         break;
 

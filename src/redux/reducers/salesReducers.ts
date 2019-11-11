@@ -114,7 +114,7 @@ export default (
       case action.UNDO_SALE:
         //FIND SALE AND REMOVE FROM HISTORY
         let historyIndex: number = 0;
-        let saleToUndo = draft.history.find((sale, index) => {
+        let saleToUndo = state.history.find((sale, index) => {
           if (sale.saleID === payload) {
             historyIndex = index;
           }
@@ -125,7 +125,7 @@ export default (
         saleToUndo.isDeleted = false;
 
         //INSERT SALE TO SALES
-        draft.sales = insertIntoArray(draft.sales, saleToUndo, "saleID");
+        draft.sales = insertIntoArray(state.sales, saleToUndo, "saleID");
         draft.isSaved = false;
         break;
     }

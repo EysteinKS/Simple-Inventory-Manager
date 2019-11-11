@@ -14,5 +14,7 @@ export function insertIntoArray<T, K extends keyof T>(
 ): T[] {
   const foundIndex = array.findIndex(item => item[key] > obj[key]);
   const indexToInsert = foundIndex === -1 ? array.length - 1 : foundIndex;
-  return array.splice(indexToInsert, 0, obj);
+  const newArray = [...array];
+  newArray.splice(indexToInsert, 0, obj);
+  return newArray;
 }
