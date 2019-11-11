@@ -38,7 +38,7 @@ const ForgotPassword = () => {
     >
       <BackWrapper>
         <BackButton onClick={() => navigate("/")}>
-          {"Tilbake til innlogging"}
+          {"Gå tilbake"}
         </BackButton>
       </BackWrapper>
       <Heading>Glemt Passord</Heading>

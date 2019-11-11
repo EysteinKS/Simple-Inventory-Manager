@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/types";
-import { firestore } from "../../firebase/firebase";
-import { shouldLog } from "../../constants/util";
-import { clearLocalStorage } from "../../redux/middleware/localStorage";
-import { resetRedux } from "../../redux/actions";
-import { navigate } from "@reach/router";
-import { changeUserLocation } from "../../firebase/user";
 import styled from "styled-components";
+import ChangeLocation from "../../components/profile/ChangeLocation"
+import ChangePassword from "../../components/profile/ChangePassword"
 
 export default function Profile() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -20,6 +16,7 @@ export default function Profile() {
         {edit ? "Lagre" : "Endre"}
       </StyledEditButton>
       <UserData edit={edit} />
+      <ChangePassword/>
       {user.locations.length > 1 && <ChangeLocation />}
     </div>
   );
@@ -99,65 +96,3 @@ const StyledUserDataForm = styled.form`
   grid-template-columns: 1fr 1fr;
   column-gap: 2em;
 `;
-
-const ChangeLocation = () => {
-  const currentLocation = useSelector(
-    (state: RootState) => state.auth.user.currentLocation
-  );
-  const locations = useSelector(
-    (state: RootState) => state.auth.user.locations
-  );
-  const [location, setLocation] = useState(currentLocation);
-  const dispatch = useDispatch();
-
-  const [isLoaded, setLoaded] = useState(false);
-  const [clients, setClients] = useState({} as { [key: string]: string });
-  useEffect(() => {
-    firestore
-      .doc("Clients/clients")
-      .get()
-      .then(res => {
-        const data = res.data() as any;
-        setClients(data.byID);
-        setLoaded(true);
-      })
-      .catch(err => shouldLog("Error getting clients", err));
-  }, []);
-
-  const changeLocation = async () => {
-    try {
-      await changeUserLocation(location);
-      await dispatch(resetRedux());
-      await clearLocalStorage();
-      navigate("/");
-      window.location.reload();
-    } catch (err) {
-      shouldLog(err);
-    }
-  };
-
-  if (!isLoaded) return <p>Loading...</p>;
-
-  return (
-    <form
-      style={{ display: "grid" }}
-      onSubmit={event => event.preventDefault()}
-    >
-      <h3 style={{ textAlign: "center" }}>Avdeling</h3>
-      <select
-        style={{ placeSelf: "center" }}
-        value={location}
-        onChange={e => setLocation(e.target.value)}
-      >
-        {locations.map((l, i) => (
-          <option key={"location_" + i} value={l}>
-            {clients[l]}
-          </option>
-        ))}
-      </select>
-      <StyledEditButton onClick={changeLocation}>
-        Endre avdeling
-      </StyledEditButton>
-    </form>
-  );
-};
