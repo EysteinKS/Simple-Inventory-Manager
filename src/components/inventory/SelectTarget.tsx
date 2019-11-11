@@ -52,10 +52,10 @@ const SelectTarget: React.FC<IProps> = ({ type, select }) => {
   const { sortedList, setList, sortFunc } = useSortableList(targets);
 
   useEffect(() => {
-    if(targets.length !== sortedList.length){
-      setList(targets)
+    if (targets.length !== sortedList.length) {
+      setList(targets);
     }
-  }, [targets])
+  }, [targets, setList, sortedList.length]);
 
   const sortList = (dir: TDirections, index: number, func: Function) =>
     sortFunc(setSorting)(dir, index, func, sorting);
