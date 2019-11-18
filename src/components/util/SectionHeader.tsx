@@ -1,38 +1,42 @@
-import React, { useState, useMemo, ReactNode, MouseEvent, FC } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/types";
+import React, { useState, ReactNode, MouseEvent, FC } from "react";
+import styled from "styled-components";
+import useAuthLocation from "../../hooks/useAuthLocation";
 
 export default function SectionHeader({ children }: { children: ReactNode }) {
-  const defaultColor = "#a9a9a9";
-  const primaryColor = useSelector(
-    (state: RootState) => state.auth.location.primaryColor
-  );
-  const bckColor = useMemo(() => {
-    if (primaryColor) {
-      return primaryColor;
-    } else {
-      return defaultColor;
-    }
-  }, [primaryColor]);
+  const { secondary } = useAuthLocation()
 
   return (
-    <header
-      style={{
-        display: "block",
-        borderBottom: "gray 1px solid",
-        borderRadius: "15px 15px 0px 0px",
-        backgroundColor: bckColor,
-        paddingTop: "1vh"
-      }}
-    >
+    <StyledHeader bckColor={secondary}>
       {children}
-    </header>
+    </StyledHeader>
   );
 }
 
-export const Title = ({ children }: { children: ReactNode }) => {
-  return <h1>{children}</h1>;
-};
+const StyledHeader = styled.header`
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  background-color: ${(props: {bckColor: (string | null)}) => props.bckColor ? props.bckColor : "#a9a9a9"}
+`
+
+export const Title = styled.h1`
+  margin: 0;
+  text-align: center;
+  padding-left: 1em;
+  color: #000B;
+`
+
+export const HeaderTop = styled.div`
+  width: 100%;
+  display: flex;
+  place-items: center;
+  justify-content: space-between;
+  border-bottom: 1.2px solid #0003;
+`
+
+export const HeaderButtons = styled.div`
+  margin-right: 1em;
+  display: flex;
+`
 
 export const Row = ({
   grid,
@@ -79,48 +83,26 @@ export const ColumnSplitter = () => {
       data-size="500"
       style={{
         height: "5vh",
-        borderLeft: "1px black solid",
+        borderLeft: "1px solid #0003",
         borderRight: "none"
       }}
     />
   );
 };
 
-export const Key = ({ children }: { children: ReactNode }) => {
-  return <p>{children}</p>;
-};
-
 interface IButton {
-  onClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  border?: string
 }
 
-export const KeyButton: FC<IButton> = ({ children, onClick }) => {
-  const withoutBorder = { border: "none", padding: "16px", background: "none" };
+export const KeyButton: FC<IButton> = ({ children, onClick, ...rest }) => {
 
   return (
-    <button onClick={onClick} style={withoutBorder}>
+    <StyledButton onClick={onClick} {...rest}>
       {children}
-    </button>
+    </StyledButton>
   );
 };
-
-/* export const SortingKey = ({ children, target, sorting }) => {
-  const withoutBorder = {border: "none", padding: "16px", background: "none"}
-  const dispatch = useDispatch()
-  const [currentDirection, setDirection] = useState("asc");
-
-  return(
-    <button 
-      onClick={() => {
-        setDirection(currentDirection === "asc" ? "desc" : "asc")
-        dispatch(target(sorting(currentDirection)))
-      }}
-      style={withoutBorder}
-    >
-      {children}{currentDirection === "asc" ? "↓" : "↑"}
-    </button>
-  )
-} */
 
 export type TDirections = "asc" | "desc" | null;
 interface ISortingKey {
@@ -131,9 +113,9 @@ interface ISortingKey {
 export const SortingKey: FC<ISortingKey> = ({
   children,
   onClick,
-  style = {}
+  style = {},
+  ...rest
 }) => {
-  const withoutBorder = { border: "none", padding: "16px", background: "none" };
   const [direction, setDirection] = useState(null as TDirections);
 
   const getNextDirection = (currentDir: TDirections) => {
@@ -152,15 +134,73 @@ export const SortingKey: FC<ISortingKey> = ({
   };
 
   return (
-    <button
-      style={{ ...withoutBorder, ...style }}
+    <StyledButton
+      style={{...style}}
       onClick={() => {
         let nextDir: TDirections = getNextDirection(direction);
         changeDirection(nextDir);
         onClick(nextDir);
       }}
+      {...rest}
     >
       {children} {direction === "asc" ? "↓" : direction === "desc" ? "↑" : null}
-    </button>
+    </StyledButton>
   );
 };
+
+export const HeaderButton = styled.button`
+  display: flex;
+  justify-content: space-evenly;
+  height: 35px;
+  width: 70px;
+  margin: 0 0 0 0.5em;
+  border-radius: 5px;
+  border: 1px solid #0004;
+  border-bottom: 2px solid #0006;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.5);
+  :hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: #0009;
+    border-bottom: 1px solid #0004;
+  };
+  :focus {
+    outline: none;
+  }
+`
+
+export const Key = styled.p`
+  cursor: help;
+  margin: 0;
+  padding: 16px;
+  color: #000A;
+  :hover {
+    color: rgba(255, 255, 255, 0.2);
+  }
+`
+
+const StyledButton = styled.button`
+  display: flex;
+  justify-content: center;
+  color: #000A;
+  border: none;
+  padding: 0;
+  height: 100%;
+  background: none;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 400;
+  ${(props: {border?: string}) => {
+    if(props.border && props.border === "left"){
+      return "border-left: 1px solid #0001;"
+    } else {
+      return "border-right: 1px solid #0001;"
+    }
+  }}
+  :hover {
+    color: rgba(255, 255, 255, 0.2);
+  };
+  :focus {
+    outline: none;
+  };
+`

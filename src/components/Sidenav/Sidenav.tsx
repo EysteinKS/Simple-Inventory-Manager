@@ -29,7 +29,7 @@ const Sidenav: React.FC<IProps> = ({ isOpen, close }) => {
       { name: "Bestillinger", linkTo: routes.ORDERS, icon: <Icons.Archive /> },
       { name: "Salg", linkTo: routes.SALES, icon: <Icons.Unarchive /> },
       { name: "Utlån", linkTo: routes.LOANS, icon: <Icons.Cached /> },
-      { name: "Logg", linkTo: routes.HISTORY, icon: <Icons.AccessTime /> },
+      { name: "Logg", linkTo: routes.HISTORY, icon: <Icons.History /> },
       { name: "Profil", linkTo: routes.PROFILE, icon: <Icons.AccountCircle /> }
     ];
 

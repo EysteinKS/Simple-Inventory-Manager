@@ -9,30 +9,18 @@ import SectionHeader, {
   RowSplitter,
   SortingKey,
   ColumnSplitter,
-  Key
+  Key,
+  HeaderTop,
+  HeaderButtons,
+  HeaderButton
 } from "../../components/util/SectionHeader";
-import styled from "styled-components";
 import { sort, isArrayEmpty } from "../../constants/util";
-import CloudStatus from "../../components/util/CloudStatus";
 import Icons from "../../components/util/Icons";
 import EditLoan from "../../components/inventory/EditModals/EditLoan";
 import useLoans from "../../redux/hooks/useLoans";
 import Loan from "./Loan";
-import { TableWrapper } from "../../styles/table";
-
-/*
-TODO
-
-CREATE SIMILAR PAGE TO ORDERS AND SALES, BUT SPLIT BY ORDERED AND SENT
-NEEDS BUTTON TO SEND AND TO RECEIVE
-
-*/
-
-const MainButton = styled.button`
-  height: 75%;
-  width: 75%;
-  border-radius: 15px;
-`;
+import { TableWrapper, ListWrapper } from "../../styles/table";
+import { Tooltip } from "../../components/util/HoverInfo";
 
 export default function Loans() {
   const loans = useSelector((state: RootState) => state.loans);
@@ -53,67 +41,93 @@ export default function Loans() {
   const sortList = (dir: TDirections, index: number, func: Function) =>
     sortFunc(setSorting)(dir, index, func, sorting);
 
-  const NewLoanButton = () => (
-    <MainButton
-      onClick={() => {
-        createNewLoan();
-        setLoanOpen(true);
-      }}
-    >
-      Legg til
-    </MainButton>
-  );
+  const handleNewLoan = () => {
+    createNewLoan();
+    setLoanOpen(true);
+  };
 
   return (
     <TableWrapper>
       <SectionHeader>
-        <Row grid="15% 15% 43.5% 14.5% 12%">
-          <NewLoanButton />
-          <div />
+        <HeaderTop>
           <Title>Utlån</Title>
-          <div />
-          <CloudStatus />
-        </Row>
-        <RowSplitter />
-        <Row grid="10% 1% 10% 1% 10% 1% 10% 1% 15%">
-          <SortingKey onClick={dir => sortList(dir, 0, sort.by("loanID", dir))}>
+          <HeaderButtons>
+            <HeaderButton
+              onClick={handleNewLoan}
+              data-tip
+              data-for={"loans_header_add"}
+            >
+              <Icons.Add />
+            </HeaderButton>
+            <Tooltip handle={"loans_header_add"}>Nytt utlån</Tooltip>
+
+            <HeaderButton data-tip data-for={"loans_header_customers"}>
+              <Icons.Business />
+              <Icons.List />
+            </HeaderButton>
+            <Tooltip handle={"loans_header_customers"}>Kunder</Tooltip>
+          </HeaderButtons>
+        </HeaderTop>
+
+        <Row grid="10% repeat(3, 15%) 10%">
+          <SortingKey
+            onClick={dir => sortList(dir, 0, sort.by("loanID", dir))}
+            data-tip
+            data-for={"loans_header_id"}
+          >
             #
           </SortingKey>
-          <ColumnSplitter />
+          <Tooltip handle={"loans_header_id"}>ID</Tooltip>
+
           <SortingKey
             onClick={dir =>
               sortList(dir, 1, sort.byCustomer(customers.customers, dir))
             }
+            data-tip
+            data-for={"loans_header_customer"}
           >
             <Icons.Business />
           </SortingKey>
-          <ColumnSplitter />
+          <Tooltip handle={"loans_header_customer"}>Kunde</Tooltip>
+
           <SortingKey
             onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}
+            data-tip
+            data-for={"loans_header_ordered"}
           >
             <Icons.AccessTime />
           </SortingKey>
-          <ColumnSplitter />
+          <Tooltip handle={"loans_header_ordered"}>Dato bestilt</Tooltip>
+
           <SortingKey
             onClick={dir => sortList(dir, 2, sort.by("dateSent", dir))}
+            data-tip
+            data-for={"loans_header_sent"}
           >
             <Icons.Unarchive />
           </SortingKey>
-          <ColumnSplitter />
-          <Key>
+          <Tooltip handle={"loans_header_sent"}>Dato sendt</Tooltip>
+
+          <Key data-tip data-for={"loans_header_amount"}>
             <Icons.ShoppingCart />
           </Key>
+          <Tooltip handle={"loans_header_amount"}>Antall produkter</Tooltip>
         </Row>
       </SectionHeader>
-      {isArrayEmpty(sortedList) ? null : (
-        <List
-          list={sortedList}
-          edit={id => {
-            editLoan(id);
-            setLoanOpen(true);
-          }}
-        />
-      )}
+      <ListWrapper>
+        {sortedList &&
+          sortedList.map((loan, index) => (
+            <Loan
+              key={"loans_" + index}
+              loan={loan}
+              edit={id => {
+                editLoan(id);
+                setLoanOpen(true);
+              }}
+              index={index}
+            />
+          ))}
+      </ListWrapper>
       {isLoanOpen && (
         <EditLoan
           isOpen={isLoanOpen}
@@ -126,19 +140,3 @@ export default function Loans() {
     </TableWrapper>
   );
 }
-
-type TList = {
-  list: ILoan[];
-  edit: (id: number) => void;
-};
-
-const List = ({ list, edit }: TList) => {
-  if (!list) return <div>No loans found!</div>;
-  return (
-    <div>
-      {list.map((loan, i) => (
-        <Loan key={"loans_" + i} loan={loan} edit={edit} index={i} />
-      ))}
-    </div>
-  );
-};

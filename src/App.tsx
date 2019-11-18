@@ -33,8 +33,8 @@ const App: FC = () => {
             height: "100%",
             overflow: "overlay",
             overflowX: "hidden",
-            marginTop: "5vh",
-            background: "linear-gradient(-10deg, #e3e3e3, #FFF)"
+            marginTop: "44px",
+            background: "#e4e4e4"
           }}
         >
           {loading ? (

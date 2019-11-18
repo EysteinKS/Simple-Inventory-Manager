@@ -1,12 +1,13 @@
 import React from "react";
 import SectionHeader, {
   Row,
-  RowSplitter,
-  Key,
-  ColumnSplitter
+  HeaderButton,
+  HeaderTop,
+  Title,
+  HeaderButtons,
+  KeyButton
 } from "./SectionHeader";
 import styled from "styled-components";
-import CloudStatus from "./CloudStatus";
 import Icons from "./Icons";
 import { TableWrapper } from "../../styles/table";
 
@@ -18,25 +19,23 @@ const TableSkeleton: React.FC<IProps> = ({ title }) => {
   return (
     <TableWrapper>
       <SectionHeader>
-        <Row grid="15% 15% 43.5% 14.5% 12%">
-          <SkeletonButton />
-          <SkeletonButton />
-          <h1 style={{ placeSelf: "center" }}>{title}</h1>
-          <br />
-          <CloudStatus />
-        </Row>
-        <RowSplitter />
-        <Row grid="10% 1% 10% 1% 10% 1% 10% 1% 56%">
-          <Key>#</Key>
-          <ColumnSplitter />
-          <Key>
+        <HeaderTop>
+          <Title>{title}</Title>
+          <HeaderButtons>  
+            <HeaderButton />
+            <HeaderButton />
+          </HeaderButtons>
+        </HeaderTop>
+        <Row grid="repeat(4, 10%) 60%">
+          <KeyButton>#</KeyButton>
+
+          <KeyButton>
             <Icons.FormatQuote />
-          </Key>
-          <ColumnSplitter />
-          <Key>...</Key>
-          <ColumnSplitter />
-          <Key>...</Key>
-          <ColumnSplitter />
+          </KeyButton>
+
+          <KeyButton>...</KeyButton>
+
+          <KeyButton>...</KeyButton>
         </Row>
       </SectionHeader>
       <SkeletonList>
@@ -48,12 +47,6 @@ const TableSkeleton: React.FC<IProps> = ({ title }) => {
   );
 };
 
-const SkeletonButton = styled.button`
-  height: 75%;
-  width: 75%;
-  border-radius: 15px;
-`;
-
 const SkeletonList = styled.div`
   width: 100%;
 `;
@@ -62,7 +55,7 @@ const SkeletonItem = styled.div`
   height: 50px;
   width: 100%;
   background: ${(props: { index: number }) => {
-    if (props.index % 2 === 0) {
+    if (props.index % 2 !== 0) {
       return "linear-gradient(-60deg, #D0D0D0, #EFEFEF)";
     } else {
       return "linear-gradient(-60deg, #E0E0E0, #FFFFFF)";

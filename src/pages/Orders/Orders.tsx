@@ -5,26 +5,28 @@ import {
   editOrder,
   clearCurrentOrder
 } from "../../redux/actions/ordersActions";
-import { sort, newOrder, isArrayEmpty } from "../../constants/util";
+import { sort, newOrder } from "../../constants/util";
 
 import EditOrder from "../../components/inventory/EditModals/EditOrder";
 import SectionHeader, {
   Row,
-  RowSplitter,
   ColumnSplitter,
   Title,
   Key,
   SortingKey,
-  TDirections
+  TDirections,
+  HeaderButton,
+  HeaderTop,
+  HeaderButtons
 } from "../../components/util/SectionHeader";
-import CloudStatus from "../../components/util/CloudStatus";
 import Icons from "../../components/util/Icons";
 
 import useSortableList from "../../hooks/useSortableList";
 import { RootState, IOrder } from "../../redux/types";
 import EditSuppliers from "../Suppliers/Suppliers";
 import Order from "./Order";
-import { TableWrapper } from "../../styles/table";
+import { TableWrapper, ListWrapper } from "../../styles/table";
+import { Tooltip } from "../../components/util/HoverInfo";
 
 type TEdit = (id: number) => void;
 
@@ -48,82 +50,86 @@ export default function Orders() {
   const sortList = (dir: TDirections, index: number, func: Function) =>
     sortFunc(setSorting)(dir, index, func, sorting);
 
-  const buttonStyle = {
-    height: "75%",
-    width: "75%",
-    borderRadius: "15px"
-  };
-
-  const NewOrderButton = () => (
-    <button
-      style={buttonStyle}
-      onClick={() => {
-        dispatch(createOrder(newOrder(orders.currentID + 1)));
-        setOrderOpen(true);
-      }}
-    >
-      Legg til
-    </button>
-  );
-  const SuppliersButton = () => {
-    return (
-      <button
-        style={buttonStyle}
-        onClick={() => {
-          setSuppliersOpen(true);
-        }}
-      >
-        Leverandører
-      </button>
-    );
-  };
+  const handleNewOrder = () => {
+    dispatch(createOrder(newOrder(orders.currentID + 1)));
+    setOrderOpen(true);
+  }
 
   return (
     <TableWrapper>
       <SectionHeader>
-        <Row grid="15% 15% 43.5% 14.5% 12%">
-          <NewOrderButton />
-          <SuppliersButton />
+        <HeaderTop>
           <Title>Bestillinger</Title>
-          <br />
-          <CloudStatus />
-        </Row>
-        <RowSplitter />
-        <Row grid="14% 1% 14% 1% 14% 1% 15%">
+          <HeaderButtons>
+            <HeaderButton onClick={handleNewOrder} data-tip data-for={"orders_header_add"}>
+              <Icons.Add/>
+            </HeaderButton>
+            <Tooltip handle={"orders_header_add"}>
+              Ny bestilling
+            </Tooltip>
+            <HeaderButton onClick={() => setSuppliersOpen(true)} data-tip data-for={"orders_header_suppliers"}>
+              <Icons.Store/><Icons.List/>
+            </HeaderButton>
+            <Tooltip handle={"orders_header_suppliers"}>
+              Leverandører
+            </Tooltip>
+          </HeaderButtons>
+        </HeaderTop>
+        <Row grid="10% 15% 15% 10%">
           <SortingKey
             onClick={dir => sortList(dir, 0, sort.by("orderID", dir))}
+            data-tip data-for={"orders_header_id"}
           >
             #
           </SortingKey>
-          <ColumnSplitter />
+          <Tooltip handle={"orders_header_id"}>
+            ID
+          </Tooltip>
+
           <SortingKey
             onClick={dir =>
               sortList(dir, 1, sort.bySupplier(suppliers.suppliers, dir))
             }
+            data-tip data-for={"orders_header_supplier"}
           >
-            <Icons.Business />
+            <Icons.Store />
           </SortingKey>
-          <ColumnSplitter />
+          <Tooltip handle={"orders_header_supplier"}>
+            Leverandør
+          </Tooltip>
+
           <SortingKey
             onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}
+            data-tip data-for={"orders_header_ordered"}
           >
             <Icons.AccessTime />
           </SortingKey>
-          <ColumnSplitter />
-          <Key>
+          <Tooltip handle={"orders_header_ordered"}>
+            Dato bestilt
+          </Tooltip>
+
+          <Key data-tip data-for={"orders_header_amount"}>
             <Icons.ShoppingCart />
           </Key>
+          <Tooltip handle={"orders_header_amount"}>
+            Antall produkter
+          </Tooltip>
         </Row>
       </SectionHeader>
-      {!isArrayEmpty(sortedList) && (
-        <List
-          list={sortedList as IOrder[]}
-          edit={id => {
-            dispatch(editOrder(id));
-            setOrderOpen(true);
-          }}
-        />
-      )}
+      <ListWrapper>
+        {sortedList &&
+          sortedList.map((order, index) => (
+            <Order 
+              order={order}
+              key={"order_" + order.orderID}
+              edit={id => {
+                dispatch(editOrder(id));
+                setOrderOpen(true);
+              }}
+              index={index}
+            />
+        ))}
+      </ListWrapper>
       {isOrderOpen && (
         <EditOrder
           isOpen={isOrderOpen}
@@ -142,27 +148,3 @@ export default function Orders() {
     </TableWrapper>
   );
 }
-
-type TList = {
-  list: IOrder[];
-  edit: TEdit;
-};
-
-const List = ({ list, edit }: TList) => {
-  if (list) {
-    return (
-      <div>
-        {list.map((order, index) => (
-          <Order
-            order={order}
-            key={"order_" + order.orderID}
-            edit={edit}
-            index={index}
-          />
-        ))}
-      </div>
-    );
-  } else {
-    return <div>No orders found!</div>;
-  }
-};

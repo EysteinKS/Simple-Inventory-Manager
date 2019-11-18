@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { TableItem } from "../../styles/table";
+import { TableItem, NewTableItem } from "../../styles/table";
 
 export const ProductList = styled.div``;
 
@@ -8,14 +8,24 @@ type TStyledProduct = {
   hasLoans: boolean;
 };
 
+export const NewStyledProduct = styled(NewTableItem)`
+  ${(props: { active: boolean }) => {
+    const { active } = props;
+    if (!active)
+      return `
+    background-color: #FDE5E5 !important
+    color: rgb(190, 190, 190)`;
+  }};
+`;
+
 export const StyledProduct = styled(TableItem)`
   width: 100%;
-  grid-template-columns: 10% 19% 19% repeat(4, 8%) 6% 7% 7%;
+  grid-template-columns: 10% 20% 15% repeat(4, 7%) 15% 6% 6%;
   ${(props: TStyledProduct) => {
     const { hasLoans } = props;
     if (hasLoans)
       return `
-    grid-template-columns: 10% 19% 19% repeat(5, 7%) 5% 6% 6%`;
+    grid-template-columns: 10% 20% 15% repeat(5, 7%) 8% 6% 6%`;
   }}
   ${(props: TStyledProduct) => {
     const { active } = props;
@@ -24,9 +34,6 @@ export const StyledProduct = styled(TableItem)`
     background-color: #FDE5E5 !important
     color: rgb(190, 190, 190)`;
   }};
-  & > p {
-    margin: 16px;
-  }
 `;
 
 export const ProductName = styled.p`

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { TableItem } from "../../styles/table";
 
 export const OrderWrapper = styled(TableItem)`
-  grid-template-columns: repeat(4, 15%) 10% repeat(4, 7.5%);
+  grid-template-columns: 10% 15% 15% 10% 26% repeat(4, 6%);
 `;
 
 export const OrderTime = styled.div`

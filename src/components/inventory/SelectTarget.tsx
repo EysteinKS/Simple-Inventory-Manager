@@ -34,16 +34,16 @@ type ItemTypes = ICategory | ICustomer | ISupplier;
 const SelectTarget: React.FC<IProps> = ({ type, select }) => {
   const targets = useSelector(
     (state: RootState) => state[type][type]
-  ) as TargetsType;
+  ) as any[];
 
   const idKey = useMemo(() => {
     switch (type) {
       case "categories":
-        return "categoryID";
+        return "categoryID"
       case "customers":
-        return "customerID";
+        return "customerID"
       default:
-        return "supplierID";
+        return "supplierID"
     }
   }, [type]);
 

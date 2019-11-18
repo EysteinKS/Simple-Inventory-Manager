@@ -124,9 +124,12 @@ const ProductHistory: React.FC<IProps> = ({ isOpen, close }) => {
           top: "10vh",
           left: "5vw",
           right: "5vw",
-          padding: "10px",
+          bottom: "none",
           display: "grid",
-          gridTemplateRows: "1fr 14fr"
+          gridTemplateRows: "1fr 14fr",
+          padding: "0",
+          border: "none",
+          backgroundColor: "#bdbdbd"
         }
       }}
     >

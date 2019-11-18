@@ -18,7 +18,7 @@
     "@types/react-tooltip": "^3.9.3",
     "@types/store": "^2.0.2",
     "@types/styled-components": "^4.1.19",
-    "firebase": "^5.11.1",
+    "firebase": "^7.3.0",
     "immer": "^3.3.0",
     "jsdoc": "^3.6.3",
     "material-table": "^1.52.0",

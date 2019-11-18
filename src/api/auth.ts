@@ -1,4 +1,4 @@
-import { auth } from "../firebase/firebase";
+import { auth, firestore } from "../firebase/firebase";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 
@@ -35,4 +35,18 @@ export const setNewPassword = (
       })
       .catch(() => onError("Feil passord oppgitt"));
   }
+};
+
+export const updateProductVisibility = (visible: boolean) => {
+  let uid = auth.currentUser && auth.currentUser.uid;
+  return firestore.doc(`Users/${uid}`).update({
+    "settings.isInactiveVisible": visible
+  });
+};
+
+export const updateTooltipVisibility = (visible: boolean) => {
+  let uid = auth.currentUser && auth.currentUser.uid;
+  return firestore.doc(`Users/${uid}`).update({
+    "settings.showTooltips": visible
+  });
 };

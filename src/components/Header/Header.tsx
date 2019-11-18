@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
-
+import CloudStatus from "./CloudStatus";
 import { RootState } from "../../redux/types";
-import { HeaderWrapper, NonAuthTitle } from "./styles";
-import LocationSelector from "./LocationSelector";
-import UserSelector from "./UserSelector";
-import SectionSelector from "./SectionSelector";
+import { HeaderWrapper, NonAuthTitle, UtilityWrapper } from "./styles";
+import Client from "./Client";
+import User from "./User";
+import Pages from "./Pages";
 
 type THeader = {
   locationIsLoaded: boolean;
@@ -30,20 +30,18 @@ export default function Header({ locationIsLoaded }: THeader) {
   );
 }
 
-const AuthHeader = () => {
-  return (
-    <>
-      <LocationSelector />
-      <UserSelector />
-      <SectionSelector />
-    </>
-  );
-};
+const AuthHeader = () => (
+  <>
+    <Pages />
+    <UtilityWrapper>
+      <User />
+      <Client />
+    </UtilityWrapper>
+  </>
+);
 
-const NonAuthHeader = () => {
-  return(
-    <>
-      <NonAuthTitle>Lagerstyring</NonAuthTitle>
-    </>
-  )
-}
+const NonAuthHeader = () => (
+  <>
+    <NonAuthTitle>Lagerstyring</NonAuthTitle>
+  </>
+);

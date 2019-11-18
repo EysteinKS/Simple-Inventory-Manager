@@ -9,8 +9,11 @@ import {
   didReceiveOrder
 } from "../../redux/actions/ordersActions";
 import ProductName from "../../components/inventory/ProductName";
-import { ExpandedTableItem } from "../../styles/table";
+import { ExpandedTableItem, ItemData } from "../../styles/table";
+import { shortDate } from "../../constants/dates";
 import { OrderTime, OrderContent, OrderWrapper } from "./styles";
+import { Tooltip } from "../../components/util/HoverInfo";
+import useAuthLocation from "../../hooks/useAuthLocation";
 
 type TOrdered = { productID: number; amount: number };
 
@@ -28,48 +31,50 @@ const Order: React.FC<TOrder> = ({ order, edit, index }) => {
     (state: RootState) => state.suppliers.suppliers
   );
 
-  let orderDate;
-  if (typeof dateOrdered === "string") {
-    let stringToDate = new Date(dateOrdered);
-    orderDate = stringToDate.toLocaleDateString("default", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    });
-  } else if (dateOrdered) {
-    orderDate = dateOrdered.toLocaleDateString("default", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    });
-  }
+  const { dark } = useAuthLocation();
 
-  let receivedDate = null;
-  if (dateReceived && typeof dateReceived === "object") {
-    receivedDate = dateReceived.toLocaleDateString("default", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    });
-  }
+  const orderDate = shortDate(dateOrdered);
+  const receivedDate = shortDate(dateReceived);
 
   let totalOrdered = ordered.reduce(
     (acc: number, cur: TOrdered) => acc + cur.amount,
     0
   );
 
+  const tooltipHandle = `order_${orderID}_`;
+  const handles = {
+    expand: tooltipHandle + "expand",
+    edit: tooltipHandle + "edit",
+    delete: tooltipHandle + "delete",
+    receive: tooltipHandle + "receive"
+  };
+
   return (
     <>
       <OrderWrapper index={index}>
-        <p>{orderID}</p>
-        <p>{suppliers[supplierID - 1].name}</p>
-        <p>{orderDate}</p>
-        <p>{totalOrdered}</p>
+        <ItemData>{orderID}</ItemData>
+        <ItemData>{suppliers[supplierID - 1].name}</ItemData>
+        <ItemData>{orderDate}</ItemData>
+        <ItemData>{totalOrdered}</ItemData>
         <div />
-        <button onClick={() => setExpanded(!expanded)}>=</button>
-        <button onClick={() => edit(orderID)}>
+        <Buttons.Click
+          onClick={() => setExpanded(!expanded)}
+          data-tip
+          data-for={handles.expand}
+        >
+          {expanded ? "x" : "="}
+        </Buttons.Click>
+        <Tooltip handle={handles.expand}>
+          {expanded ? "Skjul produkter" : "Vis produkter"}
+        </Tooltip>
+        <Buttons.Click
+          onClick={() => edit(orderID)}
+          data-tip
+          data-for={handles.edit}
+        >
           <Icons.Edit />
-        </button>
+        </Buttons.Click>
+        <Tooltip handle={handles.edit}>Rediger</Tooltip>
         <Buttons.Confirm
           message="Vil du slette denne bestillingen?"
           onConfirm={() => {
@@ -82,9 +87,12 @@ const Order: React.FC<TOrder> = ({ order, edit, index }) => {
             );
             dispatch(deleteOrder(orderID));
           }}
+          data-tip
+          data-for={handles.delete}
         >
           <Icons.Delete />
         </Buttons.Confirm>
+        <Tooltip handle={handles.delete}>Slett</Tooltip>
         <Buttons.Confirm
           message="Bekreft mottak av bestilling"
           onConfirm={() => {
@@ -97,12 +105,15 @@ const Order: React.FC<TOrder> = ({ order, edit, index }) => {
             );
             dispatch(didReceiveOrder(orderID, ordered));
           }}
+          data-tip
+          data-for={handles.receive}
         >
-          >
+          <Icons.Archive />
         </Buttons.Confirm>
+        <Tooltip handle={handles.receive}>Mottak</Tooltip>
       </OrderWrapper>
       {expanded && (
-        <ExpandedTableItem expanded={expanded}>
+        <ExpandedTableItem expanded={expanded} color={dark}>
           <OrderTime>
             <p>Bestilt: {orderDate}</p>
             <p>Mottatt: {receivedDate || "Nei"}</p>

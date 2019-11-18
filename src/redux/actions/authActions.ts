@@ -2,6 +2,10 @@ import { firestore } from "../../firebase/firebase";
 import { setLocalStorage, authKey } from "../middleware/localStorage";
 import { IThunkAction } from "../middleware/types";
 import { LastChanged, UserState } from "../types";
+import {
+  updateProductVisibility,
+  updateTooltipVisibility
+} from "../../api/auth";
 
 export const USER_SIGNED_OUT = "USER_SIGNED_OUT";
 export const userSignedOut = () => ({
@@ -112,3 +116,22 @@ export const SET_NEW_CHANGES = "SET_NEW_CHANGES";
 export const setNewChanges = () => ({
   type: SET_NEW_CHANGES
 });
+
+export const TOGGLE_VISIBLE = "TOGGLE_VISIBLE";
+export const toggleVisible = (): IThunkAction => async (dispatch, getState) => {
+  const action = { type: TOGGLE_VISIBLE };
+  dispatch(action);
+  const visibility = getState().auth.user.settings.isInactiveVisible;
+  updateProductVisibility(visibility).catch(err => console.log(err));
+};
+
+export const TOGGLE_TOOLTIPS = "TOGGLE_TOOLTIPS";
+export const toggleTooltips = (): IThunkAction => async (
+  dispatch,
+  getState
+) => {
+  const action = { type: TOGGLE_TOOLTIPS };
+  dispatch(action);
+  const visibility = getState().auth.user.settings.showTooltips;
+  updateTooltipVisibility(visibility).catch(err => console.log(err));
+};

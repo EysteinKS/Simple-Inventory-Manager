@@ -1,24 +1,148 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { device } from "../../styles/device";
 
 export const HeaderWrapper = styled.header`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  height: 5.1vh;
+  color: #000c;
+  display: flex;
+  justify-content: space-between;
+  height: 44px;
   width: 100%;
+  max-width: 100vw;
   column-gap: 2px;
-  justify-items: center;
-  border-bottom: 2px solid gray;
+  border-bottom: 2px solid #0002;
   background-color: ${(props: { bckColor: string }) => props.bckColor};
   position: fixed;
   top: 0;
   z-index: 10;
+  :first-child {
+    justify-self: flex-start;
+  }
+`;
+
+export const UtilityWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  & > :first-child {
+    padding-right: 0.5em;
+  }
+  & > :last-child {
+    padding: 0 0.5em;
+  }
+  ${device.tablet(`
+    & > :first-child {
+      padding-right: 1em;
+    }
+    & > :last-child {
+      padding: 0 1em;
+    }
+  `)}
+`;
+
+export const PagesWrapper = styled.nav`
+  display: flex;
+  align-self: center;
+  place-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-left: 0.5em;
+  ${(props: { expand: boolean }) =>
+    props.expand &&
+    css`
+      min-width: 100vw;
+      padding-right: 4em;
+      justify-content: space-between;
+    `}
+`;
+
+interface PageLinkProps {
+  current: boolean;
+  expand: boolean;
+}
+
+export const PageExpand = styled.div`
+  display: block;
+  padding-left: 0.1em;
+  padding-right: 0.1em;
+  :hover {
+    cursor: pointer;
+    color: #fff8;
+  }
+  ${device.tablet(`
+    display: none;
+  `)}
+`;
+
+export const PageLink = styled.div`
+  padding-left: 0.1em;
+  padding-right: 0.1em;
+  :hover {
+    cursor: pointer;
+    color: #fff8;
+  }
+  ${(props: PageLinkProps) =>
+    props.current
+      ? css`
+          color: #fffb;
+          :hover {
+            cursor: default;
+            color: #fffb;
+          }
+        `
+      : !props.expand && `display: none;`}
+  ${device.tablet(`
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+      display: block;
+  `)}
 `;
 
 export const UserWrapper = styled.div`
-  display: grid;
-  width: 100%;
-  grid-template-columns: 1fr 4fr 2fr;
+  display: flex;
   place-items: center;
+  justify-content: center;
+  height: 50%;
+  align-self: center;
+  border-right: 1px solid #0003;
+`;
+
+export const ClientImage = styled.img`
+  padding: 0;
+  padding-right: 0.5em;
+  margin: 0;
+  height: 22px;
+`;
+
+export const ProfileWrapper = styled.div`
+  display: flex;
+  place-items: center;
+  height: 24px;
+  padding-right: 0.2em;
+  ${(props: { current: boolean }) =>
+    props.current
+      ? css`
+          color: #fffb;
+        `
+      : css`
+          :hover {
+            cursor: pointer;
+            color: #fff8;
+          }
+        `}
+`;
+
+export const UserName = styled.p`
+  padding: 0;
+  padding-right: 0.5em;
+  margin: 0;
+  text-align: end;
+`;
+
+export const LogoutButton = styled.div`
+  height: 24px;
+  :hover {
+    cursor: pointer;
+    color: #fff8;
+  }
 `;
 
 export const NoMargin = styled.div`

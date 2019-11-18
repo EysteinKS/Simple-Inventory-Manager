@@ -9,22 +9,22 @@ import {
 import EditSale from "../../components/inventory/EditModals/EditSale";
 import SectionHeader, {
   Row,
-  RowSplitter,
-  ColumnSplitter,
   Title,
   Key,
   SortingKey,
-  TDirections
+  TDirections,
+  HeaderTop,
+  HeaderButtons,
+  HeaderButton
 } from "../../components/util/SectionHeader";
-import CloudStatus from "../../components/util/CloudStatus";
 import Icons from "../../components/util/Icons";
-import { isArrayEmpty, newSale, sort } from "../../constants/util";
+import { newSale, sort } from "../../constants/util";
 
 import useSortableList from "../../hooks/useSortableList";
-import { RootState, ISale } from "../../redux/types";
+import { RootState } from "../../redux/types";
 import Sale from "./Sale";
-import { TableWrapper } from "../../styles/table";
-import { HeaderButton } from "./styles";
+import { TableWrapper, ListWrapper } from "../../styles/table";
+import { Tooltip } from "../../components/util/HoverInfo";
 
 export default function Sales() {
   const dispatch = useDispatch();
@@ -42,70 +42,87 @@ export default function Sales() {
   const sortList = (dir: TDirections, index: number, func: Function) =>
     sortFunc(setSorting)(dir, index, func, sorting);
 
-  const NewSaleButton = () => (
-    <HeaderButton
-      onClick={() => {
-        dispatch(createSale(newSale(sales.currentID + 1)));
-        setSaleOpen(true);
-      }}
-    >
-      Legg til
-    </HeaderButton>
-  );
-  const CustomersButton = () => (
-    <HeaderButton
-      onClick={() => {
-        //setCustomersOpen(true)
-      }}
-    >
-      Kunder
-    </HeaderButton>
-  );
+  const handleNewSale = () => {
+    dispatch(createSale(newSale(sales.currentID + 1)));
+    setSaleOpen(true);
+  }
+
 
   return (
     <TableWrapper>
       <SectionHeader>
-        <Row grid="15% 15% 43.5% 14.5% 12%">
-          <NewSaleButton />
-          <CustomersButton />
+        <HeaderTop>
           <Title>Salg</Title>
-          <br />
-          <CloudStatus />
-        </Row>
-        <RowSplitter />
-        <Row grid="14% 1% 14% 1% 14% 1% 15%">
-          <SortingKey onClick={dir => sortList(dir, 0, sort.by("saleID", dir))}>
+          <HeaderButtons>
+            <HeaderButton onClick={handleNewSale} data-tip data-for={"sales_header_add"}>
+              <Icons.Add/>
+            </HeaderButton>
+            <Tooltip handle={"sales_header_add"}>
+              Nytt salg
+            </Tooltip>
+            <HeaderButton onClick={() => {}} data-tip data-for={"sales_header_customers"}>
+              <Icons.Business/><Icons.List/>
+            </HeaderButton>
+            <Tooltip handle={"sales_header_customers"}>
+              Kunder
+            </Tooltip>
+          </HeaderButtons>
+        </HeaderTop>
+        <Row grid="10% 15% 15% 10%">
+          <SortingKey 
+            onClick={dir => sortList(dir, 0, sort.by("saleID", dir))}
+            data-tip data-for={"sales_header_id"}  
+          >
             #
           </SortingKey>
-          <ColumnSplitter />
+          <Tooltip handle={"sales_header_id"}>
+            ID
+          </Tooltip>
+
           <SortingKey
             onClick={dir =>
               sortList(dir, 1, sort.byCustomer(customers.customers, dir))
             }
+            data-tip data-for={"sales_header_customer"}
           >
             <Icons.Business />
           </SortingKey>
-          <ColumnSplitter />
+          <Tooltip handle={"sales_header_customer"}>
+            Kunde
+          </Tooltip>
+
           <SortingKey
             onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}
+            data-tip data-for={"sales_header_ordered"}
           >
             <Icons.AccessTime />
           </SortingKey>
-          <ColumnSplitter />
-          <Key>
+          <Tooltip handle={"sales_header_ordered"}>
+            Dato bestilt
+          </Tooltip>
+
+          <Key data-tip data-for={"sales_header_amount"}>
             <Icons.ShoppingCart />
           </Key>
+          <Tooltip handle={"sales_header_amount"}>
+            Antall produkter
+          </Tooltip>
         </Row>
       </SectionHeader>
-      {isArrayEmpty(sortedList) ? null : (
-        <List
-          list={sortedList}
-          edit={id => {
-            dispatch(editSale(id));
-            setSaleOpen(true);
-          }}
-        />
-      )}
+      <ListWrapper>
+        {sortedList &&
+          sortedList.map((sale, index) => (
+            <Sale 
+              sale={sale}
+              key={"sale_" + sale.saleID}
+              edit={id => {
+                dispatch(editSale(id));
+                setSaleOpen(true);
+              }}
+              index={index}
+            />
+        ))}
+      </ListWrapper>
       {isSaleOpen && (
         <EditSale
           isOpen={isSaleOpen}
@@ -118,27 +135,3 @@ export default function Sales() {
     </TableWrapper>
   );
 }
-
-type TList = {
-  list: ISale[];
-  edit: (id: number) => void;
-};
-
-const List = ({ list, edit }: TList) => {
-  if (list) {
-    return (
-      <div>
-        {list.map((sale, index) => (
-          <Sale
-            sale={sale}
-            key={"sale_" + sale.saleID}
-            edit={edit}
-            index={index}
-          />
-        ))}
-      </div>
-    );
-  } else {
-    return <div>No sales found!</div>;
-  }
-};

@@ -5,6 +5,8 @@ import Checkbox from "@material-ui/icons/CheckBox";
 import CheckboxOff from "@material-ui/icons/CheckBoxOutlineBlank";
 
 import FormatQuote from "@material-ui/icons/FormatQuote";
+import List from "@material-ui/icons/List";
+import Folder from "@material-ui/icons/Folder";
 import FolderOpen from "@material-ui/icons/FolderOpen";
 import NewFolder from "@material-ui/icons/CreateNewFolder";
 import ShoppingCart from "@material-ui/icons/ShoppingCart";
@@ -20,13 +22,13 @@ import WarningIcon from "@material-ui/icons/Warning";
 
 import Edit from "@material-ui/icons/Edit";
 import Delete from "@material-ui/icons/Delete";
-import Menu from "@material-ui/icons/Menu";
 
 //ORDERS
 import RemoveShoppingCart from "@material-ui/icons/RemoveShoppingCart";
 
 //SALES
 import Business from "@material-ui/icons/Business";
+import Store from "@material-ui/icons/Store";
 import Block from "@material-ui/icons/Block";
 import Clear from "@material-ui/icons/Clear";
 import Archive from "@material-ui/icons/Archive";
@@ -54,6 +56,12 @@ import Assessment from "@material-ui/icons/Assessment";
 
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Undo from "@material-ui/icons/Undo";
+import History from "@material-ui/icons/History";
+import Add from "@material-ui/icons/Add";
+
+//NAVIGATION
+import Menu from "@material-ui/icons/Menu";
+import Close from "@material-ui/icons/Close";
 
 export default {
   Visibility,
@@ -61,6 +69,8 @@ export default {
   Checkbox,
   CheckboxOff,
   FormatQuote,
+  List,
+  Folder,
   FolderOpen,
   NewFolder,
   ShoppingCart,
@@ -75,8 +85,10 @@ export default {
   Edit,
   Delete,
   Menu,
+  Close,
   RemoveShoppingCart,
   Business,
+  Store,
   Block,
   Clear,
   Archive,
@@ -98,5 +110,7 @@ export default {
   Search,
   Done,
   ArrowBack,
-  Undo
+  Undo,
+  History,
+  Add
 };

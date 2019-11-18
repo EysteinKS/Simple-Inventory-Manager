@@ -7,6 +7,9 @@ const GlobalStyle = createGlobalStyle`
     border-style: outset;
     border-color: rgba(255, 255, 255, 0.4);
     background-color: #fbfbfb;
+    :focus {
+      outline: none;
+    }
   }
 
   body {

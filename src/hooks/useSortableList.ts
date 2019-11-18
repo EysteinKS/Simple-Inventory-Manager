@@ -5,10 +5,10 @@ import produce from "immer";
 const isFunction = (input: any) => typeof input === "function";
 export type TSetList = Dispatch<SetStateAction<any[]>>;
 
-export default function useSortableList(arr: any[] = []) {
+export default function useSortableList<T>(arr: T[] = []) {
   const [sortedList, updateList] = useState(arr);
 
-  const setList = (arr: any[]) => {
+  const setList = (arr: T[]) => {
     updateList(arr);
   };
 

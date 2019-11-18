@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/types";
 import styled from "styled-components";
-import ChangeLocation from "../../components/profile/ChangeLocation"
-import ChangePassword from "../../components/profile/ChangePassword"
+import ChangeLocation from "../../components/profile/ChangeLocation";
+import ChangePassword from "../../components/profile/ChangePassword";
+import { toggleTooltips } from "../../redux/actions/authActions";
 
 export default function Profile() {
   const user = useSelector((state: RootState) => state.auth.user);
-  const [edit, setEdit] = useState(false);
+  /* const [edit, setEdit] = useState(false); */
 
   return (
     <div style={{ margin: "5vh 10vw 10vh 10vw", display: "grid" }}>
       <h1 style={{ textAlign: "center" }}>PROFIL</h1>
-      <StyledEditButton onClick={() => setEdit(!edit)}>
+      {/* <StyledEditButton onClick={() => setEdit(!edit)}>
         {edit ? "Lagre" : "Endre"}
-      </StyledEditButton>
-      <UserData edit={edit} />
-      <ChangePassword/>
+      </StyledEditButton> */}
+      <UserData edit={false} />
+      <ChangePassword />
       {user.locations.length > 1 && <ChangeLocation />}
     </div>
   );
@@ -32,10 +33,10 @@ const StyledEditButton = styled.button`
 
 const UserData = ({ edit }: { edit: boolean }) => {
   const user = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useDispatch();
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
   const [lang, setLang] = useState(user.settings.language);
-  const [showHidden, setShowHidden] = useState(user.settings.isInactiveVisible);
 
   if (edit)
     return (
@@ -56,11 +57,6 @@ const UserData = ({ edit }: { edit: boolean }) => {
         <select value={lang} onChange={e => setLang(e.target.value)}>
           <option value="NO">NO</option>
         </select>
-        <DataKey>Vis skjulte produkter?</DataKey>
-        <input
-          type="checkbox"
-          checked={showHidden}
-          onChange={() => setShowHidden(!showHidden)}
         />
       </StyledUserDataForm>
     );
@@ -73,8 +69,12 @@ const UserData = ({ edit }: { edit: boolean }) => {
       <p>{lastName}</p>
       <DataKey>Språk</DataKey>
       <p>{lang}</p>
-      <DataKey>Vis skjulte produkter?</DataKey>
-      <input type="checkbox" checked={showHidden} disabled />
+      <DataKey>Vis hint</DataKey>
+      <input
+        type="checkbox"
+        checked={user.settings.showTooltips}
+        onChange={() => dispatch(toggleTooltips())}
+      />
     </StyledUserData>
   );
 };

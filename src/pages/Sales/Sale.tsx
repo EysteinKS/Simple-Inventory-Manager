@@ -9,6 +9,8 @@ import { addChange } from "../../redux/actions/reportsActions";
 import { deleteSale, didSendSale } from "../../redux/actions/salesActions";
 import Buttons from "../../components/util/Buttons";
 import { SaleWrapper } from "./styles";
+import { Tooltip } from "../../components/util/HoverInfo";
+import useAuthLocation from "../../hooks/useAuthLocation";
 
 type TSale = {
   sale: ISale;
@@ -21,9 +23,18 @@ const Sale: React.FC<TSale> = ({ sale, edit, index }) => {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useDispatch();
 
-  let orderDate = dateToString(dateOrdered);
+  const { dark } = useAuthLocation()
 
+  let orderDate = dateToString(dateOrdered);
   let totalProducts = ordered.reduce((acc, cur) => acc + cur.amount, 0);
+
+  const tooltipHandle = `sale_${saleID}`;
+  const handles = {
+    expand: tooltipHandle + "expand",
+    edit: tooltipHandle + "edit",
+    delete: tooltipHandle + "delete",
+    send: tooltipHandle + "send"
+  }
 
   return (
     <>
@@ -35,10 +46,24 @@ const Sale: React.FC<TSale> = ({ sale, edit, index }) => {
         <p>{orderDate}</p>
         <p>{totalProducts}</p>
         <div />
-        <button onClick={() => setExpanded(!expanded)}>=</button>
-        <button onClick={() => edit(saleID)}>
+        <Buttons.Click 
+          onClick={() => setExpanded(!expanded)}
+          data-tip data-for={handles.expand}
+        >
+          {expanded ? "x": "="}
+        </Buttons.Click>
+        <Tooltip handle={handles.expand}>
+          {expanded ? "Skjul produkter" : "Vis produkter"}
+        </Tooltip>
+        <Buttons.Click 
+          onClick={() => edit(saleID)}
+          data-tip data-for={handles.edit}
+        >
           <Icons.Edit />
-        </button>
+        </Buttons.Click>
+        <Tooltip handle={handles.edit}>
+          Rediger
+        </Tooltip>
         <Buttons.Confirm
           message="Vil du slette dette salget?"
           onConfirm={() => {
@@ -51,9 +76,13 @@ const Sale: React.FC<TSale> = ({ sale, edit, index }) => {
             );
             dispatch(deleteSale(saleID));
           }}
+          data-tip data-for={handles.delete}
         >
           <Icons.Delete />
         </Buttons.Confirm>
+        <Tooltip handle={handles.delete}>
+          Slett
+        </Tooltip>
         <Buttons.Confirm
           message="Bekreft sending av salg"
           onConfirm={() => {
@@ -66,12 +95,16 @@ const Sale: React.FC<TSale> = ({ sale, edit, index }) => {
             );
             dispatch(didSendSale(saleID, ordered));
           }}
+          data-tip data-for={handles.send}
         >
-          >
+          <Icons.Unarchive/>
         </Buttons.Confirm>
+        <Tooltip handle={handles.send}>
+          Send
+        </Tooltip>
       </SaleWrapper>
       {expanded && (
-        <ExpandedTableItem expanded={expanded}>
+        <ExpandedTableItem expanded={expanded} color={dark}>
           {ordered.map((prod, i) => (
             <div key={i}>
               {prod.amount}x <Names target="products" id={prod.productID} />

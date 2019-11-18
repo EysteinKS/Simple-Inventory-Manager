@@ -1,5 +1,10 @@
 import React, { useMemo } from "react";
-import { StyledProduct, ProductName, ProductCategory } from "./styles";
+import {
+  StyledProduct,
+  ProductName,
+  ProductCategory,
+  NewStyledProduct
+} from "./styles";
 import {
   OrderedWithInfo,
   ReservedWithInfo,
@@ -11,6 +16,9 @@ import { useSelector } from "react-redux";
 import { RootState, IProduct } from "../../redux/types";
 import { hasActiveLoans } from "../../redux/selectors/loansSelectors";
 import { getAmount } from "../../constants/util";
+import Buttons from "../../components/util/Buttons";
+import { Tooltip } from "../../components/util/HoverInfo";
+import { getTableStyle, TWidth, ItemData } from "../../styles/table";
 
 type TProductWithEdit = {
   product: IProduct;
@@ -30,12 +38,13 @@ const Product: React.FC<TProductWithEdit> = ({
   );
   const hasLoans = useSelector(hasActiveLoans);
   const category = categories[product.categoryID - 1].name;
-  let orders = useSelector((state: RootState) => state.orders.orders);
-  let sales = useSelector((state: RootState) => state.sales.sales);
-  let loans = useSelector((state: RootState) => state.loans.loans);
-  let ordered = getAmount(orders, product.productID);
-  let reserved = getAmount(sales, product.productID);
-  let loaned = getAmount(loans, product.productID);
+  const { orders, sales, loans } = useSelector((state: RootState) => {
+    const { orders, sales, loans } = state;
+    return { orders, sales, loans };
+  });
+  let ordered = getAmount(orders.orders, product.productID);
+  let reserved = getAmount(sales.sales, product.productID);
+  let loaned = getAmount(loans.loans, product.productID);
   let amount = product.amount;
 
   const total = useMemo(() => {
@@ -46,27 +55,72 @@ const Product: React.FC<TProductWithEdit> = ({
     }
   }, [amount, ordered, reserved, loaned]);
 
+  const handles = useMemo(() => {
+    const handleString = `product_${product.productID}_handle_`;
+    return {
+      history: handleString + "history",
+      edit: handleString + "edit"
+    };
+  }, [product.productID]);
+
+  const tableStyle = useMemo(() => {
+    const data: TWidth[] = [
+      "small",
+      "large",
+      "medium",
+      "tiny",
+      "tiny",
+      "tiny",
+      "tiny",
+      "tiny"
+    ];
+    if (hasLoans) {
+      data.push("tiny");
+    }
+    return getTableStyle(data, 2);
+  }, [hasLoans]);
+
   return (
     <StyledProduct active={product.active} hasLoans={hasLoans} index={index}>
-      <p>{product.productID}</p>
-      <ProductName>{product.name}</ProductName>
-      <ProductCategory>{category}</ProductCategory>
-      <p>{amount || "-"}</p>
+      <ItemData>{product.productID}</ItemData>
+      <ItemData>{product.name}</ItemData>
+      <ItemData>{category}</ItemData>
+      <ItemData>{amount || "-"}</ItemData>
       <OrderedWithInfo productID={product.productID} amount={ordered} />
       <ReservedWithInfo productID={product.productID} amount={reserved} />
       {hasLoans && (
         <LoansWithInfo productID={product.productID} amount={loaned} />
       )}
-      <p>{total || 0}</p>
-      {total < 0 ? (
-        <Warning style={{ justifySelf: "start", alignSelf: "center" }} />
-      ) : (
-        <div />
-      )}
-      <button onClick={() => showHistory(product.productID)}>H</button>
-      <button onClick={() => edit(product.productID)}>
+      <ItemData>{total || 0}</ItemData>
+      <ItemData>
+        {total < 0 && (
+          <Warning
+            style={{
+              justifySelf: "start",
+              alignSelf: "center",
+              color: "#bd3737"
+            }}
+          />
+        )}
+      </ItemData>
+      <Buttons.Click
+        data-tip
+        data-for={handles.history}
+        onClick={() => showHistory(product.productID)}
+        border="bottom"
+      >
+        <Icons.History />
+        <Tooltip handle={handles.history}>Historikk</Tooltip>
+      </Buttons.Click>
+      <Buttons.Click
+        data-tip
+        data-for={handles.edit}
+        onClick={() => edit(product.productID)}
+        border="bottom"
+      >
         <Icons.Edit />
-      </button>
+        <Tooltip handle={handles.edit}>Rediger</Tooltip>
+      </Buttons.Click>
     </StyledProduct>
   );
 };

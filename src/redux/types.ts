@@ -45,6 +45,7 @@ export interface UserState {
   currentLocation: string;
   settings: {
     isInactiveVisible: boolean;
+    showTooltips: boolean;
     language: string;
   };
 }

@@ -12,6 +12,24 @@ const HoverInfo: React.FC<{ handle: string }> = ({ handle, children }) => {
   );
 };
 
+export const Tooltip: React.FC<{
+  handle: string;
+  place?: "top" | "bottom" | "left" | "right";
+}> = ({ handle, children, place = "bottom" }) => {
+  const showTooltips = useSelector(
+    (state: RootState) => state.auth.user.settings.showTooltips
+  );
+  if (showTooltips) {
+    return (
+      <ReactTooltip id={handle} place={place} type="dark" effect="solid">
+        <p>{children}</p>
+      </ReactTooltip>
+    );
+  } else {
+    return null;
+  }
+};
+
 interface IProps {
   productID: number;
   handle: string;

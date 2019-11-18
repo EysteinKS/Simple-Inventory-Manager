@@ -14,6 +14,7 @@ const initialState: AuthState = {
     currentLocation: "",
     settings: {
       language: "NO",
+      showTooltips: true,
       isInactiveVisible: true
     }
   },
@@ -101,6 +102,16 @@ export default (
 
       case action.SET_NEW_CHANGES:
         draft.hasNewChanges = true;
+        return draft;
+
+      case action.TOGGLE_VISIBLE:
+        let visible = state.user.settings.isInactiveVisible;
+        draft.user.settings.isInactiveVisible = !visible;
+        return draft;
+
+      case action.TOGGLE_TOOLTIPS:
+        let showTooltips = state.user.settings.showTooltips;
+        draft.user.settings.showTooltips = !showTooltips;
         return draft;
 
       default:
