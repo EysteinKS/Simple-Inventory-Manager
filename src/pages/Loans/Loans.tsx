@@ -2,13 +2,11 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/types";
 import useSortableList from "../../hooks/useSortableList";
-import SectionHeader, {
+import {
   TDirections,
-  Row,
   Title,
   SortingKey,
   Key,
-  HeaderTop,
   HeaderButtons,
   HeaderButton
 } from "../../components/util/SectionHeader";

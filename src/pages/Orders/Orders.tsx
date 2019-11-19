@@ -8,14 +8,12 @@ import {
 import { sort, newOrder } from "../../constants/util";
 
 import EditOrder from "../../components/inventory/EditModals/EditOrder";
-import SectionHeader, {
-  Row,
+import {
   Title,
   Key,
   SortingKey,
   TDirections,
   HeaderButton,
-  HeaderTop,
   HeaderButtons
 } from "../../components/util/SectionHeader";
 import Icons from "../../components/util/Icons";
@@ -36,8 +34,6 @@ import {
 } from "../../styles/table";
 import { Tooltip } from "../../components/util/HoverInfo";
 import useAuthLocation from "../../hooks/useAuthLocation";
-
-type TEdit = (id: number) => void;
 
 export default function Orders() {
   const dispatch = useDispatch();

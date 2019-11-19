@@ -7,13 +7,11 @@ import {
 } from "../../redux/actions/salesActions";
 
 import EditSale from "../../components/inventory/EditModals/EditSale";
-import SectionHeader, {
-  Row,
+import {
   Title,
   Key,
   SortingKey,
   TDirections,
-  HeaderTop,
   HeaderButtons,
   HeaderButton
 } from "../../components/util/SectionHeader";

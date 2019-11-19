@@ -9,15 +9,13 @@ import { sort, newProduct } from "../../constants/util";
 
 import EditProduct from "../../components/inventory/EditModals/EditProduct";
 import EditCategories from "../Categories/Categories";
-import SectionHeader, {
-  Row,
+import {
   Title,
   Key,
   KeyButton,
   SortingKey,
   TDirections,
   HeaderButton,
-  HeaderTop,
   HeaderButtons
 } from "../../components/util/SectionHeader";
 import Icons from "../../components/util/Icons";

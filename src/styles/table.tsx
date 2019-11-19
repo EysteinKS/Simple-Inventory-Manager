@@ -21,13 +21,7 @@ const percentageOf = (total: number, percent: number) => {
 export const getTableStyle = (data: TWidth[], buttons: number) => {
   const maxWidth = 960;
 
-  const buttonSize = sizeToPercentage.tiny;
-  const buttonsPercent = buttonSize * buttons;
-  const buttonsWidth = percentageOf(maxWidth, buttonsPercent);
-
-  const dataMaxWidth = 960 - buttonsWidth;
   const dataPercentages = data.map(size => sizeToPercentage[size]);
-
   const dataPixels = dataPercentages.map(percent =>
     percentageOf(maxWidth, percent)
   );
@@ -42,6 +36,8 @@ export const getTableStyle = (data: TWidth[], buttons: number) => {
         return "3fr";
       case "large":
         return "4fr";
+      default:
+        return "1fr";
     }
   };
 
