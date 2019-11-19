@@ -21,9 +21,13 @@ const TableSkeleton: React.FC<IProps> = ({ title }) => {
       <SectionHeader>
         <HeaderTop>
           <Title>{title}</Title>
-          <HeaderButtons>  
-            <HeaderButton />
-            <HeaderButton />
+          <HeaderButtons>
+            <HeaderButton onClick={() => {}}>
+              <Icons.Add />
+            </HeaderButton>
+            <HeaderButton onClick={() => {}}>
+              <Icons.List />
+            </HeaderButton>
           </HeaderButtons>
         </HeaderTop>
         <Row grid="repeat(4, 10%) 60%">

@@ -1,29 +1,30 @@
 import React, { useState } from "react";
 import { ISale } from "../../redux/types";
 import { useDispatch } from "react-redux";
-import { ExpandedTableItem } from "../../styles/table";
+import { ExpandedTableItem, ItemData } from "../../styles/table";
 import { dateToString } from "../../constants/util";
 import Names from "../../components/Names";
 import Icons from "../../components/util/Icons";
 import { addChange } from "../../redux/actions/reportsActions";
 import { deleteSale, didSendSale } from "../../redux/actions/salesActions";
 import Buttons from "../../components/util/Buttons";
-import { SaleWrapper } from "./styles";
 import { Tooltip } from "../../components/util/HoverInfo";
 import useAuthLocation from "../../hooks/useAuthLocation";
+import { TableItem } from "../../styles/table";
 
 type TSale = {
   sale: ISale;
   edit: (id: number) => void;
-  index: number;
+  columns: string;
+  extended: boolean;
 };
 
-const Sale: React.FC<TSale> = ({ sale, edit, index }) => {
+const Sale: React.FC<TSale> = ({ sale, edit, columns, extended }) => {
   const { saleID, customerID, dateOrdered, ordered } = sale;
   const [expanded, setExpanded] = useState(false);
   const dispatch = useDispatch();
 
-  const { dark } = useAuthLocation()
+  const { dark } = useAuthLocation();
 
   let orderDate = dateToString(dateOrdered);
   let totalProducts = ordered.reduce((acc, cur) => acc + cur.amount, 0);
@@ -34,36 +35,37 @@ const Sale: React.FC<TSale> = ({ sale, edit, index }) => {
     edit: tooltipHandle + "edit",
     delete: tooltipHandle + "delete",
     send: tooltipHandle + "send"
-  }
+  };
 
   return (
     <>
-      <SaleWrapper index={index}>
-        <p>{saleID}</p>
-        <p>
+      <TableItem columns={columns}>
+        {extended && <ItemData>{saleID}</ItemData>}
+        <ItemData>
           <Names target="customers" id={customerID} />
-        </p>
-        <p>{orderDate}</p>
-        <p>{totalProducts}</p>
+        </ItemData>
+        {extended && <ItemData>{orderDate}</ItemData>}
+        <ItemData>{totalProducts}</ItemData>
         <div />
-        <Buttons.Click 
+        <div />
+        <Buttons.Click
           onClick={() => setExpanded(!expanded)}
-          data-tip data-for={handles.expand}
+          data-tip
+          data-for={handles.expand}
         >
-          {expanded ? "x": "="}
+          {expanded ? <Icons.Close /> : <Icons.List />}
         </Buttons.Click>
         <Tooltip handle={handles.expand}>
           {expanded ? "Skjul produkter" : "Vis produkter"}
         </Tooltip>
-        <Buttons.Click 
+        <Buttons.Click
           onClick={() => edit(saleID)}
-          data-tip data-for={handles.edit}
+          data-tip
+          data-for={handles.edit}
         >
           <Icons.Edit />
         </Buttons.Click>
-        <Tooltip handle={handles.edit}>
-          Rediger
-        </Tooltip>
+        <Tooltip handle={handles.edit}>Rediger</Tooltip>
         <Buttons.Confirm
           message="Vil du slette dette salget?"
           onConfirm={() => {
@@ -76,13 +78,12 @@ const Sale: React.FC<TSale> = ({ sale, edit, index }) => {
             );
             dispatch(deleteSale(saleID));
           }}
-          data-tip data-for={handles.delete}
+          data-tip
+          data-for={handles.delete}
         >
           <Icons.Delete />
         </Buttons.Confirm>
-        <Tooltip handle={handles.delete}>
-          Slett
-        </Tooltip>
+        <Tooltip handle={handles.delete}>Slett</Tooltip>
         <Buttons.Confirm
           message="Bekreft sending av salg"
           onConfirm={() => {
@@ -95,14 +96,13 @@ const Sale: React.FC<TSale> = ({ sale, edit, index }) => {
             );
             dispatch(didSendSale(saleID, ordered));
           }}
-          data-tip data-for={handles.send}
+          data-tip
+          data-for={handles.send}
         >
-          <Icons.Unarchive/>
+          <Icons.Unarchive />
         </Buttons.Confirm>
-        <Tooltip handle={handles.send}>
-          Send
-        </Tooltip>
-      </SaleWrapper>
+        <Tooltip handle={handles.send}>Send</Tooltip>
+      </TableItem>
       {expanded && (
         <ExpandedTableItem expanded={expanded} color={dark}>
           {ordered.map((prod, i) => (

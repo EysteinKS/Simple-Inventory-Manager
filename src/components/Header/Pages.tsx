@@ -63,19 +63,24 @@ const Pages = () => {
     <PagesWrapper expand={expand}>
       <ExpandPages expand={expand} setExpand={setExpand} />
       {sections.map(s => (
-        <PageLink
-          key={"link_to_" + s.linkTo}
-          onClick={() => handleClick(s.linkTo)}
-          current={isCurrent(s.linkTo)}
-          expand={expand}
-          data-tip
-          data-for={"page_" + s.linkTo}
-        >
-          {s.icon}
+        <>
+          <PageLink
+            key={"link_to_" + s.linkTo}
+            onClick={e => {
+              e.currentTarget.blur();
+              handleClick(s.linkTo);
+            }}
+            current={isCurrent(s.linkTo)}
+            expand={expand}
+            data-tip
+            data-for={"page_" + s.linkTo}
+          >
+            {s.icon}
+          </PageLink>
           <Tooltip handle={"page_" + s.linkTo} place="right">
             {s.name}
           </Tooltip>
-        </PageLink>
+        </>
       ))}
     </PagesWrapper>
   );

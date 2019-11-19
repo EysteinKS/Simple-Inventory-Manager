@@ -53,7 +53,10 @@ export default function CloudStatus() {
       <StyledStatus
         data-tip
         data-for="cloudTooltip"
-        onClick={onClick}
+        onClick={e => {
+          e.currentTarget.blur();
+          onClick();
+        }}
         status={status}
       >
         {icon}

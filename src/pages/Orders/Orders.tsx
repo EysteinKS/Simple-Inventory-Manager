@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   createOrder,
@@ -10,7 +10,6 @@ import { sort, newOrder } from "../../constants/util";
 import EditOrder from "../../components/inventory/EditModals/EditOrder";
 import SectionHeader, {
   Row,
-  ColumnSplitter,
   Title,
   Key,
   SortingKey,
@@ -25,8 +24,18 @@ import useSortableList from "../../hooks/useSortableList";
 import { RootState, IOrder } from "../../redux/types";
 import EditSuppliers from "../Suppliers/Suppliers";
 import Order from "./Order";
-import { TableWrapper, ListWrapper } from "../../styles/table";
+import {
+  TableWrapper,
+  ListWrapper,
+  TWidth,
+  getTableStyle,
+  TableHeader,
+  TableContent,
+  ContentHeader,
+  ExtendColumns
+} from "../../styles/table";
 import { Tooltip } from "../../components/util/HoverInfo";
+import useAuthLocation from "../../hooks/useAuthLocation";
 
 type TEdit = (id: number) => void;
 
@@ -36,6 +45,7 @@ export default function Orders() {
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const [isOrderOpen, setOrderOpen] = useState(false);
   const [isSuppliersOpen, setSuppliersOpen] = useState(false);
+  const { secondary } = useAuthLocation();
 
   //SORTING
   const [sorting, setSorting] = useState([null, null, null] as any[]);
@@ -50,86 +60,104 @@ export default function Orders() {
   const sortList = (dir: TDirections, index: number, func: Function) =>
     sortFunc(setSorting)(dir, index, func, sorting);
 
+  const [extended, setExtended] = useState(() => window.innerWidth > 425);
+  const tableStyles = useMemo(() => {
+    let data: TWidth[] = ["large"];
+    if (extended) {
+      data.unshift("small");
+      data.push("medium");
+    }
+    data.push("tiny", "tiny");
+    return getTableStyle(data, 4);
+  }, [extended]);
+
   const handleNewOrder = () => {
     dispatch(createOrder(newOrder(orders.currentID + 1)));
     setOrderOpen(true);
-  }
+  };
 
   return (
     <TableWrapper>
-      <SectionHeader>
-        <HeaderTop>
-          <Title>Bestillinger</Title>
-          <HeaderButtons>
-            <HeaderButton onClick={handleNewOrder} data-tip data-for={"orders_header_add"}>
-              <Icons.Add/>
-            </HeaderButton>
-            <Tooltip handle={"orders_header_add"}>
-              Ny bestilling
-            </Tooltip>
-            <HeaderButton onClick={() => setSuppliersOpen(true)} data-tip data-for={"orders_header_suppliers"}>
-              <Icons.Store/><Icons.List/>
-            </HeaderButton>
-            <Tooltip handle={"orders_header_suppliers"}>
-              Leverandører
-            </Tooltip>
-          </HeaderButtons>
-        </HeaderTop>
-        <Row grid="10% 15% 15% 10%">
-          <SortingKey
-            onClick={dir => sortList(dir, 0, sort.by("orderID", dir))}
-            data-tip data-for={"orders_header_id"}
+      <TableHeader bckColor={secondary}>
+        <Title>Bestillinger</Title>
+        <HeaderButtons>
+          <HeaderButton
+            onClick={handleNewOrder}
+            data-tip
+            data-for={"orders_header_add"}
           >
-            #
-          </SortingKey>
-          <Tooltip handle={"orders_header_id"}>
-            ID
-          </Tooltip>
+            <Icons.Add />
+            <Tooltip handle={"orders_header_add"}>Ny bestilling</Tooltip>
+          </HeaderButton>
+          <HeaderButton
+            onClick={() => setSuppliersOpen(true)}
+            data-tip
+            data-for={"orders_header_suppliers"}
+          >
+            <Icons.Store />
+            <Icons.List />
+            <Tooltip handle={"orders_header_suppliers"}>Leverandører</Tooltip>
+          </HeaderButton>
+        </HeaderButtons>
+      </TableHeader>
+      <TableContent>
+        <ContentHeader bckColor={secondary} columns={tableStyles.header}>
+          {extended && (
+            <SortingKey
+              onClick={dir => sortList(dir, 0, sort.by("orderID", dir))}
+              data-tip
+              data-for={"orders_header_id"}
+            >
+              #<Tooltip handle={"orders_header_id"}>ID</Tooltip>
+            </SortingKey>
+          )}
 
           <SortingKey
             onClick={dir =>
               sortList(dir, 1, sort.bySupplier(suppliers.suppliers, dir))
             }
-            data-tip data-for={"orders_header_supplier"}
+            data-tip
+            data-for={"orders_header_supplier"}
           >
             <Icons.Store />
+            <Tooltip handle={"orders_header_supplier"}>Leverandør</Tooltip>
           </SortingKey>
-          <Tooltip handle={"orders_header_supplier"}>
-            Leverandør
-          </Tooltip>
 
-          <SortingKey
-            onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}
-            data-tip data-for={"orders_header_ordered"}
-          >
-            <Icons.AccessTime />
-          </SortingKey>
-          <Tooltip handle={"orders_header_ordered"}>
-            Dato bestilt
-          </Tooltip>
+          {extended && (
+            <SortingKey
+              onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}
+              data-tip
+              data-for={"orders_header_ordered"}
+            >
+              <Icons.AccessTime />
+              <Tooltip handle={"orders_header_ordered"}>Dato bestilt</Tooltip>
+            </SortingKey>
+          )}
 
           <Key data-tip data-for={"orders_header_amount"}>
             <Icons.ShoppingCart />
+            <Tooltip handle={"orders_header_amount"}>Antall produkter</Tooltip>
           </Key>
-          <Tooltip handle={"orders_header_amount"}>
-            Antall produkter
-          </Tooltip>
-        </Row>
-      </SectionHeader>
-      <ListWrapper>
-        {sortedList &&
-          sortedList.map((order, index) => (
-            <Order 
-              order={order}
-              key={"order_" + order.orderID}
-              edit={id => {
-                dispatch(editOrder(id));
-                setOrderOpen(true);
-              }}
-              index={index}
-            />
-        ))}
-      </ListWrapper>
+
+          <ExtendColumns extended={extended} setExtended={setExtended} />
+          <div />
+        </ContentHeader>
+        <ListWrapper>
+          {sortedList &&
+            sortedList.map(order => (
+              <Order
+                order={order}
+                extended={extended}
+                columns={tableStyles.item}
+                key={"order_" + order.orderID}
+                edit={id => {
+                  dispatch(editOrder(id));
+                  setOrderOpen(true);
+                }}
+              />
+            ))}
+        </ListWrapper>
+      </TableContent>
       {isOrderOpen && (
         <EditOrder
           isOpen={isOrderOpen}

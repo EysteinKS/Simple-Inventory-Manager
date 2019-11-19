@@ -11,7 +11,6 @@ import EditProduct from "../../components/inventory/EditModals/EditProduct";
 import EditCategories from "../Categories/Categories";
 import SectionHeader, {
   Row,
-  ColumnSplitter,
   Title,
   Key,
   KeyButton,
@@ -27,10 +26,20 @@ import useSortableList from "../../hooks/useSortableList";
 import { RootState } from "../../redux/types";
 import { hasActiveLoans } from "../../redux/selectors/loansSelectors";
 import ProductHistory from "../../components/inventory/ProductHistory";
-import { TableWrapper, ListWrapper } from "../../styles/table";
+import {
+  TableWrapper,
+  ListWrapper,
+  TableContent,
+  ContentHeader,
+  TableHeader,
+  getTableStyle,
+  TWidth,
+  ExtendColumns
+} from "../../styles/table";
 import Product from "./Product";
 import { toggleVisible } from "../../redux/actions/authActions";
 import { Tooltip } from "../../components/util/HoverInfo";
+import useAuthLocation from "../../hooks/useAuthLocation";
 
 //TODO
 //Show icon if product contains a comment
@@ -40,6 +49,7 @@ export default function Products() {
   const dispatch = useDispatch();
   const products = useSelector((state: RootState) => state.products);
   const categories = useSelector((state: RootState) => state.categories);
+  const { secondary } = useAuthLocation();
 
   //MODALS
   const [isProductOpen, setProductOpen] = useState(false);
@@ -58,13 +68,21 @@ export default function Products() {
     sortFunc(setSorting)(dir, index, func, sorting);
 
   const activeLoans = useSelector(hasActiveLoans);
-  const iconRows = useMemo(() => {
-    if (!activeLoans) {
-      return "10% 20% 15% repeat(4, 7%) 15% 12%";
-    } else {
-      return "10% 20% 15% repeat(5, 7%) 8% 12%";
+  const [extended, setExtended] = useState(() => window.innerWidth > 425);
+  const tableStyles = useMemo(() => {
+    let data: TWidth[] = ["large"];
+    if (extended) {
+      data.unshift("small");
+      data = data.concat(["medium", "tiny", "tiny", "tiny"]);
+
+      if (activeLoans) {
+        data.push("tiny");
+      }
     }
-  }, [activeLoans]);
+    data = data.concat(["tiny", "tiny"]);
+
+    return getTableStyle(data, 2);
+  }, [activeLoans, extended]);
 
   const showHidden = useSelector(
     (state: RootState) => state.auth.user.settings.isInactiveVisible
@@ -85,38 +103,39 @@ export default function Products() {
 
   return (
     <TableWrapper>
-      <SectionHeader>
-        <HeaderTop>
-          <Title>Produkter</Title>
-          <HeaderButtons>
-            <HeaderButton
-              onClick={handleNewProduct}
-              data-tip
-              data-for={"product_header_add"}
-            >
-              <Icons.Add />
-            </HeaderButton>
-            <Tooltip handle={"product_header_add"}>Nytt produkt</Tooltip>
-            <HeaderButton
-              onClick={() => setCategoriesOpen(true)}
-              data-tip
-              data-for={"product_header_categories"}
-            >
-              <Icons.FolderOpen />
-              <Icons.List />
-            </HeaderButton>
-            <Tooltip handle={"product_header_categories"}>Kategorier</Tooltip>
-          </HeaderButtons>
-        </HeaderTop>
-        <Row grid={iconRows}>
-          <SortingKey
-            onClick={dir => sortList(dir, 0, sort.by("productID", dir))}
+      <TableHeader bckColor={secondary}>
+        <Title>Produkter</Title>
+        <HeaderButtons>
+          <HeaderButton
+            onClick={handleNewProduct}
             data-tip
-            data-for={"product_header_id"}
+            data-for={"product_header_add"}
           >
-            #
-          </SortingKey>
-          <Tooltip handle={"product_header_id"}>ID</Tooltip>
+            <Icons.Add />
+            <Tooltip handle={"product_header_add"}>Nytt produkt</Tooltip>
+          </HeaderButton>
+          <HeaderButton
+            onClick={() => setCategoriesOpen(true)}
+            data-tip
+            data-for={"product_header_categories"}
+          >
+            <Icons.FolderOpen />
+            <Icons.List />
+            <Tooltip handle={"product_header_categories"}>Kategorier</Tooltip>
+          </HeaderButton>
+        </HeaderButtons>
+      </TableHeader>
+      <TableContent>
+        <ContentHeader bckColor={secondary} columns={tableStyles.header}>
+          {extended && (
+            <SortingKey
+              onClick={dir => sortList(dir, 0, sort.by("productID", dir))}
+              data-tip
+              data-for={"product_header_id"}
+            >
+              #<Tooltip handle={"product_header_id"}>ID</Tooltip>
+            </SortingKey>
+          )}
 
           <SortingKey
             onClick={dir => sortList(dir, 1, sort.byName(dir))}
@@ -124,45 +143,49 @@ export default function Products() {
             data-for={"product_header_name"}
           >
             <Icons.FormatQuote />
+            <Tooltip handle={"product_header_name"}>Navn</Tooltip>
           </SortingKey>
-          <Tooltip handle={"product_header_name"}>Navn</Tooltip>
 
-          <SortingKey
-            onClick={dir =>
-              sortList(dir, 2, sort.byCategory(categories.categories, dir))
-            }
-            data-tip
-            data-for={"product_header_category"}
-          >
-            <Icons.FolderOpen />
-          </SortingKey>
-          <Tooltip handle={"product_header_category"}>Kategori</Tooltip>
-
-          <Key data-tip data-for={"product_header_inventory"}>
-            <Icons.Storage />
-          </Key>
-          <Tooltip handle={"product_header_inventory"}>På lager</Tooltip>
-          <Key data-tip data-for={"product_header_ordered"}>
-            <Icons.Archive />
-          </Key>
-          <Tooltip handle={"product_header_ordered"}>Bestilt</Tooltip>
-          <Key data-tip data-for={"product_header_sales"}>
-            <Icons.Unarchive />
-          </Key>
-          <Tooltip handle={"product_header_sales"}>Salg</Tooltip>
-          {activeLoans && (
+          {extended && (
             <>
-              <Key data-tip data-for={"product_header_loans"}>
-                <Icons.Cached />
+              <SortingKey
+                onClick={dir =>
+                  sortList(dir, 2, sort.byCategory(categories.categories, dir))
+                }
+                data-tip
+                data-for={"product_header_category"}
+              >
+                <Icons.FolderOpen />
+                <Tooltip handle={"product_header_category"}>Kategori</Tooltip>
+              </SortingKey>
+              <Key data-tip data-for={"product_header_inventory"}>
+                <Icons.Storage />
+                <Tooltip handle={"product_header_inventory"}>På lager</Tooltip>
               </Key>
-              <Tooltip handle={"product_header_loans"}>Utlån</Tooltip>
+              <Key data-tip data-for={"product_header_ordered"}>
+                <Icons.Archive />
+                <Tooltip handle={"product_header_ordered"}>Bestilt</Tooltip>
+              </Key>
+              <Key data-tip data-for={"product_header_sales"}>
+                <Icons.Unarchive />
+                <Tooltip handle={"product_header_sales"}>Salg</Tooltip>
+              </Key>
+              {activeLoans && (
+                <>
+                  <Key data-tip data-for={"product_header_loans"}>
+                    <Icons.Cached />
+                    <Tooltip handle={"product_header_loans"}>Utlån</Tooltip>
+                  </Key>
+                </>
+              )}
             </>
           )}
           <Key data-tip data-for={"product_header_total"}>
             <Icons.Functions />
+            <Tooltip handle={"product_header_total"}>Totalt</Tooltip>
           </Key>
-          <Tooltip handle={"product_header_total"}>Totalt</Tooltip>
 
+          <ExtendColumns extended={extended} setExtended={setExtended} />
           <div />
 
           <KeyButton
@@ -172,30 +195,31 @@ export default function Products() {
             border="left"
           >
             {!showHidden ? <Icons.VisibilityOff /> : <Icons.Visibility />}
+            <Tooltip handle={"product_header_visibility"}>
+              {showHidden ? "Skjul" : "Vis"} inaktive produkter
+            </Tooltip>
           </KeyButton>
-          <Tooltip handle={"product_header_visibility"}>
-            {showHidden ? "Skjul" : "Vis"} inaktive produkter
-          </Tooltip>
-        </Row>
-      </SectionHeader>
-      <ListWrapper>
-        {productList &&
-          productList.map((product, index) => (
-            <Product
-              key={"product_" + product.productID}
-              product={product}
-              edit={id => {
-                dispatch(setCurrentProduct(id));
-                setProductOpen(true);
-              }}
-              showHistory={id => {
-                dispatch(setCurrentProduct(id));
-                setHistoryOpen(true);
-              }}
-              index={index}
-            />
-          ))}
-      </ListWrapper>
+        </ContentHeader>
+        <ListWrapper>
+          {productList &&
+            productList.map(product => (
+              <Product
+                key={"product_" + product.productID}
+                columns={tableStyles.item}
+                product={product}
+                extended={extended}
+                edit={id => {
+                  dispatch(setCurrentProduct(id));
+                  setProductOpen(true);
+                }}
+                showHistory={id => {
+                  dispatch(setCurrentProduct(id));
+                  setHistoryOpen(true);
+                }}
+              />
+            ))}
+        </ListWrapper>
+      </TableContent>
       {isProductOpen && (
         <EditProduct
           isOpen={isProductOpen}

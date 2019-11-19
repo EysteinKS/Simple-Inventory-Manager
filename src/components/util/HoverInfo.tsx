@@ -21,7 +21,12 @@ export const Tooltip: React.FC<{
   );
   if (showTooltips) {
     return (
-      <ReactTooltip id={handle} place={place} type="dark" effect="solid">
+      <ReactTooltip
+        id={handle}
+        place={place}
+        type="dark"
+        effect="solid"
+      >
         <p>{children}</p>
       </ReactTooltip>
     );

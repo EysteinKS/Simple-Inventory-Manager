@@ -17,10 +17,11 @@ const Confirm: FC<TConfirm> = ({
 }) => {
   return (
     <StyledButton
-      onClick={() => {
+      onClick={e => {
         if (window.confirm(message)) {
           onConfirm();
         }
+        e.currentTarget.blur();
       }}
       disabled={disabled}
       {...rest}
@@ -31,19 +32,23 @@ const Confirm: FC<TConfirm> = ({
 };
 
 type TClick = {
-  onClick: () => void
-  border?: string
-}
+  onClick: () => void;
+  border?: string;
+};
 
-const Click: FC<TClick> = ({ children, ...rest }) => {
+const Click: FC<TClick> = ({ children, onClick, ...rest }) => {
   return (
     <StyledButton
+      onClick={e => {
+        e.currentTarget.blur();
+        onClick();
+      }}
       {...rest}
     >
       {children}
     </StyledButton>
-  )
-}
+  );
+};
 
 const StyledButton = styled.button`
   font-size: 20px;
@@ -60,7 +65,7 @@ const StyledButton = styled.button`
     color: #0003;
     cursor: not-allowed;
   }
-`
+`;
 
 export default {
   Confirm,

@@ -5,7 +5,6 @@ import Subscription from "../../firebase/Subscription";
 import { UserWrapper, UserName, LogoutButton, ProfileWrapper } from "./styles";
 import { RootState, AuthState } from "../../redux/types";
 import { Dispatch } from "redux";
-import LinkWrapper from "../util/LinkWrapper";
 import Icons from "../util/Icons";
 import { shouldLog } from "../../constants/util";
 import { clearLocalStorage } from "../../redux/middleware/localStorage";
@@ -56,12 +55,19 @@ const LoggedIn = ({ authUser, dispatch, unsub }: TLoggedIn) => {
   };
   return (
     <>
-      <ProfileWrapper onClick={goToProfile} current={isCurrent}>
+      <ProfileWrapper
+        onClick={e => {
+          e.currentTarget.blur();
+          goToProfile();
+        }}
+        current={isCurrent}
+      >
         <UserName>{authUser.user.firstName}</UserName>
         <Icons.AccountCircle />
       </ProfileWrapper>
       <LogoutButton
-        onClick={() => {
+        onClick={e => {
+          e.currentTarget.blur();
           shouldLog("Signing out");
           unsub();
           doSignOut();

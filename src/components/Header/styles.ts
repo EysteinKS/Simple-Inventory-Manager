@@ -49,12 +49,12 @@ export const PagesWrapper = styled.nav`
     props.expand &&
     css`
       min-width: 100vw;
-      padding-right: 4em;
+      padding-right: 10vw;
       justify-content: space-between;
     `}
 `;
 
-interface PageLinkProps {
+export interface PageLinkProps {
   current: boolean;
   expand: boolean;
 }

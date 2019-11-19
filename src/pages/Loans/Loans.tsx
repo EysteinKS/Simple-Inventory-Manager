@@ -1,31 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { RootState, ILoan } from "../../redux/types";
+import { RootState } from "../../redux/types";
 import useSortableList from "../../hooks/useSortableList";
 import SectionHeader, {
   TDirections,
   Row,
   Title,
-  RowSplitter,
   SortingKey,
-  ColumnSplitter,
   Key,
   HeaderTop,
   HeaderButtons,
   HeaderButton
 } from "../../components/util/SectionHeader";
-import { sort, isArrayEmpty } from "../../constants/util";
+import { sort } from "../../constants/util";
 import Icons from "../../components/util/Icons";
 import EditLoan from "../../components/inventory/EditModals/EditLoan";
 import useLoans from "../../redux/hooks/useLoans";
 import Loan from "./Loan";
-import { TableWrapper, ListWrapper } from "../../styles/table";
+import {
+  TableWrapper,
+  ListWrapper,
+  TWidth,
+  getTableStyle,
+  TableHeader,
+  TableContent,
+  ContentHeader,
+  ExtendColumns
+} from "../../styles/table";
 import { Tooltip } from "../../components/util/HoverInfo";
+import useAuthLocation from "../../hooks/useAuthLocation";
 
 export default function Loans() {
   const loans = useSelector((state: RootState) => state.loans);
   const customers = useSelector((state: RootState) => state.customers);
   const [isLoanOpen, setLoanOpen] = useState(false);
+  const { secondary } = useAuthLocation();
 
   const { createNewLoan, editLoan, clearCurrentLoan } = useLoans();
 
@@ -41,6 +50,17 @@ export default function Loans() {
   const sortList = (dir: TDirections, index: number, func: Function) =>
     sortFunc(setSorting)(dir, index, func, sorting);
 
+  const [extended, setExtended] = useState(() => window.innerWidth > 425);
+  const tableStyles = useMemo(() => {
+    let data: TWidth[] = ["large"];
+    if (extended) {
+      data.unshift("small");
+      data.push("medium", "medium");
+    }
+    data.push("tiny", "tiny");
+    return getTableStyle(data, 5);
+  }, [extended]);
+
   const handleNewLoan = () => {
     createNewLoan();
     setLoanOpen(true);
@@ -48,36 +68,43 @@ export default function Loans() {
 
   return (
     <TableWrapper>
-      <SectionHeader>
-        <HeaderTop>
-          <Title>Utlån</Title>
-          <HeaderButtons>
-            <HeaderButton
-              onClick={handleNewLoan}
-              data-tip
-              data-for={"loans_header_add"}
-            >
-              <Icons.Add />
-            </HeaderButton>
-            <Tooltip handle={"loans_header_add"}>Nytt utlån</Tooltip>
-
-            <HeaderButton data-tip data-for={"loans_header_customers"}>
-              <Icons.Business />
-              <Icons.List />
-            </HeaderButton>
-            <Tooltip handle={"loans_header_customers"}>Kunder</Tooltip>
-          </HeaderButtons>
-        </HeaderTop>
-
-        <Row grid="10% repeat(3, 15%) 10%">
-          <SortingKey
-            onClick={dir => sortList(dir, 0, sort.by("loanID", dir))}
+      <TableHeader bckColor={secondary}>
+        <Title>Utlån</Title>
+        <HeaderButtons>
+          <HeaderButton
+            onClick={handleNewLoan}
             data-tip
-            data-for={"loans_header_id"}
+            data-for={"loans_header_add"}
           >
-            #
-          </SortingKey>
-          <Tooltip handle={"loans_header_id"}>ID</Tooltip>
+            <Icons.Add />
+          </HeaderButton>
+          <Tooltip handle={"loans_header_add"}>Nytt utlån</Tooltip>
+
+          <HeaderButton
+            data-tip
+            data-for={"loans_header_customers"}
+            onClick={() => {}}
+          >
+            <Icons.Business />
+            <Icons.List />
+          </HeaderButton>
+          <Tooltip handle={"loans_header_customers"}>Kunder</Tooltip>
+        </HeaderButtons>
+      </TableHeader>
+      <TableContent>
+        <ContentHeader bckColor={secondary} columns={tableStyles.header}>
+          {extended && (
+            <>
+              <SortingKey
+                onClick={dir => sortList(dir, 0, sort.by("loanID", dir))}
+                data-tip
+                data-for={"loans_header_id"}
+              >
+                #
+              </SortingKey>
+              <Tooltip handle={"loans_header_id"}>ID</Tooltip>
+            </>
+          )}
 
           <SortingKey
             onClick={dir =>
@@ -89,45 +116,50 @@ export default function Loans() {
             <Icons.Business />
           </SortingKey>
           <Tooltip handle={"loans_header_customer"}>Kunde</Tooltip>
+          {extended && (
+            <>
+              <SortingKey
+                onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}
+                data-tip
+                data-for={"loans_header_ordered"}
+              >
+                <Icons.AccessTime />
+              </SortingKey>
+              <Tooltip handle={"loans_header_ordered"}>Dato bestilt</Tooltip>
 
-          <SortingKey
-            onClick={dir => sortList(dir, 2, sort.by("dateOrdered", dir))}
-            data-tip
-            data-for={"loans_header_ordered"}
-          >
-            <Icons.AccessTime />
-          </SortingKey>
-          <Tooltip handle={"loans_header_ordered"}>Dato bestilt</Tooltip>
-
-          <SortingKey
-            onClick={dir => sortList(dir, 2, sort.by("dateSent", dir))}
-            data-tip
-            data-for={"loans_header_sent"}
-          >
-            <Icons.Unarchive />
-          </SortingKey>
-          <Tooltip handle={"loans_header_sent"}>Dato sendt</Tooltip>
-
+              <SortingKey
+                onClick={dir => sortList(dir, 2, sort.by("dateSent", dir))}
+                data-tip
+                data-for={"loans_header_sent"}
+              >
+                <Icons.Unarchive />
+              </SortingKey>
+              <Tooltip handle={"loans_header_sent"}>Dato sendt</Tooltip>
+            </>
+          )}
           <Key data-tip data-for={"loans_header_amount"}>
             <Icons.ShoppingCart />
           </Key>
           <Tooltip handle={"loans_header_amount"}>Antall produkter</Tooltip>
-        </Row>
-      </SectionHeader>
-      <ListWrapper>
-        {sortedList &&
-          sortedList.map((loan, index) => (
-            <Loan
-              key={"loans_" + index}
-              loan={loan}
-              edit={id => {
-                editLoan(id);
-                setLoanOpen(true);
-              }}
-              index={index}
-            />
-          ))}
-      </ListWrapper>
+          <ExtendColumns extended={extended} setExtended={setExtended} />
+          <div />
+        </ContentHeader>
+        <ListWrapper>
+          {sortedList &&
+            sortedList.map((loan, index) => (
+              <Loan
+                key={"loans_" + index}
+                columns={tableStyles.item}
+                extended={extended}
+                loan={loan}
+                edit={id => {
+                  editLoan(id);
+                  setLoanOpen(true);
+                }}
+              />
+            ))}
+        </ListWrapper>
+      </TableContent>
       {isLoanOpen && (
         <EditLoan
           isOpen={isLoanOpen}

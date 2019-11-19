@@ -2,11 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import LinkWrapper from "../util/LinkWrapper";
 import { RootState } from "../../redux/types";
-import Typography from "@material-ui/core/Typography";
 import styled from "styled-components";
 import { UserName, ClientImage } from "./styles";
 import CloudStatus from "./CloudStatus";
-import { device } from "../../styles/device";
 
 const LocationSelector = () => {
   const locationName = useSelector(

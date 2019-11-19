@@ -1,72 +1,72 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { ILoan } from "../../redux/types";
 import useLoans from "../../redux/hooks/useLoans";
 import { dateToString } from "../../constants/util";
 import Names from "../../components/Names";
 import Icons from "../../components/util/Icons";
 import Buttons from "../../components/util/Buttons";
-import { ExpandedTableItem, TableItem } from "../../styles/table";
+import { ExpandedTableItem, TableItem, ItemData } from "../../styles/table";
 import { Tooltip } from "../../components/util/HoverInfo";
 import useAuthLocation from "../../hooks/useAuthLocation";
 
 type TLoan = {
   loan: ILoan;
   edit: (id: number) => void;
-  index: number;
+  columns: string;
+  extended: boolean;
 };
 
-const Loan = ({ loan, edit, index }: TLoan) => {
+const Loan = ({ loan, edit, columns, extended }: TLoan) => {
   const { loanID, customerID, dateOrdered, dateSent, ordered } = loan;
   const [expanded, setExpanded] = useState(false);
   const { deleteLoan, sentLoan, receivedLoan } = useLoans();
 
-  const { dark } = useAuthLocation()
+  const { dark } = useAuthLocation();
 
   let orderDate = dateToString(dateOrdered);
   let sentDate = dateToString(dateSent);
   let totalProducts = ordered.reduce((acc, cur) => acc + cur.amount, 0);
 
-  const tooltipHandle = `loan_${loanID}`
+  const tooltipHandle = `loan_${loanID}`;
   const handles = {
     expand: tooltipHandle + "expand",
     edit: tooltipHandle + "edit",
     delete: tooltipHandle + "delete",
     send: tooltipHandle + "send",
     receive: tooltipHandle + "receive"
-  }
+  };
 
   return (
     <>
-      <StyledLoan index={index}>
-        <p>{loanID}</p>
-        <p>
+      <TableItem columns={columns}>
+        {extended && <ItemData>{loanID}</ItemData>}
+        <ItemData>
           <Names target="customers" id={customerID} />
-        </p>
-        <p>{orderDate}</p>
-        <p>{sentDate || "-"}</p>
-        <p>{totalProducts}</p>
+        </ItemData>
+        {extended && <ItemData>{orderDate}</ItemData>}
+        {extended && <ItemData>{sentDate || "-"}</ItemData>}
+        <ItemData>{totalProducts}</ItemData>
         <div />
-
-        <Buttons.Click 
+        <div />
+        <Buttons.Click
           onClick={() => setExpanded(!expanded)}
-          data-tip data-for={handles.expand}
+          data-tip
+          data-for={handles.expand}
         >
-            {expanded ? "x": "="}
+          {expanded ? <Icons.Close /> : <Icons.List />}
         </Buttons.Click>
         <Tooltip handle={handles.expand}>
           {expanded ? "Skjul produkter" : "Vis produkter"}
         </Tooltip>
 
-        <Buttons.Click 
+        <Buttons.Click
           onClick={() => edit(loanID)}
-          data-tip data-for={handles.edit}
+          data-tip
+          data-for={handles.edit}
         >
           <Icons.Edit />
         </Buttons.Click>
-        <Tooltip handle={handles.edit}>
-          Rediger
-        </Tooltip>
+        <Tooltip handle={handles.edit}>Rediger</Tooltip>
 
         <Buttons.Confirm
           message="Vil du slette dette lånet?"
@@ -74,13 +74,12 @@ const Loan = ({ loan, edit, index }: TLoan) => {
           onConfirm={() => {
             deleteLoan(loanID);
           }}
-          data-tip data-for={handles.delete}
+          data-tip
+          data-for={handles.delete}
         >
           <Icons.Delete />
         </Buttons.Confirm>
-        <Tooltip handle={handles.delete}>
-          Slett
-        </Tooltip>
+        <Tooltip handle={handles.delete}>Slett</Tooltip>
 
         <Buttons.Confirm
           message="Bekreft sending av utlån"
@@ -88,13 +87,12 @@ const Loan = ({ loan, edit, index }: TLoan) => {
           onConfirm={() => {
             sentLoan(loanID, ordered);
           }}
-          data-tip data-for={handles.send}
+          data-tip
+          data-for={handles.send}
         >
           <Icons.Unarchive />
         </Buttons.Confirm>
-        <Tooltip handle={handles.send}>
-          Send
-        </Tooltip>
+        <Tooltip handle={handles.send}>Send</Tooltip>
 
         <Buttons.Confirm
           message="Bekreft mottak av utlån"
@@ -102,15 +100,13 @@ const Loan = ({ loan, edit, index }: TLoan) => {
           onConfirm={() => {
             receivedLoan(loanID, ordered);
           }}
-          data-tip data-for={handles.receive}
+          data-tip
+          data-for={handles.receive}
         >
           <Icons.Archive />
         </Buttons.Confirm>
-        <Tooltip handle={handles.receive}>
-          Mottak
-        </Tooltip>
-        
-      </StyledLoan>
+        <Tooltip handle={handles.receive}>Mottak</Tooltip>
+      </TableItem>
       {expanded && (
         <ExpandedTableItem expanded={expanded} color={dark}>
           {ordered.map((prod, i) => (
@@ -123,9 +119,5 @@ const Loan = ({ loan, edit, index }: TLoan) => {
     </>
   );
 };
-
-const StyledLoan = styled(TableItem)`
-  grid-template-columns: 10% repeat(3, 15%) 10% 5% repeat(5, 6%);
-`;
 
 export default Loan;

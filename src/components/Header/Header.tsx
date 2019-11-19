@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
-import CloudStatus from "./CloudStatus";
 import { RootState } from "../../redux/types";
 import { HeaderWrapper, NonAuthTitle, UtilityWrapper } from "./styles";
 import Client from "./Client";

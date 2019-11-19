@@ -11,19 +11,21 @@ import {
 import ProductName from "../../components/inventory/ProductName";
 import { ExpandedTableItem, ItemData } from "../../styles/table";
 import { shortDate } from "../../constants/dates";
-import { OrderTime, OrderContent, OrderWrapper } from "./styles";
+import { OrderTime, OrderContent } from "./styles";
 import { Tooltip } from "../../components/util/HoverInfo";
 import useAuthLocation from "../../hooks/useAuthLocation";
+import { TableItem } from "../../styles/table";
 
 type TOrdered = { productID: number; amount: number };
 
 type TOrder = {
   order: IOrder;
   edit: (id: number) => void;
-  index: number;
+  columns: string;
+  extended: boolean;
 };
 
-const Order: React.FC<TOrder> = ({ order, edit, index }) => {
+const Order: React.FC<TOrder> = ({ order, edit, columns, extended }) => {
   const { orderID, supplierID, dateOrdered, dateReceived, ordered } = order;
   const [expanded, setExpanded] = useState(false);
   const dispatch = useDispatch();
@@ -51,18 +53,19 @@ const Order: React.FC<TOrder> = ({ order, edit, index }) => {
 
   return (
     <>
-      <OrderWrapper index={index}>
-        <ItemData>{orderID}</ItemData>
+      <TableItem columns={columns}>
+        {extended && <ItemData>{orderID}</ItemData>}
         <ItemData>{suppliers[supplierID - 1].name}</ItemData>
-        <ItemData>{orderDate}</ItemData>
+        {extended && <ItemData>{orderDate}</ItemData>}
         <ItemData>{totalOrdered}</ItemData>
+        <div />
         <div />
         <Buttons.Click
           onClick={() => setExpanded(!expanded)}
           data-tip
           data-for={handles.expand}
         >
-          {expanded ? "x" : "="}
+          {expanded ? <Icons.Close /> : <Icons.List />}
         </Buttons.Click>
         <Tooltip handle={handles.expand}>
           {expanded ? "Skjul produkter" : "Vis produkter"}
@@ -111,7 +114,7 @@ const Order: React.FC<TOrder> = ({ order, edit, index }) => {
           <Icons.Archive />
         </Buttons.Confirm>
         <Tooltip handle={handles.receive}>Mottak</Tooltip>
-      </OrderWrapper>
+      </TableItem>
       {expanded && (
         <ExpandedTableItem expanded={expanded} color={dark}>
           <OrderTime>

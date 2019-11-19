@@ -23,13 +23,13 @@ export default function Profile() {
   );
 }
 
-const StyledEditButton = styled.button`
+/* const StyledEditButton = styled.button`
   width: 20%;
   height: 3em;
   justify-self: center;
   background-color: #fff;
   margin-bottom: 2em;
-`;
+`; */
 
 const UserData = ({ edit }: { edit: boolean }) => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -74,6 +74,9 @@ const UserData = ({ edit }: { edit: boolean }) => {
         type="checkbox"
         checked={user.settings.showTooltips}
         onChange={() => dispatch(toggleTooltips())}
+        style={{
+          alignSelf: "center"
+        }}
       />
     </StyledUserData>
   );

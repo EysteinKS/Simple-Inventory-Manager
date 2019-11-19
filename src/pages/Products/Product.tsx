@@ -1,10 +1,5 @@
 import React, { useMemo } from "react";
-import {
-  StyledProduct,
-  ProductName,
-  ProductCategory,
-  NewStyledProduct
-} from "./styles";
+import { StyledProduct } from "./styles";
 import {
   OrderedWithInfo,
   ReservedWithInfo,
@@ -18,20 +13,22 @@ import { hasActiveLoans } from "../../redux/selectors/loansSelectors";
 import { getAmount } from "../../constants/util";
 import Buttons from "../../components/util/Buttons";
 import { Tooltip } from "../../components/util/HoverInfo";
-import { getTableStyle, TWidth, ItemData } from "../../styles/table";
+import { ItemData } from "../../styles/table";
 
 type TProductWithEdit = {
   product: IProduct;
   edit: (id: number) => void;
   showHistory: (id: number) => void;
-  index: number;
+  columns: string;
+  extended: boolean;
 };
 
 const Product: React.FC<TProductWithEdit> = ({
   product,
   edit,
   showHistory,
-  index
+  columns,
+  extended
 }) => {
   const categories = useSelector(
     (state: RootState) => state.categories.categories
@@ -63,33 +60,20 @@ const Product: React.FC<TProductWithEdit> = ({
     };
   }, [product.productID]);
 
-  const tableStyle = useMemo(() => {
-    const data: TWidth[] = [
-      "small",
-      "large",
-      "medium",
-      "tiny",
-      "tiny",
-      "tiny",
-      "tiny",
-      "tiny"
-    ];
-    if (hasLoans) {
-      data.push("tiny");
-    }
-    return getTableStyle(data, 2);
-  }, [hasLoans]);
-
   return (
-    <StyledProduct active={product.active} hasLoans={hasLoans} index={index}>
-      <ItemData>{product.productID}</ItemData>
+    <StyledProduct columns={columns} active={product.active}>
+      {extended && <ItemData>{product.productID}</ItemData>}
       <ItemData>{product.name}</ItemData>
-      <ItemData>{category}</ItemData>
-      <ItemData>{amount || "-"}</ItemData>
-      <OrderedWithInfo productID={product.productID} amount={ordered} />
-      <ReservedWithInfo productID={product.productID} amount={reserved} />
-      {hasLoans && (
-        <LoansWithInfo productID={product.productID} amount={loaned} />
+      {extended && (
+        <>
+          <ItemData>{category}</ItemData>
+          <ItemData>{amount || "-"}</ItemData>
+          <OrderedWithInfo productID={product.productID} amount={ordered} />
+          <ReservedWithInfo productID={product.productID} amount={reserved} />
+          {hasLoans && (
+            <LoansWithInfo productID={product.productID} amount={loaned} />
+          )}{" "}
+        </>
       )}
       <ItemData>{total || 0}</ItemData>
       <ItemData>
@@ -103,6 +87,7 @@ const Product: React.FC<TProductWithEdit> = ({
           />
         )}
       </ItemData>
+      <div />
       <Buttons.Click
         data-tip
         data-for={handles.history}
