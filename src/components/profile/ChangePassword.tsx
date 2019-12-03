@@ -104,7 +104,8 @@ const ChangePasswordModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
       onRequestClose={onClose}
       style={{
         overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.6)"
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
+          zIndex: "10"
         },
         content: {
           top: "30vh",

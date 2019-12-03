@@ -80,15 +80,6 @@ export default function Sales() {
             <Icons.Add />
             <Tooltip handle={"sales_header_add"}>Nytt salg</Tooltip>
           </HeaderButton>
-          <HeaderButton
-            onClick={() => {}}
-            data-tip
-            data-for={"sales_header_customers"}
-          >
-            <Icons.Business />
-            <Icons.List />
-            <Tooltip handle={"sales_header_customers"}>Kunder</Tooltip>
-          </HeaderButton>
         </HeaderButtons>
       </TableHeader>
       <TableContent>

@@ -6,6 +6,8 @@ import useInitialization from "./hooks/useInitialization";
 import MainRouter from "./Router";
 import { PageLoading } from "./components/util/PageLoading";
 import GlobalStyle from "./styles/globalStyle";
+import styled from "styled-components";
+import { tallDevice } from "./styles/device";
 
 const App: FC = () => {
   const {
@@ -21,22 +23,9 @@ const App: FC = () => {
     <>
       <CssBaseline />
       <GlobalStyle />
-      <main
-        style={{
-          height: "100vh",
-          overflow: "hidden"
-        }}
-      >
+      <AppWrapper>
         <Header locationIsLoaded={isLoadedGate} />
-        <section
-          style={{
-            height: "100%",
-            overflow: "overlay",
-            overflowX: "hidden",
-            marginTop: "44px",
-            background: "#e4e4e4"
-          }}
-        >
+        <SectionWrapper>
           {loading ? (
             <PageLoading message={loadingMessage} />
           ) : loadingErrorGate ? (
@@ -50,10 +39,27 @@ const App: FC = () => {
               login={login}
             />
           )}
-        </section>
-      </main>
+        </SectionWrapper>
+      </AppWrapper>
     </>
   );
 };
+
+const AppWrapper = styled.main`
+  height: 100vh;
+  overflow: hidden;
+`;
+
+const SectionWrapper = styled.section`
+  height: 94.5vh;
+  overflow-x: hidden;
+  overflow-y: overlay;
+  margin-top: 5.5vh;
+  background: #e4e4e4;
+  ${tallDevice(`
+    height: 96vh;
+    margin-top: 4vh;
+  `)}
+`;
 
 export default App;

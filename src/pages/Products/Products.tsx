@@ -21,9 +21,9 @@ import {
 import Icons from "../../components/util/Icons";
 
 import useSortableList from "../../hooks/useSortableList";
-import { RootState } from "../../redux/types";
+import { RootState, IProduct } from "../../redux/types";
 import { hasActiveLoans } from "../../redux/selectors/loansSelectors";
-import ProductHistory from "../../components/inventory/ProductHistory";
+import ProductHistory from "./ProductHistory";
 import {
   TableWrapper,
   ListWrapper,
@@ -51,7 +51,7 @@ export default function Products() {
 
   //MODALS
   const [isProductOpen, setProductOpen] = useState(false);
-  const [isHistoryOpen, setHistoryOpen] = useState(false);
+  const [historyProduct, setHistoryProduct] = useState(null as IProduct | null);
   const [isCategoriesOpen, setCategoriesOpen] = useState(false);
 
   //SORTING
@@ -210,10 +210,7 @@ export default function Products() {
                   dispatch(setCurrentProduct(id));
                   setProductOpen(true);
                 }}
-                showHistory={id => {
-                  dispatch(setCurrentProduct(id));
-                  setHistoryOpen(true);
-                }}
+                showHistory={() => setHistoryProduct(product)}
               />
             ))}
         </ListWrapper>
@@ -235,13 +232,10 @@ export default function Products() {
           }}
         />
       )}
-      {isHistoryOpen && (
+      {historyProduct && (
         <ProductHistory
-          isOpen={isHistoryOpen}
-          close={() => {
-            setHistoryOpen(false);
-            dispatch(clearCurrentProduct());
-          }}
+          product={historyProduct}
+          close={() => setHistoryProduct(null)}
         />
       )}
     </TableWrapper>

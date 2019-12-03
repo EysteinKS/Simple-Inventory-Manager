@@ -75,18 +75,8 @@ export default function Loans() {
             data-for={"loans_header_add"}
           >
             <Icons.Add />
+            <Tooltip handle={"loans_header_add"}>Nytt utlån</Tooltip>
           </HeaderButton>
-          <Tooltip handle={"loans_header_add"}>Nytt utlån</Tooltip>
-
-          <HeaderButton
-            data-tip
-            data-for={"loans_header_customers"}
-            onClick={() => {}}
-          >
-            <Icons.Business />
-            <Icons.List />
-          </HeaderButton>
-          <Tooltip handle={"loans_header_customers"}>Kunder</Tooltip>
         </HeaderButtons>
       </TableHeader>
       <TableContent>

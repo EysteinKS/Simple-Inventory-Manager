@@ -26,7 +26,7 @@ const useAuthLocation = () => {
     let hsl = hexToHSL(color);
     hsl[1] = hsl[1] * 1 - 40;
     hsl[2] = hsl[2] * 1 + 35;
-    return `hsla(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%, 0.5)`;
+    return `hsla(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%, 1)`;
   }, [color]);
 
   return { name, url, color, secondary, dark };

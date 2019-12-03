@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IOrder, RootState, IOrderedProduct } from "../../redux/types";
+import { IOrder, RootState } from "../../redux/types";
 import { useDispatch, useSelector } from "react-redux";
 import Icons from "../../components/util/Icons";
 import Buttons from "../../components/util/Buttons";
@@ -8,13 +8,16 @@ import {
   deleteOrder,
   didReceiveOrder
 } from "../../redux/actions/ordersActions";
-import ProductName from "../../components/inventory/ProductName";
-import { ExpandedTableItem, ItemData } from "../../styles/table";
+import {
+  ExpandedTableItem,
+  ItemData,
+  ExpandedContentItem
+} from "../../styles/table";
 import { shortDate } from "../../constants/dates";
-import { OrderTime, OrderContent } from "./styles";
 import { Tooltip } from "../../components/util/HoverInfo";
 import useAuthLocation from "../../hooks/useAuthLocation";
 import { TableItem } from "../../styles/table";
+import Names from "../../components/Names";
 
 type TOrdered = { productID: number; amount: number };
 
@@ -26,7 +29,7 @@ type TOrder = {
 };
 
 const Order: React.FC<TOrder> = ({ order, edit, columns, extended }) => {
-  const { orderID, supplierID, dateOrdered, dateReceived, ordered } = order;
+  const { orderID, supplierID, dateOrdered, ordered } = order;
   const [expanded, setExpanded] = useState(false);
   const dispatch = useDispatch();
   const suppliers = useSelector(
@@ -36,7 +39,6 @@ const Order: React.FC<TOrder> = ({ order, edit, columns, extended }) => {
   const { dark } = useAuthLocation();
 
   const orderDate = shortDate(dateOrdered);
-  const receivedDate = shortDate(dateReceived);
 
   let totalOrdered = ordered.reduce(
     (acc: number, cur: TOrdered) => acc + cur.amount,
@@ -53,7 +55,7 @@ const Order: React.FC<TOrder> = ({ order, edit, columns, extended }) => {
 
   return (
     <>
-      <TableItem columns={columns}>
+      <TableItem columns={columns} expanded={expanded ? dark : null}>
         {extended && <ItemData>{orderID}</ItemData>}
         <ItemData>{suppliers[supplierID - 1].name}</ItemData>
         {extended && <ItemData>{orderDate}</ItemData>}
@@ -116,33 +118,22 @@ const Order: React.FC<TOrder> = ({ order, edit, columns, extended }) => {
         <Tooltip handle={handles.receive}>Mottak</Tooltip>
       </TableItem>
       {expanded && (
-        <ExpandedTableItem expanded={expanded} color={dark}>
-          <OrderTime>
-            <p>Bestilt: {orderDate}</p>
-            <p>Mottatt: {receivedDate || "Nei"}</p>
-          </OrderTime>
-          <OrderContent>
-            {ordered.map((prod: IOrderedProduct, i: number) => (
-              <Product product={prod} key={orderID + "product" + i} />
-            ))}
-          </OrderContent>
+        <ExpandedTableItem expanded={expanded} borderColor={dark}>
+          {ordered.map(prod => (
+            <ExpandedContentItem
+              key={`order_${orderID}_product_${prod.productID}`}
+              columns="1fr 2fr 1fr"
+            >
+              <p>#{prod.productID}</p>
+              <p>
+                <Names target="products" id={prod.productID} />
+              </p>
+              <p>{prod.amount}x</p>
+            </ExpandedContentItem>
+          ))}
         </ExpandedTableItem>
       )}
     </>
-  );
-};
-
-type TProduct = {
-  product: IOrderedProduct;
-};
-
-const Product = ({ product }: TProduct) => {
-  return (
-    <div>
-      <span>
-        {product.amount}x <ProductName id={product.productID} />
-      </span>
-    </div>
   );
 };
 

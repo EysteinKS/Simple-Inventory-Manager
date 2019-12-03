@@ -1,14 +1,15 @@
 import styled, { css } from "styled-components";
-import { device } from "../../styles/device";
+import { device, tallDevice } from "../../styles/device";
 
 export const HeaderWrapper = styled.header`
   color: #000c;
   display: flex;
   justify-content: space-between;
-  height: 44px;
+  height: 5.5vh;
   width: 100%;
   max-width: 100vw;
   column-gap: 2px;
+  box-sizing: border-box;
   border-bottom: 2px solid #0002;
   background-color: ${(props: { bckColor: string }) => props.bckColor};
   position: fixed;
@@ -17,6 +18,9 @@ export const HeaderWrapper = styled.header`
   :first-child {
     justify-self: flex-start;
   }
+  ${tallDevice(`
+    height: 4vh;
+  `)}
 `;
 
 export const UtilityWrapper = styled.div`

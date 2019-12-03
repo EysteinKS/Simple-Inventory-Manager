@@ -10,10 +10,12 @@ import { TLogin } from "./hooks/useInitialization";
 
 const Products = React.lazy(() => import("./pages/Products"));
 const Orders = React.lazy(() => import("./pages/Orders"));
+const Suppliers = React.lazy(() => import("./pages/Suppliers"));
 const Sales = React.lazy(() => import("./pages/Sales"));
+const Loans = React.lazy(() => import("./pages/Loans"));
+const Customers = React.lazy(() => import("./pages/Customers"));
 const History = React.lazy(() => import("./pages/History"));
 const Admin = React.lazy(() => import("./pages/Admin"));
-const Loans = React.lazy(() => import("./pages/Loans"));
 const Profile = React.lazy(() => import("./pages/Profile"));
 
 interface RoutePageProps extends RouteComponentProps {
@@ -50,6 +52,12 @@ export const AuthRouter: FC = () => {
         fbprops={{ title: "Bestillinger" }}
       />
       <RoutePage
+        component={Suppliers}
+        path={routes.SUPPLIERS}
+        fallback={TableSkeleton}
+        fbprops={{ title: "Leverandører" }}
+      />
+      <RoutePage
         component={Sales}
         path={routes.SALES}
         fallback={TableSkeleton}
@@ -60,6 +68,12 @@ export const AuthRouter: FC = () => {
         path={routes.LOANS}
         fallback={TableSkeleton}
         fbprops={{ title: "Utlån" }}
+      />
+      <RoutePage
+        component={Customers}
+        path={routes.CUSTOMERS}
+        fallback={TableSkeleton}
+        fbprops={{ title: "Kunder" }}
       />
       <RoutePage
         component={History}

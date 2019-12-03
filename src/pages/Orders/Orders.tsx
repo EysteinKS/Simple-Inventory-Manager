@@ -20,7 +20,6 @@ import Icons from "../../components/util/Icons";
 
 import useSortableList from "../../hooks/useSortableList";
 import { RootState, IOrder } from "../../redux/types";
-import EditSuppliers from "../Suppliers/Suppliers";
 import Order from "./Order";
 import {
   TableWrapper,
@@ -40,7 +39,6 @@ export default function Orders() {
   const orders = useSelector((state: RootState) => state.orders);
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const [isOrderOpen, setOrderOpen] = useState(false);
-  const [isSuppliersOpen, setSuppliersOpen] = useState(false);
   const { secondary } = useAuthLocation();
 
   //SORTING
@@ -84,15 +82,6 @@ export default function Orders() {
           >
             <Icons.Add />
             <Tooltip handle={"orders_header_add"}>Ny bestilling</Tooltip>
-          </HeaderButton>
-          <HeaderButton
-            onClick={() => setSuppliersOpen(true)}
-            data-tip
-            data-for={"orders_header_suppliers"}
-          >
-            <Icons.Store />
-            <Icons.List />
-            <Tooltip handle={"orders_header_suppliers"}>Leverandører</Tooltip>
           </HeaderButton>
         </HeaderButtons>
       </TableHeader>
@@ -161,12 +150,6 @@ export default function Orders() {
             setOrderOpen(false);
             dispatch(clearCurrentOrder());
           }}
-        />
-      )}
-      {isSuppliersOpen && (
-        <EditSuppliers
-          isOpen={isSuppliersOpen}
-          close={() => setSuppliersOpen(false)}
         />
       )}
     </TableWrapper>

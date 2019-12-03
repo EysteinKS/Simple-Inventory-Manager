@@ -5,7 +5,12 @@ import { dateToString } from "../../constants/util";
 import Names from "../../components/Names";
 import Icons from "../../components/util/Icons";
 import Buttons from "../../components/util/Buttons";
-import { ExpandedTableItem, TableItem, ItemData } from "../../styles/table";
+import {
+  ExpandedTableItem,
+  TableItem,
+  ItemData,
+  ExpandedContentItem
+} from "../../styles/table";
 import { Tooltip } from "../../components/util/HoverInfo";
 import useAuthLocation from "../../hooks/useAuthLocation";
 
@@ -38,7 +43,7 @@ const Loan = ({ loan, edit, columns, extended }: TLoan) => {
 
   return (
     <>
-      <TableItem columns={columns}>
+      <TableItem columns={columns} expanded={expanded ? dark : null}>
         {extended && <ItemData>{loanID}</ItemData>}
         <ItemData>
           <Names target="customers" id={customerID} />
@@ -108,11 +113,18 @@ const Loan = ({ loan, edit, columns, extended }: TLoan) => {
         <Tooltip handle={handles.receive}>Mottak</Tooltip>
       </TableItem>
       {expanded && (
-        <ExpandedTableItem expanded={expanded} color={dark}>
-          {ordered.map((prod, i) => (
-            <div key={"loan_product_" + i}>
-              {prod.amount}x <Names target="products" id={prod.productID} />
-            </div>
+        <ExpandedTableItem expanded={expanded} borderColor={dark}>
+          {ordered.map(prod => (
+            <ExpandedContentItem
+              key={`loan_${loanID}_product_${prod.productID}`}
+              columns="1fr 2fr 1fr"
+            >
+              <p>#{prod.productID}</p>
+              <p>
+                <Names target="products" id={prod.productID} />
+              </p>
+              <p>{prod.amount}x</p>
+            </ExpandedContentItem>
           ))}
         </ExpandedTableItem>
       )}

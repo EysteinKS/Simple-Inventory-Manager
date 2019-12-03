@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { verticalScroll, horizontalScroll } from "./scroll";
 import { device } from "./device";
 import { Key } from "../components/util/SectionHeader";
@@ -28,37 +28,40 @@ export const getTableStyle = (data: TWidth[], buttons: number) => {
 
   const sizeToFraction = (size: TWidth) => {
     switch (size) {
-      case "tiny":
-        return "1fr";
       case "small":
-        return "2fr";
+        return "minmax(96px, 2fr)";
       case "medium":
-        return "3fr";
+        return "minmax(144px, 3fr)";
       case "large":
-        return "4fr";
+        return "minmax(192px, 4fr)";
+      case "tiny":
       default:
-        return "1fr";
+        return "minmax(48px, 1fr)";
     }
   };
 
+  const minmaxTotal =
+    dataPixels.reduce((acc, cur) => {
+      acc += cur * 2;
+      return acc;
+    }, 0) +
+    buttons * 48;
+
   const dataFractions = data.map(size => sizeToFraction(size));
 
+  const minmax =
+    minmaxTotal > maxWidth
+      ? dataFractions
+      : dataPixels.map(px => {
+          return `minmax(${px}px, ${px * 2}px)`;
+        });
+
   const headerStyle = `
-    grid-template-columns: ${dataPixels.join("px ")}px auto ${buttons * 48}px;
-    ${device.tablet(`
-      grid-template-columns: ${dataFractions.join(" ")} auto ${buttons * 48}px;
-    `)}
+    grid-template-columns: ${minmax.join(" ")} auto ${buttons * 48}px;
   `;
 
   const itemStyle = `
-    grid-template-columns: ${dataPixels.join(
-      "px "
-    )}px auto repeat(${buttons}, 48px);
-    ${device.tablet(`
-      grid-template-columns: ${dataFractions.join(
-        " "
-      )} auto repeat(${buttons}, 48px)
-    `)}
+    grid-template-columns: ${minmax.join(" ")} auto repeat(${buttons}, 48px);
   `;
 
   return {
@@ -69,9 +72,11 @@ export const getTableStyle = (data: TWidth[], buttons: number) => {
 
 export const TableWrapper = styled.div`
   max-width: 960px;
-  margin: 2vh auto 0 auto;
+  margin: 0;
   border-top: 1px solid #0001;
-  border-bottom: 1px solid #0001;
+  ${device.tablet(`
+    margin: 2vh auto 0 auto;
+  `)}
 `;
 
 export const TableHeader = styled.div`
@@ -140,6 +145,7 @@ export const ListWrapper = styled.div`
 
 interface ITableItem {
   columns: string;
+  expanded?: string | null;
 }
 
 export const TableItem = styled.div`
@@ -154,33 +160,12 @@ export const TableItem = styled.div`
   }
   & > button {
     height: 100%;
+    background: none;
+    border: none;
   }
   ${(props: ITableItem) => (props.columns ? props.columns : null)}
 
   background-color: #F3F3F3;
-  :nth-child(2n) {
-    background-color: #dadada;
-  }
-`;
-
-export const NewTableItem = styled.div`
-  min-width: 100vw;
-  max-width: 960px;
-  display: grid;
-  grid-template-columns: ${(props: { btnWidth: number }) =>
-    props.btnWidth
-      ? `${
-          window.innerWidth < 960
-            ? window.innerWidth - props.btnWidth
-            : 960 - props.btnWidth
-        }px ${props.btnWidth}px`
-      : "48px"};
-
-  ${device.mobileS(`
-    grid-template-columns: 
-  `)}
-
-  background-color: #f3f3f3;
   :nth-child(2n) {
     background-color: #dadada;
   }
@@ -218,16 +203,60 @@ export const ItemButtons = styled.div`
     props.buttons ? `repeat(${props.buttons}, 48px)` : "48px"};
 `;
 
-export const ExpandedTableItem = styled.div`
-  ${(props: { expanded: boolean; color?: string }) =>
-    props.expanded
-      ? css`
-          display: grid;
-          padding: 10px;
-          background-color: ${props.color || "#e6e6e6"};
-          place-items: center;
-        `
-      : css`
-          display: none;
-        `}
+export const ExpandedContent = styled.div`
+  width: 100%;
+  display: grid;
+  grid-auto-rows: 30px;
+  background-color: #eee;
+  border-left: 5px solid
+    ${(props: { borderColor: string }) => props.borderColor || "#bbb"};
+`;
+
+interface ColumnsProps {
+  columns: string;
+}
+
+export const ExpandedContentItem = styled.div`
+  display: grid;
+  place-items: center;
+  place-content: center;
+  ${(props: ColumnsProps) => `
+    grid-template-columns: ${props.columns};
+  `}
+  :nth-child(2n) {
+    background-color: #0001;
+  }
+  & > p {
+    margin: 0;
+    :nth-child(1) {
+      justify-self: end;
+    }
+    :nth-child(3) {
+      justify-self: start;
+    }
+  }
+`;
+
+interface ExpandedTableItemProps {
+  expanded: boolean;
+  borderColor: string;
+}
+
+export const ExpandedTableItem: React.FC<ExpandedTableItemProps> = ({
+  expanded,
+  borderColor,
+  children
+}) => {
+  return (
+    <ExpandedWrapper expanded={expanded}>
+      <ExpandedContent borderColor={borderColor}>{children}</ExpandedContent>
+    </ExpandedWrapper>
+  );
+};
+
+export const ExpandedWrapper = styled.div`
+  float: left;
+  width: 100%;
+  display: ${(props: { expanded: boolean }) =>
+    props.expanded ? "block" : "none"};
 `;

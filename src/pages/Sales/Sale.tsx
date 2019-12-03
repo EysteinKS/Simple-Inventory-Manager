@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { ISale } from "../../redux/types";
 import { useDispatch } from "react-redux";
-import { ExpandedTableItem, ItemData } from "../../styles/table";
+import {
+  ExpandedTableItem,
+  ItemData,
+  ExpandedContentItem
+} from "../../styles/table";
 import { dateToString } from "../../constants/util";
 import Names from "../../components/Names";
 import Icons from "../../components/util/Icons";
@@ -39,7 +43,7 @@ const Sale: React.FC<TSale> = ({ sale, edit, columns, extended }) => {
 
   return (
     <>
-      <TableItem columns={columns}>
+      <TableItem columns={columns} expanded={expanded ? dark : null}>
         {extended && <ItemData>{saleID}</ItemData>}
         <ItemData>
           <Names target="customers" id={customerID} />
@@ -104,11 +108,18 @@ const Sale: React.FC<TSale> = ({ sale, edit, columns, extended }) => {
         <Tooltip handle={handles.send}>Send</Tooltip>
       </TableItem>
       {expanded && (
-        <ExpandedTableItem expanded={expanded} color={dark}>
-          {ordered.map((prod, i) => (
-            <div key={i}>
-              {prod.amount}x <Names target="products" id={prod.productID} />
-            </div>
+        <ExpandedTableItem expanded={expanded} borderColor={dark}>
+          {ordered.map(prod => (
+            <ExpandedContentItem
+              key={`sale_${saleID}_product_${prod.productID}`}
+              columns="1fr 2fr 1fr"
+            >
+              <p>#{prod.productID}</p>
+              <p>
+                <Names target="products" id={prod.productID} />
+              </p>
+              <p>{prod.amount}x</p>
+            </ExpandedContentItem>
           ))}
         </ExpandedTableItem>
       )}

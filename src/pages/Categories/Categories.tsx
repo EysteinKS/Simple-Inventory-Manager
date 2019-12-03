@@ -29,7 +29,8 @@ export default function EditCategories({
       onRequestClose={close}
       style={{
         overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.5)"
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
+          zIndex: "10"
         },
         content: {
           top: "20vh",

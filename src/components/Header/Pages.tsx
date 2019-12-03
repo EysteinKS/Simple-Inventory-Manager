@@ -24,8 +24,10 @@ const Pages = () => {
     let sectionArray = [
       { name: "Produkter", linkTo: routes.HOME, icon: <Icons.Storage /> },
       { name: "Bestillinger", linkTo: routes.ORDERS, icon: <Icons.Archive /> },
+      { name: "Leverandører", linkTo: routes.SUPPLIERS, icon: <Icons.Store /> },
       { name: "Salg", linkTo: routes.SALES, icon: <Icons.Unarchive /> },
       { name: "Utlån", linkTo: routes.LOANS, icon: <Icons.Cached /> },
+      { name: "Kunder", linkTo: routes.CUSTOMERS, icon: <Icons.Business /> },
       { name: "Logg", linkTo: routes.HISTORY, icon: <Icons.History /> },
       { name: "Profil", linkTo: routes.PROFILE, icon: <Icons.AccountCircle /> }
     ];
@@ -63,24 +65,22 @@ const Pages = () => {
     <PagesWrapper expand={expand}>
       <ExpandPages expand={expand} setExpand={setExpand} />
       {sections.map(s => (
-        <>
-          <PageLink
-            key={"link_to_" + s.linkTo}
-            onClick={e => {
-              e.currentTarget.blur();
-              handleClick(s.linkTo);
-            }}
-            current={isCurrent(s.linkTo)}
-            expand={expand}
-            data-tip
-            data-for={"page_" + s.linkTo}
-          >
-            {s.icon}
-          </PageLink>
+        <PageLink
+          key={"link_to_" + s.linkTo}
+          onClick={e => {
+            e.currentTarget.blur();
+            handleClick(s.linkTo);
+          }}
+          current={isCurrent(s.linkTo)}
+          expand={expand}
+          data-tip
+          data-for={"page_" + s.linkTo}
+        >
+          {s.icon}
           <Tooltip handle={"page_" + s.linkTo} place="right">
             {s.name}
           </Tooltip>
-        </>
+        </PageLink>
       ))}
     </PagesWrapper>
   );
