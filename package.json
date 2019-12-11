@@ -3,11 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^3.9.3",
-    "@material-ui/icons": "^3.0.2",
     "@reach/router": "^1.2.1",
     "@types/jest": "^24.0.18",
-    "@types/material-ui": "^0.21.7",
     "@types/node": "^12.7.12",
     "@types/reach__router": "^1.2.6",
     "@types/react": "^16.9.5",
@@ -20,8 +17,6 @@
     "@types/styled-components": "^4.1.19",
     "firebase": "^7.3.0",
     "immer": "^3.3.0",
-    "jsdoc": "^3.6.3",
-    "material-table": "^1.52.0",
     "react": "^16.10.2",
     "react-datepicker": "^2.9.6",
     "react-dom": "^16.10.2",
@@ -35,9 +30,9 @@
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "simplebar-react": "^1.2.3",
     "store": "^2.0.12",
     "styled-components": "^4.4.0",
+    "styled-icons": "^9.0.1",
     "typescript": "^3.6.4"
   },
   "scripts": {

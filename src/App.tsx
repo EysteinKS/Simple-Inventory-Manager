@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import Header from "./components/Header";
-import CssBaseline from "@material-ui/core/CssBaseline";
 
 import useInitialization from "./hooks/useInitialization";
 import MainRouter from "./Router";
@@ -21,7 +20,6 @@ const App: FC = () => {
 
   return (
     <>
-      <CssBaseline />
       <GlobalStyle />
       <AppWrapper>
         <Header locationIsLoaded={isLoadedGate} />

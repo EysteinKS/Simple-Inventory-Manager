@@ -34,8 +34,9 @@ const NewModal: React.FC<NewModalProps> = ({
   onSave,
   message
 }) => {
-  const modalWidth = 350;
-  const sideMargin = useMargin(modalWidth);
+  const modalWidth = window.innerWidth >= 364 ? 350 : window.innerWidth - 14;
+  const borderWidth = 7;
+  const sideMargin = useMargin(modalWidth, borderWidth);
 
   const { color, secondary } = useAuthLocation();
 
@@ -61,7 +62,7 @@ const NewModal: React.FC<NewModalProps> = ({
           width: `${modalWidth}px`,
           display: "grid",
           gridTemplateRows: "50px 50px auto",
-          border: `7px solid ${color}`
+          border: `${borderWidth}px solid ${color}`
         }
       }}
     >

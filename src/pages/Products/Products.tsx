@@ -140,7 +140,7 @@ export default function Products() {
             data-tip
             data-for={"product_header_name"}
           >
-            <Icons.FormatQuote />
+            <Icons.Name />
             <Tooltip handle={"product_header_name"}>Navn</Tooltip>
           </SortingKey>
 
@@ -157,21 +157,21 @@ export default function Products() {
                 <Tooltip handle={"product_header_category"}>Kategori</Tooltip>
               </SortingKey>
               <Key data-tip data-for={"product_header_inventory"}>
-                <Icons.Storage />
+                <Icons.Products />
                 <Tooltip handle={"product_header_inventory"}>På lager</Tooltip>
               </Key>
               <Key data-tip data-for={"product_header_ordered"}>
-                <Icons.Archive />
+                <Icons.Orders />
                 <Tooltip handle={"product_header_ordered"}>Bestilt</Tooltip>
               </Key>
               <Key data-tip data-for={"product_header_sales"}>
-                <Icons.Unarchive />
+                <Icons.Sales />
                 <Tooltip handle={"product_header_sales"}>Salg</Tooltip>
               </Key>
               {activeLoans && (
                 <>
                   <Key data-tip data-for={"product_header_loans"}>
-                    <Icons.Cached />
+                    <Icons.Loans />
                     <Tooltip handle={"product_header_loans"}>Utlån</Tooltip>
                   </Key>
                 </>

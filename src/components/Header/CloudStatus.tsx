@@ -18,11 +18,11 @@ export default function CloudStatus() {
 
   useEffect(() => {
     if (error) {
-      setIcon(<Icons.WarningIcon />);
+      setIcon(<Icons.Warning />);
       setTooltip("En feil oppsto! Prøv igjen?");
       setStatus("error");
     } else if (hasNewChanges) {
-      setIcon(<Icons.WarningIcon />);
+      setIcon(<Icons.Warning />);
       setTooltip("Nye endringer oppdaget, last inn siden på nytt!");
       setStatus("error");
     } else if (isSaving) {

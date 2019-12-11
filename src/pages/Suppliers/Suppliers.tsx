@@ -89,7 +89,7 @@ const Suppliers = () => {
             data-tip
             data-for={"supplier_header_name"}
           >
-            <Icons.FormatQuote />
+            <Icons.Name />
             <Tooltip handle={"supplier_header_name"}>Navn</Tooltip>
           </SortingKey>
         </ContentHeader>

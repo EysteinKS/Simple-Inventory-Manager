@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import { device, tallDevice } from "../../styles/device";
+import { DropdownWrapper, DropdownContent } from "../util/Dropdown";
 
 export const HeaderWrapper = styled.header`
   color: #000c;
@@ -48,12 +49,12 @@ export const PagesWrapper = styled.nav`
   place-items: center;
   justify-content: center;
   height: 100%;
-  padding-left: 0.5em;
+  padding-left: 2vw;
   ${(props: { expand: boolean }) =>
     props.expand &&
     css`
-      min-width: 100vw;
-      padding-right: 10vw;
+      min-width: 96vw;
+      padding-right: 2vw;
       justify-content: space-between;
     `}
 `;
@@ -100,15 +101,6 @@ export const PageLink = styled.div`
   `)}
 `;
 
-export const UserWrapper = styled.div`
-  display: flex;
-  place-items: center;
-  justify-content: center;
-  height: 50%;
-  align-self: center;
-  border-right: 1px solid #0003;
-`;
-
 export const ClientImage = styled.img`
   padding: 0;
   padding-right: 0.5em;
@@ -119,7 +111,7 @@ export const ClientImage = styled.img`
 export const ProfileWrapper = styled.div`
   display: flex;
   place-items: center;
-  height: 24px;
+  height: 100%;
   padding-right: 0.2em;
   ${(props: { current: boolean }) =>
     props.current
@@ -128,11 +120,22 @@ export const ProfileWrapper = styled.div`
         `
       : css`
           :hover {
-            cursor: pointer;
             color: #fff8;
           }
         `}
 `;
+
+export const UserWrapper = styled(DropdownWrapper)`
+  height: 100%;
+  align-self: center;
+  :hover {
+    ${ProfileWrapper} {
+      color: #fff8;
+    }
+  }
+`;
+
+export const UserDropdownContent = styled(DropdownContent)``;
 
 export const UserName = styled.p`
   padding: 0;

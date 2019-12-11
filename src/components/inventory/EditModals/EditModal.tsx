@@ -2,6 +2,9 @@ import React from "react";
 import ReactModal from "react-modal";
 import { IOrderedProduct } from "../../../redux/types";
 import ProductName from "../ProductName";
+import useMargin from "../../../hooks/useMargin";
+import useAuthLocation from "../../../hooks/useAuthLocation";
+import { ProductWrapper } from "../OrderedProducts";
 ReactModal.setAppElement("#root");
 
 interface IProps {
@@ -9,17 +12,25 @@ interface IProps {
   label: string;
   onClose: () => void;
   rows?: string;
+  modalWidth?: number;
 }
 
-const defaultRows = "10vh 60vh 10vh";
+const defaultRows = "5vh auto 5vh";
 
 const EditModal: React.FC<IProps> = ({
   isOpen,
   label,
   onClose,
   rows = defaultRows,
-  children
+  children,
+  modalWidth = 350
 }) => {
+  modalWidth =
+    window.innerWidth >= modalWidth ? modalWidth : window.innerWidth - 14;
+  const borderWidth = 7;
+  const sideMargin = useMargin(modalWidth, borderWidth);
+  const { color } = useAuthLocation();
+
   return (
     <ReactModal
       isOpen={isOpen}
@@ -34,11 +45,14 @@ const EditModal: React.FC<IProps> = ({
         },
         content: {
           top: "10vh",
-          left: "5vw",
-          right: "5vw",
-          padding: "10px",
+          bottom: "auto",
+          left: `${sideMargin}px`,
+          right: `${sideMargin}px`,
+          width: `${modalWidth}px`,
+          padding: "0",
           display: "grid",
-          gridTemplateRows: rows
+          gridTemplateRows: rows,
+          border: `${borderWidth}px solid ${color}`
         }
       }}
     >
@@ -53,14 +67,26 @@ interface OrderedProductProps {
 
 export const OrderedProduct: React.FC<OrderedProductProps> = ({ product }) => {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
-      <p style={{ placeSelf: "center" }}>
-        <span>
-          <ProductName id={product.productID} />
-        </span>
-        <span> x{product.amount}</span>
+    <ProductWrapper columns="1fr 1fr">
+      <p>
+        <ProductName id={product.productID} />
       </p>
-    </div>
+      <p>{product.amount}x</p>
+    </ProductWrapper>
+  );
+};
+
+interface SelectedProductProps {
+  id: number;
+}
+
+export const SelectedProduct: React.FC<SelectedProductProps> = ({ id }) => {
+  return (
+    <ProductWrapper columns="1fr">
+      <p>
+        <ProductName id={id} />
+      </p>
+    </ProductWrapper>
   );
 };
 

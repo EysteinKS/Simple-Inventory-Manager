@@ -4,6 +4,11 @@ import SelectProduct from "./SelectProduct";
 import ProductName from "./ProductName";
 import Icons from "../util/Icons";
 import styled from "styled-components";
+import { device } from "../../styles/device";
+import { ProductWithEdit, CenteredText } from "./EditModals/styles";
+import { InputButton as FormInputButton } from "../../styles/form";
+import { StyledList } from "../../styles/list";
+import useAuthLocation from "../../hooks/useAuthLocation";
 
 type TOrdered = {
   products: IProduct[];
@@ -20,17 +25,29 @@ const OrderedProducts = ({
   edit,
   remove
 }: TOrdered) => {
+  const { secondary, dark } = useAuthLocation();
   return (
     <StyledWrapper>
       <StyledSection overflow="hidden">
         <SelectProduct
+          height={/*window.innerWidth > 760*/ false ? "60vh" : "30vh"}
           products={products}
           onSelect={productID => add(productID)}
           selected={ordered}
         />
       </StyledSection>
-      <StyledSection overflow="overlay">
-        <StyledList>
+      <StyledSection overflow="hidden">
+        <ProductWithEdit bckColor={secondary}>
+          <CenteredText>
+            <Icons.Exchange />
+          </CenteredText>
+          {/* <FormInputButton
+            bckColor="rgb(255, 220, 0)"
+          >
+            <Icons.Edit />
+          </FormInputButton> */}
+        </ProductWithEdit>
+        <StyledList borderColor={dark}>
           {ordered.map((product, i) => (
             <OrderedProduct
               product={product}
@@ -48,12 +65,6 @@ const OrderedProducts = ({
   );
 };
 
-const StyledList = styled.ul`
-  list-style-type: none;
-  padding: 0px;
-  margin: 0px;
-`;
-
 type TOrderedProduct = {
   product: IOrderedProduct;
   edit: (updated: any, index: number) => void;
@@ -68,7 +79,7 @@ const OrderedProduct = ({ product, edit, remove, index }: TOrderedProduct) => {
   };
 
   return (
-    <ProductWrapper index={index}>
+    <ProductWrapper columns="4fr 2fr 1fr">
       <NameWrapper>
         <ProductName id={productID} />
       </NameWrapper>
@@ -94,37 +105,43 @@ const OrderedProduct = ({ product, edit, remove, index }: TOrderedProduct) => {
           +
         </InputButton>
       </InputWrapper>
-      <DeleteProduct
-        tabIndex={-1}
+      <FormInputButton
         onClick={e => {
           e.preventDefault();
           remove(index);
         }}
       >
         <Icons.Delete />
-      </DeleteProduct>
+      </FormInputButton>
     </ProductWrapper>
   );
 };
 
-const ProductWrapper = styled.div`
+interface ProductWrapperProps {
+  columns?: string;
+}
+
+export const ProductWrapper = styled.div<ProductWrapperProps>`
   display: grid;
-  grid-template-columns: 5fr 3fr 1fr;
-  height: 50px;
-  column-gap: 1em;
+  grid-template-columns: ${props => props.columns || "3fr 3fr 1fr"};
+  height: 35px;
   padding: 0.3em;
-  background-color: ${(props: { index: number }) => {
-    if (props.index % 2 === 0) {
-      return "#F3F3F3";
-    } else {
-      return "#E8E8E8";
-    }
-  }};
+  background-color: #e8e8e8;
+  :nth-child(2n) {
+    background-color: #f3f3f3;
+  }
+
+  p {
+    padding: 0;
+    margin: 0;
+    place-self: center;
+    font-size: 12px;
+  }
 `;
 
-const NameWrapper = styled.p`
+export const NameWrapper = styled.p`
   padding-left: 1em;
-  margin: 0.7em 0;
+  margin: 0;
   text-align: start;
   align-self: center;
 `;
@@ -133,17 +150,20 @@ const InputButton = styled.button`
   background-color: #fff;
   font-weight: 400;
   font-size: 16px;
-  border: 1px solid #aaa;
   border-radius: ${(props: { side: string }) => {
     if (props.side === "left") return "0.5em 0 0 0.5em";
     else if (props.side === "right") return "0 0.5em 0.5em 0";
   }};
+  border-radius: 0;
 `;
 
 const InputField = styled.input`
   width: 100%;
   border: 1px solid #aaa;
   text-align: center;
+  border: none;
+  margin: 0;
+
   ::-webkit-inner-spin-button,
   ::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -158,22 +178,22 @@ const InputWrapper = styled.div`
 `;
 
 const StyledWrapper = styled.div`
-  padding: 1%;
   max-height: 100%;
   overflow-y: hidden;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 1em;
-`;
-
-const DeleteProduct = styled.button`
-  border: 1px solid #aaa;
+  grid-template-rows: 30vh 30vh;
+  ${device.tablet(`
+    /* grid-template-rows: 100%;
+    grid-template-columns: 345px 345px;
+    column-gap: 10px; */
+  `)}
 `;
 
 const StyledSection = styled.div`
   background-color: #fbfbfb;
   padding: 0;
-  border: 2px solid #eee;
+  display: grid;
+  grid-template-rows: 6vh 24vh;
   overflow-y: hidden;
   overflow-x: hidden;
   :hover {

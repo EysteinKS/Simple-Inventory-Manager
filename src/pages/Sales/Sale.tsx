@@ -103,7 +103,7 @@ const Sale: React.FC<TSale> = ({ sale, edit, columns, extended }) => {
           data-tip
           data-for={handles.send}
         >
-          <Icons.Unarchive />
+          <Icons.Sales />
         </Buttons.Confirm>
         <Tooltip handle={handles.send}>Send</Tooltip>
       </TableItem>

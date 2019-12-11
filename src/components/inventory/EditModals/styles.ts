@@ -1,9 +1,14 @@
 import styled from "styled-components";
 
-export const StyledHeader = styled.header`
+interface BckColorProps {
+  bckColor: string;
+}
+
+export const StyledHeader = styled.header<BckColorProps>`
   padding: 10px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 50px 1fr 50px;
+  background-color: ${props => props.bckColor};
 `;
 
 export const StyledDetails = styled.section`
@@ -11,6 +16,11 @@ export const StyledDetails = styled.section`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(3, 1fr) 8fr;
   column-gap: 1em;
+`;
+
+export const ModalFooter = styled.footer`
+  display: flex;
+  justify-content: flex-end;
 `;
 
 export const StyledFooter = styled.footer`
@@ -21,6 +31,8 @@ export const StyledFooter = styled.footer`
 
 export const CenteredText = styled.p`
   text-align: center;
+  margin: 0;
+  place-self: center;
 `;
 
 export const EndText = styled.p`
@@ -33,9 +45,14 @@ export const TargetWithEdit = styled.div`
 `;
 
 export const ProductWithEdit = styled.div`
-  grid-column: 1/3;
   display: grid;
-  grid-template-columns: 1fr 8fr 1fr;
+  grid-template-columns: 2fr 5fr 2fr;
+  padding: 0.5em;
+  background: ${(props: { bckColor?: string }) => props.bckColor || "white"};
+
+  :before {
+    content: "";
+  }
 `;
 
 export const IDText = styled(CenteredText)`
@@ -43,7 +60,6 @@ export const IDText = styled(CenteredText)`
 `;
 
 export const ProductList = styled.div`
-  grid-column: 1 / 3;
-  height: 43vh;
+  max-height: 43vh;
   overflow: overlay;
 `;

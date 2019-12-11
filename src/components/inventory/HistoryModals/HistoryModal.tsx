@@ -9,6 +9,7 @@ import {
 } from "./styles";
 import useAuthLocation from "../../../hooks/useAuthLocation";
 import useMargin from "../../../hooks/useMargin";
+import Icons from "../../util/Icons";
 ReactModal.setAppElement("#root");
 
 interface HistoryModalProps {
@@ -65,7 +66,9 @@ const HistoryModal: React.FC<HistoryModalProps> = ({
       }}
     >
       <HistoryHeader bckColor={color as string}>
-        <HistoryTitle>Historikk - {name}</HistoryTitle>
+        <HistoryTitle>
+          <Icons.History /> Historikk - {name}
+        </HistoryTitle>
       </HistoryHeader>
       <HistoryContent>
         <ListHeader bckColor={secondary} columns={columns}>

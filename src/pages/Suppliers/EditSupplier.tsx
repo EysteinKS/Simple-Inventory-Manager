@@ -7,14 +7,31 @@ import { useDispatch } from "react-redux";
 import { addChange } from "../../redux/actions/reportsActions";
 import { saveEditedSupplier } from "../../redux/actions/suppliersActions";
 import {
-  StyledHeader,
-  StyledDetails,
-  IDText,
-  EndText,
-  StyledFooter
+  ProductWithEdit,
+  CenteredText
 } from "../../components/inventory/EditModals/styles";
 import SuppliersProducts from "../../components/inventory/SuppliersProducts";
-import EditModal from "../../components/inventory/EditModals/EditModal";
+import EditModal, {
+  SelectedProduct
+} from "../../components/inventory/EditModals/EditModal";
+import useAuthLocation from "../../hooks/useAuthLocation";
+import {
+  ModalHeader,
+  ModalTitle,
+  ModalSubtitle,
+  ModalButton,
+  ModalFooter,
+  ModalContent,
+  TitleWrapper
+} from "../../styles/modal";
+import Icons from "../../components/util/Icons";
+import {
+  InputWrapper,
+  InputLabel,
+  TextInput,
+  InputButton
+} from "../../styles/form";
+import { StyledList } from "../../styles/list";
 
 interface EditSupplierProps {
   supplier: ISupplier;
@@ -35,6 +52,9 @@ const EditSupplier: React.FC<EditSupplierProps> = ({
       return [] as number[];
     }
   }, [supplier]);
+
+  const [view, setView] = useState("details" as "details" | "products");
+  const { color, secondary, dark } = useAuthLocation();
 
   const { list, add: addProduct, remove: removeProduct } = useEditableList(
     supplierProducts
@@ -77,31 +97,73 @@ const EditSupplier: React.FC<EditSupplierProps> = ({
 
   return (
     <EditModal isOpen={Boolean(supplier)} label="Edit supplier" onClose={close}>
-      <StyledHeader>
-        <div />
-        <h3 style={{ textAlign: "center" }}>Rediger</h3>
-      </StyledHeader>
-      <StyledDetails>
-        <IDText>ID: {supplier.supplierID}</IDText>
-        <EndText>Navn: </EndText>
-        <input
-          type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
-        <IDText>Produkter</IDText>
-        <SuppliersProducts
-          products={products}
-          selected={selected}
-          add={addProduct}
-          remove={removeProduct}
-        />
-      </StyledDetails>
-      <StyledFooter>
-        <br />
-        <button onClick={save}>Lagre</button>
-        <button onClick={close}>Lukk</button>
-      </StyledFooter>
+      <ModalHeader
+        bckColor={color}
+        padBottom="7px"
+        columns={view === "details" ? "6fr 1fr" : "5fr 1fr 1fr"}
+      >
+        <TitleWrapper>
+          <ModalTitle>
+            <Icons.Suppliers /> Leverandør #{supplier.supplierID}{" "}
+          </ModalTitle>
+          {view !== "details" && <ModalSubtitle>Produkter</ModalSubtitle>}
+        </TitleWrapper>
+        {view !== "details" && (
+          <ModalButton sideBorder="right" onClick={() => setView("details")}>
+            <Icons.ArrowBack />
+          </ModalButton>
+        )}
+        <ModalButton onClick={close}>
+          <Icons.Close />
+        </ModalButton>
+      </ModalHeader>
+      <ModalContent>
+        {view === "details" && (
+          <>
+            <InputWrapper>
+              <InputLabel>
+                <Icons.Suppliers /> Leverandør
+              </InputLabel>
+              <TextInput
+                type="text"
+                value={name}
+                onChange={e => setName(e.target.value)}
+              />
+            </InputWrapper>
+            <ProductWithEdit>
+              <CenteredText>Produkter</CenteredText>
+              <InputButton
+                bckColor={secondary}
+                onClick={() => setView("products")}
+              >
+                <Icons.Products />
+                <Icons.List />
+              </InputButton>
+            </ProductWithEdit>
+            <StyledList borderColor={dark}>
+              {selected.map(s => (
+                <SelectedProduct
+                  id={s}
+                  key={`supplier_${supplier.supplierID}_product_${s}`}
+                />
+              ))}
+            </StyledList>
+          </>
+        )}
+        {view === "products" && (
+          <SuppliersProducts
+            products={products}
+            selected={selected}
+            add={addProduct}
+            remove={removeProduct}
+          />
+        )}
+      </ModalContent>
+      <ModalFooter bckColor={secondary}>
+        <ModalButton onClick={save}>
+          <Icons.Save />
+        </ModalButton>
+      </ModalFooter>
     </EditModal>
   );
 };

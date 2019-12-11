@@ -9,20 +9,21 @@ This app allows for keeping track of products in inventory, in addition to depos
 ## Libraries Used
 
 ### General
+
 [@reach/router](https://www.npmjs.com/package/@reach/router) - URL routing
 
 [Typescript](https://www.npmjs.com/package/typescript) - Type checking and preventive bug-fixing
 
 ### UI
-[@material-ui/core](https://www.npmjs.com/package/@material-ui/core) - Google Material Design for React
 
-[@material-ui/icons](https://www.npmjs.com/package/@material-ui/icons) -  Google Material Icons
-
+[styled-components](https://www.npmjs.com/package/styled-components) - React Styled Components
+[styled-icons](https://www.npmjs.com/package/styled-icons) - Icons as Styled Components
 [react-modal](https://www.npmjs.com/package/react-modal) - A Modal Component that is easy to configure
 
 [react-tooltip](https://www.npmjs.com/package/react-tooltip) - Tooltips displayed on hover
 
 ### Data
+
 [firebase](https://www.npmjs.com/package/firebase) - The Javascript Firebase SDK
 
 [react-firebase-hooks](https://www.npmjs.com/package/react-firebase-hooks) - Easy hooks for authentication

@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/types";
 import styled from "styled-components";
-import ChangeLocation from "../../components/profile/ChangeLocation";
 import ChangePassword from "../../components/profile/ChangePassword";
 import { toggleTooltips } from "../../redux/actions/authActions";
 
 export default function Profile() {
-  const user = useSelector((state: RootState) => state.auth.user);
   /* const [edit, setEdit] = useState(false); */
 
   return (
@@ -18,7 +16,6 @@ export default function Profile() {
       </StyledEditButton> */}
       <UserData edit={false} />
       <ChangePassword />
-      {user.locations.length > 1 && <ChangeLocation />}
     </div>
   );
 }

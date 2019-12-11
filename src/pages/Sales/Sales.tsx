@@ -101,7 +101,7 @@ export default function Sales() {
             data-tip
             data-for={"sales_header_customer"}
           >
-            <Icons.Business />
+            <Icons.Customers />
             <Tooltip handle={"sales_header_customer"}>Kunde</Tooltip>
           </SortingKey>
 
@@ -111,7 +111,7 @@ export default function Sales() {
               data-tip
               data-for={"sales_header_ordered"}
             >
-              <Icons.AccessTime />
+              <Icons.Calendar />
               <Tooltip handle={"sales_header_ordered"}>Dato bestilt</Tooltip>
             </SortingKey>
           )}

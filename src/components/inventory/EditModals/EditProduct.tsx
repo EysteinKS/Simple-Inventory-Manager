@@ -5,13 +5,32 @@ import {
   saveEditedProduct
 } from "../../../redux/actions/productsActions";
 import { saveCreatedCategory } from "../../../redux/actions/categoriesActions";
-import ReactModal from "react-modal";
-import Collapse from "@material-ui/core/Collapse";
 import Icons from "../../util/Icons";
 import { RootState, ICategory, IProduct } from "../../../redux/types";
 import { addChange } from "../../../redux/actions/reportsActions";
 import { isChanged, shouldLog } from "../../../constants/util";
-ReactModal.setAppElement("#root");
+import EditModal from "./EditModal";
+import {
+  ModalHeader,
+  ModalTitle,
+  ModalButton,
+  ModalFooter,
+  ModalContent,
+  TitleWrapper
+} from "../../../styles/modal";
+import useAuthLocation from "../../../hooks/useAuthLocation";
+import {
+  InputWrapper,
+  InputLabel,
+  TextInput,
+  SelectInput,
+  OptionInput,
+  CheckboxInput,
+  TextareaInput,
+  InputButton,
+  InputWithButton,
+  FakeInput
+} from "../../../styles/form";
 
 //TODO
 //MAKE SURE PRODUCT CAN ONLY BE DEACTIVATED IF
@@ -32,14 +51,19 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
   );
   const dispatch = useDispatch();
 
+  const { color, secondary } = useAuthLocation();
+
   const [name, setName] = useState(current.name);
-  const [category, setCategory] = useState(current.categoryID || "new");
+  const [category, setCategory] = useState(
+    current.categoryID || (0 as string | number)
+  );
   const [amount, setAmount] = useState(current.amount);
   const [active, setActive] = useState(current.active);
   const [comments, setComments] = useState(current.comments);
 
   const [editAmount, setEditAmount] = useState(false);
-  const [prevAmount, setPrevAmount] = useState(0);
+  const [editReason, setEditReason] = useState("");
+  const [newAmount, setNewAmount] = useState(current.amount);
 
   useEffect(() => {
     setComments(current.comments);
@@ -78,14 +102,6 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
     name: name,
     productID: current.productID
   } as IProduct;
-
-  const product = useMemo(
-    () =>
-      products[
-        products.findIndex(i => i.productID === returnedProduct.productID)
-      ],
-    [products, returnedProduct]
-  );
 
   const isNew = current.productID > products.length;
 
@@ -130,67 +146,71 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
     }
   };
 
+  const saveNewAmount = () => {
+    dispatch(
+      addChange({
+        type: "EDIT_PRODUCT_AMOUNT",
+        name: returnedProduct.name,
+        reason: editReason,
+        id: returnedProduct.productID,
+        section: "products",
+        changed: [
+          {
+            key: "amount",
+            oldValue: amount,
+            newValue: Number(newAmount)
+          }
+        ]
+      })
+    );
+    dispatch(
+      saveEditedProduct({ ...returnedProduct, amount: Number(newAmount) })
+    );
+    setAmount(newAmount);
+    setEditAmount(false);
+  };
+
   return (
-    <ReactModal
+    <EditModal
       isOpen={isOpen}
-      contentLabel="Edit Product"
-      shouldCloseOnOverlayClick={true}
-      shouldCloseOnEsc={true}
-      onRequestClose={() => {
+      label="Edit Product"
+      onClose={() => {
         close();
         setInit(false);
       }}
-      style={{
-        overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.5)"
-        },
-        content: {
-          top: "10vh",
-          left: "5vw",
-          right: "5vw",
-          padding: "10px",
-          display: "grid",
-          gridTemplateRows: "10vh 60vh 10vh"
-        }
-      }}
     >
-      <p style={{ padding: "10px" }}>ID: {current.productID}</p>
-      <form
-        style={{
-          display: "grid",
-          gridTemplateColumns: "50% 50%",
-          justifyContent: "center",
-          maxHeight: "60vh",
-          padding: "1em"
-        }}
-        onSubmit={e => e.preventDefault()}
-      >
-        <label htmlFor="name">Navn</label>
-        <input
-          type="text"
-          name="name"
-          placeholder="Navn"
-          value={name}
-          onChange={event => setName(event.target.value)}
-        />
-        <label htmlFor="category">Kategori</label>
-        <select value={category} onChange={e => setCategory(e.target.value)}>
-          {categories.map(category => (
-            <option
-              key={"category_menu_" + category.categoryID}
-              value={category.categoryID}
-            >
-              {category.name}
-            </option>
-          ))}
-          <option value="new">...</option>
-        </select>
-        <Collapse
-          in={newCategory}
-          style={{
-            gridColumn: "2/3"
+      <ModalHeader bckColor={color} padBottom="7px">
+        <TitleWrapper>
+          <ModalTitle>
+            <Icons.Products /> Produkt #{current.productID}
+          </ModalTitle>
+        </TitleWrapper>
+        <ModalButton
+          onClick={() => {
+            close();
+            setInit(false);
           }}
         >
+          <Icons.Close />
+        </ModalButton>
+      </ModalHeader>
+      <ModalContent>
+        <InputWrapper>
+          <InputLabel>
+            <Icons.Name /> Navn
+          </InputLabel>
+          <TextInput
+            type="text"
+            name="name"
+            placeholder="Navn"
+            value={name}
+            onChange={event => setName(event.target.value)}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <InputLabel>
+            <Icons.FolderOpen /> Kategori
+          </InputLabel>
           {newCategory ? (
             <AddCategory
               visible={category === "new"}
@@ -200,76 +220,123 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
                 toggleNewCategory(false);
               }}
             />
-          ) : null}
-        </Collapse>
-        {isNew && <label htmlFor="amount">På lager</label>}
-        {!isNew && (
-          <div style={{ display: "grid", gridTemplateColumns: "80% 20%" }}>
-            <label htmlFor="amount">På lager</label>
-            <button
+          ) : (
+            <SelectInput
+              value={category}
+              onChange={e => setCategory(e.target.value)}
+            >
+              {categories.map(category => (
+                <OptionInput
+                  key={"category_menu_" + category.categoryID}
+                  value={category.categoryID}
+                >
+                  {category.name}
+                </OptionInput>
+              ))}
+              <OptionInput value="new">---Ny Kategori---</OptionInput>
+            </SelectInput>
+          )}
+        </InputWrapper>
+        <InputWrapper>
+          <InputLabel>
+            <Icons.Products /> På lager
+          </InputLabel>
+          {isNew ? (
+            <TextInput
+              type="tel"
+              name="amount"
+              value={amount}
+              onChange={event =>
+                !isNaN(event.target.value as any)
+                  ? setAmount(Number(event.target.value.replace(/\s/g, "")))
+                  : null
+              }
+            />
+          ) : editAmount ? (
+            <>
+              <InputWithButton>
+                <TextInput
+                  type="tel"
+                  name="amount"
+                  required
+                  value={newAmount}
+                  onChange={event =>
+                    !isNaN(event.target.value as any)
+                      ? setNewAmount(
+                          Number(event.target.value.replace(/\s/g, ""))
+                        )
+                      : null
+                  }
+                />
+                <InputButton
+                  bckColor="#eaeaea"
+                  onClick={() => {
+                    setNewAmount(amount);
+                    setEditAmount(false);
+                  }}
+                >
+                  <Icons.Close />
+                </InputButton>
+              </InputWithButton>
+              <InputLabel>
+                <Icons.Comment /> Årsak
+              </InputLabel>
+              <InputWithButton>
+                <TextInput
+                  name="reason"
+                  value={editReason}
+                  onChange={e => setEditReason(e.target.value)}
+                />
+                <InputButton
+                  bckColor="#eaeaea"
+                  disabled={newAmount === amount || editReason.length < 1}
+                  onClick={saveNewAmount}
+                >
+                  <Icons.Save />
+                </InputButton>
+              </InputWithButton>
+            </>
+          ) : (
+            <FakeInput
               onClick={() => {
-                setPrevAmount(amount);
                 setEditAmount(true);
               }}
             >
-              Endre
-            </button>
-          </div>
-        )}
-        <input
-          type="tel"
-          name="amount"
-          value={amount}
-          disabled={!isNew}
-          onChange={event =>
-            !isNaN(event.target.value as any)
-              ? setAmount(Number(event.target.value.replace(/\s/g, "")))
-              : null
-          }
-        />
-        <label htmlFor="comments">Kommentar</label>
-        <textarea
-          name="comments"
-          value={comments}
-          onChange={e => setComments(e.target.value)}
-        />
-        <label htmlFor="active">Aktiv</label>
-        <input
-          type="checkbox"
-          name="active"
-          checked={active}
-          onChange={() => setActive(!active)}
-        />
-      </form>
-      <div style={{ display: "grid", gridTemplateColumns: "60% 20% 20%" }}>
-        <div />
-        <button onClick={save} disabled={savingDisabled}>
-          Lagre
-        </button>
-        <button
-          onClick={() => {
-            close();
-            setInit(false);
-          }}
-        >
-          Lukk
-        </button>
-      </div>
-      {editAmount && (
-        <EditProductAmount
-          isOpen={editAmount}
-          close={() => setEditAmount(false)}
-          saveAndClose={() => {
-            setEditAmount(false);
-            close();
-            setInit(false);
-          }}
-          prevAmount={prevAmount}
-          product={product}
-          returnedProduct={returnedProduct}
-        />
-      )}
-    </ReactModal>
+              {amount}
+              <Icons.Edit />
+            </FakeInput>
+          )}
+        </InputWrapper>
+        <InputWrapper inputHeight="60px">
+          <InputLabel>
+            <Icons.Comment /> Kommentar
+          </InputLabel>
+          <TextareaInput
+            cols={30}
+            rows={3}
+            name="comments"
+            value={comments}
+            onChange={e => setComments(e.target.value)}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <InputLabel>
+            <Icons.Visibility /> Aktiv
+          </InputLabel>
+          <CheckboxInput
+            type="checkbox"
+            name="active"
+            checked={active}
+            onChange={() => setActive(!active)}
+          />
+        </InputWrapper>
+      </ModalContent>
+      <ModalFooter bckColor={secondary}>
+        <ModalButton onClick={save} disabled={savingDisabled}>
+          <Icons.Save />
+        </ModalButton>
+      </ModalFooter>
+    </EditModal>
   );
 }
 
@@ -307,144 +374,19 @@ const AddCategory = ({ visible, close, categories }: TAddCategory) => {
   }, [visible, setID, categories]);
 
   return (
-    <div
-      style={{
-        gridColumn: "2 / 3",
-        marginTop: "5px",
-        marginBottom: "20px",
-        display: "flex",
-        flexWrap: "nowrap",
-        justifyContent: "center"
-      }}
-    >
-      <input
+    <InputWithButton columns="4fr 1fr 1fr">
+      <TextInput
         type="text"
         value={name}
         onChange={e => setName(e.target.value)}
         placeholder="Navn"
-        style={{
-          width: "100"
-        }}
       />
-      <button
-        onClick={e => save(e)}
-        style={{
-          width: "10vw",
-          backgroundColor: "rgb(255, 220, 0)"
-        }}
-      >
-        <Icons.NewFolder />
-      </button>
-    </div>
-  );
-};
-
-interface IAmountProps {
-  isOpen: boolean;
-  close: () => void;
-  saveAndClose: () => void;
-  prevAmount: number;
-  product: IProduct;
-  returnedProduct: IProduct;
-}
-
-const EditProductAmount: React.FC<IAmountProps> = ({
-  isOpen,
-  close,
-  saveAndClose,
-  prevAmount,
-  product,
-  returnedProduct
-}) => {
-  const [newAmount, setNewAmount] = useState(prevAmount);
-  const [reason, setReason] = useState("");
-  const dispatch = useDispatch();
-
-  const save = () => {
-    dispatch(
-      addChange({
-        type: "EDIT_PRODUCT_AMOUNT",
-        name: returnedProduct.name,
-        reason,
-        id: returnedProduct.productID,
-        section: "products",
-        changed: [
-          {
-            key: "amount",
-            oldValue: product.amount,
-            newValue: Number(newAmount)
-          }
-        ]
-      })
-    );
-    dispatch(
-      saveEditedProduct({ ...returnedProduct, amount: Number(newAmount) })
-    );
-    saveAndClose();
-  };
-
-  return (
-    <ReactModal
-      isOpen={isOpen}
-      contentLabel="Edit product amount"
-      shouldCloseOnOverlayClick={true}
-      shouldCloseOnEsc={true}
-      onRequestClose={close}
-      style={{
-        overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.5)"
-        },
-        content: {
-          top: "30vh",
-          left: "20vw",
-          right: "20vw",
-          height: "40vh",
-          padding: "1em",
-          display: "grid",
-          gridTemplateRows: "20% 60% 20%"
-        }
-      }}
-    >
-      <h3>Endre antall på lager</h3>
-      <form
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr"
-        }}
-      >
-        <label htmlFor="amount">På lager</label>
-        <input
-          name="amount"
-          type="tel"
-          value={newAmount}
-          onChange={e => setNewAmount(Number(e.target.value))}
-        />
-        <label htmlFor="reason">Årsak</label>
-        <textarea
-          name="reason"
-          value={reason}
-          onChange={e => setReason(e.target.value)}
-        />
-      </form>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "60% 20% 20%"
-        }}
-      >
-        <div />
-        <button
-          onClick={save}
-          disabled={
-            prevAmount === newAmount ||
-            (prevAmount === newAmount && reason.length < 1) ||
-            reason.length < 1
-          }
-        >
-          Lagre
-        </button>
-        <button onClick={close}>Lukk</button>
-      </div>
-    </ReactModal>
+      <InputButton onClick={e => save(e)} bckColor="#eaeaea">
+        <Icons.Save />
+      </InputButton>
+      <InputButton onClick={() => close(0)} bckColor="#eaeaea">
+        <Icons.Close />
+      </InputButton>
+    </InputWithButton>
   );
 };

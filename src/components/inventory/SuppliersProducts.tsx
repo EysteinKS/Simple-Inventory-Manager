@@ -4,6 +4,12 @@ import SelectProduct from "./SelectProduct";
 import ProductName from "./ProductName";
 import Icons from "../util/Icons";
 import styled from "styled-components";
+import { device } from "../../styles/device";
+import { ProductWithEdit, CenteredText } from "./EditModals/styles";
+import useAuthLocation from "../../hooks/useAuthLocation";
+import { StyledList } from "../../styles/list";
+import { ProductWrapper, NameWrapper } from "./OrderedProducts";
+import { InputButton } from "../../styles/form";
 
 interface IProps {
   products: IProduct[];
@@ -21,19 +27,26 @@ const SuppliersProducts = ({ products, selected, add, remove }: IProps) => {
     return list;
   }, [selected]);
 
+  const { secondary, dark } = useAuthLocation();
+
   return (
     <StyledWrapper>
-      <StyledSection>
+      <StyledSection overflow="hidden">
         <SelectProduct
-          height="35vh"
+          height="30vh"
           ignoreInactive={true}
           products={products}
           onSelect={productID => add(productID)}
           selected={selectedProducts}
         />
       </StyledSection>
-      <StyledSection>
-        <ul style={{ listStyleType: "none", padding: "5px", margin: "0px" }}>
+      <StyledSection overflow="hidden">
+        <ProductWithEdit bckColor={secondary}>
+          <CenteredText>
+            <Icons.Exchange />
+          </CenteredText>
+        </ProductWithEdit>
+        <StyledList borderColor={dark}>
           {selectedProducts.map((product, i) => (
             <SuppliersProduct
               product={product.productID}
@@ -42,7 +55,7 @@ const SuppliersProducts = ({ products, selected, add, remove }: IProps) => {
               remove={index => remove(index)}
             />
           ))}
-        </ul>
+        </StyledList>
       </StyledSection>
     </StyledWrapper>
   );
@@ -56,37 +69,44 @@ type TOrderedProduct = {
 
 const SuppliersProduct = ({ product, remove, index }: TOrderedProduct) => {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "80% 20%",
-        marginBottom: "10px",
-        paddingBottom: "5px"
-      }}
-    >
-      <ProductName id={product} />
-      <button
+    <ProductWrapper columns="6fr 1fr">
+      <NameWrapper>
+        <ProductName id={product} />
+      </NameWrapper>
+      <InputButton
         onClick={e => {
           e.preventDefault();
           remove(index);
         }}
       >
         <Icons.Delete />
-      </button>
-    </div>
+      </InputButton>
+    </ProductWrapper>
   );
 };
 
 const StyledWrapper = styled.div`
-  padding: 3%;
   max-height: 100%;
-  overflow-y: auto;
+  overflow-y: hidden;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 2em;
-  grid-column: 1 / 3;
+  grid-template-rows: 30vh 30vh;
+  ${device.tablet(`
+    /* grid-template-rows: 100%;
+    grid-template-columns: 345px 345px;
+    column-gap: 10px; */
+  `)}
 `;
 
-const StyledSection = styled.div``;
+const StyledSection = styled.div`
+  background-color: #fbfbfb;
+  padding: 0;
+  display: grid;
+  grid-template-rows: 6vh 24vh;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  :hover {
+    overflow-y: ${(props: { overflow: string }) => props.overflow};
+  }
+`;
 
 export default SuppliersProducts;

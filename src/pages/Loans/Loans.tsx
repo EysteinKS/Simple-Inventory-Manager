@@ -101,7 +101,7 @@ export default function Loans() {
             data-tip
             data-for={"loans_header_customer"}
           >
-            <Icons.Business />
+            <Icons.Customers />
           </SortingKey>
           <Tooltip handle={"loans_header_customer"}>Kunde</Tooltip>
           {extended && (
@@ -111,7 +111,7 @@ export default function Loans() {
                 data-tip
                 data-for={"loans_header_ordered"}
               >
-                <Icons.AccessTime />
+                <Icons.Calendar />
               </SortingKey>
               <Tooltip handle={"loans_header_ordered"}>Dato bestilt</Tooltip>
 
@@ -120,7 +120,7 @@ export default function Loans() {
                 data-tip
                 data-for={"loans_header_sent"}
               >
-                <Icons.Unarchive />
+                <Icons.Sales />
               </SortingKey>
               <Tooltip handle={"loans_header_sent"}>Dato sendt</Tooltip>
             </>

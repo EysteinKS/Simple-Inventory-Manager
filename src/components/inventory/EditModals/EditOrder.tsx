@@ -10,22 +10,29 @@ import SelectTarget from "../SelectTarget";
 import EditModal, { OrderedProduct } from "./EditModal";
 import Names from "../../Names";
 import Icons from "../../util/Icons";
-import {
-  StyledFooter,
-  StyledDetails,
-  ProductWithEdit,
-  CenteredText,
-  TargetWithEdit,
-  EndText,
-  IDText,
-  StyledHeader,
-  ProductList
-} from "./styles";
+import { ProductWithEdit, CenteredText } from "./styles";
 import {
   saveCreatedOrder,
   saveEditedOrder
 } from "../../../redux/actions/ordersActions";
 import useProducts from "../../../hooks/useProducts";
+import useAuthLocation from "../../../hooks/useAuthLocation";
+import {
+  ModalHeader,
+  ModalTitle,
+  ModalButton,
+  ModalSubtitle,
+  ModalContent,
+  ModalFooter,
+  TitleWrapper
+} from "../../../styles/modal";
+import {
+  InputWrapper,
+  InputLabel,
+  InputButton,
+  FakeInput
+} from "../../../styles/form";
+import { StyledList } from "../../../styles/list";
 
 ReactModal.setAppElement("#root");
 
@@ -49,6 +56,7 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
     (state: RootState) => state.suppliers.suppliers
   );
   const [products, setSupplierProducts] = useProducts();
+  const { color, secondary, dark } = useAuthLocation();
 
   useEffect(() => {
     if (supplier !== null && typeof supplier === "number") {
@@ -132,81 +140,87 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
 
   return (
     <EditModal isOpen={isOpen} label="Edit Order" onClose={close}>
-      <StyledHeader>
-        {view === "details" ? (
-          <br />
-        ) : (
-          <button onClick={() => setView("details")}>
+      <ModalHeader
+        bckColor={color}
+        padBottom="7px"
+        columns={view === "details" ? "6fr 1fr" : "5fr 1fr 1fr"}
+      >
+        <TitleWrapper>
+          <ModalTitle>
+            <Icons.Orders /> Bestilling #{current.orderID}{" "}
+          </ModalTitle>
+          {view !== "details" && <ModalSubtitle>{viewText}</ModalSubtitle>}
+        </TitleWrapper>
+        {view !== "details" && (
+          <ModalButton sideBorder="right" onClick={() => setView("details")}>
             <Icons.ArrowBack />
-          </button>
+          </ModalButton>
         )}
-        <CenteredText>{viewText}</CenteredText>
-      </StyledHeader>
-      {view === "details" && (
-        <StyledDetails>
-          <IDText>ID: {current.orderID}</IDText>
-          <EndText>Leverandør:</EndText>
-          <TargetWithEdit>
-            <p>
-              <Names target="suppliers" id={supplier} />
-            </p>
-            <button onClick={() => setView("supplier")}>
-              <Icons.Edit />
-            </button>
-          </TargetWithEdit>
-          <ProductWithEdit>
-            <CenteredText style={{ gridColumn: "2/3" }}>Produkter</CenteredText>
-            <button onClick={() => setView("products")}>
-              <Icons.Edit />
-            </button>
-          </ProductWithEdit>
-          <ProductList>
-            {ordered.map(product => (
-              <OrderedProduct
-                key={"ordered_product_" + product.productID}
-                product={product}
-              />
-            ))}
-          </ProductList>
-        </StyledDetails>
-      )}
-      {view === "supplier" && (
-        <SelectTarget
-          type="suppliers"
-          select={id => {
-            setSupplier(id);
-            setView("details");
-          }}
-        />
-      )}
-      {view === "products" && (
-        <OrderedProducts
-          products={products}
-          ordered={ordered}
-          add={productID => addProduct({ productID, amount: 1 })}
-          edit={(product, index) => editProduct(product, index)}
-          remove={productID => removeProduct(productID)}
-        />
-      )}
-      <StyledFooter>
-        <div />
-        <button
+        <ModalButton onClick={close}>
+          <Icons.Close />
+        </ModalButton>
+      </ModalHeader>
+      <ModalContent>
+        {view === "details" && (
+          <>
+            <InputWrapper>
+              <InputLabel>
+                <Icons.Suppliers /> Leverandør
+              </InputLabel>
+              <FakeInput onClick={() => setView("supplier")}>
+                <Names target="suppliers" id={supplier} />
+                <Icons.Edit />
+              </FakeInput>
+            </InputWrapper>
+            <ProductWithEdit>
+              <CenteredText>Produkter</CenteredText>
+              <InputButton
+                onClick={() => setView("products")}
+                bckColor={secondary}
+              >
+                <Icons.Products />
+                <Icons.List />
+              </InputButton>
+            </ProductWithEdit>
+            <StyledList borderColor={dark}>
+              {ordered.map(product => (
+                <OrderedProduct
+                  key={"ordered_product_" + product.productID}
+                  product={product}
+                />
+              ))}
+            </StyledList>
+          </>
+        )}
+        {view === "supplier" && (
+          <SelectTarget
+            type="suppliers"
+            select={id => {
+              setSupplier(id);
+              setView("details");
+            }}
+          />
+        )}
+        {view === "products" && (
+          <OrderedProducts
+            products={products}
+            ordered={ordered}
+            add={productID => addProduct({ productID, amount: 1 })}
+            edit={(product, index) => editProduct(product, index)}
+            remove={productID => removeProduct(productID)}
+          />
+        )}
+      </ModalContent>
+      <ModalFooter bckColor={secondary}>
+        <ModalButton
           onClick={save}
           disabled={
             supplier === "new" || view === "supplier" || ordered.length < 1
           }
         >
-          Lagre
-        </button>
-        <button
-          onClick={() => {
-            close();
-            setInit(false);
-          }}
-        >
-          Lukk
-        </button>
-      </StyledFooter>
+          <Icons.Save />
+        </ModalButton>
+      </ModalFooter>
     </EditModal>
   );
 }

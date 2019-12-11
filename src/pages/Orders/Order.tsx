@@ -113,7 +113,7 @@ const Order: React.FC<TOrder> = ({ order, edit, columns, extended }) => {
           data-tip
           data-for={handles.receive}
         >
-          <Icons.Archive />
+          <Icons.Orders />
         </Buttons.Confirm>
         <Tooltip handle={handles.receive}>Mottak</Tooltip>
       </TableItem>

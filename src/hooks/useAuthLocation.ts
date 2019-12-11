@@ -9,7 +9,7 @@ const useAuthLocation = () => {
     return {
       name,
       url: logoUrl,
-      color: primaryColor
+      color: primaryColor as string
     };
   });
 

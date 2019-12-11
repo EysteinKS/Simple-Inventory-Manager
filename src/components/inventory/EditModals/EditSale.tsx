@@ -10,22 +10,29 @@ import SelectTarget from "../SelectTarget";
 import EditModal, { OrderedProduct } from "./EditModal";
 import Names from "../../Names";
 import Icons from "../../util/Icons";
-import {
-  StyledFooter,
-  StyledDetails,
-  ProductWithEdit,
-  CenteredText,
-  TargetWithEdit,
-  EndText,
-  IDText,
-  StyledHeader,
-  ProductList
-} from "./styles";
+import { ProductWithEdit, CenteredText } from "./styles";
 import {
   saveCreatedSale,
   saveEditedSale
 } from "../../../redux/actions/salesActions";
 import useProducts from "../../../hooks/useProducts";
+import useAuthLocation from "../../../hooks/useAuthLocation";
+import {
+  ModalFooter,
+  ModalHeader,
+  ModalButton,
+  ModalTitle,
+  ModalSubtitle,
+  ModalContent,
+  TitleWrapper
+} from "../../../styles/modal";
+import { StyledList } from "../../../styles/list";
+import {
+  InputWrapper,
+  FakeInput,
+  InputLabel,
+  InputButton
+} from "../../../styles/form";
 
 ReactModal.setAppElement("#root");
 
@@ -42,6 +49,8 @@ export default function EditSale({ isOpen, close }: TEditSale) {
   ) as ISale;
   const [products] = useProducts();
   const dispatch = useDispatch();
+
+  const { color, secondary, dark } = useAuthLocation();
 
   const [customer, setCustomer] = useState();
   const [view, setView] = useState("details" as ViewTypes);
@@ -112,81 +121,93 @@ export default function EditSale({ isOpen, close }: TEditSale) {
 
   return (
     <EditModal isOpen={isOpen} label="Edit Sale" onClose={close}>
-      <StyledHeader>
-        {view === "details" ? (
-          <br />
-        ) : (
-          <button onClick={() => setView("details")}>
+      <ModalHeader
+        bckColor={color}
+        padBottom="7px"
+        columns={view === "details" ? "6fr 1fr" : "5fr 1fr 1fr"}
+      >
+        <TitleWrapper>
+          <ModalTitle>
+            <Icons.Sales /> Salg #{current.saleID}{" "}
+          </ModalTitle>
+          {view !== "details" && <ModalSubtitle>{viewText}</ModalSubtitle>}
+        </TitleWrapper>
+        {view !== "details" && (
+          <ModalButton sideBorder="right" onClick={() => setView("details")}>
             <Icons.ArrowBack />
-          </button>
+          </ModalButton>
         )}
-        <CenteredText>{viewText}</CenteredText>
-      </StyledHeader>
-      {view === "details" && (
-        <StyledDetails>
-          <IDText>ID: {current.saleID}</IDText>
-          <EndText>Kunde:</EndText>
-          <TargetWithEdit>
-            <p>
-              <Names target="customers" id={customer} />
-            </p>
-            <button onClick={() => setView("customer")}>
-              <Icons.Edit />
-            </button>
-          </TargetWithEdit>
-          <ProductWithEdit>
-            <CenteredText style={{ gridColumn: "2/3" }}>Produkter</CenteredText>
-            <button onClick={() => setView("products")}>
-              <Icons.Edit />
-            </button>
-          </ProductWithEdit>
-          <ProductList>
-            {ordered.map(product => (
-              <OrderedProduct
-                key={"ordered_product_" + product.productID}
-                product={product}
-              />
-            ))}
-          </ProductList>
-        </StyledDetails>
-      )}
-      {view === "customer" && (
-        <SelectTarget
-          type="customers"
-          select={id => {
-            setCustomer(id);
-            setView("details");
-          }}
-        />
-      )}
-      {view === "products" && (
-        <OrderedProducts
-          products={products}
-          ordered={ordered}
-          add={productID => addProduct({ productID, amount: 1 })}
-          edit={(product, index) => editProduct(product, index)}
-          remove={productID => removeProduct(productID)}
-        />
-      )}
-      <StyledFooter>
-        <div />
-        <button
-          onClick={save}
-          disabled={
-            customer === "new" || view === "customer" || ordered.length < 1
-          }
-        >
-          Lagre
-        </button>
-        <button
+        <ModalButton
           onClick={() => {
             close();
             setInit(false);
           }}
         >
-          Lukk
-        </button>
-      </StyledFooter>
+          <Icons.Close />
+        </ModalButton>
+      </ModalHeader>
+      <ModalContent>
+        {view === "details" && (
+          <>
+            <InputWrapper>
+              <InputLabel>
+                <Icons.Customers /> Kunde
+              </InputLabel>
+              <FakeInput onClick={() => setView("customer")}>
+                <Names target="customers" id={customer} />
+                <Icons.Edit />
+              </FakeInput>
+            </InputWrapper>
+
+            <ProductWithEdit>
+              <CenteredText>Produkter</CenteredText>
+              <InputButton
+                bckColor={secondary}
+                onClick={() => setView("products")}
+              >
+                <Icons.Products />
+                <Icons.List />
+              </InputButton>
+            </ProductWithEdit>
+            <StyledList borderColor={dark}>
+              {ordered.map(product => (
+                <OrderedProduct
+                  key={"ordered_product_" + product.productID}
+                  product={product}
+                />
+              ))}
+            </StyledList>
+          </>
+        )}
+        {view === "customer" && (
+          <SelectTarget
+            type="customers"
+            select={id => {
+              setCustomer(id);
+              setView("details");
+            }}
+          />
+        )}
+        {view === "products" && (
+          <OrderedProducts
+            products={products}
+            ordered={ordered}
+            add={productID => addProduct({ productID, amount: 1 })}
+            edit={(product, index) => editProduct(product, index)}
+            remove={productID => removeProduct(productID)}
+          />
+        )}
+      </ModalContent>
+      <ModalFooter bckColor={secondary}>
+        <ModalButton
+          onClick={save}
+          disabled={
+            customer === "new" || view === "customer" || ordered.length < 1
+          }
+        >
+          <Icons.Save />
+        </ModalButton>
+      </ModalFooter>
     </EditModal>
   );
 }

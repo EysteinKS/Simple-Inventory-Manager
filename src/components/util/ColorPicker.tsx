@@ -49,12 +49,31 @@ const ColorPicker = () => {
       <ColorWrapper>
         <InputsWrapper>
           <p>Fargemetning</p>
-          <PercentInput
-            value={secondSaturation}
-            setValue={setSecondSaturation}
-          />
+          <Inputs>
+            <PercentInput
+              type="number"
+              value={secondSaturation}
+              setValue={setSecondSaturation}
+            />
+            <PercentInput
+              type="range"
+              value={secondSaturation}
+              setValue={setSecondSaturation}
+            />
+          </Inputs>
           <p>Valør</p>
-          <PercentInput value={secondLightness} setValue={setSecondLightness} />
+          <Inputs>
+            <PercentInput
+              type="number"
+              value={secondLightness}
+              setValue={setSecondLightness}
+            />
+            <PercentInput
+              type="range"
+              value={secondLightness}
+              setValue={setSecondLightness}
+            />
+          </Inputs>
         </InputsWrapper>
         <DisplayColor clr={secondColor} />
       </ColorWrapper>
@@ -87,6 +106,11 @@ const ColorWrapper = styled.div`
 const InputsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+`;
+
+const Inputs = styled.div`
+  display: grid;
+  grid-template-rows: 1fr 1fr;
 `;
 
 const DisplayColor = styled.div`
@@ -122,14 +146,19 @@ const PrimaryWrapper = styled.input`
 `;
 
 interface PercentInputProps {
+  type: "range" | "number";
   value: number;
   setValue: (value: number) => void;
 }
 
-const PercentInput: React.FC<PercentInputProps> = ({ value, setValue }) => {
+const PercentInput: React.FC<PercentInputProps> = ({
+  value,
+  setValue,
+  type
+}) => {
   return (
     <input
-      type="range"
+      type={type}
       min={0}
       max={100}
       value={value}

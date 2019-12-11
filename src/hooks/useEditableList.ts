@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 
-export default function useEditableList(arr: any[] = []) {
+export default function useEditableList<T>(arr: T[] = []) {
   const [list, setList] = useState(arr);
 
   useEffect(() => {
     setList(arr);
   }, [arr]);
 
-  const add = (newListItem: any) => {
+  const add = (newListItem: T) => {
     setList(state => state.concat(newListItem));
   };
 
-  const edit = (updated: any, index: number) => {
+  const edit = (updated: T, index: number) => {
     let editedList = [...list] as any;
     editedList[index] = updated;
     setList(editedList);

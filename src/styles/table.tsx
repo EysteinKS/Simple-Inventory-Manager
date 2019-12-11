@@ -166,7 +166,7 @@ export const TableItem = styled.div`
   ${(props: ITableItem) => (props.columns ? props.columns : null)}
 
   background-color: #F3F3F3;
-  :nth-child(2n) {
+  :nth-of-type(2n) {
     background-color: #dadada;
   }
 `;
@@ -254,7 +254,7 @@ export const ExpandedTableItem: React.FC<ExpandedTableItemProps> = ({
   );
 };
 
-export const ExpandedWrapper = styled.div`
+export const ExpandedWrapper = styled.aside`
   float: left;
   width: 100%;
   display: ${(props: { expanded: boolean }) =>

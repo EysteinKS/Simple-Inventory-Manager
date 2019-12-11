@@ -3,27 +3,31 @@ import { RootState, ILoan } from "../../../redux/types";
 import { useSelector } from "react-redux";
 import useEditableList from "../../../hooks/useEditableList";
 import { isChanged, shouldLog } from "../../../constants/util";
-import ReactModal from "react-modal";
 import OrderedProducts from "../OrderedProducts";
 import SelectTarget from "../SelectTarget";
 import EditModal, { OrderedProduct } from "./EditModal";
 import Names from "../../Names";
 import Icons from "../../util/Icons";
-import {
-  StyledFooter,
-  StyledDetails,
-  ProductWithEdit,
-  CenteredText,
-  TargetWithEdit,
-  EndText,
-  IDText,
-  StyledHeader,
-  ProductList
-} from "./styles";
+import { ProductWithEdit, CenteredText } from "./styles";
 import useProducts from "../../../hooks/useProducts";
 import useLoans from "../../../redux/hooks/useLoans";
-
-ReactModal.setAppElement("#root");
+import useAuthLocation from "../../../hooks/useAuthLocation";
+import {
+  ModalButton,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+  ModalSubtitle,
+  ModalContent,
+  TitleWrapper
+} from "../../../styles/modal";
+import { StyledList } from "../../../styles/list";
+import {
+  InputButton,
+  InputWrapper,
+  InputLabel,
+  FakeInput
+} from "../../../styles/form";
 
 type TEditLoan = {
   isOpen: boolean;
@@ -39,6 +43,7 @@ export default function EditLoan({ isOpen, close }: TEditLoan) {
   const [products] = useProducts();
 
   const { saveCreatedLoan, saveEditedLoan } = useLoans();
+  const { color, secondary, dark } = useAuthLocation();
 
   const [customer, setCustomer] = useState();
   const [view, setView] = useState("details" as ViewTypes);
@@ -95,81 +100,92 @@ export default function EditLoan({ isOpen, close }: TEditLoan) {
 
   return (
     <EditModal isOpen={isOpen} label="Edit Loan" onClose={close}>
-      <StyledHeader>
-        {view === "details" ? (
-          <br />
-        ) : (
-          <button onClick={() => setView("details")}>
+      <ModalHeader
+        bckColor={color}
+        padBottom="7px"
+        columns={view === "details" ? "6fr 1fr" : "5fr 1fr 1fr"}
+      >
+        <TitleWrapper>
+          <ModalTitle>
+            <Icons.Loans /> Utlån #{current.loanID}{" "}
+          </ModalTitle>
+          {view !== "details" && <ModalSubtitle>{viewText}</ModalSubtitle>}
+        </TitleWrapper>
+        {view !== "details" && (
+          <ModalButton sideBorder="right" onClick={() => setView("details")}>
             <Icons.ArrowBack />
-          </button>
+          </ModalButton>
         )}
-        <CenteredText>{viewText}</CenteredText>
-      </StyledHeader>
-      {view === "details" && (
-        <StyledDetails>
-          <IDText>ID: {current.loanID}</IDText>
-          <EndText>Kunde:</EndText>
-          <TargetWithEdit>
-            <p>
-              <Names target="customers" id={customer} />
-            </p>
-            <button onClick={() => setView("customer")}>
-              <Icons.Edit />
-            </button>
-          </TargetWithEdit>
-          <ProductWithEdit>
-            <CenteredText style={{ gridColumn: "2/3" }}>Produkter</CenteredText>
-            <button onClick={() => setView("products")}>
-              <Icons.Edit />
-            </button>
-          </ProductWithEdit>
-          <ProductList>
-            {ordered.map(product => (
-              <OrderedProduct
-                key={"ordered_product_" + product.productID}
-                product={product}
-              />
-            ))}
-          </ProductList>
-        </StyledDetails>
-      )}
-      {view === "customer" && (
-        <SelectTarget
-          type="customers"
-          select={id => {
-            setCustomer(id);
-            setView("details");
-          }}
-        />
-      )}
-      {view === "products" && (
-        <OrderedProducts
-          products={products}
-          ordered={ordered}
-          add={productID => addProduct({ productID, amount: 1 })}
-          edit={(product, index) => editProduct(product, index)}
-          remove={productID => removeProduct(productID)}
-        />
-      )}
-      <StyledFooter>
-        <div />
-        <button
-          onClick={save}
-          disabled={
-            customer === "new" || view === "customer" || ordered.length < 1
-          }
-        >
-          Lagre
-        </button>
-        <button
+        <ModalButton
           onClick={() => {
             close();
             setInit(false);
           }}
         >
-          Lukk
-        </button>
-      </StyledFooter>
+          <Icons.Close />
+        </ModalButton>
+      </ModalHeader>
+      <ModalContent>
+        {view === "details" && (
+          <>
+            <InputWrapper>
+              <InputLabel>
+                <Icons.Customers /> Kunde
+              </InputLabel>
+              <FakeInput onClick={() => setView("customer")}>
+                <Names target="customers" id={customer} />
+                <Icons.Edit />
+              </FakeInput>
+            </InputWrapper>
+            <ProductWithEdit>
+              <CenteredText>Produkter</CenteredText>
+              <InputButton
+                bckColor={secondary}
+                onClick={() => setView("products")}
+              >
+                <Icons.Products />
+                <Icons.List />
+              </InputButton>
+            </ProductWithEdit>
+            <StyledList borderColor={dark}>
+              {ordered.map(product => (
+                <OrderedProduct
+                  key={"ordered_product_" + product.productID}
+                  product={product}
+                />
+              ))}
+            </StyledList>
+          </>
+        )}
+        {view === "customer" && (
+          <SelectTarget
+            type="customers"
+            select={id => {
+              setCustomer(id);
+              setView("details");
+            }}
+          />
+        )}
+        {view === "products" && (
+          <OrderedProducts
+            products={products}
+            ordered={ordered}
+            add={productID => addProduct({ productID, amount: 1 })}
+            edit={(product, index) => editProduct(product, index)}
+            remove={productID => removeProduct(productID)}
+          />
+        )}
+      </ModalContent>
+      <ModalFooter bckColor={secondary}>
+        <ModalButton
+          onClick={save}
+          disabled={
+            customer === "new" || view === "customer" || ordered.length < 1
+          }
+        >
+          <Icons.Save />
+        </ModalButton>
+      </ModalFooter>
     </EditModal>
   );
 }

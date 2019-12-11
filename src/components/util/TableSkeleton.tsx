@@ -38,7 +38,7 @@ const TableSkeleton: React.FC<IProps> = ({ title }) => {
           <KeyButton>#</KeyButton>
 
           <KeyButton>
-            <Icons.FormatQuote />
+            <Icons.Name />
           </KeyButton>
 
           <KeyButton>...</KeyButton>

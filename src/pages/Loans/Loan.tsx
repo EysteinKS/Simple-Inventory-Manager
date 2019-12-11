@@ -95,7 +95,7 @@ const Loan = ({ loan, edit, columns, extended }: TLoan) => {
           data-tip
           data-for={handles.send}
         >
-          <Icons.Unarchive />
+          <Icons.Sales />
         </Buttons.Confirm>
         <Tooltip handle={handles.send}>Send</Tooltip>
 
@@ -108,7 +108,7 @@ const Loan = ({ loan, edit, columns, extended }: TLoan) => {
           data-tip
           data-for={handles.receive}
         >
-          <Icons.Archive />
+          <Icons.Orders />
         </Buttons.Confirm>
         <Tooltip handle={handles.receive}>Mottak</Tooltip>
       </TableItem>

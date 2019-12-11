@@ -104,7 +104,7 @@ export default function Orders() {
             data-tip
             data-for={"orders_header_supplier"}
           >
-            <Icons.Store />
+            <Icons.Suppliers />
             <Tooltip handle={"orders_header_supplier"}>Leverandør</Tooltip>
           </SortingKey>
 
@@ -114,7 +114,7 @@ export default function Orders() {
               data-tip
               data-for={"orders_header_ordered"}
             >
-              <Icons.AccessTime />
+              <Icons.Calendar />
               <Tooltip handle={"orders_header_ordered"}>Dato bestilt</Tooltip>
             </SortingKey>
           )}

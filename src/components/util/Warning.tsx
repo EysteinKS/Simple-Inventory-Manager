@@ -8,7 +8,7 @@ interface IWarning {
 export default function Warning({ children, ...props }: IWarning) {
   return (
     <>
-      <Icons.WarningIcon {...props} />
+      <Icons.Warning {...props} />
       {children ? children : null}
     </>
   );

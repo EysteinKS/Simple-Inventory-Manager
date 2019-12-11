@@ -20,7 +20,7 @@ export default (
     switch (type) {
       case action.LOAD_PRODUCTS_BEGIN:
         return drafts.loadBegin(draft);
-        
+
       case action.LOAD_PRODUCTS_SUCCESS:
         return drafts.loadSuccess(draft, "products", payload);
 
@@ -42,7 +42,6 @@ export default (
 
       case action.SAVE_CREATED_PRODUCT:
         draft.products.push(payload);
-        draft.currentProduct = null;
         draft.isSaved = false;
         break;
 
@@ -52,7 +51,6 @@ export default (
 
       case action.SAVE_EDITED_PRODUCT:
         draft.products[payload.productID - 1] = payload;
-        draft.currentProduct = null;
         draft.isSaved = false;
         break;
 

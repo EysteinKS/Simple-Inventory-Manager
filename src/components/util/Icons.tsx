@@ -1,116 +1,103 @@
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import { Visibility } from "styled-icons/material/Visibility";
+import { VisibilityOff } from "styled-icons/material/VisibilityOff";
 
-import Checkbox from "@material-ui/icons/CheckBox";
-import CheckboxOff from "@material-ui/icons/CheckBoxOutlineBlank";
+import { ListUl as List } from "styled-icons/boxicons-regular/ListUl";
+import { FolderOpen } from "styled-icons/material/FolderOpen";
+import { ShoppingCart } from "styled-icons/material/ShoppingCart";
 
-import FormatQuote from "@material-ui/icons/FormatQuote";
-import List from "@material-ui/icons/List";
-import Folder from "@material-ui/icons/Folder";
-import FolderOpen from "@material-ui/icons/FolderOpen";
-import NewFolder from "@material-ui/icons/CreateNewFolder";
-import ShoppingCart from "@material-ui/icons/ShoppingCart";
-import Home from "@material-ui/icons/Home";
-import Storage from "@material-ui/icons/Storage";
-import Redeem from "@material-ui/icons/Redeem";
-import LocalAtm from "@material-ui/icons/LocalAtm";
+import { CloudDone } from "styled-icons/material/CloudDone";
+import { CloudUpload } from "styled-icons/material/CloudUpload";
+import { Warning } from "styled-icons/material/Warning";
 
-import CloudDone from "@material-ui/icons/CloudDone";
-import CloudOff from "@material-ui/icons/CloudOff";
-import CloudUpload from "@material-ui/icons/CloudUpload";
-import WarningIcon from "@material-ui/icons/Warning";
-
-import Edit from "@material-ui/icons/Edit";
-import Delete from "@material-ui/icons/Delete";
-
-//ORDERS
-import RemoveShoppingCart from "@material-ui/icons/RemoveShoppingCart";
+import { Edit } from "styled-icons/boxicons-solid/Edit";
+import { DeleteForever as Delete } from "styled-icons/material/DeleteForever";
 
 //SALES
-import Business from "@material-ui/icons/Business";
-import Store from "@material-ui/icons/Store";
-import Block from "@material-ui/icons/Block";
-import Clear from "@material-ui/icons/Clear";
-import Archive from "@material-ui/icons/Archive";
-import Unarchive from "@material-ui/icons/Unarchive";
-import Save from "@material-ui/icons/Save";
-import AttachMoney from "@material-ui/icons/AttachMoney";
-import Functions from "@material-ui/icons/Functions";
-import ArrowUp from "@material-ui/icons/KeyboardArrowUp";
-import ArrowDown from "@material-ui/icons/KeyboardArrowDown";
-import ArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import ArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import LocalShipping from "@material-ui/icons/LocalShipping";
-import AccessTime from "@material-ui/icons/AccessTime";
+import { Save } from "styled-icons/material/Save";
+import { Functions } from "styled-icons/material/Functions";
+import { KeyboardArrowLeft as ArrowLeft } from "styled-icons/material/KeyboardArrowLeft";
+import { KeyboardArrowRight as ArrowRight } from "styled-icons/material/KeyboardArrowRight";
+import { Calendar } from "styled-icons/boxicons-regular/Calendar";
 
 //LOANS
-import Cached from "@material-ui/icons/Cached";
-import Search from "@material-ui/icons/Search";
-import Done from "@material-ui/icons/Done";
+import { SearchAlt as Search } from "styled-icons/boxicons-regular/SearchAlt";
+import { Done } from "styled-icons/material/Done";
 
 //AUTH
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import Notifications from "@material-ui/icons/Notifications";
-import NotificationsActive from "@material-ui/icons/NotificationsActive";
-import Assessment from "@material-ui/icons/Assessment";
 
-import ArrowBack from "@material-ui/icons/ArrowBack";
-import Undo from "@material-ui/icons/Undo";
-import History from "@material-ui/icons/History";
-import Add from "@material-ui/icons/Add";
+import { ArrowBack } from "styled-icons/material/ArrowBack";
+import { Undo } from "styled-icons/boxicons-regular/Undo";
+import { Add } from "styled-icons/material/Add";
 
 //NAVIGATION
-import Menu from "@material-ui/icons/Menu";
-import Close from "@material-ui/icons/Close";
+import { Menu } from "styled-icons/material/Menu";
+import { Close } from "styled-icons/material/Close";
+import { Enter } from "styled-icons/icomoon/Enter";
+
+//PAGES
+import { Warehouse as Inventory } from "styled-icons/fa-solid/Warehouse";
+import { Archive as Orders } from "styled-icons/material/Archive";
+import { Unarchive as Sales } from "styled-icons/material/Unarchive";
+import { Cached as Loans } from "styled-icons/material/Cached";
+import { History } from "styled-icons/material/History";
+import { AccountCircle as Profile } from "styled-icons/material/AccountCircle";
+import { HomeGear as Admin } from "styled-icons/remix-fill/HomeGear";
+import { Business as Customers } from "styled-icons/material/Business";
+import { Store as Suppliers } from "styled-icons/material/Store";
+
+//CLOUD STATUS
+
+//POSSIBLE ICONS
+import { Cube as Products } from "styled-icons/boxicons-solid/Cube";
+import { Component as Boxes } from "styled-icons/boxicons-solid/Component";
+import { Hash } from "styled-icons/feather/Hash";
+import { Gear } from "styled-icons/octicons/Gear";
+import { ExitToApp as Logout } from "styled-icons/material/ExitToApp";
+import { FormatQuote as Name } from "styled-icons/material/FormatQuote";
+import { CommentDetail as Comment } from "styled-icons/boxicons-solid/CommentDetail";
+import { ExchangeAlt as Exchange } from "styled-icons/fa-solid/ExchangeAlt";
+import { Check } from "styled-icons/material/Check";
 
 export default {
+  Products,
+  Orders,
+  Sales,
+  Loans,
+  History,
+  Profile,
+  Admin,
+  Customers,
+  Suppliers,
+  Inventory,
+  Boxes,
+  Hash,
+  Gear,
+  Logout,
+  Name,
+  Calendar,
+  Enter,
+  Comment,
+  Exchange,
+  Check,
   Visibility,
   VisibilityOff,
-  Checkbox,
-  CheckboxOff,
-  FormatQuote,
   List,
-  Folder,
   FolderOpen,
-  NewFolder,
   ShoppingCart,
-  Home,
-  Storage,
-  Redeem,
-  LocalAtm,
   CloudDone,
-  CloudOff,
   CloudUpload,
-  WarningIcon,
+  Warning,
   Edit,
   Delete,
   Menu,
   Close,
-  RemoveShoppingCart,
-  Business,
-  Store,
-  Block,
-  Clear,
-  Archive,
-  Unarchive,
   Save,
-  AttachMoney,
   Functions,
-  ArrowUp,
-  ArrowDown,
   ArrowLeft,
   ArrowRight,
-  LocalShipping,
-  AccessTime,
-  AccountCircle,
-  Notifications,
-  NotificationsActive,
-  Assessment,
-  Cached,
   Search,
   Done,
   ArrowBack,
   Undo,
-  History,
   Add
 };

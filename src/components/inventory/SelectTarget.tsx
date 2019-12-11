@@ -17,6 +17,8 @@ import { saveCreatedCustomer } from "../../redux/actions/customersActions";
 import { saveCreatedCategory } from "../../redux/actions/categoriesActions";
 import { saveCreatedSupplier } from "../../redux/actions/suppliersActions";
 import { addChange } from "../../redux/actions/reportsActions";
+import { InputButton } from "../../styles/form";
+import { verticalScroll } from "../../styles/scroll";
 
 /**
  * Used by EditModals to select targets such as supplier, category and customer
@@ -32,18 +34,16 @@ type TargetsType = ICategory[] | ICustomer[] | ISupplier[];
 type ItemTypes = ICategory | ICustomer | ISupplier;
 
 const SelectTarget: React.FC<IProps> = ({ type, select }) => {
-  const targets = useSelector(
-    (state: RootState) => state[type][type]
-  ) as any[];
+  const targets = useSelector((state: RootState) => state[type][type]) as any[];
 
   const idKey = useMemo(() => {
     switch (type) {
       case "categories":
-        return "categoryID"
+        return "categoryID";
       case "customers":
-        return "customerID"
+        return "customerID";
       default:
-        return "supplierID"
+        return "supplierID";
     }
   }, [type]);
 
@@ -115,9 +115,9 @@ const TargetHeader: React.FC<HeaderProps> = ({
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
-        <SearchButton onClick={() => setSearching(false)}>
+        <InputButton onClick={() => setSearching(false)}>
           <Icons.Done />
-        </SearchButton>
+        </InputButton>
       </StyledHeader>
     );
   }
@@ -128,11 +128,11 @@ const TargetHeader: React.FC<HeaderProps> = ({
         #
       </SortingKey>
       <SortingKey onClick={dir => sortList(dir, 1, sort.byName(dir))}>
-        <Icons.FormatQuote />
+        <Icons.Name />
       </SortingKey>
-      <SearchButton onClick={() => setSearching(true)}>
+      <InputButton onClick={() => setSearching(true)}>
         <Icons.Search />
-      </SearchButton>
+      </InputButton>
     </StyledHeader>
   );
 };
@@ -163,7 +163,9 @@ const TargetItem: React.FC<ItemProps> = ({ item, select }) => {
     <StyledTargetItem>
       <CenteredText>{ID}</CenteredText>
       <CenteredText>{name}</CenteredText>
-      <button onClick={() => select(ID)}>Velg</button>
+      <InputButton onClick={() => select(ID)}>
+        <Icons.Check />
+      </InputButton>
     </StyledTargetItem>
   );
 };
@@ -219,78 +221,81 @@ const AddItem: React.FC<AddItemProps> = ({ targets, type }) => {
           value={name}
           onChange={e => setName(e.target.value)}
         />
-        <button onClick={save}>
+        <InputButton onClick={save}>
           <Icons.Save />
-        </button>
-        <button
+        </InputButton>
+        <InputButton
           onClick={() => {
             setAdd(false);
             setName("");
           }}
         >
-          <Icons.Clear />
-        </button>
+          <Icons.Close />
+        </InputButton>
       </AddWrapper>
     );
   }
 
-  return <AddButton onClick={() => setAdd(true)}>+</AddButton>;
+  return (
+    <AddButton onClick={() => setAdd(true)}>
+      <Icons.Add />
+    </AddButton>
+  );
 };
 
 const StyledWrapper = styled.div`
   background-color: #eee;
-  border: 2px solid #ddd;
-  border-radius: 15px;
 `;
 
 const StyledHeader = styled.div`
   display: grid;
   grid-template-columns: 1fr 5fr 1fr;
-  height: 60px;
+  height: 40px;
   background-color: #eee;
-  border-bottom: 1px solid #ddd;
-  border-radius: 15px 15px 0 0;
 `;
 
 const CenteredText = styled.p`
   text-align: center;
-`;
-
-const SearchButton = styled.button`
-  border-radius: 0 15px 0 0;
+  margin: 0;
+  place-self: center;
 `;
 
 const StyledTargetItem = styled.div`
   display: grid;
   grid-template-columns: 1fr 5fr 1fr;
-  height: 50px;
+  height: 35px;
+  padding: 0.3em;
   background-color: #f8f8f8;
   :nth-child(2n) {
     background-color: #fff;
   }
+
+  p {
+    margin: 0;
+    place-self: center;
+    font-size: 12px;
+  }
 `;
 
 const AddButton = styled.button`
-  height: 50px;
-  background-color: #fff;
-  border-color: #ddd;
+  height: 35px;
+  padding: 0.3em;
+  background: none;
+  border: none;
 `;
 
 const AddWrapper = styled.div`
   display: grid;
   grid-template-columns: 2fr 10fr 1fr 1fr;
   background-color: #f3f3f3;
+  padding: 0.3em;
 `;
 
-const AddInput = styled.input`
-  height: 50px;
-`;
+const AddInput = styled.input``;
 
 const ScrollableList = styled.div`
-  overflow-y: overlay;
-  height: 50vh;
   max-height: 50vh;
-  border-bottom: 1px solid #ddd;
+  ${verticalScroll}
 `;
 
 export default SelectTarget;

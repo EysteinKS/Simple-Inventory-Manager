@@ -2,47 +2,58 @@ import React from "react";
 import { auth, doSignOut } from "../../firebase/firebase";
 import { useSelector, useDispatch } from "react-redux";
 import Subscription from "../../firebase/Subscription";
-import { UserWrapper, UserName, LogoutButton, ProfileWrapper } from "./styles";
+import {
+  UserWrapper,
+  UserName,
+  ProfileWrapper,
+  UserDropdownContent
+} from "./styles";
 import { RootState, AuthState } from "../../redux/types";
-import { Dispatch } from "redux";
 import Icons from "../util/Icons";
 import { shouldLog } from "../../constants/util";
 import { clearLocalStorage } from "../../redux/middleware/localStorage";
 import { resetRedux } from "../../redux/actions";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Exit from "@material-ui/icons/ExitToApp";
-import { Tooltip } from "../util/HoverInfo";
 import useLocation from "../../hooks/useLocation";
 import { navigate } from "@reach/router";
+import { DropdownList, DropdownListItem, ListSplitter } from "../util/Dropdown";
 
 const User = () => {
   const [user] = useAuthState(auth);
   const authUser = useSelector((state: RootState) => state.auth);
-  const dispatch = useDispatch();
-
-  const unsub = () => {
-    const sub = Subscription.getInstance();
-    sub.unsubscribe();
-  };
 
   return (
     <UserWrapper>
-      {user ? (
-        <LoggedIn authUser={authUser} dispatch={dispatch} unsub={unsub} />
-      ) : (
-        <NotLoggedIn />
-      )}
+      {user ? <LoggedIn authUser={authUser} /> : <NotLoggedIn />}
+      <UserDropdownContent>
+        {user ? <LoggedInDropdown /> : <div>Hello world!</div>}
+      </UserDropdownContent>
     </UserWrapper>
   );
 };
 
 type TLoggedIn = {
   authUser: AuthState;
-  dispatch: Dispatch<any>;
-  unsub: () => void;
 };
 
-const LoggedIn = ({ authUser, dispatch, unsub }: TLoggedIn) => {
+const LoggedIn = ({ authUser }: TLoggedIn) => {
+  const { location } = useLocation();
+  const currentPath = location.pathname;
+  const isCurrent = React.useMemo(() => currentPath === "/profile", [
+    currentPath
+  ]);
+  return (
+    <>
+      <ProfileWrapper current={isCurrent}>
+        <UserName>{authUser.user.firstName}</UserName>
+        <Icons.Profile />
+      </ProfileWrapper>
+    </>
+  );
+};
+
+const LoggedInDropdown = () => {
+  const dispatch = useDispatch();
   const { location } = useLocation();
   const currentPath = location.pathname;
   const isCurrent = React.useMemo(() => currentPath === "/profile", [
@@ -53,35 +64,36 @@ const LoggedIn = ({ authUser, dispatch, unsub }: TLoggedIn) => {
       navigate("/profile");
     }
   };
+  const handleLogout = () => {
+    shouldLog("Signing out");
+    Subscription.getInstance().unsubscribe();
+    doSignOut();
+    clearLocalStorage();
+    shouldLog("Resetting redux");
+    dispatch(resetRedux());
+  };
   return (
-    <>
-      <ProfileWrapper
+    <DropdownList>
+      <DropdownListItem
         onClick={e => {
           e.currentTarget.blur();
           goToProfile();
         }}
-        current={isCurrent}
       >
-        <UserName>{authUser.user.firstName}</UserName>
-        <Icons.AccountCircle />
-      </ProfileWrapper>
-      <LogoutButton
+        <p>Profil</p>
+        <Icons.Gear />
+      </DropdownListItem>
+      <ListSplitter />
+      <DropdownListItem
         onClick={e => {
           e.currentTarget.blur();
-          shouldLog("Signing out");
-          unsub();
-          doSignOut();
-          clearLocalStorage();
-          shouldLog("Resetting redux");
-          dispatch(resetRedux());
+          handleLogout();
         }}
-        data-tip
-        data-for={"logout_button"}
       >
-        <Exit />
-        <Tooltip handle={"logout_button"}>Logg ut</Tooltip>
-      </LogoutButton>
-    </>
+        <p>Logg ut</p>
+        <Icons.Logout />
+      </DropdownListItem>
+    </DropdownList>
   );
 };
 

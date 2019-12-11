@@ -1,5 +1,6 @@
 import React from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Spinner from "./Spinner";
+import styled from "styled-components";
 
 interface PageLoadingProps {
   message: string;
@@ -14,18 +15,24 @@ export const PageLoading: React.FC<PageLoadingProps> = ({ message }) => (
         placeSelf: "center"
       }}
     >
-      <CircularProgress style={{ placeSelf: "center" }} />
-      <p style={{ height: "2vh", placeSelf: "center" }}>{message}</p>
+      <Spinner />
+      <LoadingText>{message}</LoadingText>
     </div>
   </div>
 );
+
+const LoadingText = styled.p`
+  height: 2vh;
+  justify-self: center;
+  align-self: center;
+`;
 
 export const NoTextLoading = () => {
   return (
     <div
       style={{ display: "grid", gridTemplateColumns: "1fr", height: "95vh" }}
     >
-      <CircularProgress style={{ placeSelf: "center" }} />
+      <Spinner />
     </div>
   );
 };

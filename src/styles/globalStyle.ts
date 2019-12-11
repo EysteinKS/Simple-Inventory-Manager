@@ -27,6 +27,20 @@ const GlobalStyle = createGlobalStyle`
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
       monospace;
   }
+
+  svg {
+    height: 24px;
+    width: 24px;
+  }
+
+  .ReactModal__Content {
+    animation: fadein 0.25s;
+  }
+
+  @keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 `;
 
 export default GlobalStyle;

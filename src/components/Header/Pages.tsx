@@ -22,21 +22,40 @@ const Pages = () => {
 
   const sections: ISection[] = React.useMemo(() => {
     let sectionArray = [
-      { name: "Produkter", linkTo: routes.HOME, icon: <Icons.Storage /> },
-      { name: "Bestillinger", linkTo: routes.ORDERS, icon: <Icons.Archive /> },
-      { name: "Leverandører", linkTo: routes.SUPPLIERS, icon: <Icons.Store /> },
-      { name: "Salg", linkTo: routes.SALES, icon: <Icons.Unarchive /> },
-      { name: "Utlån", linkTo: routes.LOANS, icon: <Icons.Cached /> },
-      { name: "Kunder", linkTo: routes.CUSTOMERS, icon: <Icons.Business /> },
-      { name: "Logg", linkTo: routes.HISTORY, icon: <Icons.History /> },
-      { name: "Profil", linkTo: routes.PROFILE, icon: <Icons.AccountCircle /> }
+      {
+        name: "Produkter",
+        linkTo: routes.HOME,
+        icon: <Icons.Products />
+      },
+      {
+        name: "Bestillinger",
+        linkTo: routes.ORDERS,
+        icon: <Icons.Orders />
+      },
+      { name: "Salg", linkTo: routes.SALES, icon: <Icons.Sales /> },
+      { name: "Utlån", linkTo: routes.LOANS, icon: <Icons.Loans /> },
+      {
+        name: "Leverandører",
+        linkTo: routes.SUPPLIERS,
+        icon: <Icons.Suppliers />
+      },
+      {
+        name: "Kunder",
+        linkTo: routes.CUSTOMERS,
+        icon: <Icons.Customers />
+      },
+      {
+        name: "Logg",
+        linkTo: routes.HISTORY,
+        icon: <Icons.History />
+      }
     ];
 
     if (userRole === "admin") {
       sectionArray.push({
         name: "Admin",
         linkTo: routes.ADMIN,
-        icon: <Icons.Assessment />
+        icon: <Icons.Admin />
       });
     }
 
