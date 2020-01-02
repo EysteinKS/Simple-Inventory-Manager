@@ -99,7 +99,12 @@ export default function EditLoan({ isOpen, close }: TEditLoan) {
   };
 
   return (
-    <EditModal isOpen={isOpen} label="Edit Loan" onClose={close}>
+    <EditModal
+      isOpen={isOpen}
+      label="Edit Loan"
+      onClose={close}
+      fullWidth={view === "products"}
+    >
       <ModalHeader
         bckColor={color}
         padBottom="7px"

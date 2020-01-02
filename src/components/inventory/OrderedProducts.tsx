@@ -25,9 +25,9 @@ const OrderedProducts = ({
   edit,
   remove
 }: TOrdered) => {
-  const { secondary, dark } = useAuthLocation();
+  const { color, secondary, dark } = useAuthLocation();
   return (
-    <StyledWrapper>
+    <StyledWrapper bckColor={color}>
       <StyledSection overflow="hidden">
         <SelectProduct
           height={/*window.innerWidth > 760*/ false ? "60vh" : "30vh"}
@@ -41,11 +41,6 @@ const OrderedProducts = ({
           <CenteredText>
             <Icons.Exchange />
           </CenteredText>
-          {/* <FormInputButton
-            bckColor="rgb(255, 220, 0)"
-          >
-            <Icons.Edit />
-          </FormInputButton> */}
         </ProductWithEdit>
         <StyledList borderColor={dark}>
           {ordered.map((product, i) => (
@@ -177,15 +172,16 @@ const InputWrapper = styled.div`
   padding: 0.2em;
 `;
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled.div<{ bckColor: string }>`
+  background: ${props => props.bckColor};
   max-height: 100%;
   overflow-y: hidden;
   display: grid;
   grid-template-rows: 30vh 30vh;
   ${device.tablet(`
-    /* grid-template-rows: 100%;
+    grid-template-rows: 500px;
     grid-template-columns: 345px 345px;
-    column-gap: 10px; */
+    column-gap: 10px;
   `)}
 `;
 
@@ -193,12 +189,15 @@ const StyledSection = styled.div`
   background-color: #fbfbfb;
   padding: 0;
   display: grid;
-  grid-template-rows: 6vh 24vh;
+  grid-template-rows: 35px 175px;
   overflow-y: hidden;
   overflow-x: hidden;
   :hover {
     overflow-y: ${(props: { overflow: string }) => props.overflow};
   }
+  ${device.tablet(`
+    grid-template-rows: 35px 465px;
+  `)}
 `;
 
 export default OrderedProducts;

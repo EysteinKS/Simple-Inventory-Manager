@@ -28,6 +28,10 @@ export const ModalFooter = styled.footer<BckColorProps>`
   display: flex;
   justify-content: flex-end;
   background-color: ${props => props.bckColor};
+
+  button {
+    width: 33%;
+  }
 `;
 
 export const TitleWrapper = styled.div`

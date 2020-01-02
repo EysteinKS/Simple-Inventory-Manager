@@ -1,4 +1,6 @@
+import React from "react";
 import styled, { css } from "styled-components";
+import { DetailedHTMLProps, InputHTMLAttributes } from "react";
 
 interface BckColorProps {
   bckColor?: string;
@@ -136,5 +138,41 @@ export const InputButton = styled.button<BckColorProps>`
     svg {
       color: #0008;
     }
+  }
+`;
+
+export const InputWithIcon: React.FC<
+  DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
+> = ({ children, ...rest }) => {
+  return (
+    <InputWithIconWrapper>
+      <input {...rest} />
+      {children}
+    </InputWithIconWrapper>
+  );
+};
+
+const InputWithIconWrapper = styled.div`
+  position: relative;
+  padding: 0;
+  margin-bottom: 10px;
+
+  input {
+    display: inline-block;
+    height: 30px;
+    margin: 0;
+    padding: 0;
+    width: 250px;
+    padding-left: 40px;
+  }
+
+  & > :nth-child(2) {
+    position: absolute;
+    display: inline-block;
+    left: 10px;
+    top: 5px;
+    width: 25px;
+    height: 25px;
+    color: #000b;
   }
 `;

@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ReactModal from "react-modal";
 import { setNewPassword } from "../../api/auth";
-import { navigate } from "@reach/router";
+import ForgotPassword from "../ForgotPassword";
+import useMargin from "../../hooks/useMargin";
 ReactModal.setAppElement("#root");
+
+type ViewTypes = "change" | "forgot" | "updated";
 
 const ChangePassword = () => {
   const [isOpen, setOpen] = React.useState(false);
@@ -24,12 +27,12 @@ interface ModalProps {
 }
 
 const ChangePasswordModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
-  const [oldPwd, setOldPwd] = React.useState("");
-  const [newPwd, setNewPwd] = React.useState("");
-  const [repeatPwd, setRepeatPwd] = React.useState("");
-  const [messages, setMessages] = React.useState([] as string[]);
-  const [isValid, setValid] = React.useState(false);
-  const [isUpdated, setUpdated] = React.useState(false);
+  const [oldPwd, setOldPwd] = useState("");
+  const [newPwd, setNewPwd] = useState("");
+  const [repeatPwd, setRepeatPwd] = useState("");
+  const [messages, setMessages] = useState([] as string[]);
+  const [isValid, setValid] = useState(false);
+  const [view, setView] = useState("change" as ViewTypes);
 
   const checkValidity = () => {
     setMessages([]);
@@ -78,7 +81,7 @@ const ChangePasswordModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         oldPwd,
         newPwd,
         () => {
-          setUpdated(true);
+          setView("updated");
         },
         err => {
           setMessages([err]);
@@ -87,13 +90,8 @@ const ChangePasswordModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const modalWidth = React.useMemo(() => {
-    if (window.innerWidth < 700) {
-      return "1vw";
-    } else {
-      return "25vw";
-    }
-  }, []);
+  const modalWidth = window.innerWidth >= 364 ? 350 : window.innerWidth;
+  const sideMargin = useMargin(modalWidth);
 
   return (
     <ReactModal
@@ -110,18 +108,19 @@ const ChangePasswordModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         content: {
           top: "30vh",
           bottom: "auto",
-          right: modalWidth,
-          left: modalWidth,
+          right: `${sideMargin}px`,
+          left: `${sideMargin}px`,
+          width: `${modalWidth}px`,
+          border: "none",
           padding: "0",
           background: "white"
         }
       }}
     >
       <ModalWrapper>
-        <p>Endre passord</p>
-
-        {!isUpdated && (
+        {view === "change" && (
           <>
+            <p>Endre passord</p>
             <MessageList>
               {messages.map((m, i) => (
                 <MessageItem key={"message_" + i}>{m}</MessageItem>
@@ -156,19 +155,20 @@ const ChangePasswordModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                 value="Lagre"
                 disabled={!isValid || oldPwd.length < 6}
               />
-              <ForgotPassword onClick={() => navigate("/forgot")}>
+              <ForgotPasswordLink onClick={() => setView("forgot")}>
                 Glemt passordet?
-              </ForgotPassword>
+              </ForgotPasswordLink>
             </PasswordForm>
           </>
         )}
 
-        {isUpdated && (
+        {view === "updated" && (
           <UpdatedWrapper>
             <p>Passordet er endret!</p>
             <button onClick={() => onClose()}>Lukk</button>
           </UpdatedWrapper>
         )}
+        {view === "forgot" && <ForgotPassword back={() => setView("change")} />}
       </ModalWrapper>
     </ReactModal>
   );
@@ -181,7 +181,7 @@ const ChangeText = styled.p`
   justify-self: center;
 `;
 
-const ForgotPassword = styled(ChangeText)`
+const ForgotPasswordLink = styled(ChangeText)`
   color: #666;
   margin: 0.5em;
   grid-column: 1 / 3;

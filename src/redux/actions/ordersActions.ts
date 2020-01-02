@@ -7,6 +7,7 @@ import {
 import { IOrderedProduct, IOrder } from "../types";
 import { IThunkAction } from "../middleware/types";
 import { addChange } from "./reportsActions";
+import { addNotification, notifications } from "./notificationActions";
 
 const thisSection = "orders";
 
@@ -135,20 +136,21 @@ export const clearCurrentOrder = () => ({
 });
 
 export const RECEIVED_ORDER = "RECEIVED_ORDER";
-export const receivedOrder = (id: number) => ({
+export const receivedOrder = (id: number, date: Date) => ({
   type: RECEIVED_ORDER,
-  payload: id
+  payload: { id, date }
 });
 
 export const didReceiveOrder = (
   id: number,
-  ordered: IOrderedProduct[]
+  ordered: IOrderedProduct[],
+  date: Date
 ): IThunkAction => {
   return async dispatch => {
     ordered.forEach(product => {
       dispatch(updateProductAmount(product.productID, product.amount));
     });
-    dispatch(receivedOrder(id));
+    dispatch(receivedOrder(id, date));
   };
 };
 
@@ -197,5 +199,6 @@ export const didUndoOrder = (
         section: "orders"
       })
     );
+    dispatch(addNotification(notifications.addedChange()));
   };
 };

@@ -7,6 +7,7 @@ import {
 import { ISale, IOrderedProduct, SalesState } from "../types";
 import { IThunkAction } from "../middleware/types";
 import { addChange } from "./reportsActions";
+import { addNotification, notifications } from "./notificationActions";
 
 const thisSection = "sales";
 
@@ -132,14 +133,15 @@ export const clearCurrentSale = () => ({
 });
 
 export const SEND_SALE = "SEND_SALE";
-export const sendSale = (id: number) => ({
+export const sendSale = (id: number, date: Date) => ({
   type: SEND_SALE,
-  payload: id
+  payload: { id, date }
 });
 
 export const didSendSale = (
   id: number,
-  ordered: IOrderedProduct[]
+  ordered: IOrderedProduct[],
+  date: Date
 ): IThunkAction => {
   return async dispatch => {
     ordered.forEach(product => {
@@ -147,7 +149,7 @@ export const didSendSale = (
         updateProductAmount(product.productID, -Math.abs(product.amount))
       );
     });
-    dispatch(sendSale(id));
+    dispatch(sendSale(id, date));
   };
 };
 
@@ -184,5 +186,12 @@ export const didUndoSale = (
         section: "sales"
       })
     );
+    dispatch(addNotification(notifications.addedChange()));
   };
 };
+
+export const TOGGLE_SALE_READY = "TOGGLE_SALE_READY";
+export const toggleSaleReady = (id: number) => ({
+  type: TOGGLE_SALE_READY,
+  payload: id
+});

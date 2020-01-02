@@ -1,9 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { RootState, IOrder } from "../../../redux/types";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import useEditableList from "../../../hooks/useEditableList";
-import { addChange } from "../../../redux/actions/reportsActions";
-import { isChanged, shouldLog } from "../../../constants/util";
+import { isChanged } from "../../../constants/util";
 import ReactModal from "react-modal";
 import OrderedProducts from "../OrderedProducts";
 import SelectTarget from "../SelectTarget";
@@ -11,10 +10,6 @@ import EditModal, { OrderedProduct } from "./EditModal";
 import Names from "../../Names";
 import Icons from "../../util/Icons";
 import { ProductWithEdit, CenteredText } from "./styles";
-import {
-  saveCreatedOrder,
-  saveEditedOrder
-} from "../../../redux/actions/ordersActions";
 import useProducts from "../../../hooks/useProducts";
 import useAuthLocation from "../../../hooks/useAuthLocation";
 import {
@@ -33,6 +28,7 @@ import {
   FakeInput
 } from "../../../styles/form";
 import { StyledList } from "../../../styles/list";
+import useOrders from "../../../redux/hooks/useOrders";
 
 ReactModal.setAppElement("#root");
 
@@ -44,10 +40,7 @@ type TEditOrder = {
 type ViewTypes = "details" | "supplier" | "products";
 
 export default function EditOrder({ isOpen, close }: TEditOrder) {
-  const current = useSelector(
-    (state: RootState) => state.orders.currentOrder
-  ) as IOrder;
-  const dispatch = useDispatch();
+  const { currentOrder, saveCreatedOrder, saveEditedOrder } = useOrders();
 
   const [supplier, setSupplier] = useState();
   const [view, setView] = useState("details" as ViewTypes);
@@ -93,45 +86,29 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
     edit: editProduct,
     remove: removeProduct,
     replace: setOrdered
-  } = useEditableList(current.ordered);
+  } = useEditableList(currentOrder.ordered);
 
   const [init, setInit] = useState(false);
   if (isOpen && !init) {
-    setSupplier(current.supplierID);
-    setOrdered(current.ordered);
+    setSupplier(currentOrder.supplierID);
+    setOrdered(currentOrder.ordered);
     setInit(true);
   }
 
   const save = () => {
     let returnedOrder: IOrder = {
-      orderID: current.orderID,
+      orderID: currentOrder.orderID,
       supplierID: Number(supplier),
-      dateOrdered: current.dateOrdered,
-      dateReceived: current.dateReceived,
+      dateOrdered: currentOrder.dateOrdered,
+      dateReceived: currentOrder.dateReceived,
       ordered
     };
-    if (current.isNew) {
-      dispatch(
-        addChange({
-          type: "NEW_ORDER",
-          id: returnedOrder.orderID,
-          section: "orders"
-        })
-      );
-      dispatch(saveCreatedOrder(returnedOrder));
+    if (currentOrder.isNew) {
+      saveCreatedOrder(returnedOrder);
     } else {
-      let isOrderChanged = isChanged(current, returnedOrder);
+      let isOrderChanged = isChanged(currentOrder, returnedOrder);
       if (!isOrderChanged.isEqual) {
-        shouldLog("Changed loan content", isOrderChanged.changed);
-        dispatch(
-          addChange({
-            type: "EDIT_ORDER_INFO",
-            id: returnedOrder.orderID,
-            section: "orders",
-            changed: isOrderChanged.changed
-          })
-        );
-        dispatch(saveEditedOrder(returnedOrder));
+        saveEditedOrder(returnedOrder, isOrderChanged.changed);
       }
     }
     close();
@@ -139,7 +116,12 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
   };
 
   return (
-    <EditModal isOpen={isOpen} label="Edit Order" onClose={close}>
+    <EditModal
+      isOpen={isOpen}
+      label="Edit Order"
+      onClose={close}
+      fullWidth={view === "products"}
+    >
       <ModalHeader
         bckColor={color}
         padBottom="7px"
@@ -147,7 +129,7 @@ export default function EditOrder({ isOpen, close }: TEditOrder) {
       >
         <TitleWrapper>
           <ModalTitle>
-            <Icons.Orders /> Bestilling #{current.orderID}{" "}
+            <Icons.Orders /> Bestilling #{currentOrder.orderID}{" "}
           </ModalTitle>
           {view !== "details" && <ModalSubtitle>{viewText}</ModalSubtitle>}
         </TitleWrapper>

@@ -8,6 +8,7 @@ import Icons from "../util/Icons";
 
 export default function CloudStatus() {
   const [isSaving, isSaved, error, save] = useSavingGate();
+  const isDemo = useSelector((state: RootState) => state.auth.isDemo);
   const hasNewChanges = useSelector(
     (state: RootState) => state.auth.hasNewChanges
   );
@@ -17,6 +18,12 @@ export default function CloudStatus() {
   const [status, setStatus] = useState("");
 
   useEffect(() => {
+    if (isDemo) {
+      setIcon(<Icons.CloudDone />);
+      setTooltip("Alle endringer lagret");
+      setStatus("default");
+      return;
+    }
     if (error) {
       setIcon(<Icons.Warning />);
       setTooltip("En feil oppsto! Prøv igjen?");
@@ -38,9 +45,10 @@ export default function CloudStatus() {
       setTooltip("Alle endringer lagret");
       setStatus("default");
     }
-  }, [error, hasNewChanges, isSaving, isSaved, setIcon, setTooltip]);
+  }, [error, hasNewChanges, isSaving, isSaved, setIcon, setTooltip, isDemo]);
 
   const onClick = () => {
+    if (isDemo) return;
     if (hasNewChanges) {
       window.location.reload();
     } else if (typeof save !== "boolean") {

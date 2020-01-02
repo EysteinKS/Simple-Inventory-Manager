@@ -49,7 +49,7 @@ export const PagesWrapper = styled.nav`
   place-items: center;
   justify-content: center;
   height: 100%;
-  padding-left: 2vw;
+  padding-left: 0.5em;
   ${(props: { expand: boolean }) =>
     props.expand &&
     css`

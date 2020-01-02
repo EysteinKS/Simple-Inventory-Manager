@@ -58,6 +58,13 @@ import { CommentDetail as Comment } from "styled-icons/boxicons-solid/CommentDet
 import { ExchangeAlt as Exchange } from "styled-icons/fa-solid/ExchangeAlt";
 import { Check } from "styled-icons/material/Check";
 
+import { Mail as Email } from "styled-icons/octicons/Mail";
+/* import { MailOutline as Email } from "styled-icons/material/MailOutline"; */
+import { Key } from "styled-icons/boxicons-regular/Key";
+
+import { Checkbox } from "styled-icons/remix-line/Checkbox";
+import { CheckboxBlank } from "styled-icons/remix-line/CheckboxBlank";
+
 export default {
   Products,
   Orders,
@@ -99,5 +106,9 @@ export default {
   Done,
   ArrowBack,
   Undo,
-  Add
+  Add,
+  Email,
+  Key,
+  Checkbox,
+  CheckboxBlank
 };

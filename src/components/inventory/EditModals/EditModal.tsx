@@ -13,6 +13,7 @@ interface IProps {
   onClose: () => void;
   rows?: string;
   modalWidth?: number;
+  fullWidth?: boolean;
 }
 
 const defaultRows = "5vh auto 5vh";
@@ -23,10 +24,14 @@ const EditModal: React.FC<IProps> = ({
   onClose,
   rows = defaultRows,
   children,
-  modalWidth = 350
+  modalWidth = 350,
+  fullWidth = false
 }) => {
   modalWidth =
     window.innerWidth >= modalWidth ? modalWidth : window.innerWidth - 14;
+  if (window.innerWidth >= 768 && fullWidth) {
+    modalWidth = 700;
+  }
   const borderWidth = 7;
   const sideMargin = useMargin(modalWidth, borderWidth);
   const { color } = useAuthLocation();

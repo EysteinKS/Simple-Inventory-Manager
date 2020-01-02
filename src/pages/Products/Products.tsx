@@ -8,7 +8,6 @@ import {
 import { sort, newProduct } from "../../constants/util";
 
 import EditProduct from "../../components/inventory/EditModals/EditProduct";
-import EditCategories from "../Categories/Categories";
 import {
   Title,
   Key,
@@ -52,7 +51,6 @@ export default function Products() {
   //MODALS
   const [isProductOpen, setProductOpen] = useState(false);
   const [historyProduct, setHistoryProduct] = useState(null as IProduct | null);
-  const [isCategoriesOpen, setCategoriesOpen] = useState(false);
 
   //SORTING
   const [sorting, setSorting] = useState([null, null, null] as any[]);
@@ -111,15 +109,6 @@ export default function Products() {
           >
             <Icons.Add />
             <Tooltip handle={"product_header_add"}>Nytt produkt</Tooltip>
-          </HeaderButton>
-          <HeaderButton
-            onClick={() => setCategoriesOpen(true)}
-            data-tip
-            data-for={"product_header_categories"}
-          >
-            <Icons.FolderOpen />
-            <Icons.List />
-            <Tooltip handle={"product_header_categories"}>Kategorier</Tooltip>
           </HeaderButton>
         </HeaderButtons>
       </TableHeader>
@@ -221,14 +210,6 @@ export default function Products() {
           close={() => {
             setProductOpen(false);
             dispatch(clearCurrentProduct());
-          }}
-        />
-      )}
-      {isCategoriesOpen && (
-        <EditCategories
-          isOpen={isCategoriesOpen}
-          close={() => {
-            setCategoriesOpen(false);
           }}
         />
       )}

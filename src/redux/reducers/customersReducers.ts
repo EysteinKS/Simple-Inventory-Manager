@@ -42,6 +42,14 @@ export default (
         draft.isSaved = false;
         return draft;
 
+      case action.SAVE_EDITED_CUSTOMER:
+        let customerIndex = draft.customers.findIndex(
+          c => c.customerID === payload.customerID
+        );
+        draft.customers[customerIndex] = payload;
+        draft.isSaved = false;
+        return draft;
+
       case action.RESET_CUSTOMERS:
         return drafts.resetReducer(initialState);
     }

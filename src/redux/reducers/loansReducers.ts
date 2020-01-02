@@ -84,21 +84,21 @@ export default (
 
       case action.SEND_LOAN:
         let sent: ILoan | any = state.loans.find(
-          loan => loan.loanID === payload
+          loan => loan.loanID === payload.id
         );
-        sent.dateSent = new Date();
+        sent.dateSent = payload.date;
         draft.isSaved = false;
         break;
 
       case action.RECEIVED_LOAN:
         let loanIndex: number = 0;
         let received: ILoan | any = state.loans.find((loan, index) => {
-          if (loan.loanID === payload) {
+          if (loan.loanID === payload.id) {
             loanIndex = index;
           }
-          return loan.loanID === payload;
+          return loan.loanID === payload.id;
         });
-        received.dateReceived = new Date();
+        received.dateReceived = payload.date;
         draft.history.push(received);
         draft.loans.splice(loanIndex, 1);
         draft.isSaved = false;

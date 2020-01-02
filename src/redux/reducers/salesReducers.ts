@@ -73,12 +73,12 @@ export default (
       case action.SEND_SALE:
         let saleIndex: number = 0;
         let sent: ISale | any = state.sales.find((sale, index) => {
-          if (sale.saleID === payload) {
+          if (sale.saleID === payload.id) {
             saleIndex = index;
           }
-          return sale.saleID === payload;
+          return sale.saleID === payload.id;
         });
-        sent.dateSent = new Date();
+        sent.dateSent = payload.date;
         draft.history.push(sent);
         draft.sales.splice(saleIndex, 1);
         draft.isSaved = false;
@@ -126,6 +126,19 @@ export default (
 
         //INSERT SALE TO SALES
         draft.sales = insertIntoArray(state.sales, saleToUndo, "saleID");
+        draft.isSaved = false;
+        break;
+
+      case action.TOGGLE_SALE_READY:
+        let salesWithToggled = state.sales.map(sale => {
+          if (sale.saleID === payload) {
+            const isReady = sale.isReady || false;
+            return { ...sale, isReady: !isReady };
+          } else {
+            return sale;
+          }
+        });
+        draft.sales = salesWithToggled;
         draft.isSaved = false;
         break;
     }

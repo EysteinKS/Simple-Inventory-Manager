@@ -1,5 +1,3 @@
-import ProductName from "../components/inventory/ProductName";
-
 interface IStringKey {
   [index: string]: any;
 }
@@ -62,6 +60,7 @@ export interface AuthState extends SavingState, LoadingState {
   location: LocationState;
   loggingOut: boolean;
   hasNewChanges: boolean;
+  isDemo: boolean;
 }
 
 //AUTH END
@@ -147,6 +146,7 @@ export interface ISale {
   saleID: number;
   isNew?: boolean;
   isDeleted?: boolean;
+  isReady?: boolean;
 }
 
 export interface SalesState extends SectionState {
@@ -359,6 +359,19 @@ export interface ReportsState {
   changes: Changes[];
 }
 
+export type NotificationTypes = "success" | "info" | "warning";
+
+export interface INotification {
+  message: string;
+  type: NotificationTypes;
+  id: number;
+  timeout?: number;
+}
+
+export interface NotificationState {
+  notifications: INotification[];
+}
+
 //REPORTS END
 
 export type AnyState =
@@ -381,5 +394,6 @@ export interface RootState {
   readonly loans: LoansState;
   readonly suppliers: SuppliersState;
   readonly reports: ReportsState;
+  readonly notifications: NotificationState;
   [index: string]: any;
 }

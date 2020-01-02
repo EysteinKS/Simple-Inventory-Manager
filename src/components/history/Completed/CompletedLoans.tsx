@@ -25,11 +25,11 @@ const CompletedLoans = () => {
   const loansColumns = React.useMemo(() => {
     return [
       { name: "ID", width: "10%" },
-      { name: "CUSTOMER", width: "20%" },
-      { name: "ORDERED", width: "20%" },
-      { name: "SENT", width: "20%" },
-      { name: "RECEIVED", width: "20%" },
-      { name: "AMOUNT", width: "10%" }
+      { name: "KUNDE", width: "20%" },
+      { name: "BESTILT", width: "20%" },
+      { name: "SENDT", width: "20%" },
+      { name: "MOTTATT", width: "20%" },
+      { name: "ANTALL", width: "10%" }
     ];
   }, []);
 
@@ -85,7 +85,7 @@ const CompletedLoans = () => {
 
   if (loanHistory.length > 0) {
     return (
-      <HistoryTable name="Loans" columns={loansColumns}>
+      <HistoryTable name="Utlån" columns={loansColumns}>
         {loansContent}
       </HistoryTable>
     );

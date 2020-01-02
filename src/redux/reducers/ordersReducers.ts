@@ -78,12 +78,12 @@ export default (
       case action.RECEIVED_ORDER:
         let orderIndex: number = 0;
         let received: IOrder | any = state.orders.find((order, index) => {
-          if (order.orderID === payload) {
+          if (order.orderID === payload.id) {
             orderIndex = index;
           }
-          return order.orderID === payload;
+          return order.orderID === payload.id;
         });
-        received.dateReceived = new Date();
+        received.dateReceived = payload.date;
         draft.history.push(received);
         draft.orders.splice(orderIndex, 1);
         draft.isSaved = false;

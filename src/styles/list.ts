@@ -8,7 +8,6 @@ interface BorderColorProps {
 export const BasicListItem = styled.div``;
 
 export const StyledList = styled.div<BorderColorProps>`
-  max-height: 55vh;
   border-left: 5px solid ${props => props.borderColor};
   ${verticalScroll}
 `;

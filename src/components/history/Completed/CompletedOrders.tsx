@@ -28,10 +28,10 @@ const CompletedOrders = () => {
   const ordersColumns = React.useMemo(() => {
     return [
       { name: "ID", width: "10%" },
-      { name: "SUPPLIER", width: "30%" },
-      { name: "ORDERED", width: "30%" },
-      { name: "RECEIVED", width: "30%" },
-      { name: "AMOUNT", width: "10%" }
+      { name: "LEVERANDØR", width: "30%" },
+      { name: "BESTILT", width: "30%" },
+      { name: "MOTTATT", width: "30%" },
+      { name: "ANTALL", width: "10%" }
     ];
   }, []);
 
@@ -85,7 +85,7 @@ const CompletedOrders = () => {
 
   if (orderHistory.length > 0) {
     return (
-      <HistoryTable name="Orders" columns={ordersColumns}>
+      <HistoryTable name="Bestillinger" columns={ordersColumns}>
         {ordersContent}
       </HistoryTable>
     );

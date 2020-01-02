@@ -1,14 +1,11 @@
 import {
   ISupplier,
   ICustomer,
-  ISale,
-  IOrder,
   IProduct,
   RootState,
   ICategory,
   IOrderedProduct,
-  IChangeValue,
-  ILoan
+  IChangeValue
 } from "../redux/types";
 import { TDirections } from "../components/util/SectionHeader";
 
@@ -191,43 +188,6 @@ export const newProduct = (id: number): IProduct => {
     active: true,
     amount: 0,
     comments: ""
-  };
-};
-
-export const newOrder = (id: number): IOrder => {
-  let date = new Date();
-  return {
-    orderID: id,
-    supplierID: 1,
-    dateOrdered: date,
-    dateReceived: null,
-    ordered: [],
-    isNew: true
-  };
-};
-
-export const newSale = (id: number): ISale => {
-  let date = new Date();
-  return {
-    saleID: id,
-    customerID: 1,
-    dateOrdered: date,
-    dateSent: null,
-    ordered: [],
-    isNew: true
-  };
-};
-
-export const newLoan = (id: number): ILoan => {
-  let date = new Date();
-  return {
-    loanID: id,
-    customerID: 1,
-    dateOrdered: date,
-    dateSent: null,
-    dateReceived: null,
-    ordered: [],
-    isNew: true
   };
 };
 
@@ -426,8 +386,8 @@ export const isChanged = (prev: any, next: any) => {
         const { oldVals, newVals } = compareArrays(oldKey, newKey);
         changed.push({
           key: key,
-          oldValue: oldVals,
-          newValue: newVals
+          oldValue: oldVals || [],
+          newValue: newVals || []
         });
       } else if (!Array.isArray(oldKey)) {
         if (oldKey !== newKey) {

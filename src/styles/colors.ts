@@ -1,9 +1,8 @@
-export const MAIN = "#91E299";
-export const MAIN_DARK = "#6FCF79";
-export const MAIN_BRIGHT = "#DFFFE2";
+export const MAIN = "#eb943b";
+export const BRIGHT = "#ffcb72";
 
-export const SECONDARY = "#FFFEE3";
-export const SECONDARY_DARK = "#F6F5DE";
+export const ERROR = "#c72222de";
+export const SUCCESS = "#2f840ede";
 
 export const hexToHSL = (H: string) => {
   let r: any = "0",

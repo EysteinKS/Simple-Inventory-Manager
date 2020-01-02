@@ -8,6 +8,7 @@ import reports from "./reportsReducers";
 import sales from "./salesReducers";
 import suppliers from "./suppliersReducers";
 import loans from "./loansReducers";
+import notifications from "./notificationReducers";
 
 import { Reducer } from "redux";
 
@@ -21,6 +22,7 @@ interface CombinedReducers {
   sales: Reducer;
   suppliers: Reducer;
   loans: Reducer;
+  notifications: Reducer;
 }
 
 const reducers: CombinedReducers = {
@@ -32,7 +34,8 @@ const reducers: CombinedReducers = {
   reports,
   sales,
   suppliers,
-  loans
+  loans,
+  notifications
 };
 
 export default combineReducers(reducers);

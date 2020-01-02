@@ -154,15 +154,27 @@ export const TableItem = styled.div`
   width: 100%;
   max-height: 50px;
   place-items: center;
+
   & > p {
     font-size: 14px;
     margin: 0;
   }
-  & > button {
+
+  button {
     height: 100%;
     background: none;
     border: none;
   }
+
+  svg {
+    color: #000b;
+  }
+
+  svg:hover {
+    cursor: pointer;
+    color: #0008;
+  }
+
   ${(props: ITableItem) => (props.columns ? props.columns : null)}
 
   background-color: #F3F3F3;
@@ -195,6 +207,11 @@ export const ItemData = styled.p`
   font-size: 14px;
   ${(props: { justify?: "start" | "end" | "center" }) =>
     props.justify && `justify-self: ${props.justify}`}
+
+  svg {
+    height: 22px;
+    width: 22px;
+  }
 `;
 
 export const ItemButtons = styled.div`
@@ -223,7 +240,7 @@ export const ExpandedContentItem = styled.div`
   ${(props: ColumnsProps) => `
     grid-template-columns: ${props.columns};
   `}
-  :nth-child(2n) {
+    :nth-child(2n) {
     background-color: #0001;
   }
   & > p {

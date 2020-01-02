@@ -32,6 +32,10 @@ import {
   InputButton
 } from "../../styles/form";
 import { StyledList } from "../../styles/list";
+import {
+  notifications,
+  addNotification
+} from "../../redux/actions/notificationActions";
 
 interface EditSupplierProps {
   supplier: ISupplier;
@@ -91,12 +95,18 @@ const EditSupplier: React.FC<EditSupplierProps> = ({
         })
       );
       dispatch(saveEditedSupplier(returnedSupplier));
+      dispatch(addNotification(notifications.addedChange()));
     }
     close();
   };
 
   return (
-    <EditModal isOpen={Boolean(supplier)} label="Edit supplier" onClose={close}>
+    <EditModal
+      isOpen={Boolean(supplier)}
+      label="Edit supplier"
+      onClose={close}
+      fullWidth={view === "products"}
+    >
       <ModalHeader
         bckColor={color}
         padBottom="7px"

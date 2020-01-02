@@ -42,7 +42,8 @@ const initialState: AuthState = {
   savingError: null,
   loggingOut: false,
   hasNewChanges: false,
-  error: null
+  error: null,
+  isDemo: false
 };
 
 export default (
@@ -112,6 +113,10 @@ export default (
       case action.TOGGLE_TOOLTIPS:
         let showTooltips = state.user.settings.showTooltips;
         draft.user.settings.showTooltips = !showTooltips;
+        return draft;
+
+      case action.SET_DEMO:
+        draft.isDemo = payload;
         return draft;
 
       default:

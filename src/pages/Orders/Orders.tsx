@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  createOrder,
-  editOrder,
-  clearCurrentOrder
-} from "../../redux/actions/ordersActions";
-import { sort, newOrder } from "../../constants/util";
+import { useSelector } from "react-redux";
+import { sort } from "../../constants/util";
 
 import EditOrder from "../../components/inventory/EditModals/EditOrder";
 import {
@@ -33,23 +28,22 @@ import {
 } from "../../styles/table";
 import { Tooltip } from "../../components/util/HoverInfo";
 import useAuthLocation from "../../hooks/useAuthLocation";
+import useOrders from "../../redux/hooks/useOrders";
 
 export default function Orders() {
-  const dispatch = useDispatch();
-  const orders = useSelector((state: RootState) => state.orders);
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const [isOrderOpen, setOrderOpen] = useState(false);
   const { secondary } = useAuthLocation();
 
+  const { orders, createNewOrder, editOrder, clearCurrentOrder } = useOrders();
+
   //SORTING
   const [sorting, setSorting] = useState([null, null, null] as any[]);
-  const { sortedList, setList, sortFunc } = useSortableList(
-    orders.orders as IOrder[]
-  );
+  const { sortedList, setList, sortFunc } = useSortableList(orders as IOrder[]);
   useEffect(() => {
-    setList(orders.orders);
+    setList(orders);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orders.orders]);
+  }, [orders]);
 
   const sortList = (dir: TDirections, index: number, func: Function) =>
     sortFunc(setSorting)(dir, index, func, sorting);
@@ -66,7 +60,7 @@ export default function Orders() {
   }, [extended]);
 
   const handleNewOrder = () => {
-    dispatch(createOrder(newOrder(orders.currentID + 1)));
+    createNewOrder();
     setOrderOpen(true);
   };
 
@@ -136,7 +130,7 @@ export default function Orders() {
                 columns={tableStyles.item}
                 key={"order_" + order.orderID}
                 edit={id => {
-                  dispatch(editOrder(id));
+                  editOrder(id);
                   setOrderOpen(true);
                 }}
               />
@@ -148,7 +142,7 @@ export default function Orders() {
           isOpen={isOrderOpen}
           close={() => {
             setOrderOpen(false);
-            dispatch(clearCurrentOrder());
+            clearCurrentOrder();
           }}
         />
       )}

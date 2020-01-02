@@ -165,6 +165,7 @@ const CenteredText = styled.p`
 
 const SearchInput = styled.input`
   grid-column: span 2;
+  margin: 0.3em;
 `;
 
 const ProductWrapper = styled.div`

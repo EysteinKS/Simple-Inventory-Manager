@@ -155,47 +155,47 @@ const Report: React.FC = () => {
           })}
         </ReportTable>
         {/* Loans */}
-        {report.loans &&
-        <ReportTable
-          name="Loans"
-          columns={[
-            { name: "ID", width: "15%" },
-            { name: "CUSTOMER", width: "20%" },
-            { name: "ORDERED", width: "20%" },
-            { name: "SENT", width: "20%" },
-            { name: "AMOUNT", width: "15%" }
-          ]}
-        >
-          {report.loans.active.map(loan => {
-            let sent = () => {
-              if (loan.dateSent == null) {
-                return "-";
-              } else {
-                return new Date(loan.dateSent).toLocaleString(
+        {report.loans && (
+          <ReportTable
+            name="Loans"
+            columns={[
+              { name: "ID", width: "15%" },
+              { name: "CUSTOMER", width: "20%" },
+              { name: "ORDERED", width: "20%" },
+              { name: "SENT", width: "20%" },
+              { name: "AMOUNT", width: "15%" }
+            ]}
+          >
+            {report.loans.active.map(loan => {
+              let sent = () => {
+                if (loan.dateSent == null) {
+                  return "-";
+                } else {
+                  return new Date(loan.dateSent).toLocaleString(
+                    "default",
+                    localeStringOpts
+                  );
+                }
+              };
+              let columns = [
+                loan.loanID,
+                loan.customer.name,
+                new Date(loan.dateOrdered as string).toLocaleString(
                   "default",
                   localeStringOpts
-                );
-              }
-            };
-            let columns = [
-              loan.loanID,
-              loan.customer.name,
-              new Date(loan.dateOrdered as string).toLocaleString(
-                "default",
-                localeStringOpts
-              ),
-              sent(),
-              loan.ordered.reduce((acc, cur) => {
-                acc += cur.amount;
-                return acc;
-              }, 0)
-            ];
-            return (
-              <TableRow key={"loan_row_" + loan.loanID} columns={columns} />
-            );
-          })}
-        </ReportTable>
-        }
+                ),
+                sent(),
+                loan.ordered.reduce((acc, cur) => {
+                  acc += cur.amount;
+                  return acc;
+                }, 0)
+              ];
+              return (
+                <TableRow key={"loan_row_" + loan.loanID} columns={columns} />
+              );
+            })}
+          </ReportTable>
+        )}
         <ReportTable
           name="Changelog"
           columns={[
@@ -296,7 +296,6 @@ const ExtendedChangeLog: React.FC<ExtendedProps> = ({ columns, changes }) => {
 };
 
 const StyledChangeContent = styled.ul`
-  width: 100%;
   margin-bottom: 20px;
   margin-block-start: 0;
   padding: 1em 2rem;

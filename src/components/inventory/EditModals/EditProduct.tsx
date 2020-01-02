@@ -31,6 +31,10 @@ import {
   InputWithButton,
   FakeInput
 } from "../../../styles/form";
+import {
+  notifications,
+  addNotification
+} from "../../../redux/actions/notificationActions";
 
 //TODO
 //MAKE SURE PRODUCT CAN ONLY BE DEACTIVATED IF
@@ -120,6 +124,7 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
         })
       );
       dispatch(saveCreatedProduct(returnedProduct));
+      dispatch(addNotification(notifications.addedChange()));
       close();
       setInit(false);
     } else {
@@ -140,6 +145,7 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
           })
         );
         dispatch(saveEditedProduct(returnedProduct));
+        dispatch(addNotification(notifications.addedChange()));
       }
       close();
       setInit(false);

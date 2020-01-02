@@ -78,21 +78,6 @@ export const saveCategories = (date: Date) =>
     }
   );
 
-/* export const saveCategories = (categories) => {
-  return (dispatch, getState) => {
-    const state = getState()
-    dispatch(saveCategoriesBegin())
-    firestore.doc(`${state.auth.currentLocation}/Categories`).set({
-      categories
-    }, {merge: true})
-      .then(() => {
-        dispatch(saveCategoriesSuccess())
-        dispatch(saveLastChanged("categories"))
-      })
-      .catch(err => dispatch(saveCategoriesFailure(err)))
-  }
-} */
-
 export const SAVE_CREATED_CATEGORY = "SAVE_CREATED_CATEGORY";
 export const saveCreatedCategory = (name: string) => ({
   type: SAVE_CREATED_CATEGORY,

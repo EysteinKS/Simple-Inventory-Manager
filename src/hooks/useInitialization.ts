@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import store from "store";
 import { useDispatch, useSelector } from "react-redux";
 import useLoadedGate from "./useLoadedGate";
 import {
@@ -19,6 +20,12 @@ import { ClientData } from "../firebase/types";
 import { getInventory } from "../redux/middleware/firestore";
 import { parseDate } from "../constants/util";
 import { listenToUpdates } from "../firebase/Subscription";
+import {
+  addNotification,
+  notifications
+} from "../redux/actions/notificationActions";
+import useDemo from "./useDemo";
+import { clearLocalStorage } from "../redux/middleware/localStorage";
 
 export type TLogin = (
   email: string,
@@ -28,6 +35,8 @@ export type TLogin = (
 
 export default function useInitialization() {
   const [user, initializingUser] = useAuthState(auth);
+  const { isDemo } = useDemo();
+  const stateIsDemo = useSelector((state: RootState) => state.auth.isDemo);
   const dispatch = useDispatch();
   const authIsLoaded = useSelector((state: RootState) => state.auth.isLoaded);
   const authCurrentLocation = useSelector(
@@ -37,7 +46,7 @@ export default function useInitialization() {
     (state: RootState) => state.auth.loggingOut
   );
   const [isLoadingUser, setLoadingUser] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("Initializing...");
+  const [loadingMessage, setLoadingMessage] = useState("");
 
   useEffect(() => {
     if (!user && userLoggingOut) {
@@ -50,12 +59,19 @@ export default function useInitialization() {
   //FETCH USER
   useEffect(() => {
     if (user && !isLoadingUser && !authIsLoaded && !userLoggingOut) {
-      setLoadingUser(true);
-      setLoadingMessage("Loading user...");
-      dispatch(loadUser(user.uid));
+      const prevSessionIsDemo = isDemo();
+      if (prevSessionIsDemo && !stateIsDemo) {
+        store.set("demo", false);
+        auth.signOut();
+        clearLocalStorage();
+      } else {
+        setLoadingUser(true);
+        setLoadingMessage("Loading user...");
+        dispatch(loadUser(user.uid));
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, authIsLoaded, userLoggingOut]);
+  }, [user, authIsLoaded, userLoggingOut, isDemo, stateIsDemo]);
 
   //FETCH LOCATION
   async function fetchLocationData(location: string | null) {
@@ -83,7 +99,7 @@ export default function useInitialization() {
       });
   }
 
-  //LOAD LOCATION WHEN USER IS LOADED
+  //Load location when user is loaded
   useEffect(() => {
     if (authIsLoaded) {
       setLoadingUser(false);
@@ -100,10 +116,14 @@ export default function useInitialization() {
   const loading =
     isLoadingGate || initializingUser || isLoadingUser || userLoggingOut;
 
+  //Configure subscription when logged in
   useEffect(() => {
     if (isLoadedGate) {
       setLoadingMessage("Loaded!");
-      const onChange = () => dispatch(setNewChanges());
+      const onChange = () => {
+        dispatch(setNewChanges());
+        dispatch(addNotification(notifications.newChanges()));
+      };
       listenToUpdates(authCurrentLocation, onChange);
     }
     //eslint-disable-next-line

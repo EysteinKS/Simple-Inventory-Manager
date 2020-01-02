@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/types";
-import { HeaderWrapper, NonAuthTitle, UtilityWrapper } from "./styles";
+import { HeaderWrapper, UtilityWrapper } from "./styles";
 import Client from "./Client";
 import User from "./User";
 import Pages from "./Pages";
@@ -22,9 +22,11 @@ export default function Header({ locationIsLoaded }: THeader) {
     }
   }, [primaryColor, locationIsLoaded]);
 
+  if (!locationIsLoaded) return null;
+
   return (
     <HeaderWrapper bckColor={bckColor}>
-      {locationIsLoaded ? <AuthHeader /> : <NonAuthHeader />}
+      <AuthHeader />
     </HeaderWrapper>
   );
 }
@@ -36,11 +38,5 @@ const AuthHeader = () => (
       <User />
       <Client />
     </UtilityWrapper>
-  </>
-);
-
-const NonAuthHeader = () => (
-  <>
-    <NonAuthTitle>Lagerstyring</NonAuthTitle>
   </>
 );

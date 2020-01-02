@@ -6,6 +6,7 @@ import {
   updateProductVisibility,
   updateTooltipVisibility
 } from "../../api/auth";
+import { notifications, addNotification } from "./notificationActions";
 
 export const USER_SIGNED_OUT = "USER_SIGNED_OUT";
 export const userSignedOut = () => ({
@@ -89,6 +90,7 @@ export const saveLastChanged = (section: string, date: Date): IThunkAction => {
       })
       .then(() => {
         dispatch(setLastChanged(section, date));
+        dispatch(addNotification(notifications.savedChanges()));
         let updatedAuthStorage = {
           ...state.auth,
           lastChanged: {
@@ -121,8 +123,10 @@ export const TOGGLE_VISIBLE = "TOGGLE_VISIBLE";
 export const toggleVisible = (): IThunkAction => async (dispatch, getState) => {
   const action = { type: TOGGLE_VISIBLE };
   dispatch(action);
-  const visibility = getState().auth.user.settings.isInactiveVisible;
-  updateProductVisibility(visibility).catch(err => console.log(err));
+  if (!getState().auth.isDemo) {
+    const visibility = getState().auth.user.settings.isInactiveVisible;
+    updateProductVisibility(visibility).catch(err => console.log(err));
+  }
 };
 
 export const TOGGLE_TOOLTIPS = "TOGGLE_TOOLTIPS";
@@ -135,3 +139,9 @@ export const toggleTooltips = (): IThunkAction => async (
   const visibility = getState().auth.user.settings.showTooltips;
   updateTooltipVisibility(visibility).catch(err => console.log(err));
 };
+
+export const SET_DEMO = "SET_DEMO";
+export const setDemo = (bool: boolean) => ({
+  type: SET_DEMO,
+  payload: bool
+});

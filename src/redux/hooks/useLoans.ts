@@ -3,6 +3,7 @@ import { ILoan, RootState, IOrderedProduct, IChangeValue } from "../types";
 import * as actions from "../actions/loansActions";
 import { addChange } from "../actions/reportsActions";
 import { useMemo } from "react";
+import { addNotification, notifications } from "../actions/notificationActions";
 
 const newLoan = (id: number): ILoan => {
   let date = new Date();
@@ -36,6 +37,7 @@ const useLoans = () => {
       })
     );
     dispatch(actions.saveCreatedLoan(loan));
+    dispatch(addNotification(notifications.addedChange()));
   };
 
   const saveEditedLoan = (loan: ILoan, changed: IChangeValue[]) => {
@@ -48,6 +50,7 @@ const useLoans = () => {
       })
     );
     dispatch(actions.saveEditedLoan(loan));
+    dispatch(addNotification(notifications.addedChange()));
   };
 
   const deleteLoan = (id: number) => {
@@ -59,9 +62,10 @@ const useLoans = () => {
       })
     );
     dispatch(actions.deleteLoan(id));
+    dispatch(addNotification(notifications.addedChange()));
   };
 
-  const sentLoan = (id: number, ordered: IOrderedProduct[]) => {
+  const sentLoan = (id: number, ordered: IOrderedProduct[], date: Date) => {
     dispatch(
       addChange({
         type: "SENT_LOAN",
@@ -69,10 +73,11 @@ const useLoans = () => {
         section: "loans"
       })
     );
-    dispatch(actions.didSendLoan(id, ordered));
+    dispatch(actions.didSendLoan(id, ordered, date));
+    dispatch(addNotification(notifications.addedChange()));
   };
 
-  const receivedLoan = (id: number, ordered: IOrderedProduct[]) => {
+  const receivedLoan = (id: number, ordered: IOrderedProduct[], date: Date) => {
     dispatch(
       addChange({
         type: "RECEIVED_LOAN",
@@ -80,7 +85,8 @@ const useLoans = () => {
         section: "loans"
       })
     );
-    dispatch(actions.didReceiveLoan(id, ordered));
+    dispatch(actions.didReceiveLoan(id, ordered, date));
+    dispatch(addNotification(notifications.addedChange()));
   };
 
   return {

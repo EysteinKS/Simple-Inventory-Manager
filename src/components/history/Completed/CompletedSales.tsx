@@ -28,10 +28,10 @@ const CompletedSales = () => {
   const salesColumns = React.useMemo(() => {
     return [
       { name: "ID", width: "10%" },
-      { name: "CUSTOMER", width: "30%" },
-      { name: "ORDERED", width: "30%" },
-      { name: "SENT", width: "30%" },
-      { name: "AMOUNT", width: "10%" }
+      { name: "KUNDE", width: "30%" },
+      { name: "BESTILT", width: "30%" },
+      { name: "SENDT", width: "30%" },
+      { name: "ANTALL", width: "10%" }
     ];
   }, []);
 
@@ -85,7 +85,7 @@ const CompletedSales = () => {
 
   if (saleHistory.length > 0) {
     return (
-      <HistoryTable name="Sales" columns={salesColumns}>
+      <HistoryTable name="Salg" columns={salesColumns}>
         {salesContent}
       </HistoryTable>
     );

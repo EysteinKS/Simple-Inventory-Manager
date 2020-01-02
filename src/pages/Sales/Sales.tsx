@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  createSale,
-  editSale,
-  clearCurrentSale
-} from "../../redux/actions/salesActions";
+import { useSelector } from "react-redux";
 
 import EditSale from "../../components/inventory/EditModals/EditSale";
 import {
@@ -16,7 +11,7 @@ import {
   HeaderButton
 } from "../../components/util/SectionHeader";
 import Icons from "../../components/util/Icons";
-import { newSale, sort } from "../../constants/util";
+import { sort } from "../../constants/util";
 
 import useSortableList from "../../hooks/useSortableList";
 import { RootState } from "../../redux/types";
@@ -33,24 +28,25 @@ import {
 } from "../../styles/table";
 import { Tooltip } from "../../components/util/HoverInfo";
 import useAuthLocation from "../../hooks/useAuthLocation";
+import useSales from "../../redux/hooks/useSales";
 
 export default function Sales() {
-  const dispatch = useDispatch();
-  const sales = useSelector((state: RootState) => state.sales);
+  const { sales, createNewSale, editSale, clearCurrentSale } = useSales();
   const customers = useSelector((state: RootState) => state.customers);
   const [isSaleOpen, setSaleOpen] = useState(false);
   const { secondary } = useAuthLocation();
 
   //SORTING
   const [sorting, setSorting] = useState([null, null, null] as any[]);
-  const { sortedList, setList, sortFunc } = useSortableList(sales.sales);
+  const { sortedList, setList, sortFunc } = useSortableList(sales);
   useEffect(() => {
-    setList(sales.sales);
+    setList(sales);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sales.sales]);
+  }, [sales]);
   const sortList = (dir: TDirections, index: number, func: Function) =>
     sortFunc(setSorting)(dir, index, func, sorting);
 
+  //SIZE
   const [extended, setExtended] = useState(() => window.innerWidth > 425);
   const tableStyles = useMemo(() => {
     let data: TWidth[] = ["large"];
@@ -58,12 +54,12 @@ export default function Sales() {
       data.unshift("small");
       data.push("medium");
     }
-    data.push("tiny", "tiny");
+    data.push("tiny", "tiny", "tiny");
     return getTableStyle(data, 4);
   }, [extended]);
 
   const handleNewSale = () => {
-    dispatch(createSale(newSale(sales.currentID + 1)));
+    createNewSale();
     setSaleOpen(true);
   };
 
@@ -121,6 +117,11 @@ export default function Sales() {
             <Tooltip handle={"sales_header_amount"}>Antall produkter</Tooltip>
           </Key>
 
+          <Key data-tip data-for={"sales_header_ready"}>
+            <Icons.Check />
+            <Tooltip handle={"sales_header_ready"}>Klar for sending</Tooltip>
+          </Key>
+
           <ExtendColumns extended={extended} setExtended={setExtended} />
           <div />
         </ContentHeader>
@@ -133,7 +134,7 @@ export default function Sales() {
                 columns={tableStyles.item}
                 key={"sale_" + sale.saleID}
                 edit={id => {
-                  dispatch(editSale(id));
+                  editSale(id);
                   setSaleOpen(true);
                 }}
               />
@@ -145,7 +146,7 @@ export default function Sales() {
           isOpen={isSaleOpen}
           close={() => {
             setSaleOpen(false);
-            dispatch(clearCurrentSale());
+            clearCurrentSale();
           }}
         />
       )}

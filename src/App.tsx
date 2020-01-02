@@ -7,6 +7,7 @@ import { PageLoading } from "./components/util/PageLoading";
 import GlobalStyle from "./styles/globalStyle";
 import styled from "styled-components";
 import { tallDevice } from "./styles/device";
+import { NotificationHandler } from "./components/util/Notification";
 
 const App: FC = () => {
   const {
@@ -38,6 +39,7 @@ const App: FC = () => {
             />
           )}
         </SectionWrapper>
+        <NotificationHandler />
       </AppWrapper>
     </>
   );
@@ -46,6 +48,7 @@ const App: FC = () => {
 const AppWrapper = styled.main`
   height: 100vh;
   overflow: hidden;
+  background: #e4e4e4;
 `;
 
 const SectionWrapper = styled.section`

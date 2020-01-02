@@ -11,6 +11,10 @@ import { saveSales } from "../redux/actions/salesActions";
 import { saveSuppliers } from "../redux/actions/suppliersActions";
 import { shouldLog } from "../constants/util";
 import { saveLoans } from "../redux/actions/loansActions";
+import {
+  addNotification,
+  notifications
+} from "../redux/actions/notificationActions";
 
 const stateKeys = [
   "categories",
@@ -98,18 +102,19 @@ export default function useSaving() {
         });
       } catch (err) {
         console.error(err);
+        dispatch(addNotification(notifications.savingError()));
       }
       shouldLog("Saving report from save");
       dispatch(saveReport(date));
     }
   };
 
+  //Autosave
+  /* const doAutosave = false;
+  
   const timerRef = React.useRef(null as number | NodeJS.Timeout | null);
   const [isTimerStarted, setTimerStarted] = React.useState(false);
   const [isTimerFinished, setTimerFinished] = React.useState(true);
-
-  //Autosave
-  const doAutosave = false;
 
   React.useEffect(() => {
     if (doAutosave && !isTimerStarted && !isSavedGate) {
@@ -134,7 +139,7 @@ export default function useSaving() {
       timerRef.current = null;
     }
     //eslint-disable-next-line
-  }, [isTimerFinished, isTimerStarted, isSavedGate]);
+  }, [isTimerFinished, isTimerStarted, isSavedGate]); */
 
   return [isSavingGate, isSavedGate, savingErrorGate, save];
 }

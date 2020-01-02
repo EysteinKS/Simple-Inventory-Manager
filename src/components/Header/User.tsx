@@ -1,4 +1,5 @@
 import React from "react";
+import store from "store";
 import { auth, doSignOut } from "../../firebase/firebase";
 import { useSelector, useDispatch } from "react-redux";
 import Subscription from "../../firebase/Subscription";
@@ -65,6 +66,9 @@ const LoggedInDropdown = () => {
     }
   };
   const handleLogout = () => {
+    if (store.get("demo")) {
+      store.set("demo", false);
+    }
     shouldLog("Signing out");
     Subscription.getInstance().unsubscribe();
     doSignOut();

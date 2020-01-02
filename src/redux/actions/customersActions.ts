@@ -82,6 +82,12 @@ export const saveCreatedCustomer = (name: string) => ({
   payload: name
 });
 
+export const SAVE_EDITED_CUSTOMER = "SAVE_EDITED_CUSTOMER";
+export const saveEditedCustomer = (edited: ICustomer) => ({
+  type: SAVE_EDITED_CUSTOMER,
+  payload: edited
+});
+
 export const RESET_CUSTOMERS = "RESET_CUSTOMERS";
 export const resetCustomers = () => ({
   type: RESET_CUSTOMERS

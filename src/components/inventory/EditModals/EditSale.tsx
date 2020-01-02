@@ -33,6 +33,10 @@ import {
   InputLabel,
   InputButton
 } from "../../../styles/form";
+import {
+  addNotification,
+  notifications
+} from "../../../redux/actions/notificationActions";
 
 ReactModal.setAppElement("#root");
 
@@ -100,6 +104,7 @@ export default function EditSale({ isOpen, close }: TEditSale) {
         })
       );
       dispatch(saveCreatedSale(returnedSale));
+      dispatch(addNotification(notifications.addedChange()));
     } else {
       let isSaleChanged = isChanged(current, returnedSale);
       if (!isSaleChanged.isEqual) {
@@ -113,6 +118,7 @@ export default function EditSale({ isOpen, close }: TEditSale) {
           })
         );
         dispatch(saveEditedSale(returnedSale));
+        dispatch(addNotification(notifications.addedChange()));
       }
     }
     close();
@@ -120,7 +126,12 @@ export default function EditSale({ isOpen, close }: TEditSale) {
   };
 
   return (
-    <EditModal isOpen={isOpen} label="Edit Sale" onClose={close}>
+    <EditModal
+      isOpen={isOpen}
+      label="Edit Sale"
+      onClose={close}
+      fullWidth={view === "products"}
+    >
       <ModalHeader
         bckColor={color}
         padBottom="7px"

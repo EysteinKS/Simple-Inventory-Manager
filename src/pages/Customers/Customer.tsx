@@ -7,10 +7,16 @@ import Icons from "../../components/util/Icons";
 interface CustomerProps {
   customer: ICustomer;
   history: () => void;
+  edit: () => void;
   columns: string;
 }
 
-const Customer: React.FC<CustomerProps> = ({ customer, history, columns }) => {
+const Customer: React.FC<CustomerProps> = ({
+  customer,
+  history,
+  edit,
+  columns
+}) => {
   return (
     <TableItem columns={columns}>
       <ItemData>{customer.customerID}</ItemData>
@@ -18,6 +24,9 @@ const Customer: React.FC<CustomerProps> = ({ customer, history, columns }) => {
       <div />
       <Buttons.Click onClick={() => history()}>
         <Icons.History />
+      </Buttons.Click>
+      <Buttons.Click onClick={() => edit()}>
+        <Icons.Edit />
       </Buttons.Click>
     </TableItem>
   );

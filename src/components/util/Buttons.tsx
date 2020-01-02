@@ -1,9 +1,12 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import styled from "styled-components";
+import ConfirmModal from "./ConfirmModal";
 
 type TConfirm = {
   message: string;
-  onConfirm: Function;
+  title?: string;
+  onConfirm: (d: Date) => void;
+  getDate?: boolean;
   disabled?: boolean;
   border?: string;
 };
@@ -11,23 +14,33 @@ type TConfirm = {
 const Confirm: FC<TConfirm> = ({
   children,
   message,
+  title = "",
   onConfirm,
+  getDate,
   disabled = false,
   ...rest
 }) => {
+  const [isModalOpen, setModalOpen] = useState(false);
   return (
-    <StyledButton
-      onClick={e => {
-        if (window.confirm(message)) {
-          onConfirm();
-        }
-        e.currentTarget.blur();
-      }}
-      disabled={disabled}
-      {...rest}
-    >
-      {children}
-    </StyledButton>
+    <>
+      <StyledButton
+        onClick={() => setModalOpen(true)}
+        disabled={disabled}
+        {...rest}
+      >
+        {children}
+      </StyledButton>
+      {isModalOpen && (
+        <ConfirmModal
+          isOpen={isModalOpen}
+          onClose={() => setModalOpen(false)}
+          onConfirm={onConfirm}
+          title={title}
+          message={message}
+          getDate={getDate}
+        />
+      )}
+    </>
   );
 };
 
@@ -67,6 +80,11 @@ const StyledButton = styled.button`
   :disabled {
     color: #0003;
     cursor: not-allowed;
+
+    svg {
+      color: #0003;
+      cursor: not-allowed;
+    }
   }
 `;
 

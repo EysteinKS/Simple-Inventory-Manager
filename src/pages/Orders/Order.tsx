@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 import { IOrder, RootState } from "../../redux/types";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Icons from "../../components/util/Icons";
 import Buttons from "../../components/util/Buttons";
-import { addChange } from "../../redux/actions/reportsActions";
-import {
-  deleteOrder,
-  didReceiveOrder
-} from "../../redux/actions/ordersActions";
 import {
   ExpandedTableItem,
   ItemData,
@@ -18,6 +13,7 @@ import { Tooltip } from "../../components/util/HoverInfo";
 import useAuthLocation from "../../hooks/useAuthLocation";
 import { TableItem } from "../../styles/table";
 import Names from "../../components/Names";
+import useOrders from "../../redux/hooks/useOrders";
 
 type TOrdered = { productID: number; amount: number };
 
@@ -31,10 +27,11 @@ type TOrder = {
 const Order: React.FC<TOrder> = ({ order, edit, columns, extended }) => {
   const { orderID, supplierID, dateOrdered, ordered } = order;
   const [expanded, setExpanded] = useState(false);
-  const dispatch = useDispatch();
   const suppliers = useSelector(
     (state: RootState) => state.suppliers.suppliers
   );
+
+  const { deleteOrder, receivedOrder } = useOrders();
 
   const { dark } = useAuthLocation();
 
@@ -81,16 +78,10 @@ const Order: React.FC<TOrder> = ({ order, edit, columns, extended }) => {
         </Buttons.Click>
         <Tooltip handle={handles.edit}>Rediger</Tooltip>
         <Buttons.Confirm
+          title="Slett bestilling"
           message="Vil du slette denne bestillingen?"
           onConfirm={() => {
-            dispatch(
-              addChange({
-                type: "DELETE_ORDER",
-                id: orderID,
-                section: "orders"
-              })
-            );
-            dispatch(deleteOrder(orderID));
+            deleteOrder(orderID);
           }}
           data-tip
           data-for={handles.delete}
@@ -99,16 +90,11 @@ const Order: React.FC<TOrder> = ({ order, edit, columns, extended }) => {
         </Buttons.Confirm>
         <Tooltip handle={handles.delete}>Slett</Tooltip>
         <Buttons.Confirm
+          title="Motta bestilling"
           message="Bekreft mottak av bestilling"
-          onConfirm={() => {
-            dispatch(
-              addChange({
-                type: "RECEIVED_ORDER",
-                id: orderID,
-                section: "orders"
-              })
-            );
-            dispatch(didReceiveOrder(orderID, ordered));
+          getDate={true}
+          onConfirm={date => {
+            receivedOrder(orderID, ordered, date);
           }}
           data-tip
           data-for={handles.receive}

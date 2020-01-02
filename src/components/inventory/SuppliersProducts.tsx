@@ -27,13 +27,13 @@ const SuppliersProducts = ({ products, selected, add, remove }: IProps) => {
     return list;
   }, [selected]);
 
-  const { secondary, dark } = useAuthLocation();
+  const { color, secondary, dark } = useAuthLocation();
 
   return (
-    <StyledWrapper>
+    <StyledWrapper bckColor={color}>
       <StyledSection overflow="hidden">
         <SelectProduct
-          height="30vh"
+          height="60vh"
           ignoreInactive={true}
           products={products}
           onSelect={productID => add(productID)}
@@ -85,15 +85,16 @@ const SuppliersProduct = ({ product, remove, index }: TOrderedProduct) => {
   );
 };
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled.div<{ bckColor: string }>`
+  background: ${props => props.bckColor};
   max-height: 100%;
   overflow-y: hidden;
   display: grid;
   grid-template-rows: 30vh 30vh;
   ${device.tablet(`
-    /* grid-template-rows: 100%;
+    grid-template-rows: 500px;
     grid-template-columns: 345px 345px;
-    column-gap: 10px; */
+    column-gap: 10px;
   `)}
 `;
 

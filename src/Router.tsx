@@ -5,7 +5,6 @@ import { PageLoading, NoTextLoading } from "./components/util/PageLoading";
 import TableSkeleton from "./components/util/TableSkeleton";
 import NotFound from "./pages/NotFound";
 import Login from "./components/Login";
-import ForgotPassword from "./components/ForgotPassword";
 import { TLogin } from "./hooks/useInitialization";
 
 const Products = React.lazy(() => import("./pages/Products"));
@@ -90,11 +89,6 @@ export const AuthRouter: FC = () => {
         path={routes.ADMIN}
         fallback={NoTextLoading}
       />
-      <RoutePage
-        component={ForgotPassword}
-        path={routes.FORGOT_PASSWORD}
-        fallback={NoTextLoading}
-      />
       <RoutePage component={NotFound} default fallback={NoTextLoading} />
     </Router>
   );
@@ -107,11 +101,6 @@ interface NonAuthRouteProps {
 export const NonAuthRouter: FC<NonAuthRouteProps> = ({ login }) => {
   return (
     <Router primary={false}>
-      <RoutePage
-        component={ForgotPassword}
-        path={routes.FORGOT_PASSWORD}
-        fallback={NoTextLoading}
-      />
       <NonAuthPage login={login} default />
     </Router>
   );
@@ -123,11 +112,7 @@ interface NonAuthProps {
 }
 
 const NonAuthPage: FC<NonAuthProps> = ({ login }) => {
-  return (
-    <div style={{ margin: "5vh 10vw 10vh 10vw", display: "grid" }}>
-      <Login doLogin={login} />
-    </div>
-  );
+  return <Login doLogin={login} />;
 };
 
 interface MainRouterProps {

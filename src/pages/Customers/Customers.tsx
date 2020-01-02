@@ -25,6 +25,7 @@ import { sort } from "../../constants/util";
 import Customer from "./Customer";
 import NewCustomer from "./NewCustomer";
 import CustomerHistory from "./CustomerHistory";
+import EditCustomer from "./EditCustomer";
 
 const Customers = () => {
   const customers = useSelector(
@@ -43,7 +44,7 @@ const Customers = () => {
 
   const tableStyles = useMemo(() => {
     let data: TWidth[] = ["tiny", "large"];
-    return getTableStyle(data, 1);
+    return getTableStyle(data, 2);
   }, []);
 
   const [isNewCustomerOpen, setNewCustomerOpen] = useState(false);
@@ -53,6 +54,7 @@ const Customers = () => {
     setNewCustomerOpen(true);
   };
 
+  const [editCustomer, setEditCustomer] = useState(null as ICustomer | null);
   const [historyCustomer, setHistoryCustomer] = useState(
     null as ICustomer | null
   );
@@ -96,6 +98,7 @@ const Customers = () => {
               key={"customer_" + c.customerID}
               customer={c}
               history={() => setHistoryCustomer(c)}
+              edit={() => setEditCustomer(c)}
               columns={tableStyles.item}
             />
           ))}
@@ -103,6 +106,12 @@ const Customers = () => {
       </TableContent>
       {isNewCustomerOpen && (
         <NewCustomer isOpen={isNewCustomerOpen} onClose={closeNewCustomer} />
+      )}
+      {editCustomer && (
+        <EditCustomer
+          customer={editCustomer}
+          close={() => setEditCustomer(null)}
+        />
       )}
       {historyCustomer && (
         <CustomerHistory

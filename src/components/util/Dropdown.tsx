@@ -17,7 +17,7 @@ const Dropdown: React.FC<DropdownProps> = ({ content, children }) => {
 export const DropdownContent = styled.div`
   display: none;
   position: absolute;
-  float: right;
+  right: 0;
   min-width: 120px;
   background-color: #f9f9f9;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -39,7 +39,7 @@ export const DropdownWrapper = styled.div`
 export const DropdownList = styled.ul`
   list-style-type: none;
   margin: 0;
-  padding: 0;
+  padding: 0.2em 0;
   width: 100%;
 `;
 
@@ -53,7 +53,7 @@ export const DropdownListItem = styled.li`
   background-color: #f8f8f8;
   color: #000;
   :hover {
-    color: #0005;
+    background: #0001;
     cursor: pointer;
   }
 

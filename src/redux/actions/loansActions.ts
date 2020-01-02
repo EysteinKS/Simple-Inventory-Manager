@@ -128,35 +128,37 @@ export const clearCurrentLoan = () => ({
 });
 
 export const SEND_LOAN = "SEND_LOAN";
-export const sendLoan = (id: number) => ({
+export const sendLoan = (id: number, date: Date) => ({
   type: SEND_LOAN,
-  payload: id
+  payload: { id, date }
 });
 
 export const didSendLoan = (
   id: number,
-  ordered: IOrderedProduct[]
+  ordered: IOrderedProduct[],
+  date: Date
 ): IThunkAction => async dispatch => {
   ordered.forEach(product => {
     dispatch(updateProductAmount(product.productID, -Math.abs(product.amount)));
   });
-  dispatch(sendLoan(id));
+  dispatch(sendLoan(id, date));
 };
 
 export const RECEIVED_LOAN = "RECEIVED_LOAN";
-export const receivedLoan = (id: number) => ({
+export const receivedLoan = (id: number, date: Date) => ({
   type: RECEIVED_LOAN,
-  payload: id
+  payload: { id, date }
 });
 
 export const didReceiveLoan = (
   id: number,
-  ordered: IOrderedProduct[]
+  ordered: IOrderedProduct[],
+  date: Date
 ): IThunkAction => async dispatch => {
   ordered.forEach(product => {
     dispatch(updateProductAmount(product.productID, product.amount));
   });
-  dispatch(receivedLoan(id));
+  dispatch(receivedLoan(id, date));
 };
 
 export const DELETE_LOAN = "DELETE_LOAN";
