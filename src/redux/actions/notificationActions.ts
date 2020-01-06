@@ -22,7 +22,7 @@ export const notifications: { [key: string]: () => INotification } = {
   savedChanges: () => ({
     message: "Endringene ble lagret",
     type: "success",
-    id: Math.random(),
+    id: 2,
     timeout: 2
   }),
   addedChange: () => ({
@@ -34,7 +34,7 @@ export const notifications: { [key: string]: () => INotification } = {
   savingError: () => ({
     message: "Det oppsto en feil, last inn siden på nytt",
     type: "warning",
-    id: 2,
+    id: 3,
     timeout: 5
   })
 };

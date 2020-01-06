@@ -16,7 +16,7 @@ interface IProps {
   fullWidth?: boolean;
 }
 
-const defaultRows = "5vh auto 5vh";
+const defaultRows = "40px auto 40px";
 
 const EditModal: React.FC<IProps> = ({
   isOpen,

@@ -7,6 +7,7 @@ import Icons from "./util/Icons";
 import { MAIN, BRIGHT } from "../styles/colors";
 import ForgotPassword from "./ForgotPassword";
 import useDemo from "../hooks/useDemo";
+import { device } from "../styles/device";
 
 type IProps = {
   doLogin: TLogin;
@@ -45,13 +46,17 @@ export default function Login({ doLogin }: IProps) {
 }
 
 const LoginWrapper = styled.div`
-  width: 300px;
+  max-width: 300px;
   margin: 0 auto;
-  padding: 1em;
+  padding: 0.5em;
   background: #f9f9f9;
   border: 2px solid #0002;
   display: grid;
   grid-template-rows: 35px auto;
+
+  ${device.tablet(`
+    padding: 1em;
+  `)}
 `;
 
 const DemoWrapper = styled.div`
@@ -59,7 +64,7 @@ const DemoWrapper = styled.div`
   background: #f9f9f9;
   border: 2px solid #0002;
   margin: 1em auto;
-  padding: 1em;
+  padding: 0.5em;
   display: grid;
   grid-template-rows: 1fr 1fr;
 
@@ -148,7 +153,7 @@ const LoginForm = ({ doLogin, forgotPw }: TLoginForm) => {
 const StyledForm = styled.form`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: auto auto 5vh 5vh;
+  grid-template-rows: auto auto 40px 40px;
 `;
 
 const InputsWrapper = styled.div`

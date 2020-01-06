@@ -61,7 +61,7 @@ const NewModal: React.FC<NewModalProps> = ({
           background: "white",
           width: `${modalWidth}px`,
           display: "grid",
-          gridTemplateRows: "50px 50px auto",
+          gridTemplateRows: "40px 50px auto",
           border: `${borderWidth}px solid ${color}`
         }
       }}
