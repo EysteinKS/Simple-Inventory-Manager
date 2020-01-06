@@ -8,8 +8,11 @@ import GlobalStyle from "./styles/globalStyle";
 import styled from "styled-components";
 import { tallDevice } from "./styles/device";
 import { NotificationHandler } from "./components/util/Notification";
+import useRedirect from "./hooks/useRedirect";
 
 const App: FC = () => {
+  useRedirect(["localhost"], "lager.eystein.dev");
+
   const {
     loading,
     isLoadedGate,
