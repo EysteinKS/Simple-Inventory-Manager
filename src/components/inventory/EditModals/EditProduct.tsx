@@ -174,6 +174,8 @@ export default function EditProduct({ isOpen, close }: TEditProduct) {
     );
     setAmount(newAmount);
     setEditAmount(false);
+    close();
+    setInit(false);
   };
 
   return (
