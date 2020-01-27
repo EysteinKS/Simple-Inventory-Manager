@@ -45,6 +45,8 @@ export interface UserState {
     isInactiveVisible: boolean;
     showTooltips: boolean;
     language: string;
+    useAutoSave: boolean;
+    timeToAutoSave: number;
   };
 }
 

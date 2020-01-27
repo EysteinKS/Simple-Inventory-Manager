@@ -15,6 +15,10 @@ import {
   addNotification,
   notifications
 } from "../redux/actions/notificationActions";
+import {
+  selectAutoSaveSetting,
+  selectTimeToAutoSave
+} from "../redux/selectors/authSelectors";
 
 const stateKeys = [
   "categories",
@@ -110,36 +114,48 @@ export default function useSaving() {
   };
 
   //Autosave
-  /* const doAutosave = false;
-  
-  const timerRef = React.useRef(null as number | NodeJS.Timeout | null);
+  const useAutoSave = useSelector(selectAutoSaveSetting);
+  const timeToAutoSave = useSelector(selectTimeToAutoSave);
+
+  const timerRef = React.useRef(null as number | null);
   const [isTimerStarted, setTimerStarted] = React.useState(false);
   const [isTimerFinished, setTimerFinished] = React.useState(true);
 
   React.useEffect(() => {
-    if (doAutosave && !isTimerStarted && !isSavedGate) {
-      shouldLog("Saving content...");
-      shouldLog("Starting timeout");
-      console.time("autosave");
+    if (useAutoSave && !isTimerStarted && !isSavedGate) {
+      shouldLog("Starting autosave timeout...");
       setTimerStarted(true);
       timerRef.current = window.setTimeout(() => {
         save();
-        console.timeEnd("autosave");
-      }, 1000);
+      }, timeToAutoSave);
       setTimerFinished(false);
     }
     //eslint-disable-next-line
-  }, [isSavingGate, isSavedGate]);
+  }, [useAutoSave, isSavingGate, isSavedGate]);
 
+  //Cancel autosave if setting is changed by user
   React.useEffect(() => {
-    if (doAutosave && !isTimerFinished && isTimerStarted && isSavedGate) {
-      shouldLog("Finished timeout");
+    if (!useAutoSave && isTimerStarted && timerRef.current !== null) {
+      shouldLog("Cancelling autosave");
       setTimerStarted(false);
       setTimerFinished(true);
+      window.clearTimeout(timerRef.current);
       timerRef.current = null;
     }
     //eslint-disable-next-line
-  }, [isTimerFinished, isTimerStarted, isSavedGate]); */
+  }, [useAutoSave, isTimerStarted]);
+
+  //End timeout when saved
+  React.useEffect(() => {
+    if (useAutoSave && !isTimerFinished && isTimerStarted && isSavedGate) {
+      shouldLog("Finished timeout");
+      setTimerStarted(false);
+      setTimerFinished(true);
+      timerRef.current && window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    //eslint-disable-next-line
+  }, [useAutoSave, isTimerFinished, isTimerStarted, isSavedGate]);
 
   return [isSavingGate, isSavedGate, savingErrorGate, save];
 }

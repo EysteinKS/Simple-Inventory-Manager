@@ -50,3 +50,17 @@ export const updateTooltipVisibility = (visible: boolean) => {
     "settings.showTooltips": visible
   });
 };
+
+export const updateUseAutoSave = (bool: boolean) => {
+  let uid = auth.currentUser && auth.currentUser.uid;
+  return firestore.doc(`Users/${uid}`).update({
+    "settings.useAutoSave": bool
+  });
+};
+
+export const updateTimeToAutoSave = (time: number) => {
+  let uid = auth.currentUser && auth.currentUser.uid;
+  return firestore.doc(`Users/${uid}`).update({
+    "settings.timeToAutoSave": time
+  });
+};

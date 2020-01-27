@@ -2,7 +2,6 @@ import React from "react";
 import ReactTooltip from "react-tooltip";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/types";
-import { shouldLog } from "../../constants/util";
 
 const HoverInfo: React.FC<{ handle: string }> = ({ handle, children }) => {
   return (
@@ -21,12 +20,7 @@ export const Tooltip: React.FC<{
   );
   if (showTooltips) {
     return (
-      <ReactTooltip
-        id={handle}
-        place={place}
-        type="dark"
-        effect="solid"
-      >
+      <ReactTooltip id={handle} place={place} type="dark" effect="solid">
         <p>{children}</p>
       </ReactTooltip>
     );
@@ -196,12 +190,6 @@ export const LoansInfo: React.FC<IProps> = ({ productID, handle }) => {
     });
     return [ordered, sent];
   }, [productID, loansWithProduct, customers]);
-
-  shouldLog("Loans orderedArrays: ", orderedArrays);
-  shouldLog(
-    "Loans orderedArrays[1].length === ",
-    Boolean(orderedArrays[1].length)
-  );
 
   return (
     <HoverInfo handle={handle}>

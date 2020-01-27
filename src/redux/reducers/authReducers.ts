@@ -15,7 +15,9 @@ const initialState: AuthState = {
     settings: {
       language: "NO",
       showTooltips: true,
-      isInactiveVisible: true
+      isInactiveVisible: true,
+      useAutoSave: false,
+      timeToAutoSave: 10000
     }
   },
   location: {
@@ -113,6 +115,15 @@ export default (
       case action.TOGGLE_TOOLTIPS:
         let showTooltips = state.user.settings.showTooltips;
         draft.user.settings.showTooltips = !showTooltips;
+        return draft;
+
+      case action.TOGGLE_AUTOSAVE:
+        let useAutoSave = state.user.settings.useAutoSave;
+        draft.user.settings.useAutoSave = !useAutoSave;
+        return draft;
+
+      case action.SET_AUTOSAVE_TIME:
+        draft.user.settings.timeToAutoSave = payload;
         return draft;
 
       case action.SET_DEMO:

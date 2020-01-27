@@ -4,7 +4,9 @@ import { IThunkAction } from "../middleware/types";
 import { LastChanged, UserState } from "../types";
 import {
   updateProductVisibility,
-  updateTooltipVisibility
+  updateTooltipVisibility,
+  updateUseAutoSave,
+  updateTimeToAutoSave
 } from "../../api/auth";
 import { notifications, addNotification } from "./notificationActions";
 
@@ -43,6 +45,16 @@ export const loadUser = (uid: string): IThunkAction => {
       .get()
       .then(res => {
         let data = res.data() as UserState;
+
+        //In case useAutoSave is unset
+        if (!data.settings.hasOwnProperty("useAutoSave")) {
+          data.settings.useAutoSave = false;
+        }
+
+        if (!data.settings.hasOwnProperty("timeToAutoSave")) {
+          data.settings.timeToAutoSave = 10000;
+        }
+
         dispatch(loadUserSuccess(data));
       })
       .catch(err => dispatch(loadUserFailure(err.message)));
@@ -138,6 +150,26 @@ export const toggleTooltips = (): IThunkAction => async (
   dispatch(action);
   const visibility = getState().auth.user.settings.showTooltips;
   updateTooltipVisibility(visibility).catch(err => console.log(err));
+};
+
+export const TOGGLE_AUTOSAVE = "TOGGLE_AUTOSAVE";
+export const toggleAutoSave = (): IThunkAction => async (
+  dispatch,
+  getState
+) => {
+  const action = { type: TOGGLE_AUTOSAVE };
+  dispatch(action);
+  const bool = getState().auth.user.settings.useAutoSave;
+  updateUseAutoSave(bool).catch(err => console.log(err));
+};
+
+export const SET_AUTOSAVE_TIME = "SET_AUTOSAVE_TIME";
+export const setAutoSaveTime = (
+  time: number
+): IThunkAction => async dispatch => {
+  const action = { type: SET_AUTOSAVE_TIME, payload: time };
+  dispatch(action);
+  updateTimeToAutoSave(time).catch(err => console.log(err));
 };
 
 export const SET_DEMO = "SET_DEMO";
