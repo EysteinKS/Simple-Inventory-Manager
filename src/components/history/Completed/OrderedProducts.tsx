@@ -57,8 +57,8 @@ const OrderedProducts: React.FC<IOrderedProducts> = ({
           <thead>
             <tr>
               <th style={{ width: "20%" }}>ID</th>
-              <th style={{ width: "60%" }}>NAME</th>
-              <th style={{ width: "20%" }}>AMOUNT</th>
+              <th style={{ width: "60%" }}>NAVN</th>
+              <th style={{ width: "20%" }}>ANTALL</th>
             </tr>
           </thead>
           <tbody>
