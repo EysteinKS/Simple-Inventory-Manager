@@ -75,12 +75,12 @@ const Report: React.FC = () => {
       <div>
         {/* Products */}
         <ReportTable
-          name="Products"
+          name="Produkter"
           columns={[
             { name: "ID", width: "20%" },
-            { name: "NAME", width: "30%" },
-            { name: "CATEGORY", width: "30%" },
-            { name: "AMOUNT", width: "20%" }
+            { name: "NAVN", width: "30%" },
+            { name: "KATEGORI", width: "30%" },
+            { name: "ANTALL", width: "20%" }
           ]}
         >
           {report.products.all.map(product => {
@@ -100,12 +100,12 @@ const Report: React.FC = () => {
         </ReportTable>
         {/* Orders */}
         <ReportTable
-          name="Orders"
+          name="Bestillinger"
           columns={[
             { name: "ID", width: "20%" },
-            { name: "SUPPLIER", width: "30%" },
-            { name: "DATE", width: "30%" },
-            { name: "AMOUNT", width: "20%" }
+            { name: "LEVERANDØR", width: "30%" },
+            { name: "BESTILT", width: "30%" },
+            { name: "ANTALL", width: "20%" }
           ]}
         >
           {report.orders.active.map(order => {
@@ -128,12 +128,12 @@ const Report: React.FC = () => {
         </ReportTable>
         {/* Sales */}
         <ReportTable
-          name="Sales"
+          name="Salg"
           columns={[
             { name: "ID", width: "20%" },
-            { name: "CUSTOMER", width: "30%" },
-            { name: "DATE", width: "30%" },
-            { name: "AMOUNT", width: "20%" }
+            { name: "KUNDE", width: "30%" },
+            { name: "BESTILT", width: "30%" },
+            { name: "ANTALL", width: "20%" }
           ]}
         >
           {report.sales.active.map(sale => {
@@ -157,12 +157,12 @@ const Report: React.FC = () => {
         {/* Loans */}
         {report.loans && (
           <ReportTable
-            name="Loans"
+            name="Utlån"
             columns={[
               { name: "ID", width: "15%" },
-              { name: "CUSTOMER", width: "20%" },
-              { name: "ORDERED", width: "20%" },
-              { name: "SENT", width: "20%" },
+              { name: "KUNDE", width: "20%" },
+              { name: "BESTILT", width: "20%" },
+              { name: "SENDT", width: "20%" },
               { name: "AMOUNT", width: "15%" }
             ]}
           >
@@ -197,11 +197,11 @@ const Report: React.FC = () => {
           </ReportTable>
         )}
         <ReportTable
-          name="Changelog"
+          name="Endringslogg"
           columns={[
-            { name: "NAME", width: "33%" },
-            { name: "E-MAIL", width: "34%" },
-            { name: "DATE", width: "33%" }
+            { name: "NAVN", width: "33%" },
+            { name: "E-POST", width: "34%" },
+            { name: "DATO", width: "33%" }
           ]}
         >
           {reversedChangelog.map((log, i) => {
