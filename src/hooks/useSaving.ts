@@ -116,13 +116,23 @@ export default function useSaving() {
   //Autosave
   const useAutoSave = useSelector(selectAutoSaveSetting);
   const timeToAutoSave = useSelector(selectTimeToAutoSave);
+  const hasNewChanges = useSelector(
+    (state: RootState) => state.auth.hasNewChanges
+  );
+  const isDemo = useSelector((state: RootState) => state.auth.isDemo);
 
   const timerRef = React.useRef(null as number | null);
   const [isTimerStarted, setTimerStarted] = React.useState(false);
   const [isTimerFinished, setTimerFinished] = React.useState(true);
 
   React.useEffect(() => {
-    if (useAutoSave && !isTimerStarted && !isSavedGate) {
+    if (
+      useAutoSave &&
+      !isTimerStarted &&
+      !isSavedGate &&
+      !hasNewChanges &&
+      !isDemo
+    ) {
       shouldLog("Starting autosave timeout...");
       setTimerStarted(true);
       timerRef.current = window.setTimeout(() => {
@@ -131,7 +141,25 @@ export default function useSaving() {
       setTimerFinished(false);
     }
     //eslint-disable-next-line
-  }, [useAutoSave, isSavingGate, isSavedGate]);
+  }, [useAutoSave, isSavingGate, isSavedGate, hasNewChanges]);
+
+  //Cancel autosave if there are new changes
+  React.useEffect(() => {
+    if (
+      useAutoSave &&
+      isTimerStarted &&
+      !isSavedGate &&
+      hasNewChanges &&
+      timerRef.current !== null
+    ) {
+      shouldLog("New changes found, cancelling autosave");
+      setTimerStarted(false);
+      setTimerFinished(true);
+      window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    //eslint-disable-next-line
+  }, [useAutoSave, isTimerStarted, isSavedGate, hasNewChanges]);
 
   //Cancel autosave if setting is changed by user
   React.useEffect(() => {

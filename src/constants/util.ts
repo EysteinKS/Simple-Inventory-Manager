@@ -408,7 +408,7 @@ export const isChanged = (prev: any, next: any) => {
 };
 
 export const shouldLog = (message: any, opt?: any) => {
-  if (false) {
+  if (process.env.REACT_APP_SHOW_LOG === "yes") {
     opt ? console.log(message, opt) : console.log(message);
   }
 };

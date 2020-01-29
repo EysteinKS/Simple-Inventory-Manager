@@ -20,7 +20,7 @@ export default function CloudStatus() {
   useEffect(() => {
     if (isDemo) {
       setIcon(<Icons.CloudDone />);
-      setTooltip("Alle endringer lagret");
+      setTooltip("DEMO: Kan ikke lagre");
       setStatus("default");
       return;
     }
