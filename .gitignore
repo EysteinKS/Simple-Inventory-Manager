@@ -11,6 +11,9 @@
 # production
 /build
 .VSCodeCounter/
+.vscode/
+.firebase/
+.firebaserc
 
 # misc
 config.js
@@ -28,7 +31,4 @@ yarn-error.log*
 .VSCodeCounter/results.md
 .VSCodeCounter/results.txt
 .firebase/hosting.YnVpbGQ.cache
-.VSCodeCounter/details.md
-.VSCodeCounter/results.csv
-.VSCodeCounter/results.md
-.VSCodeCounter/results.txt
+*.cache

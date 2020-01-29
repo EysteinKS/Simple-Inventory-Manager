@@ -1,39 +1,57 @@
 # Summary
 
-Date : 2019-08-09 13:17:25
+Date : 2020-01-10 19:35:10
 
 Directory /Users/eystein/Documents/Programmering/lagerstatus/src
 
-Total : 96 files,  6706 codes, 300 comments, 860 blanks, all 7866 lines
+Total : 183 files,  14633 codes, 242 comments, 1848 blanks, all 16723 lines
 
 [details](details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| TypeScript React | 34 | 3,309 | 79 | 340 | 3,728 |
-| TypeScript | 48 | 3,085 | 152 | 462 | 3,699 |
-| CSS | 6 | 169 | 16 | 31 | 216 |
-| JavaScript | 7 | 136 | 53 | 26 | 215 |
-| XML | 1 | 7 | 0 | 1 | 8 |
+| TypeScript React | 82 | 8,938 | 68 | 928 | 9,934 |
+| TypeScript | 99 | 5,595 | 143 | 905 | 6,643 |
+| JavaScript | 2 | 100 | 31 | 15 | 146 |
 
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 96 | 6,706 | 300 | 860 | 7,866 |
-| components | 24 | 2,445 | 55 | 246 | 2,746 |
-| components/history | 3 | 476 | 0 | 45 | 521 |
-| components/inventory | 7 | 1,102 | 23 | 83 | 1,208 |
-| components/util | 10 | 532 | 27 | 75 | 634 |
-| constants | 4 | 326 | 12 | 39 | 377 |
-| firebase | 4 | 138 | 2 | 32 | 172 |
-| hooks | 12 | 526 | 33 | 97 | 656 |
-| pages | 11 | 862 | 36 | 96 | 994 |
-| redux | 27 | 2,095 | 104 | 293 | 2,492 |
-| redux/actions | 9 | 864 | 73 | 166 | 1,103 |
-| redux/middleware | 5 | 316 | 18 | 44 | 378 |
-| redux/reducers | 10 | 634 | 11 | 39 | 684 |
-| redux/selectors | 1 | 15 | 2 | 3 | 20 |
-| styles | 5 | 36 | 22 | 11 | 69 |
+| . | 183 | 14,633 | 242 | 1,848 | 16,723 |
+| api | 1 | 48 | 0 | 5 | 53 |
+| components | 60 | 6,179 | 32 | 657 | 6,868 |
+| components/Header | 7 | 570 | 0 | 57 | 627 |
+| components/Table | 1 | 1 | 0 | 1 | 2 |
+| components/history | 13 | 1,238 | 8 | 132 | 1,378 |
+| components/history/Completed | 7 | 423 | 0 | 38 | 461 |
+| components/inventory | 16 | 2,188 | 11 | 200 | 2,399 |
+| components/inventory/EditModals | 6 | 1,111 | 5 | 79 | 1,195 |
+| components/inventory/HistoryModals | 3 | 188 | 0 | 23 | 211 |
+| components/inventory/NewModals | 2 | 155 | 0 | 17 | 172 |
+| components/profile | 3 | 438 | 0 | 52 | 490 |
+| components/util | 17 | 1,440 | 12 | 186 | 1,638 |
+| constants | 5 | 469 | 12 | 57 | 538 |
+| firebase | 7 | 381 | 10 | 61 | 452 |
+| hooks | 17 | 791 | 61 | 140 | 992 |
+| pages | 39 | 2,610 | 32 | 279 | 2,921 |
+| pages/Admin | 2 | 146 | 13 | 18 | 177 |
+| pages/Categories | 2 | 73 | 0 | 11 | 84 |
+| pages/Customers | 6 | 427 | 1 | 44 | 472 |
+| pages/History | 2 | 59 | 1 | 8 | 68 |
+| pages/Loans | 3 | 277 | 2 | 24 | 303 |
+| pages/NotFound | 2 | 29 | 3 | 6 | 38 |
+| pages/Orders | 4 | 265 | 2 | 29 | 296 |
+| pages/Products | 6 | 556 | 6 | 58 | 620 |
+| pages/Profile | 2 | 54 | 0 | 8 | 62 |
+| pages/Sales | 4 | 262 | 3 | 31 | 296 |
+| pages/Suppliers | 6 | 462 | 1 | 42 | 505 |
+| redux | 40 | 3,217 | 58 | 524 | 3,799 |
+| redux/actions | 12 | 1,368 | 13 | 198 | 1,579 |
+| redux/hooks | 3 | 259 | 0 | 36 | 295 |
+| redux/middleware | 5 | 327 | 15 | 47 | 389 |
+| redux/reducers | 13 | 879 | 10 | 162 | 1,051 |
+| redux/selectors | 4 | 39 | 2 | 13 | 54 |
+| styles | 8 | 634 | 1 | 85 | 720 |
 
 [details](details.md)

@@ -1,138 +1,243 @@
-Date : 2019-08-09 13:17:25
+Date : 2020-01-10 19:35:10
 Directory : /Users/eystein/Documents/Programmering/lagerstatus/src
-Total : 96 files,  6706 codes, 300 comments, 860 blanks, all 7866 lines
+Total : 183 files,  14633 codes, 242 comments, 1848 blanks, all 16723 lines
 
 Languages
 +------------------+------------+------------+------------+------------+------------+
 | language         | files      | code       | comment    | blank      | total      |
 +------------------+------------+------------+------------+------------+------------+
-| TypeScript React |         34 |      3,309 |         79 |        340 |      3,728 |
-| TypeScript       |         48 |      3,085 |        152 |        462 |      3,699 |
-| CSS              |          6 |        169 |         16 |         31 |        216 |
-| JavaScript       |          7 |        136 |         53 |         26 |        215 |
-| XML              |          1 |          7 |          0 |          1 |          8 |
+| TypeScript React |         82 |      8,938 |         68 |        928 |      9,934 |
+| TypeScript       |         99 |      5,595 |        143 |        905 |      6,643 |
+| JavaScript       |          2 |        100 |         31 |         15 |        146 |
 +------------------+------------+------------+------------+------------+------------+
 
 Directories
-+----------------------------------------------+------------+------------+------------+------------+------------+
-| path                                         | files      | code       | comment    | blank      | total      |
-+----------------------------------------------+------------+------------+------------+------------+------------+
-| .                                            |         96 |      6,706 |        300 |        860 |      7,866 |
-| components                                   |         24 |      2,445 |         55 |        246 |      2,746 |
-| redux                                        |         27 |      2,095 |        104 |        293 |      2,492 |
-| components/inventory                         |          7 |      1,102 |         23 |         83 |      1,208 |
-| redux/actions                                |          9 |        864 |         73 |        166 |      1,103 |
-| pages                                        |         11 |        862 |         36 |         96 |        994 |
-| redux/reducers                               |         10 |        634 |         11 |         39 |        684 |
-| components/util                              |         10 |        532 |         27 |         75 |        634 |
-| hooks                                        |         12 |        526 |         33 |         97 |        656 |
-| components/history                           |          3 |        476 |          0 |         45 |        521 |
-| constants                                    |          4 |        326 |         12 |         39 |        377 |
-| redux/middleware                             |          5 |        316 |         18 |         44 |        378 |
-| firebase                                     |          4 |        138 |          2 |         32 |        172 |
-| styles                                       |          5 |         36 |         22 |         11 |         69 |
-| redux/selectors                              |          1 |         15 |          2 |          3 |         20 |
-+----------------------------------------------+------------+------------+------------+------------+------------+
++------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                       | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                          |        183 |     14,633 |        242 |      1,848 |     16,723 |
+| api                                                                                                        |          1 |         48 |          0 |          5 |         53 |
+| components                                                                                                 |         60 |      6,179 |         32 |        657 |      6,868 |
+| components/Header                                                                                          |          7 |        570 |          0 |         57 |        627 |
+| components/Table                                                                                           |          1 |          1 |          0 |          1 |          2 |
+| components/history                                                                                         |         13 |      1,238 |          8 |        132 |      1,378 |
+| components/history/Completed                                                                               |          7 |        423 |          0 |         38 |        461 |
+| components/inventory                                                                                       |         16 |      2,188 |         11 |        200 |      2,399 |
+| components/inventory/EditModals                                                                            |          6 |      1,111 |          5 |         79 |      1,195 |
+| components/inventory/HistoryModals                                                                         |          3 |        188 |          0 |         23 |        211 |
+| components/inventory/NewModals                                                                             |          2 |        155 |          0 |         17 |        172 |
+| components/profile                                                                                         |          3 |        438 |          0 |         52 |        490 |
+| components/util                                                                                            |         17 |      1,440 |         12 |        186 |      1,638 |
+| constants                                                                                                  |          5 |        469 |         12 |         57 |        538 |
+| firebase                                                                                                   |          7 |        381 |         10 |         61 |        452 |
+| hooks                                                                                                      |         17 |        791 |         61 |        140 |        992 |
+| pages                                                                                                      |         39 |      2,610 |         32 |        279 |      2,921 |
+| pages/Admin                                                                                                |          2 |        146 |         13 |         18 |        177 |
+| pages/Categories                                                                                           |          2 |         73 |          0 |         11 |         84 |
+| pages/Customers                                                                                            |          6 |        427 |          1 |         44 |        472 |
+| pages/History                                                                                              |          2 |         59 |          1 |          8 |         68 |
+| pages/Loans                                                                                                |          3 |        277 |          2 |         24 |        303 |
+| pages/NotFound                                                                                             |          2 |         29 |          3 |          6 |         38 |
+| pages/Orders                                                                                               |          4 |        265 |          2 |         29 |        296 |
+| pages/Products                                                                                             |          6 |        556 |          6 |         58 |        620 |
+| pages/Profile                                                                                              |          2 |         54 |          0 |          8 |         62 |
+| pages/Sales                                                                                                |          4 |        262 |          3 |         31 |        296 |
+| pages/Suppliers                                                                                            |          6 |        462 |          1 |         42 |        505 |
+| redux                                                                                                      |         40 |      3,217 |         58 |        524 |      3,799 |
+| redux/actions                                                                                              |         12 |      1,368 |         13 |        198 |      1,579 |
+| redux/hooks                                                                                                |          3 |        259 |          0 |         36 |        295 |
+| redux/middleware                                                                                           |          5 |        327 |         15 |         47 |        389 |
+| redux/reducers                                                                                             |         13 |        879 |         10 |        162 |      1,051 |
+| redux/selectors                                                                                            |          4 |         39 |          2 |         13 |         54 |
+| styles                                                                                                     |          8 |        634 |          1 |         85 |        720 |
++------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 
 Files
-+----------------------------------------------+------------------+------------+------------+------------+------------+
-| filename                                     | language         | code       | comment    | blank      | total      |
-+----------------------------------------------+------------------+------------+------------+------------+------------+
-| App.css                                      | CSS              |         43 |          0 |          6 |         49 |
-| App.test.js                                  | JavaScript       |          8 |          0 |          2 |         10 |
-| App.tsx                                      | TypeScript React |         76 |          0 |         13 |         89 |
-| AuthPage.tsx                                 | TypeScript React |         24 |          1 |          4 |         29 |
-| components/Header.tsx                        | TypeScript React |        212 |          1 |         28 |        241 |
-| components/Login.tsx                         | TypeScript React |         87 |          1 |         11 |         99 |
-| components/Names.tsx                         | TypeScript React |         22 |          3 |          2 |         27 |
-| components/Status.css                        | CSS              |         14 |          0 |          2 |         16 |
-| components/history/Completed.tsx             | TypeScript React |        245 |          0 |         21 |        266 |
-| components/history/Report.tsx                | TypeScript React |        161 |          0 |         15 |        176 |
-| components/history/Reports.tsx               | TypeScript React |         70 |          0 |          9 |         79 |
-| components/inventory/EditOrder.tsx           | TypeScript React |        319 |          3 |         22 |        344 |
-| components/inventory/EditProduct.tsx         | TypeScript React |        337 |          6 |         22 |        365 |
-| components/inventory/EditSale.tsx            | TypeScript React |        319 |          3 |         19 |        341 |
-| components/inventory/ItemPage.tsx            | TypeScript React |        105 |          0 |         12 |        117 |
-| components/inventory/ProductName.tsx         | TypeScript React |         13 |          0 |          1 |         14 |
-| components/inventory/ProductSuppliers.tsx    | TypeScript React |          2 |         10 |          3 |         15 |
-| components/inventory/ProductTransactions.tsx | TypeScript React |          7 |          1 |          4 |         12 |
-| components/util/Buttons.tsx                  | TypeScript React |         14 |          0 |          3 |         17 |
-| components/util/CloudStatus.tsx              | TypeScript React |         53 |          3 |          6 |         62 |
-| components/util/DropDownMenu.tsx             | TypeScript React |         33 |          0 |          6 |         39 |
-| components/util/Icons.tsx                    | TypeScript React |         76 |          3 |          8 |         87 |
-| components/util/Notifications.tsx            | TypeScript React |         74 |          0 |         12 |         86 |
-| components/util/SectionHeader.tsx            | TypeScript React |        125 |         17 |         16 |        158 |
-| components/util/SectionList.tsx              | TypeScript React |          8 |          0 |          1 |          9 |
-| components/util/SectionTable.tsx             | TypeScript React |         72 |          1 |         12 |         85 |
-| components/util/SelectProduct.tsx            | TypeScript React |         64 |          3 |          9 |         76 |
-| components/util/Warning.tsx                  | TypeScript React |         13 |          0 |          2 |         15 |
-| constants/api.ts                             | TypeScript       |         49 |          0 |          6 |         55 |
-| constants/mock.ts                            | TypeScript       |         33 |          0 |          5 |         38 |
-| constants/routes.ts                          | TypeScript       |          6 |          0 |          0 |          6 |
-| constants/util.ts                            | TypeScript       |        238 |         12 |         28 |        278 |
-| firebase/findReport.ts                       | TypeScript       |         78 |          1 |         19 |         98 |
-| firebase/firebase.ts                         | TypeScript       |         29 |          1 |          8 |         38 |
-| firebase/history.ts                          | TypeScript       |         13 |          0 |          3 |         16 |
-| firebase/types.ts                            | TypeScript       |         18 |          0 |          2 |         20 |
-| hooks/useEditableList.ts                     | TypeScript       |         22 |          0 |          7 |         29 |
-| hooks/useFilterableList.ts                   | TypeScript       |         26 |          8 |          9 |         43 |
-| hooks/useForm.ts                             | TypeScript       |          9 |          0 |          4 |         13 |
-| hooks/useGate.ts                             | TypeScript       |         18 |          1 |          6 |         25 |
-| hooks/useInitialization.ts                   | TypeScript       |        106 |          5 |         14 |        125 |
-| hooks/useLoadedGate.ts                       | TypeScript       |         52 |          1 |          7 |         60 |
-| hooks/useLocation.ts                         | TypeScript       |         21 |          1 |          4 |         26 |
-| hooks/useReports.ts                          | TypeScript       |        109 |          2 |         21 |        132 |
-| hooks/useSaving.ts                           | TypeScript       |        106 |          3 |         14 |        123 |
-| hooks/useSearch.ts                           | TypeScript       |         26 |         12 |          5 |         43 |
-| hooks/useSortableList.ts                     | TypeScript       |         28 |          0 |          6 |         34 |
-| hooks/useUser.ts                             | TypeScript       |          3 |          0 |          0 |          3 |
-| index.css                                    | CSS              |         14 |          0 |          2 |         16 |
-| index.tsx                                    | TypeScript React |         14 |          3 |          4 |         21 |
-| logo.svg                                     | XML              |          7 |          0 |          1 |          8 |
-| pages/Categories.tsx                         | TypeScript React |         58 |          0 |          9 |         67 |
-| pages/Customers.tsx                          | TypeScript React |          7 |          0 |          3 |         10 |
-| pages/History.tsx                            | TypeScript React |         53 |          1 |          7 |         61 |
-| pages/Orders.css                             | CSS              |         40 |          0 |          8 |         48 |
-| pages/Orders.tsx                             | TypeScript React |        261 |          5 |         21 |        287 |
-| pages/Products.css                           | CSS              |         48 |         16 |         12 |         76 |
-| pages/Products.tsx                           | TypeScript React |        169 |         11 |         13 |        193 |
-| pages/Profile.tsx                            | TypeScript React |          7 |          0 |          3 |         10 |
-| pages/Sales.css                              | CSS              |         10 |          0 |          1 |         11 |
-| pages/Sales.tsx                              | TypeScript React |        202 |          3 |         16 |        221 |
-| pages/Suppliers.tsx                          | TypeScript React |          7 |          0 |          3 |         10 |
-| react-app-env.d.ts                           | TypeScript       |          0 |          1 |          1 |          2 |
-| redux/actions/authActions.ts                 | TypeScript       |         88 |          1 |         16 |        105 |
-| redux/actions/categoriesActions.ts           | TypeScript       |         64 |         15 |         13 |         92 |
-| redux/actions/customersActions.ts            | TypeScript       |         63 |         31 |         15 |        109 |
-| redux/actions/index.ts                       | TypeScript       |         42 |          0 |          6 |         48 |
-| redux/actions/ordersActions.ts               | TypeScript       |        124 |          3 |         25 |        152 |
-| redux/actions/productsActions.ts             | TypeScript       |        106 |         18 |         29 |        153 |
-| redux/actions/reportsActions.ts              | TypeScript       |        195 |          3 |         29 |        227 |
-| redux/actions/salesActions.ts                | TypeScript       |        114 |          1 |         20 |        135 |
-| redux/actions/suppliersActions.ts            | TypeScript       |         68 |          1 |         13 |         82 |
-| redux/middleware/changeLog.ts                | TypeScript       |         22 |          0 |          4 |         26 |
-| redux/middleware/firestore.ts                | TypeScript       |        119 |          6 |         13 |        138 |
-| redux/middleware/localStorage.ts             | TypeScript       |         47 |          0 |          8 |         55 |
-| redux/middleware/thunks.ts                   | TypeScript       |        115 |          6 |         13 |        134 |
-| redux/middleware/types.ts                    | TypeScript       |         13 |          6 |          6 |         25 |
-| redux/reducers/authReducers.ts               | TypeScript       |         88 |          0 |          3 |         91 |
-| redux/reducers/categoriesReducers.ts         | TypeScript       |         32 |          1 |          3 |         36 |
-| redux/reducers/customersReducers.ts          | TypeScript       |         32 |          1 |          2 |         35 |
-| redux/reducers/drafts.ts                     | TypeScript       |         81 |          5 |         10 |         96 |
-| redux/reducers/index.ts                      | TypeScript       |         31 |          0 |          4 |         35 |
-| redux/reducers/ordersReducers.ts             | TypeScript       |         97 |          1 |          3 |        101 |
-| redux/reducers/productsReducers.ts           | TypeScript       |         75 |          1 |          3 |         79 |
-| redux/reducers/reportsReducers.ts            | TypeScript       |         83 |          0 |          5 |         88 |
-| redux/reducers/salesReducers.ts              | TypeScript       |         83 |          1 |          3 |         87 |
-| redux/reducers/suppliersReducers.ts          | TypeScript       |         32 |          1 |          3 |         36 |
-| redux/selectors/productSelectors.ts          | TypeScript       |         15 |          2 |          3 |         20 |
-| redux/store.ts                               | TypeScript       |         10 |          0 |          1 |         11 |
-| redux/types.ts                               | TypeScript       |        256 |          0 |         40 |        296 |
-| serviceWorker.js                             | JavaScript       |         92 |         31 |         13 |        136 |
-| styles/colors.js                             | JavaScript       |          5 |          0 |          3 |          8 |
-| styles/display.js                            | JavaScript       |         18 |          0 |          5 |         23 |
-| styles/index.js                              | JavaScript       |          8 |          0 |          1 |          9 |
-| styles/placement.js                          | JavaScript       |          5 |         22 |          1 |         28 |
-| styles/size.js                               | JavaScript       |          0 |          0 |          1 |          1 |
-| Total                                        |                  |      6,706 |        300 |        860 |      7,866 |
-+----------------------------------------------+------------------+------------+------------+------------+------------+
++------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                                                   | language         | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| /Users/eystein/Documents/Programmering/lagerstatus/src/App.test.js                                         | JavaScript       |          8 |          0 |          2 |         10 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/App.tsx                                             | TypeScript React |         62 |          0 |          8 |         70 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/Router.tsx                                          | TypeScript React |        129 |          1 |         12 |        142 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/api/auth.ts                                         | TypeScript       |         48 |          0 |          5 |         53 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/ForgotPassword.tsx                       | TypeScript React |        105 |          0 |          4 |        109 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/Header/Client.tsx                        | TypeScript React |         59 |          0 |          7 |         66 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/Header/CloudStatus.tsx                   | TypeScript React |        102 |          0 |          7 |        109 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/Header/Header.tsx                        | TypeScript React |         37 |          0 |          6 |         43 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/Header/Pages.tsx                         | TypeScript React |        109 |          0 |         12 |        121 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/Header/User.tsx                          | TypeScript React |        103 |          0 |          8 |        111 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/Header/index.ts                          | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/Header/styles.ts                         | TypeScript       |        158 |          0 |         16 |        174 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/Login.tsx                                | TypeScript React |        174 |          1 |         19 |        194 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/Names.tsx                                | TypeScript React |         25 |          0 |          6 |         31 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/Table/index.ts                           | TypeScript       |          1 |          0 |          1 |          2 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/Completed.tsx                    | TypeScript React |         14 |          0 |          3 |         17 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/Completed/CompletedLoans.tsx     | TypeScript React |         91 |          0 |          7 |         98 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/Completed/CompletedOrders.tsx    | TypeScript React |         91 |          0 |          7 |         98 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/Completed/CompletedSales.tsx     | TypeScript React |         91 |          0 |          7 |         98 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/Completed/FunctionsRow.tsx       | TypeScript React |         30 |          0 |          4 |         34 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/Completed/HistoryTable.tsx       | TypeScript React |         41 |          0 |          5 |         46 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/Completed/OrderedProducts.tsx    | TypeScript React |         70 |          0 |          6 |         76 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/Completed/styles.ts              | TypeScript       |          9 |          0 |          2 |         11 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/Report.tsx                       | TypeScript React |        301 |          0 |         19 |        320 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/ReportChanges.tsx                | TypeScript React |        330 |          3 |         46 |        379 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/ReportDatePicker.tsx             | TypeScript React |        125 |          5 |         17 |        147 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/ReportSkeleton.tsx               | TypeScript React |         29 |          0 |          5 |         34 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/history/Reports.tsx                      | TypeScript React |         16 |          0 |          4 |         20 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/EditModals/EditLoan.tsx        | TypeScript React |        186 |          0 |         11 |        197 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/EditModals/EditModal.tsx       | TypeScript React |         89 |          0 |         10 |         99 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/EditModals/EditOrder.tsx       | TypeScript React |        196 |          0 |         13 |        209 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/EditModals/EditProduct.tsx     | TypeScript React |        374 |          5 |         20 |        399 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/EditModals/EditSale.tsx        | TypeScript React |        212 |          0 |         13 |        225 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/EditModals/styles.ts           | TypeScript       |         54 |          0 |         12 |         66 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/HistoryModals/HistoryModal.tsx | TypeScript React |         80 |          0 |          6 |         86 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/HistoryModals/index.ts         | TypeScript       |          2 |          0 |          2 |          4 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/HistoryModals/styles.ts        | TypeScript       |        106 |          0 |         15 |        121 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/NewModals/NewModal.tsx         | TypeScript React |         91 |          0 |          6 |         97 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/NewModals/styles.ts            | TypeScript       |         64 |          0 |         11 |         75 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/OrderedProducts.tsx            | TypeScript React |        189 |          0 |         15 |        204 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/ProductName.tsx                | TypeScript React |          9 |          0 |          2 |         11 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/SelectProduct.tsx              | TypeScript React |        171 |          1 |         18 |        190 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/SelectTarget.tsx               | TypeScript React |        261 |          5 |         36 |        302 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/inventory/SuppliersProducts.tsx          | TypeScript React |        104 |          0 |         10 |        114 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/profile/ChangeLocation.tsx               | TypeScript React |         75 |          0 |          8 |         83 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/profile/ChangePassword.tsx               | TypeScript React |        202 |          0 |         26 |        228 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/profile/LocationModal.tsx                | TypeScript React |        161 |          0 |         18 |        179 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/Buttons.tsx                         | TypeScript React |         88 |          0 |          7 |         95 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/ColorPicker.tsx                     | TypeScript React |        148 |          2 |         21 |        171 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/ConfirmModal.tsx                    | TypeScript React |        141 |          0 |         10 |        151 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/CountdownBar.tsx                    | TypeScript React |         27 |          0 |          7 |         34 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/Dropdown.tsx                        | TypeScript React |         69 |          0 |          9 |         78 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/ErrorBoundary.tsx                   | TypeScript React |         21 |          0 |          9 |         30 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/ExpandableRow.tsx                   | TypeScript React |         36 |          0 |          6 |         42 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/HoverInfo.tsx                       | TypeScript React |        235 |          0 |         21 |        256 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/Icons.tsx                           | TypeScript React |         92 |          8 |         15 |        115 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/LinkWrapper.tsx                     | TypeScript React |         14 |          0 |          4 |         18 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/Notification.tsx                    | TypeScript React |        135 |          1 |         21 |        157 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/PageLoading.tsx                     | TypeScript React |         34 |          0 |          5 |         39 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/SectionHeader.tsx                   | TypeScript React |        207 |          0 |         21 |        228 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/SectionTable.tsx                    | TypeScript React |         77 |          1 |         13 |         91 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/Spinner.tsx                         | TypeScript React |         51 |          0 |          5 |         56 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/TableSkeleton.tsx                   | TypeScript React |         52 |          0 |          9 |         61 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/components/util/Warning.tsx                         | TypeScript React |         13 |          0 |          3 |         16 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/constants/api.ts                                    | TypeScript       |         49 |          0 |          6 |         55 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/constants/dates.ts                                  | TypeScript       |         14 |          0 |          0 |         14 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/constants/mock.ts                                   | TypeScript       |         33 |          0 |          5 |         38 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/constants/routes.ts                                 | TypeScript       |         12 |          0 |          1 |         13 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/constants/util.ts                                   | TypeScript       |        361 |         12 |         45 |        418 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/firebase/Subscription.ts                            | TypeScript       |         48 |          0 |         10 |         58 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/firebase/admin.ts                                   | TypeScript       |        170 |          8 |         16 |        194 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/firebase/findReport.ts                              | TypeScript       |         83 |          1 |         15 |         99 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/firebase/firebase.ts                                | TypeScript       |         35 |          1 |         11 |         47 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/firebase/history.ts                                 | TypeScript       |         12 |          0 |          3 |         15 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/firebase/types.ts                                   | TypeScript       |         23 |          0 |          4 |         27 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/firebase/user.ts                                    | TypeScript       |         10 |          0 |          2 |         12 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useAuthLocation.ts                            | TypeScript       |         28 |          0 |          8 |         36 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useDemo.ts                                    | TypeScript       |         22 |          0 |          8 |         30 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useEditableList.ts                            | TypeScript       |         22 |          0 |          8 |         30 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useFilterableList.ts                          | TypeScript       |         29 |          8 |          9 |         46 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useGate.ts                                    | TypeScript       |         23 |          1 |          7 |         31 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useInitialization.ts                          | TypeScript       |        132 |          7 |         15 |        154 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useKeyPress.ts                                | TypeScript       |         33 |          0 |          6 |         39 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useLoadedGate.ts                              | TypeScript       |         98 |          0 |          7 |        105 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useLocation.ts                                | TypeScript       |         21 |          1 |          5 |         27 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useMargin.ts                                  | TypeScript       |         20 |          0 |          6 |         26 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useNames.ts                                   | TypeScript       |         23 |          0 |          7 |         30 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useProducts.ts                                | TypeScript       |         18 |          0 |          5 |         23 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useRedirect.ts                                | TypeScript       |         11 |          0 |          3 |         14 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useReports.ts                                 | TypeScript       |        122 |          1 |         22 |        145 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useSaving.ts                                  | TypeScript       |        104 |         31 |         11 |        146 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useSearch.ts                                  | TypeScript       |         36 |         12 |          6 |         54 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/hooks/useSortableList.ts                            | TypeScript       |         49 |          0 |          7 |         56 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/index.tsx                                           | TypeScript React |         13 |          3 |          4 |         20 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Admin/Admin.tsx                               | TypeScript React |        144 |         13 |         17 |        174 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Admin/index.ts                                | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Categories/Categories.tsx                     | TypeScript React |         71 |          0 |         10 |         81 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Categories/index.ts                           | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Customers/Customer.tsx                        | TypeScript React |         32 |          0 |          4 |         36 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Customers/CustomerHistory.tsx                 | TypeScript React |        138 |          0 |         17 |        155 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Customers/Customers.tsx                       | TypeScript React |        117 |          1 |          9 |        127 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Customers/EditCustomer.tsx                    | TypeScript React |         87 |          0 |          7 |         94 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Customers/NewCustomer.tsx                     | TypeScript React |         51 |          0 |          6 |         57 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Customers/index.ts                            | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/History/History.tsx                           | TypeScript React |         57 |          1 |          7 |         65 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/History/index.ts                              | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Loans/Loan.tsx                                | TypeScript React |        125 |          0 |         12 |        137 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Loans/Loans.tsx                               | TypeScript React |        150 |          2 |         11 |        163 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Loans/index.ts                                | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/NotFound/NotFound.tsx                         | TypeScript React |         27 |          3 |          5 |         35 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/NotFound/index.ts                             | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Orders/Order.tsx                              | TypeScript React |        116 |          0 |         11 |        127 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Orders/Orders.tsx                             | TypeScript React |        136 |          2 |         14 |        152 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Orders/index.ts                               | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Orders/styles.ts                              | TypeScript       |         11 |          0 |          3 |         14 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Products/Product.tsx                          | TypeScript React |        107 |          0 |          7 |        114 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Products/ProductHistory.tsx                   | TypeScript React |        162 |          0 |         14 |        176 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Products/ProductInfo.tsx                      | TypeScript React |         56 |          0 |         11 |         67 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Products/Products.tsx                         | TypeScript React |        201 |          6 |         18 |        225 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Products/index.ts                             | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Products/styles.ts                            | TypeScript       |         28 |          0 |          7 |         35 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Profile/Profile.tsx                           | TypeScript React |         52 |          0 |          7 |         59 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Profile/index.ts                              | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Sales/Sale.tsx                                | TypeScript React |        114 |          0 |         15 |        129 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Sales/Sales.tsx                               | TypeScript React |        140 |          3 |         13 |        156 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Sales/index.ts                                | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Sales/styles.ts                               | TypeScript       |          6 |          0 |          2 |          8 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Suppliers/EditSupplier.tsx                    | TypeScript React |        170 |          0 |         12 |        182 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Suppliers/NewSupplier.tsx                     | TypeScript React |         51 |          0 |          6 |         57 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Suppliers/Supplier.tsx                        | TypeScript React |         32 |          0 |          4 |         36 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Suppliers/SupplierHistory.tsx                 | TypeScript React |         90 |          0 |          9 |         99 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Suppliers/Suppliers.tsx                       | TypeScript React |        117 |          1 |         10 |        128 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/pages/Suppliers/index.ts                            | TypeScript       |          2 |          0 |          1 |          3 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/react-app-env.d.ts                                  | TypeScript       |          0 |          1 |          1 |          2 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/adminActions.ts                       | TypeScript       |         15 |          0 |          4 |         19 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/authActions.ts                        | TypeScript       |        130 |          0 |         18 |        148 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/categoriesActions.ts                  | TypeScript       |         77 |          1 |         13 |         91 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/customersActions.ts                   | TypeScript       |         80 |          1 |         14 |         95 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/index.ts                              | TypeScript       |         87 |          0 |          8 |         95 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/loansActions.ts                       | TypeScript       |        153 |          0 |         21 |        174 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/notificationActions.ts                | TypeScript       |         37 |          0 |          4 |         41 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/ordersActions.ts                      | TypeScript       |        175 |          3 |         27 |        205 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/productsActions.ts                    | TypeScript       |        105 |          3 |         21 |        129 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/reportsActions.ts                     | TypeScript       |        253 |          3 |         31 |        287 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/salesActions.ts                       | TypeScript       |        174 |          1 |         23 |        198 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/actions/suppliersActions.ts                   | TypeScript       |         82 |          1 |         14 |         97 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/hooks/useLoans.ts                             | TypeScript       |         94 |          0 |         11 |        105 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/hooks/useOrders.ts                            | TypeScript       |         96 |          0 |         13 |        109 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/hooks/useSales.ts                             | TypeScript       |         69 |          0 |         12 |         81 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/middleware/changeLog.ts                       | TypeScript       |         29 |          0 |          4 |         33 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/middleware/firestore.ts                       | TypeScript       |        116 |          3 |         14 |        133 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/middleware/localStorage.ts                    | TypeScript       |         52 |          0 |          9 |         61 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/middleware/thunks.ts                          | TypeScript       |        120 |          6 |         13 |        139 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/middleware/types.ts                           | TypeScript       |         10 |          6 |          7 |         23 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/adminReducers.ts                     | TypeScript       |          1 |          0 |          0 |          1 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/authReducers.ts                      | TypeScript       |        109 |          0 |         17 |        126 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/categoriesReducers.ts                | TypeScript       |         34 |          1 |         10 |         45 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/customersReducers.ts                 | TypeScript       |         44 |          1 |         12 |         57 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/drafts.ts                            | TypeScript       |         81 |          0 |         10 |         91 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/index.ts                             | TypeScript       |         37 |          0 |          5 |         42 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/loansReducers.ts                     | TypeScript       |        117 |          0 |         19 |        136 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/notificationReducers.ts              | TypeScript       |         25 |          0 |          4 |         29 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/ordersReducers.ts                    | TypeScript       |        117 |          1 |         21 |        139 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/productsReducers.ts                  | TypeScript       |         61 |          1 |         17 |         79 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/reportsReducers.ts                   | TypeScript       |         88 |          0 |         16 |        104 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/salesReducers.ts                     | TypeScript       |        121 |          5 |         20 |        146 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/reducers/suppliersReducers.ts                 | TypeScript       |         44 |          1 |         11 |         56 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/selectors/customersSelectors.ts               | TypeScript       |          7 |          0 |          3 |         10 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/selectors/loansSelectors.ts                   | TypeScript       |          7 |          0 |          3 |         10 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/selectors/productSelectors.ts                 | TypeScript       |         18 |          2 |          4 |         24 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/selectors/suppliersSelectors.ts               | TypeScript       |          7 |          0 |          3 |         10 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/store.ts                                      | TypeScript       |          8 |          0 |          2 |         10 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/types.ts                                      | TypeScript       |        318 |         18 |         64 |        400 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/redux/util.ts                                       | TypeScript       |         19 |          0 |          2 |         21 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/serviceWorker.js                                    | JavaScript       |         92 |         31 |         13 |        136 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/styles/colors.ts                                    | TypeScript       |         38 |          1 |          9 |         48 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/styles/device.ts                                    | TypeScript       |         26 |          0 |          5 |         31 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/styles/form.tsx                                     | TypeScript React |        162 |          0 |         17 |        179 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/styles/globalStyle.ts                               | TypeScript       |         44 |          0 |          3 |         47 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/styles/list.ts                                      | TypeScript       |         10 |          0 |          4 |         14 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/styles/modal.ts                                     | TypeScript       |         81 |          0 |         11 |         92 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/styles/scroll.ts                                    | TypeScript       |         27 |          0 |          2 |         29 |
+| /Users/eystein/Documents/Programmering/lagerstatus/src/styles/table.tsx                                    | TypeScript React |        246 |          0 |         34 |        280 |
+| Total                                                                                                      |                  |     14,633 |        242 |      1,848 |     16,723 |
++------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
